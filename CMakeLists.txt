@@ -81,13 +81,13 @@ set(RELEASE_SOURCE_FILES
 # We connect all logical units of the project to the executable file/target
 # -----------------------------------------
 
-add_executable(engine
+add_executable(${APP_TARGET}
         ${RELEASE_SOURCE_FILES}
         ${CORE_SOURCES}
         ${FUNC_SOURCES}
 )
 
-target_include_directories(engine PUBLIC
+target_include_directories(${APP_TARGET} PUBLIC
         ${CORE_INCLUDE_DIRS}
         ${FUNC_INCLUDE_DIRS}
 )
