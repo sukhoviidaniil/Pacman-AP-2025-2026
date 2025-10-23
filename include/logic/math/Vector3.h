@@ -1,7 +1,20 @@
-//
-// Created by Kaede on 2025-08-31.
-//
-
+/***************************************************************
+ * Project:       Pacman
+ * File:          Vector.h
+ *
+ * Author:        Sukhovii Daniil
+ * Created:       2025-08-31
+ * Modified:      []
+ *
+ * Description:   []
+ *
+ * Contact:
+ *   Email:       sukhovii.daniil@gmail.com
+ *
+ * Disclaimer:
+ *   This file is part of Pacman.
+ *   Unauthorized use, reproduction, or distribution is prohibited.
+***************************************************************/
 #ifndef GENGINE_Vector3_H
 #define GENGINE_Vector3_H
 #include <iosfwd>

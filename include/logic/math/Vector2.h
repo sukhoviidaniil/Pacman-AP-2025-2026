@@ -1,28 +1,20 @@
-//
-// Created by Kaede on 2025-10-23.
-//
-
 /***************************************************************
- * Project:   ${PROJECT_NAME}
- * File:      ${FILE_NAME}
+ * Project:       Pacman
+ * File:          Vector2.h
  *
- * Author:    $USER_NAME
- * #if ($ORGANIZATION_NAME && $ORGANIZATION_NAME != "")
- * Copyright (c) $YEAR ${ORGANIZATION_NAME}#if (!$ORGANIZATION_NAME.endsWith(".")).#end All rights reserved.
- * Created:   $DATE
- * Modified:  []
+ * Author:        Sukhovii Daniil
+ * Created:       2025-10-23
+ * Modified:      []
  *
- * Description:
- *   []
+ * Description:   []
  *
  * Contact:
- *   Email:    sukhovii.daniil@gmail.com
+ *   Email:       sukhovii.daniil@gmail.com
  *
  * Disclaimer:
- *   This file is part of ${PROJECT_NAME}.
+ *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-
 
 #ifndef MY_SFML_VECTOR2_H
 #define MY_SFML_VECTOR2_H

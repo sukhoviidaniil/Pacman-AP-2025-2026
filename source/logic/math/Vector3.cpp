@@ -1,7 +1,3 @@
-//
-// Created by Kaede on 2025-08-31.
-//
-
 #include "math/Vector3.h"
 
 #include <cmath>

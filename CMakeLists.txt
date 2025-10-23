@@ -73,6 +73,12 @@ set(LOGIC_INCLUDE_DIRS
         ${INCLUDE_DIR}/logic
 )
 
+file(GLOB_RECURSE CONST_SOURCES "${SOURCE_DIR}/const/*.cpp")
+set(CONST_INCLUDE_DIRS
+        ${SOURCE_DIR}/const
+        ${INCLUDE_DIR}/const
+)
+
 # Collecting Function Resources
 file(GLOB_RECURSE FUNC_SOURCES "${INCLUDE_DIR}/func/*.h")
 set(FUNC_INCLUDE_DIRS
@@ -91,12 +97,14 @@ set(RELEASE_SOURCE_FILES
 add_executable(${APP_TARGET}
         ${RELEASE_SOURCE_FILES}
         ${CORE_SOURCES}
+        ${CONST_SOURCES}
         ${LOGIC_SOURCES}
         ${FUNC_SOURCES}
 )
 
 target_include_directories(${APP_TARGET} PUBLIC
         ${CORE_INCLUDE_DIRS}
+        ${CONST_INCLUDE_DIRS}
         ${LOGIC_INCLUDE_DIRS}
         ${FUNC_INCLUDE_DIRS}
 )
