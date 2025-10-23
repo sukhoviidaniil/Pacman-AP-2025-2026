@@ -48,7 +48,7 @@ add_compile_options(-Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conver
 # -----------------------------------------
 
 # Specify the name of the project
-project(My_SFML LANGUAGES CXX)
+project(Pacman LANGUAGES CXX)
 # We specify the name of the executable file
 set(APP_TARGET PacMan)
 
@@ -57,13 +57,20 @@ set(APP_TARGET PacMan)
 # -----------------------------------------
 
 # Folders with .h and .cpp files
-set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
+set(SOURCE_DIR "${CMAKE_SOURCE_DIR}/source")
 set(INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
 
 # Collecting Core resources
-file(GLOB_RECURSE CORE_SOURCES "${SRC_DIR}/core/*.cpp")
+file(GLOB_RECURSE CORE_SOURCES "${SOURCE_DIR}/core/*.cpp")
 set(CORE_INCLUDE_DIRS
-        ${SRC_DIR}/core
+        ${SOURCE_DIR}/core
+        ${INCLUDE_DIR}/core
+)
+
+file(GLOB_RECURSE LOGIC_SOURCES "${SOURCE_DIR}/logic/*.cpp")
+set(LOGIC_INCLUDE_DIRS
+        ${SOURCE_DIR}/logic
+        ${INCLUDE_DIR}/logic
 )
 
 # Collecting Function Resources
@@ -74,7 +81,7 @@ set(FUNC_INCLUDE_DIRS
 
 # Collecting additional files that do not fall into general categories
 set(RELEASE_SOURCE_FILES
-        ${SRC_DIR}/main.cpp
+        ${SOURCE_DIR}/main.cpp
 )
 
 # -----------------------------------------
@@ -84,11 +91,13 @@ set(RELEASE_SOURCE_FILES
 add_executable(${APP_TARGET}
         ${RELEASE_SOURCE_FILES}
         ${CORE_SOURCES}
+        ${LOGIC_SOURCES}
         ${FUNC_SOURCES}
 )
 
 target_include_directories(${APP_TARGET} PUBLIC
         ${CORE_INCLUDE_DIRS}
+        ${LOGIC_INCLUDE_DIRS}
         ${FUNC_INCLUDE_DIRS}
 )
 
