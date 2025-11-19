@@ -25,6 +25,14 @@ namespace Logic::Collision {
         public:
         virtual ~Collision_Control() = default;
 
+        /** TODO DOC
+         *
+         * @param first
+         * @param second
+         * @return
+         */
+        virtual bool collision(const std::shared_ptr<HitBoxe>& first, const std::shared_ptr<HitBoxe>& second) = 0;
+
         /**
          *
          * @param first

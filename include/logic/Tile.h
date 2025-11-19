@@ -17,18 +17,24 @@
 ***************************************************************/
 #ifndef PACMAN_TILE_H
 #define PACMAN_TILE_H
+
 #include <memory>
 
-#include "core/Entity.h"
+#include "collision/HitBoxe_Shape.h"
+
 namespace Logic {
     class Tile {
-        Math::Vector2 center;
-        int status = 0;
-        std::shared_ptr<Core::Entity> my_entity;
+        std::shared_ptr<Collision::HitBoxe> hitboxe_;
+        Math::Vector2 center_;
+        int status_ = 0;
     public:
-        explicit Tile(const Math::Vector2 &t_center);
+        explicit Tile(const std::shared_ptr<Collision::HitBoxe>& hitboxe);
+        explicit Tile(const std::shared_ptr<Collision::HitBoxe> &hitboxe, const Math::Vector2 &t_center);
+        void set_status(int status);
+        [[nodiscard]] int get_status() const;
         [[nodiscard]] Math::Vector2 get_center() const;
-        [[nodiscard]] std::shared_ptr<Core::Entity> occupied() const;
+        [[nodiscard]] std::shared_ptr<Collision::HitBoxe> get_hitbox() const;
+
     };
 }
 

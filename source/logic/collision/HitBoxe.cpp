@@ -18,6 +18,8 @@
 
 #include "logic/collision/HitBoxe.h"
 
+
+
 namespace Logic::Collision {
     HitBoxe::HitBoxe(const unsigned int layer, const unsigned int strength):
     layer_(layer), strength_(strength){
@@ -31,9 +33,9 @@ namespace Logic::Collision {
         return strength_;
     }
 
-    std::vector<Math::Vector2> HitBoxe::get_vector_to(const HitBoxe &hit_boxe) const {
+    std::vector<Math::Vector2> HitBoxe::get_vector_to(const std::shared_ptr<HitBoxe> &hit_boxe) const {
         const std::vector<Math::Vector2> m_centers = get_centers();
-        const std::vector<Math::Vector2> f_centers = hit_boxe.get_centers();
+        const std::vector<Math::Vector2> f_centers = hit_boxe->get_centers();
         std::vector<Math::Vector2> all_centers;
         for (const auto& f_center : f_centers) {
             for (const auto& m_center : m_centers) {

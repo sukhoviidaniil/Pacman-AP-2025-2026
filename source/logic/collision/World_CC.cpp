@@ -24,62 +24,32 @@
 #include "logic/collision/AABB.h"
 
 namespace Logic::Collision {
-    World_CC::World_CC() = default;
 
-    World_CC::World_CC(const std::vector<std::vector<int>> &vector) {
-
-        if (vector.empty()) {
-            throw std::logic_error(""); // TODO Add expt
-        }
-        height_ = vector.size();
-
-        if (vector.front().empty()) {
-            throw std::logic_error(""); // TODO Add expt
-        }
-        width_ = vector.front().size();
-
-        for (std::vector<int> row : vector) {
-            if (row.size() != width_) {
-                throw std::logic_error(""); // TODO Add expt
-            }
-        }
-
-        world_ = vector;
-    }
-
-    World_CC::World_CC(const size_t height, const size_t width):
-    height_(height), width_(width){
+    World_CC::World_CC(const std::shared_ptr<Tile_Grid> &world):
+    world_(world){
+        height_ = world_->get_height();
+        width_ = world_->get_width();
     }
 
     World_CC::~World_CC() = default;
 
-    bool World_CC::collision(const HitBoxe_Shape &entity) {
 
-        // вычисляем AABB сущности
-        const AABB aabb = entity.get_aabb();
-        // Предполагаю что у HitBoxe_Shape есть метод get_aabb()
-        // который возвращает {minX, minY, maxX, maxY}
+    bool World_CC::collision(const std::shared_ptr<HitBoxe> &entity) {
+        const AABB aabb = entity->get_aabb();
+        const size_t minTileX = static_cast<size_t>(std::max(0, static_cast<int>(std::floor(aabb.min_X))));
+        const size_t minTileY = static_cast<size_t>(std::max(0, static_cast<int>(std::floor(aabb.min_Y))));
+        const size_t maxTileX = static_cast<size_t>(std::min(static_cast<int>(width_)  - 1, static_cast<int>(std::floor(aabb.max_X))));
+        const size_t maxTileY = static_cast<size_t>(std::min(static_cast<int>(height_) - 1, static_cast<int>(std::floor(aabb.max_Y))));
 
-        const int minTileX = std::max(0, static_cast<int>(std::floor(aabb.min_X)));
-        const int minTileY = std::max(0, static_cast<int>(std::floor(aabb.min_Y)));
-        const int maxTileX = std::min(static_cast<int>(width_)  - 1, static_cast<int>(std::floor(aabb.max_X)));
-        const int maxTileY = std::min(static_cast<int>(height_) - 1, static_cast<int>(std::floor(aabb.max_Y)));
-
-
-        for (size_t y = minTileY; y <= maxTileY; ++y)
-        {
-            for (size_t x = minTileX; x <= maxTileX; ++x)
-            {
-                if (world_[y][x] == 0)
-                    continue; // пустая клетка — пропускаем
-
-                const float tx = static_cast<float>(x);
-                const float ty = static_cast<float>(y);
-
-                HitBoxe_Shape tile = HitBoxe_Shape({tx, ty}, 1, 1);
-
-                if (Separating_Axis_Theorem::collision(entity, tile))
-                    return true;
+        for (size_t y = minTileY; y <= maxTileY; ++y){
+            for (size_t x = minTileX; x <= maxTileX; ++x){
+                std::shared_ptr<Tile> tile = world_->get_tile(x, y);
+                if (tile->get_status() == 0) {
+                    continue; // empty cell — skip
+                }
+                std::shared_ptr<HitBoxe> tile_hitbox = tile->get_hitbox();
+                if (Separating_Axis_Theorem::collision(entity, tile_hitbox))
+                    return true; //
             }
         }
         return false;

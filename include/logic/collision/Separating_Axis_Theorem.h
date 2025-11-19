@@ -17,6 +17,8 @@
 ***************************************************************/
 #ifndef PACMAN_SEPARATING_AXIS_THEOREM_H
 #define PACMAN_SEPARATING_AXIS_THEOREM_H
+#include <memory>
+
 #include "Collision_Control.h"
 
 namespace Logic::Collision {
@@ -24,6 +26,8 @@ namespace Logic::Collision {
         public:
 
         Separating_Axis_Theorem();
+
+        bool collision(const std::shared_ptr<HitBoxe>& first, const std::shared_ptr<HitBoxe>& second) override;
 
         bool collision(const HitBoxe_Shape& first, const HitBoxe_Shape& second) override;
         std::optional<Math::Vector2> collision_mtv(const HitBoxe_Shape &first, const HitBoxe_Shape &second) override;

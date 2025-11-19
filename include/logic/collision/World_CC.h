@@ -17,23 +17,22 @@
 ***************************************************************/
 #ifndef PACMAN_WORLD_CC_H
 #define PACMAN_WORLD_CC_H
+#include <memory>
+
 #include "Separating_Axis_Theorem.h"
+#include "logic/Tile_Grid.h"
 
 namespace Logic::Collision {
 
     class World_CC final : public Separating_Axis_Theorem {
-        std::vector<std::vector<int>> world_;
-        size_t height_, width_;
+        std::shared_ptr<Tile_Grid> world_;
+        unsigned int height_ = 0, width_ = 0;
         public:
-        using Separating_Axis_Theorem::collision;
-
-        World_CC();
-        explicit World_CC(const std::vector<std::vector<int>> &vector);
-        World_CC(size_t height, size_t width);
-
+        explicit World_CC(const std::shared_ptr<Tile_Grid> &world);
         ~World_CC() override;
 
-        bool collision(const HitBoxe_Shape& entity);
+        using Separating_Axis_Theorem::collision;
+        bool collision(const std::shared_ptr<HitBoxe>& entity);
     };
 }
 

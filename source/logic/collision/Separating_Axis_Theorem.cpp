@@ -23,9 +23,47 @@
 
 namespace Logic::Collision {
 
-    Separating_Axis_Theorem::Separating_Axis_Theorem() {
+    Separating_Axis_Theorem::Separating_Axis_Theorem() = default;
+
+    bool Separating_Axis_Theorem::collision(const std::shared_ptr<HitBoxe> &first, const std::shared_ptr<HitBoxe> &second) {
+
+        std::vector<Math::Vector2> axes;
+        {
+            std::vector<Math::Vector2> temp = first->get_normals();
+            axes.insert(axes.end(), temp.begin(), temp.end());
+            temp = second->get_normals();
+            axes.insert(axes.end(), temp.begin(), temp.end());
+        }
+        if (axes.empty()) {
+            std::vector<Math::Vector2> temp = first->get_vector_to(second);
+        }
+        if (axes.empty()) {
+            throw std::runtime_error("No axis");
+        }
+
+        for (const auto &axis_raw : axes) {
+            Math::Vector2 axis = axis_raw;
+            axis.normalize(); // required for correct depth
+
+            std::vector<float> f = first->project(axis);
+            std::vector<float> s = second->project(axis);
+
+            const float first_min  = f.front();
+            const float first_max  = f.back();
+
+
+            const float second_min = s.front();
+            const float second_max = s.back();
+
+            // === CONDITION FOR DIVISION ===
+            if (first_max <= second_min || second_max <= first_min) {
+                // Found the dividing axis → no collision
+                return false;
+            }
+        }
+        return true;
     }
-    
+
     bool Separating_Axis_Theorem::collision(const HitBoxe_Shape &first, const HitBoxe_Shape &second) {
         std::vector<Math::Vector2> axes;
         {
