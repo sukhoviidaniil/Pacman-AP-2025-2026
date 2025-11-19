@@ -1,0 +1,95 @@
+{
+  "Ghosts" : {
+    "facial_expressions" : [
+      {
+        "expression" : "To the right",
+        "direction" : [1,0]
+      },
+      {
+        "expression" : "To the left",
+        "direction" : [-1,0]
+      },
+      {
+        "expression" : "Back",
+        "direction" : [0,-1]
+      },
+      {
+        "expression" : "Forward",
+        "direction" : [0,1]
+      }
+    ],
+    "number of expressions per direction" : 1,
+    "recLeft" : {
+      "base" : 1,
+      "increase" : 50
+    },
+    "recTop" : {
+      "base" : 4,
+      "increase" : 100
+    },
+    "names" : ["Blinky", "Pinky", "Inky", "Clyde", "Sludgy", "Shady"]
+  },
+  "Ghosts_Dead" : {
+    "facial_expressions" : [
+      {
+        "expression" : "To the right",
+        "direction" : [1,0]
+      },
+      {
+        "expression" : "To the left",
+        "direction" : [-1,0]
+      },
+      {
+        "expression" : "Back",
+        "direction" : [0,-1]
+      },
+      {
+        "expression" : "Forward",
+        "direction" : [0,1]
+      },
+      {
+        "expression" : "Blanco",
+        "direction" : [0,0]
+      }
+    ],
+    "number of expressions per direction" : 1,
+    "recLeft" : {
+      "base" : 300,
+      "increase" : 0
+    },
+    "recTop" : {
+      "base" : 204,
+      "increase" : 50
+    }
+  },
+  "Pac-Man": {
+    "facial_expressions" : [
+      {
+        "expression" : "To the right",
+        "direction" : [1,0]
+      },
+      {
+        "expression" : "To the left",
+        "direction" : [-1,0]
+      },
+      {
+        "expression" : "Back",
+        "direction" : [0,-1]
+      },
+      {
+        "expression" : "Forward",
+        "direction" : [0,1]
+      }
+    ],
+    "number of expressions per direction" : 3,
+    "recLeft" : {
+      "base" : 851,
+      "increase" : 50
+    },
+    "recTop" : {
+      "base" : 4,
+      "increase" : 50
+    },
+    "names" : ["Mr. Pacman", "Mr. Gray"]
+  }
+}

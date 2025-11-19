@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Entity.h
+ * File:          Tile.cpp
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-10-23
+ * Created:       2025-11-05
  * Modified:      []
  *
  * Description:   []
@@ -15,23 +15,18 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_ENTITY_H
-#define PACMAN_ENTITY_H
 
-#include "math/Vector2.h"
+#include "logic/Tile.h"
 
-namespace Core {
-    class Entity {
-    protected:
-        Math::Vector2 position_;
-        // TODO
-        float radius = 5.0;
-        bool alive = true;
-    public:
-        explicit Entity(const Math::Vector2 &position);
+namespace Logic {
+    Tile::Tile(const Math::Vector2 &t_center) : center(t_center) {
+    }
 
-    };
+    Math::Vector2 Tile::get_center() const {
+        return center;
+    }
+
+    std::shared_ptr<Core::Entity> Tile::occupied() const {
+        return my_entity;
+    }
 }
-
-
-#endif //PACMAN_ENTITY_H

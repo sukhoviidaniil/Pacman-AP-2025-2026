@@ -1,0 +1,93 @@
+{
+  "from_file" : "sprite.png",
+  "sprite_width": 35,
+  "sprite_height": 35,
+  "names" :  ["Blinky", "Pinky", "Inky", "Clyde", "Sludgy", "Shady"],
+  "number_of_statuses" : 4,
+  "statuses" : [
+    {
+      "facial_expressions" : [
+        {
+          "expression" : "To the right",
+          "direction" : [1,0]
+        },
+        {
+          "expression" : "Back",
+          "direction" : [0,-1]
+        },
+        {
+          "expression" : "To the left",
+          "direction" : [-1,0]
+        },
+        {
+          "expression" : "Forward",
+          "direction" : [0,1]
+        }
+      ],
+      "number_of_expressions_per_direction" : 1,
+      "recLeft" : {
+        "base" : 1,
+        "increase" : 50
+      },
+      "recTop" : {
+        "base" : 4,
+        "increase" : 100
+      }
+    },
+    {
+      "facial_expressions" : [
+        {
+          "expression" : "To the right",
+          "direction" : [1,0]
+        },
+        {
+          "expression" : "Back",
+          "direction" : [0,-1]
+        },
+        {
+          "expression" : "To the left",
+          "direction" : [-1,0]
+        },
+        {
+          "expression" : "Forward",
+          "direction" : [0,1]
+        }
+      ],
+      "number_of_expressions_per_direction" : 1,
+      "recLeft" : {
+        "base" : 301,
+        "increase" : 0
+      },
+      "recTop" : {
+        "base" : 254,
+        "increase" : 50
+      }
+    },
+    {
+      "facial_expressions" : [
+        {
+          "expression" : "Blanco",
+          "direction" : [0,0],
+          "recLeft" : 1,
+          "recTop" : 554
+        }
+      ]
+    },
+    {
+      "facial_expressions" : [
+        {
+          "expression" : "Blanco",
+          "direction" : [0,0],
+          "recLeft" : 1,
+          "recTop" : 554
+        },
+        {
+          "expression" : "Blanco",
+          "direction" : [0,0],
+          "recLeft" : 51,
+          "recTop" : 554
+        }
+      ]
+    }
+  ]
+}

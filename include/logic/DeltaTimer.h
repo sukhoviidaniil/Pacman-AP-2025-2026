@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Entity.h
+ * File:          DeltaTimer.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-10-23
+ * Created:       2025-11-15
  * Modified:      []
  *
  * Description:   []
@@ -15,23 +15,19 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_ENTITY_H
-#define PACMAN_ENTITY_H
+#ifndef PACMAN_DELTATIMER_H
+#define PACMAN_DELTATIMER_H
+#include <chrono>
 
-#include "math/Vector2.h"
-
-namespace Core {
-    class Entity {
-    protected:
-        Math::Vector2 position_;
-        // TODO
-        float radius = 5.0;
-        bool alive = true;
+namespace Logic {
+    class DeltaTimer {
     public:
-        explicit Entity(const Math::Vector2 &position);
-
+        using clock = std::chrono::steady_clock;
+        DeltaTimer();
+        float tick();
+    private:
+        clock::time_point last;
     };
 }
 
-
-#endif //PACMAN_ENTITY_H
+#endif //PACMAN_DELTATIMER_H

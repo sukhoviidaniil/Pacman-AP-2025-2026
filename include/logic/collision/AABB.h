@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Entity.h
+ * File:          AABB.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-10-23
+ * Created:       2025-11-18
  * Modified:      []
  *
  * Description:   []
@@ -15,23 +15,18 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_ENTITY_H
-#define PACMAN_ENTITY_H
+#ifndef PACMAN_AABB_H
+#define PACMAN_AABB_H
+#include <limits>
 
-#include "math/Vector2.h"
 
-namespace Core {
-    class Entity {
-    protected:
-        Math::Vector2 position_;
-        // TODO
-        float radius = 5.0;
-        bool alive = true;
-    public:
-        explicit Entity(const Math::Vector2 &position);
-
+namespace Logic::Collision {
+    struct AABB {
+        float min_X = std::numeric_limits<float>::max();
+        float max_X = -std::numeric_limits<float>::max();
+        float min_Y = std::numeric_limits<float>::max();
+        float max_Y = -std::numeric_limits<float>::max();
     };
 }
 
-
-#endif //PACMAN_ENTITY_H
+#endif //PACMAN_AABB_H

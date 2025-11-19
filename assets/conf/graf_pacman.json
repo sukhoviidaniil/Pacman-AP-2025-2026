@@ -1,0 +1,55 @@
+{
+  "from file" : "sprite.png",
+  "sprite_width": 35,
+  "sprite_height": 35,
+  "names" : ["Mr. Pacman", "Mr. Gray"],
+  "number of statuses" : 2,
+  "statuses" : [
+    {
+      "facial expressions" : [
+        {
+          "expression" : "To the right",
+          "direction" : [1,0]
+        },
+        {
+          "expression" : "Back",
+          "direction" : [0,-1]
+        },
+        {
+          "expression" : "To the left",
+          "direction" : [-1,0]
+        },
+        {
+          "expression" : "Forward",
+          "direction" : [0,1]
+        }
+      ],
+      "number of expressions per direction" : 3,
+      "recLeft" : {
+        "base" : 851,
+        "increase" : 50
+      },
+      "recTop" : {
+        "base" : 4,
+        "increase" : 50
+      }
+    },
+    {
+      "facial_expressions" : [
+        {
+          "expression" : "Blanco",
+          "direction" : [0,0]
+        }
+      ],
+      "number of expressions per direction" : 11,
+      "recLeft" : {
+        "base" : 351,
+        "increase" : 50
+      },
+      "recTop" : {
+        "base" : 4,
+        "increase" : 50
+      }
+    }
+  ]
+}

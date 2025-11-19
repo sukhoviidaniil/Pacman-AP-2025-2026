@@ -17,17 +17,19 @@
 ***************************************************************/
 #ifndef PACMAN_TILE_H
 #define PACMAN_TILE_H
+#include <memory>
 
-class Tile {
-    int width = 10, height = 10;
-    int pixel_size = 10;
-    int status = 0;
+#include "core/Entity.h"
+namespace Logic {
+    class Tile {
+        Math::Vector2 center;
+        int status = 0;
+        std::shared_ptr<Core::Entity> my_entity;
     public:
-    Tile(int width, int height, int pixel_size, int status);
-
-    void get_consumable(); // TODO: set consumable type
-    bool is_walkable() const;
-    bool get_center() const;
-};
+        explicit Tile(const Math::Vector2 &t_center);
+        [[nodiscard]] Math::Vector2 get_center() const;
+        [[nodiscard]] std::shared_ptr<Core::Entity> occupied() const;
+    };
+}
 
 #endif //PACMAN_TILE_H

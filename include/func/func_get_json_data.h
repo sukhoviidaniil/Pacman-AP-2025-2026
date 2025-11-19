@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Entity.h
+ * File:          func_get_json_data.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-10-23
+ * Created:       2025-11-19
  * Modified:      []
  *
  * Description:   []
@@ -15,23 +15,17 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_ENTITY_H
-#define PACMAN_ENTITY_H
+#ifndef PACMAN_FUNC_GET_JSON_DATA_H
+#define PACMAN_FUNC_GET_JSON_DATA_H
+#include "func_open_file.h"
+#include "json.hpp"
 
-#include "math/Vector2.h"
-
-namespace Core {
-    class Entity {
-    protected:
-        Math::Vector2 position_;
-        // TODO
-        float radius = 5.0;
-        bool alive = true;
-    public:
-        explicit Entity(const Math::Vector2 &position);
-
-    };
+inline nlohmann::json get_json_data(const std::string &filename) {
+    std::ifstream file = open_file(filename);
+    nlohmann::json data;
+    file >> data;
+    file.close();
+    return data;
 }
 
-
-#endif //PACMAN_ENTITY_H
+#endif //PACMAN_FUNC_GET_JSON_DATA_H
