@@ -17,10 +17,10 @@
 ***************************************************************/
 #ifndef PACMAN_WORLD_CC_H
 #define PACMAN_WORLD_CC_H
-#include <memory>
 
 #include "Separating_Axis_Theorem.h"
 #include "logic/Tile_Grid.h"
+#include <memory>
 
 namespace Logic::Collision {
 

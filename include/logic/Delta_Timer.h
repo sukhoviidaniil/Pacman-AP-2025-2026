@@ -1,6 +1,6 @@
 /***************************************************************
  * Project:       Pacman
- * File:          DeltaTimer.cpp
+ * File:          Delta_Timer.h
  *
  * Author:        Sukhovii Daniil
  * Created:       2025-11-15
@@ -15,17 +15,19 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#include "logic/DeltaTimer.h"
+#ifndef PACMAN_DELTATIMER_H
+#define PACMAN_DELTATIMER_H
+#include <chrono>
 
 namespace Logic {
-    DeltaTimer::DeltaTimer() {
-        last = clock::now();
-    }
-
-    float DeltaTimer::tick()  {
-        const auto now = clock::now();
-        const std::chrono::duration<float> diff = now - last;
-        last = now;
-        return diff.count(); // seconds
-    }
+    class Delta_Timer {
+    public:
+        using clock = std::chrono::steady_clock;
+        Delta_Timer();
+        float tick();
+    private:
+        clock::time_point last;
+    };
 }
+
+#endif //PACMAN_DELTATIMER_H

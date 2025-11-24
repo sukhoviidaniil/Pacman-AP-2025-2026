@@ -1,6 +1,6 @@
 /***************************************************************
  * Project:       Pacman
- * File:          LogicMap.h
+ * File:          Logic_Map.h
  *
  * Author:        Sukhovii Daniil
  * Created:       2025-11-08
@@ -20,17 +20,17 @@
 #include <vector>
 
 namespace Logic {
-    class LogicMap {
+    class Logic_Map {
         unsigned int height, width;
         public:
         std::vector<std::vector<int>> map;
-        LogicMap();
-        explicit LogicMap(unsigned int height, unsigned int width);
-        explicit LogicMap(std::vector<std::vector<int> > t_map);
+        Logic_Map();
+        explicit Logic_Map(unsigned int height, unsigned int width);
+        explicit Logic_Map(std::vector<std::vector<int> > t_map);
         void set_height(unsigned int t_height);
         void set_width(unsigned int t_width);
         // == Comparison ==========
-        [[nodiscard]] bool same_size(const LogicMap& other) const;
+        [[nodiscard]] bool same_size(const Logic_Map& other) const;
     };
 }
 

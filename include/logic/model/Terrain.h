@@ -1,6 +1,6 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Stage.h
+ * File:          Terrain.cpp
  *
  * Author:        Sukhovii Daniil
  * Created:       2025-11-19
@@ -15,18 +15,20 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_STAGE_H
-#define PACMAN_STAGE_H
 
-namespace Core {
-    class Stage {
-        public:
-        Stage();
-        virtual ~Stage();
+#ifndef PACMAN_TERRAIN_H
+#define PACMAN_TERRAIN_H
 
-        virtual void simulate();
-        virtual void render();
+#include "Entity.h"
+
+
+
+namespace Logic::Model {
+
+    class Terrain: public Entity {
+
+
     };
 }
 
-#endif //PACMAN_STAGE_H
+#endif

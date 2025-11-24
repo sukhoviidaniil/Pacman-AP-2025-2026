@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Entity.cpp
+ * File:          Pac_Man.cpp
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-11-17
+ * Created:       2025-11-19
  * Modified:      []
  *
  * Description:   []
@@ -15,10 +15,3 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-
-#include "core/Entity.h"
-
-namespace Core {
-    Entity::Entity(const Math::Vector2 &position) :position_(position) {
-    }
-}

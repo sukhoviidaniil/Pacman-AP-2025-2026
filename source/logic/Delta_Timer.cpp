@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Stage.h
+ * File:          Delta_Timer.cpp
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-11-19
+ * Created:       2025-11-15
  * Modified:      []
  *
  * Description:   []
@@ -15,18 +15,17 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_STAGE_H
-#define PACMAN_STAGE_H
+#include "logic/Delta_Timer.h"
 
-namespace Core {
-    class Stage {
-        public:
-        Stage();
-        virtual ~Stage();
+namespace Logic {
+    Delta_Timer::Delta_Timer() {
+        last = clock::now();
+    }
 
-        virtual void simulate();
-        virtual void render();
-    };
+    float Delta_Timer::tick()  {
+        const auto now = clock::now();
+        const std::chrono::duration<float> diff = now - last;
+        last = now;
+        return diff.count(); // seconds
+    }
 }
-
-#endif //PACMAN_STAGE_H

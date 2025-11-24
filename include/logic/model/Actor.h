@@ -17,10 +17,10 @@
 ***************************************************************/
 #ifndef PACMAN_ACTOR_H
 #define PACMAN_ACTOR_H
-#include "Entity.h"
+#include "logic/model/Entity.h"
 #include "logic/collision/Collision_Control.h"
 
-namespace Core {
+namespace Logic::Model {
     class Actor : public Entity {
 
         Math::Vector2 current_direction_;

@@ -18,18 +18,22 @@
 #ifndef PACMAN_ENTITY_H
 #define PACMAN_ENTITY_H
 
+#include <memory>
+
+#include "logic/collision/HitBoxe.h"
 #include "math/Vector2.h"
 
-namespace Core {
+namespace Logic::Model {
     class Entity {
     protected:
         Math::Vector2 position_;
-        // TODO
-        float radius = 5.0;
-        bool alive = true;
+        std::shared_ptr<Collision::HitBoxe> hitbox_;
+        int status_ = 0;
     public:
         explicit Entity(const Math::Vector2 &position);
 
+        [[nodiscard]] Math::Vector2 get_position() const;
+        std::shared_ptr<Collision::HitBoxe> get_hitboxe();
     };
 }
 

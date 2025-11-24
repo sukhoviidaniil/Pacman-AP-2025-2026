@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Stage.h
+ * File:          Entity.cpp
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-11-19
+ * Created:       2025-11-17
  * Modified:      []
  *
  * Description:   []
@@ -15,18 +15,10 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_STAGE_H
-#define PACMAN_STAGE_H
 
-namespace Core {
-    class Stage {
-        public:
-        Stage();
-        virtual ~Stage();
+#include "logic/model/Entity.h"
 
-        virtual void simulate();
-        virtual void render();
-    };
+namespace Logic::Core {
+    Entity::Entity(const Math::Vector2 &position) :position_(position) {
+    }
 }
-
-#endif //PACMAN_STAGE_H

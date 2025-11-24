@@ -19,19 +19,36 @@
 #include "logic/Tile.h"
 
 namespace Logic {
-    Tile::Tile(const std::shared_ptr<Collision::HitBoxe>& hitboxe):
-    hitboxe_(hitboxe) {
-        std::vector<Math::Vector2> centers = hitboxe_->get_centers();
-        if (centers.empty()) throw;
-        center_ = hitboxe_->get_centers()[0];
-    }
 
-    Tile::Tile(const std::shared_ptr<Collision::HitBoxe> &hitboxe, const Math::Vector2 &t_center):
-    hitboxe_(hitboxe), center_(t_center){
+    Tile::Tile(const std::shared_ptr<Model::Terrain> &terrains):
+    terrains_(terrains){
+
     }
 
     void Tile::set_status(int status) {
         status_ = status;
+    }
+
+    void Tile::add_Entity(const std::shared_ptr<Model::Entity> &entity) {
+        if (!entity) return;
+
+        for (const auto& e : entities_) {
+            if (e == entity)
+                return;
+        }
+
+        entities_.push_back(entity);
+    }
+
+    void Tile::remove_Entity(const std::shared_ptr<Model::Entity> &entity) {
+        if (!entity) return;
+
+        for (auto it = entities_.begin(); it != entities_.end(); ++it) {
+            if (*it == entity) {
+                entities_.erase(it);
+                return;
+            }
+        }
     }
 
     int Tile::get_status() const {
@@ -43,6 +60,10 @@ namespace Logic {
     }
 
     std::shared_ptr<Collision::HitBoxe> Tile::get_hitbox() const {
-        return hitboxe_;
+        return terrains_->get_hitboxe();
+    }
+
+    std::vector<std::shared_ptr<Model::Entity>> Tile::get_entities() const {
+        return entities_;
     }
 }

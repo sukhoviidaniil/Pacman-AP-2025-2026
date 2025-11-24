@@ -19,17 +19,9 @@
 #define PACMAN_STATUS_INFO_H
 
 #include "Expression_Info.h"
+#include "rec_Info.h"
 
 namespace Graphics::Info {
-
-    struct rec_Info {
-        unsigned int base = 0;
-        unsigned int increase = 0;
-    };
-    inline void from_json(const nlohmann::json& j, rec_Info& s) {
-        s.base = j.value<unsigned int>("base", 0);
-        s.increase = j.value<unsigned int>("increase", 0);
-    }
 
     class Status_Info {
     public:

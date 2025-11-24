@@ -1,6 +1,6 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Stage.h
+ * File:          Fruit.cpp
  *
  * Author:        Sukhovii Daniil
  * Created:       2025-11-19
@@ -15,18 +15,3 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_STAGE_H
-#define PACMAN_STAGE_H
-
-namespace Core {
-    class Stage {
-        public:
-        Stage();
-        virtual ~Stage();
-
-        virtual void simulate();
-        virtual void render();
-    };
-}
-
-#endif //PACMAN_STAGE_H

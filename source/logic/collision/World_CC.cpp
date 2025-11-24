@@ -49,7 +49,7 @@ namespace Logic::Collision {
                 }
                 std::shared_ptr<HitBoxe> tile_hitbox = tile->get_hitbox();
                 if (Separating_Axis_Theorem::collision(entity, tile_hitbox))
-                    return true; //
+                    return true;
             }
         }
         return false;
