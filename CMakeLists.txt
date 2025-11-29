@@ -65,13 +65,13 @@ target_link_libraries(${APP_TARGET}
         PRIVATE
         math_lib
         logic_lib
-        core_lib
         graphics_lib
+        core_lib
 )
 
 
 if(WIN32)
-    # Создаём кастомную цель "run", которая запускает exe с нужным PATH
+    # Create a custom target “run” that launches the exe with the required PATH
     add_custom_target(run_on_windows
             COMMAND ${CMAKE_COMMAND} -E env "PATH=${SFML_ROOT}/bin;$ENV{PATH}" $<TARGET_FILE:${APP_TARGET}>
             DEPENDS ${APP_TARGET}
@@ -79,7 +79,7 @@ if(WIN32)
             COMMENT "Running ${APP_TARGET} with SFML DLLs in PATH"
     )
 elseif(UNIX)
-    # Linux: добавляем RPATH, чтобы ELF искал .so в SFML/lib
+    # Linux: add RPATH so that ELF searches for .so in SFML/lib
     set_target_properties(${APP_TARGET} PROPERTIES
             BUILD_RPATH "${SFML_ROOT}/lib"
             INSTALL_RPATH "${SFML_ROOT}/lib"
