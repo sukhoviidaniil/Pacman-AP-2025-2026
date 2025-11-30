@@ -1,0 +1,22 @@
+{
+  "tile_grid" : "tile_grid1.json",
+  "camera_game" : "camera_game1.json",
+  "entity_model": [
+    {
+      "Model" : "Ghost",
+      "name" : "Blinky",
+      "position" : {"x" :  0, "y" : 0},
+      "direction" : {"x" :  1, "y" : 0},
+      "speed" : 0.1,
+      "status" : 0,
+      "hitbox" : "hitbox1.json"
+    }
+  ],
+  "entity_view" : [
+    {
+      "View" : "Ghost",
+      "entity_name" : "Blinky",
+      "Sprite_Group" : "Blinky"
+    }
+  ]
+}

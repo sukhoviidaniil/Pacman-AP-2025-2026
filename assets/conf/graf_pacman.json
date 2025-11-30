@@ -3,10 +3,10 @@
   "sprite_width": 35,
   "sprite_height": 35,
   "names" : ["Mr. Pacman", "Mr. Gray"],
-  "number of statuses" : 2,
+  "number_of_statuses" : 2,
   "statuses" : [
     {
-      "facial expressions" : [
+      "facial_expressions" : [
         {
           "expression" : "To the right",
           "direction" : [1,0]
@@ -24,7 +24,7 @@
           "direction" : [0,1]
         }
       ],
-      "number of expressions per direction" : 3,
+      "number_of_expressions_per_direction" : 3,
       "recLeft" : {
         "base" : 851,
         "increase" : 50
@@ -41,7 +41,7 @@
           "direction" : [0,0]
         }
       ],
-      "number of expressions per direction" : 11,
+      "number_of_expressions_per_direction" : 11,
       "recLeft" : {
         "base" : 351,
         "increase" : 50

@@ -25,9 +25,19 @@ set(APP_TARGET PacMan)
 # -----------------------------------------
 # Specifying global variables
 # -----------------------------------------
-# Folders with .h and .cpp files
-set(SOURCE_DIR "${CMAKE_SOURCE_DIR}/source")
-set(INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
+
+# Specify the path to SFML
+set(SFML_RELATIVE_DIR "external/SFML-2.6.1")
+if(WIN32)
+    set(SFML_RELATIVE_DIR "${SFML_RELATIVE_DIR}/windows")
+elseif(UNIX)
+    set(SFML_RELATIVE_DIR "${SFML_RELATIVE_DIR}/linux")
+endif()
+set(SFML_ROOT "${CMAKE_SOURCE_DIR}/${SFML_RELATIVE_DIR}")
+set(CMAKE_PREFIX_PATH "${SFML_ROOT}/lib/cmake/SFML")
+find_package(SFML 2.6 COMPONENTS graphics window system REQUIRED)
+
+set(JSON_DIR "${CMAKE_SOURCE_DIR}/external/json")
 
 # -----------------------------------------
 # Collect all the logical units of the project
@@ -35,7 +45,7 @@ set(INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
 
 # Collecting additional files that do not fall into general categories
 set(RELEASE_SOURCE_FILES
-        ${SOURCE_DIR}/main.cpp
+        main.cpp
 )
 
 # Collecting Function Resources
@@ -44,10 +54,10 @@ set(FUNC_INCLUDE_DIRS
         ${INCLUDE_DIR}/func
 )
 
-add_subdirectory(source/math)
-add_subdirectory(source/logic)
-add_subdirectory(source/core)
-add_subdirectory(source/graphics)
+add_subdirectory(lib/math)
+add_subdirectory(lib/logic)
+add_subdirectory(lib/core)
+add_subdirectory(lib/graphics)
 add_subdirectory(tests)
 
 # -----------------------------------------
@@ -59,10 +69,6 @@ add_executable(${APP_TARGET}
         ${FUNC_SOURCES}
 )
 
-target_include_directories(${APP_TARGET} PUBLIC
-        ${INCLUDE_DIR}/
-)
-
 target_link_libraries(${APP_TARGET}
         PRIVATE
         math_lib
@@ -70,6 +76,11 @@ target_link_libraries(${APP_TARGET}
         graphics_lib
         core_lib
 )
+#[[
+target_include_directories(${APP_TARGET} PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/external/json
+)
+]]#
 
 if(WIN32)
     message("CMAKE_CURRENT_BINARY_DIR - ${CMAKE_CURRENT_BINARY_DIR}")
