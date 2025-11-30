@@ -58,9 +58,11 @@ add_executable(${APP_TARGET}
         ${RELEASE_SOURCE_FILES}
         ${FUNC_SOURCES}
 )
+
 target_include_directories(${APP_TARGET} PUBLIC
         ${INCLUDE_DIR}/
 )
+
 target_link_libraries(${APP_TARGET}
         PRIVATE
         math_lib
@@ -69,15 +71,21 @@ target_link_libraries(${APP_TARGET}
         core_lib
 )
 
-
 if(WIN32)
-    # Create a custom target “run” that launches the exe with the required PATH
-    add_custom_target(run_on_windows
-            COMMAND ${CMAKE_COMMAND} -E env "PATH=${SFML_ROOT}/bin;$ENV{PATH}" $<TARGET_FILE:${APP_TARGET}>
+    message("CMAKE_CURRENT_BINARY_DIR - ${CMAKE_CURRENT_BINARY_DIR}")
+    get_property(SFML_ABSOLUTE_DIR TARGET graphics_lib PROPERTY INTERFACE_SFML_ABSOLUTE_DIR)
+    get_property(SFML_RELATIVE_DIR TARGET graphics_lib PROPERTY INTERFACE_SFML_RELATIVE_DIR)
+    message("SFML_ABSOLUTE_DIR - ${SFML_ABSOLUTE_DIR}")
+    message("SFML_RELATIVE_DIR - ${SFML_RELATIVE_DIR}")
+    set(BAT_FILE "${CMAKE_CURRENT_BINARY_DIR}/run_${APP_TARGET}.bat")
+    add_custom_command(
+            OUTPUT "${BAT_FILE}"
+            COMMAND ${CMAKE_COMMAND} -E echo "@echo off" >  "${BAT_FILE}"
+            COMMAND ${CMAKE_COMMAND} -E echo "set PATH=${SFML_ABSOLUTE_DIR}/bin;%PATH%" >> "${BAT_FILE}"
+            COMMAND ${CMAKE_COMMAND} -E echo "\"%~dp0\\${APP_TARGET}.exe\"" >> "${BAT_FILE}"
             DEPENDS ${APP_TARGET}
-            WORKING_DIRECTORY $<TARGET_FILE_DIR:${APP_TARGET}>
-            COMMENT "Running ${APP_TARGET} with SFML DLLs in PATH"
     )
+    add_custom_target(run_bat ALL DEPENDS "${BAT_FILE}")
 elseif(UNIX)
     # Linux: add RPATH so that ELF searches for .so in SFML/lib
     set_target_properties(${APP_TARGET} PROPERTIES
@@ -85,5 +93,4 @@ elseif(UNIX)
             INSTALL_RPATH "${SFML_ROOT}/lib"
     )
 endif()
-
 target_compile_definitions(${APP_TARGET} PRIVATE ASSETS_DIR="${CMAKE_SOURCE_DIR}/assets")
