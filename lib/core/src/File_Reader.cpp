@@ -16,6 +16,8 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
+#include <utility>
+
 #include "core/File_Reader.h"
 
 namespace Core {
@@ -31,8 +33,8 @@ namespace Core {
         return it->second;
     }
 
-    File_Reader::File_Reader(const std::string &texture_folder, const std::string& configuration_folder):
-    texture_folder_(texture_folder), configuration_folder_(configuration_folder){
+    File_Reader::File_Reader(std::string  graphics_folder, std::string  configuration_folder):
+    graphics_folder_(std::move(graphics_folder)), configuration_folder_(std::move(configuration_folder)){
     }
 
     void File_Reader::add_Reader(const std::string &extension, const std::shared_ptr<Reader> &reader) {
@@ -45,7 +47,7 @@ namespace Core {
         }
 
         sf::Texture texture;
-        texture.loadFromFile(texture_folder_ + name);
+        texture.loadFromFile(graphics_folder_ + name);
         manager.add_Texture(name, texture);
 
         return manager.get_Texture(name)->get();
@@ -69,6 +71,24 @@ namespace Core {
         reader->load_SFML_Sprite_Group(manager, configuration_folder_ + filename);
     }
 
+    std::shared_ptr<Logic::Collision::HitBoxe> File_Reader::make_hitboxe(const std::string &filename) const {
+        const std::string extension = get_extension(filename);
+        const std::shared_ptr<Reader> reader = get_reader(extension);
+        if (!reader) {
+            throw std::runtime_error("No suitable reader was found for the configuration type " + extension);
+        }
+
+    }
+
     Stage_Manager File_Reader::make_Stage_Manager(const Graphics::SFML_Manager &manage, const std::string &path) {
+    }
+
+    Info::Game_Info File_Reader::get_Game_Info(const std::string &filename) const {
+        const std::string extension = get_extension(filename);
+        const std::shared_ptr<Reader> reader = get_reader(extension);
+        if (!reader) {
+            throw std::runtime_error("No suitable reader was found for the configuration type " + extension);
+        }
+        return reader->get_Game_Info(configuration_folder_ + filename);
     }
 }

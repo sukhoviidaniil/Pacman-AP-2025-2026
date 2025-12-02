@@ -17,18 +17,32 @@
 ***************************************************************/
 #ifndef PACMAN_GRAPHICS_FACTORY_H
 #define PACMAN_GRAPHICS_FACTORY_H
-#include "logic/Logic_Factory.h"
-#include "core/Stage.h" // TODO INVALID INCLUDE!!!!
 
+#include "SFML_Manager.h"
+#include "logic/model/Actor.h"
+#include "graphics/view/Actor_View.h"
+#include "view/Tile_Grid_View.h"
 
 namespace Graphics {
-    class Graphics_Factory: public Logic::Logic_Factory{
+
+    struct Actor_Pair {
+        std::shared_ptr<Logic::Model::Actor> actor_model_;
+        std::shared_ptr<View::Actor_View> actor_view_;
+    };
+
+    struct Tile_Grid_Pair {
+        std::shared_ptr<Logic::Tile_Grid> tile_grid_model_;
+        std::shared_ptr<View::Tile_Grid_View> tile_grid_view_;
+    };
+
+    class Graphics_Factory{
         public:
-
-
-        std::shared_ptr<Logic::Tile_Grid> make_grid(std::shared_ptr<Core::Stage> stage, unsigned int width, unsigned int height, float tile_size, const std::vector<std::vector<int>>& grid);
+        static Actor_Pair make_Actor(const SFML_Manager& manager, const View::Actor_View_Info &view_info, const Logic::Model::Actor_Info &model_info);
+        static Actor_Pair make_Actor(const SFML_Manager& manager, const View::Actor_View_Info &view_info, const std::shared_ptr<Logic::Model::Actor>& actor_model);
+        static Tile_Grid_Pair make_Tile_Grid(const SFML_Manager& manager, const Logic::Tile_Grid_Info &tile_grid_info);
 
     };
+
 }
 
 #endif //PACMAN_GRAPHICS_FACTORY_H

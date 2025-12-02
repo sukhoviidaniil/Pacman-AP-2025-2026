@@ -26,14 +26,12 @@ namespace Logic::Model {
         std::string name,
         const Math::Vector2 &position,
         const std::shared_ptr<Collision::HitBoxe>& hitbox,
-        const unsigned int status):
-        name_(std::move(name)), position_(position), hitbox_(hitbox), status_(status){
+        const unsigned int max_status):
+        name_(std::move(name)), position_(position), hitbox_(hitbox), max_status_(max_status){
 
         hitbox_->move_to(position);
     }
 
-    Entity::Entity(const Math::Vector2 &vector2): position_(vector2) {
-    }
 
     Entity::~Entity() = default;
 

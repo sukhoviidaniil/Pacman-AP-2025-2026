@@ -1,0 +1,34 @@
+{
+  "entities" : [
+    {
+      "Type" : "Actor",
+      "Model" : {
+        "name" : "Blinky",
+        "position" : {"x" :  0, "y" : 0},
+        "speed" : 0.1,
+        "max_status" : 4,
+        "hitbox" : "hitbox1.json"
+      },
+      "View" : {
+        "Sprite_Group" : "Blinky"
+      }
+    },
+    {
+      "Type" : "Actor",
+      "Model" : {
+        "name" : "Inky",
+        "position" : {"x" :  0, "y" : 0},
+        "speed" : 0.1,
+        "max_status" : 4,
+        "hitbox" : "hitbox1.json"
+      }
+    },
+    {
+      "Type" : "Actor",
+      "Model" : "Inky",
+      "View" : {
+        "Sprite_Group" : "Blinky"
+      }
+    }
+  ]
+}

@@ -6,21 +6,10 @@ target_include_directories(graphics_lib PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-#[[
-target_include_directories(graphics_lib PUBLIC
-        ${SFML_INCLUDE_DIR}
-)
 target_link_libraries(graphics_lib PUBLIC
         math_lib logic_lib
         sfml-graphics sfml-window sfml-system
 )
-]]#
-target_link_libraries(graphics_lib PUBLIC
-        math_lib logic_lib
-        sfml-graphics sfml-window sfml-system
-)
-
-
 
 #[[
 # Specify the path to SFML

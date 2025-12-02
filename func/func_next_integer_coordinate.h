@@ -24,7 +24,7 @@
 inline Math::Vector2 next_integer_coordinate (const Math::Vector2 &position, const Math::Vector2 &direction) {
     const float x = position.x;
     const float y = position.y;
-    const float dx = direction.x;
+    const float dx = direction.x;к4
     const float dy = direction.y;
 
     // Next vertical line

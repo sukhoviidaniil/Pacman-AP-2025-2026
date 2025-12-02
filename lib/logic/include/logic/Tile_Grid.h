@@ -25,6 +25,14 @@
 #include <vector>
 
 namespace Logic {
+
+    struct Tile_Grid_Info {
+        unsigned int rows;
+        unsigned int columns;
+        float tile_size;
+        std::vector<std::vector<int>> logic_grid;
+    };
+
     class Tile_Grid {
         size_t rows_, columns_;
         float offset_row_ = 0, offset_columns_ = 0;
@@ -42,12 +50,15 @@ namespace Logic {
         > entity_tile_;
     public:
         Tile_Grid(size_t rows, size_t columns, float tile_size);
+        Tile_Grid(size_t rows, size_t columns, float tile_size, std::vector<std::vector<std::shared_ptr<Tile>>> tiles);
         ~Tile_Grid();
 
         [[nodiscard]] size_t get_rows() const;
         [[nodiscard]] size_t get_columns() const;
         [[nodiscard]] unsigned int get_width() const;
         [[nodiscard]] unsigned int get_height() const;
+
+        [[nodiscard]] Math::Vector2 get_next_tile_center(const Math::Vector2& pos, const Math::Vector2& dir) const;
 
         [[nodiscard]] std::vector<std::vector<std::shared_ptr<Tile>>> get_tiles() const;
         /**
@@ -63,7 +74,10 @@ namespace Logic {
          */
         [[nodiscard]] std::shared_ptr<Tile> get_tile(size_t x, size_t y) const;
 
-
+        /** Видаляє Сутність з старої клітинки та додає її до нової, використовуючи її позицію
+         *
+         * @param entity
+         */
         void update_Entity_Tile(const std::shared_ptr<Model::Entity>& entity);
     };
 }

@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Warning.h
+ * File:          Game_Info.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-11-29
+ * Created:       2025-12-02
  * Modified:      []
  *
  * Description:   []
@@ -15,21 +15,19 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_WARNING_H
-#define PACMAN_WARNING_H
+#ifndef PACMAN_GAME_INFO_H
+#define PACMAN_GAME_INFO_H
 
 #include <string>
 
 namespace Core::Info {
-    class Warning {
-
-        std::string what_;
-        public:
-        explicit Warning(const std::string& what);
-        virtual ~Warning();
-
-        [[nodiscard]] const std::string& what() const;
+    struct Game_Info {
+        std::string graphics = "not SFML";
+        unsigned int window_width = 1000;
+        unsigned int window_height = 1000;
+        std::string graphics_conf = "no_conf.json";
+        std::string stage_mng = "no_conf.json";
     };
 }
 
-#endif //PACMAN_WARNING_H
+#endif //PACMAN_GAME_INFO_H

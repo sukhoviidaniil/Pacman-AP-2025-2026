@@ -22,13 +22,15 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include "graphics/view/Entity_View.h"
 #include <memory>
+
+#include "SFML/Graphics/RectangleShape.hpp"
+
 namespace Graphics::View {
     class Terrain_View : public Entity_View {
+        std::shared_ptr<sf::RectangleShape> placeholder;
         std::shared_ptr<sf::Sprite> sprite_ = nullptr;
     public:
-        Terrain_View();
-        explicit Terrain_View(const std::shared_ptr<sf::Sprite>& sprite);
-
+        explicit Terrain_View(const std::string& name, const std::shared_ptr<sf::Sprite>& sprite);
         void render(sf::RenderWindow &window, const Math::Vector2& pixel_pos) const override;
     };
 }

@@ -21,7 +21,7 @@
 
 #include "Warning.h"
 
-namespace Info {
+namespace Core::Info {
     class Error final : public Warning {
         public:
         explicit Error(const std::string& what);

@@ -1,24 +1,7 @@
 {
   "graphics" : "SFML",
-
   "window_width" : 800,
   "window_height" : 600,
-
-  "textures " : [
-    "sprite.png"
-  ],
-  "sprites" : [
-
-  ],
-  "sprite_groups" : [
-    "graf_ghosts.json"
-  ],
-
-  "stages" : [
-    {
-      "name" : "Game_Stage",
-      "configuration" : "stage_game1.json"
-    }
-  ],
-  "start_stage" : "Game_Stage"
+  "graphics_conf" : "sprites.json",
+  "stage_mng" : "conf_stage_mng.json"
 }

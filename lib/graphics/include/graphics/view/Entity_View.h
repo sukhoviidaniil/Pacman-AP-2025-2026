@@ -18,17 +18,17 @@
 #ifndef PACMAN_ENTITY_VIEW_H
 #define PACMAN_ENTITY_VIEW_H
 
-
+#include "SFML/Graphics/RenderWindow.hpp"
 #include "math/Vector2.h"
-
-#include <SFML/Graphics/RenderWindow.hpp>
-
 
 namespace Graphics::View {
     class Entity_View {
-    public:
 
+    protected:
+        std::string name_ = "None";
+    public:
         Entity_View();
+        explicit Entity_View(const std::string& name);
         virtual ~Entity_View();
 
         [[nodiscard]] virtual Math::Vector2 get_position() const = 0;

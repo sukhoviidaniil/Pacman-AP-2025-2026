@@ -22,16 +22,14 @@
 
 namespace Logic::Model {
     class Terrain : public Entity {
-
         bool walkable_ = false;
-
         public:
         explicit Terrain(
             const std::string &name, const Math::Vector2 &position,
             const std::shared_ptr<Collision::HitBoxe> &hitbox, unsigned int status, bool walkable = false);
         ~Terrain() override;
 
-        bool walkable() const;
+        [[nodiscard]] bool walkable() const;
     };
 }
 

@@ -22,6 +22,14 @@
 #include "math/Vector2.h"
 
 namespace Logic::Collision {
+
+    struct HitBoxe_Shape_Info {
+        Math::Vector2 pos;
+        float height;
+        float width;
+        unsigned int layer;
+        unsigned int strength;
+    };
     class HitBoxe_Shape final : public HitBoxe {
         std::vector<Math::Vector2> points_;
         public:

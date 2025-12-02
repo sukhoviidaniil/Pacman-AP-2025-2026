@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Delta_Timer.h
+ * File:          Tile_Grid_View.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-11-15
+ * Created:       2025-12-02
  * Modified:      []
  *
  * Description:   []
@@ -15,18 +15,14 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_DELTATIMER_H
-#define PACMAN_DELTATIMER_H
-#include <chrono>
+#ifndef PACMAN_TILE_GRID_VIEW_H
+#define PACMAN_TILE_GRID_VIEW_H
+#include "Entity_View.h"
 
-namespace Logic {
-    class Delta_Timer {
-        using clock = std::chrono::steady_clock;
-        clock::time_point last;
-    public:
-        Delta_Timer();
-        float tick();
+namespace Graphics::View {
+    class Tile_Grid_View : public Entity_View {
+
     };
 }
 
-#endif //PACMAN_DELTATIMER_H
+#endif //PACMAN_TILE_GRID_VIEW_H

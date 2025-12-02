@@ -21,7 +21,7 @@
 
 #include "Error.h"
 
-namespace Info {
+namespace Core::Info {
     class Validation {
         bool valid_ = true;
         std::vector<Error> errors_;

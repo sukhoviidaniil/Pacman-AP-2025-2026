@@ -30,6 +30,7 @@ namespace Core {
 
     void Game::run(const std::string& path) {
         throw;
+        /*
 
         Graphics::SFML_Manager ren = Graphics::SFML_Manager();
 
@@ -85,5 +86,6 @@ namespace Core {
             // Вывод содержимого на экран
             window.display();
         }
+        */
     }
 }

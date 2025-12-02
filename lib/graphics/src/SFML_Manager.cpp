@@ -25,7 +25,7 @@ namespace Graphics {
         textures_[name] = texture;
     }
 
-    std::optional<std::reference_wrapper<sf::Texture>> SFML_Manager::get_Texture(const std::string &name) {
+    std::optional<std::reference_wrapper<const sf::Texture>> SFML_Manager::get_Texture(const std::string &name) const {
         const auto it = textures_.find(name);
         if (it == textures_.end()) return std::nullopt;
         return it->second;
@@ -35,7 +35,7 @@ namespace Graphics {
         sprites_[name] = sprite;
     }
 
-    std::shared_ptr<sf::Sprite> SFML_Manager::get_Sprite(const std::string &name) {
+    std::shared_ptr<sf::Sprite> SFML_Manager::get_Sprite(const std::string &name) const {
         const auto it = sprites_.find(name);
         if (it == sprites_.end()) return nullptr;
         return it->second;
@@ -45,7 +45,7 @@ namespace Graphics {
         sprite_groups_[name] = sprite_group;
     }
 
-    std::shared_ptr<Sprite_Group> SFML_Manager::get_Sprite_Group(const std::string &name) {
+    std::shared_ptr<Sprite_Group> SFML_Manager::get_Sprite_Group(const std::string &name) const{
         const auto it = sprite_groups_.find(name);
         if (it == sprite_groups_.end()) return nullptr;
         return it->second;

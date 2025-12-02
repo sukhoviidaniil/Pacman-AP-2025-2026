@@ -26,7 +26,6 @@ target_link_libraries(run_tests
         gtest_main
         math_lib
         logic_lib
-        core_lib
 )
 
 add_test(NAME AllTests COMMAND run_tests)

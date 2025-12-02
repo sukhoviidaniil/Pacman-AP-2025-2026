@@ -25,10 +25,12 @@
 #include <memory>
 #include <unordered_map>
 
+#include "info/Game_Info.h"
+
 namespace Core {
     class File_Reader {
 
-        std::string texture_folder_;
+        std::string graphics_folder_;
         std::string configuration_folder_;
 
         std::unordered_map<
@@ -43,15 +45,18 @@ namespace Core {
         std::shared_ptr<Reader> get_reader(const std::string &filetype) const;
 
         public:
-        File_Reader(const std::string &texture_folder, const std::string &configuration_folder);
-
+        File_Reader(std::string graphics_folder, std::string configuration_folder);
         void add_Reader(const std::string& extension, const std::shared_ptr<Reader> &reader);
 
         sf::Texture& load_SFML_texture(Graphics::SFML_Manager& manager, const std::string& name) const;
         void load_SFML_Sprite(Graphics::SFML_Manager& manager, const std::string& filename) const;
         void load_SFML_Sprite_Group(Graphics::SFML_Manager& manager, const std::string& filename) const;
 
+        std::shared_ptr<Logic::Collision::HitBoxe> make_hitboxe(const std::string& filename) const;
+
         Stage_Manager make_Stage_Manager(const Graphics::SFML_Manager& manage, const std::string& path);
+
+        Info::Game_Info get_Game_Info(const std::string& filename) const;
     };
 }
 

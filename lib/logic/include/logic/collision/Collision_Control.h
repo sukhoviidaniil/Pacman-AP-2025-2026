@@ -29,7 +29,7 @@ namespace Logic::Collision {
 
         [[nodiscard]] virtual bool collision(const std::shared_ptr<HitBoxe>& first) const = 0;
 
-        /** TODO DOC
+        /**
          *
          * @param first
          * @param second

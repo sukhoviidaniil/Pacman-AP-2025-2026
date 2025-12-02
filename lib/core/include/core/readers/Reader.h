@@ -19,6 +19,7 @@
 #define PACMAN_READER_H
 
 #include "core/Stage_Manager.h"
+#include "core/info/Game_Info.h"
 #include "core/info/Validation.h"
 #include "graphics/Camera.h"
 #include "graphics/SFML_Manager.h"
@@ -33,6 +34,8 @@ namespace Core {
         virtual void load_SFML_Sprite(Graphics::SFML_Manager& manager, const std::string& filename) const = 0;
         virtual void load_SFML_Sprite_Group(Graphics::SFML_Manager& manager, const std::string& filename) const = 0;
 
+
+        [[nodiscard]] virtual std::shared_ptr<Logic::Collision::HitBoxe> make_hitboxe(const std::string& filename) const = 0;
 
         [[nodiscard]] virtual std::shared_ptr<Graphics::Camera> make_Camera(
             const std::string& filename) const = 0;
@@ -50,6 +53,8 @@ namespace Core {
         virtual Stage_Manager make_Stage_Manager(
             const std::shared_ptr<File_Reader>& fr,
             const Graphics::SFML_Manager& manage, const std::string& path) = 0;
+
+        virtual Info::Game_Info get_Game_Info(const std::string& filename) = 0;
 
     };
 }

@@ -142,4 +142,12 @@ namespace Logic::Collision {
     void World_Collision_Manager::update_Entity_Tile(const std::shared_ptr<Model::Entity> &entity) const {
         grid_->update_Entity_Tile(entity);
     }
+
+    std::shared_ptr<Tile_Grid> World_Collision_Manager::get_grid() const {
+        return grid_;
+    }
+
+    Math::Vector2 World_Collision_Manager::get_next_tile_center(const Math::Vector2 &pos, const Math::Vector2 &dir) const {
+        return grid_->get_next_tile_center(pos, dir);
+    }
 }

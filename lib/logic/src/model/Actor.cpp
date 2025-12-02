@@ -17,10 +17,8 @@
 ***************************************************************/
 
 #include "logic/model/Actor.h"
-
 #include <cmath>
 
-//#include "func_next_integer_coordinate.h"
 
 namespace Logic::Model{
 
@@ -28,14 +26,23 @@ namespace Logic::Model{
         return current_direction_;
     }
 
-    Actor::Actor(const Math::Vector2 &position, const Math::Vector2 &direction, const float speed):
-    Entity(position), current_direction_(direction), speed_(speed){
+    Actor::Actor(
+        const std::string &name,
+        const Math::Vector2 &position,
+        const std::shared_ptr<Collision::HitBoxe> &hitbox,
+        const unsigned int status, const float speed):
+        Entity(name, position, hitbox, status), speed_(speed){
+    }
+
+    Actor::Actor(const Actor_Info &info) : Entity(info.name, info.position, info.hitbox, info.max_status), speed_(info.speed) {
     }
 
     void Actor::move(
         const float deltaTime,
-        const Collision::World_Collision_Manager &collision_control
+        const std::shared_ptr<Collision::World_Collision_Manager> &collision_control
         ) {
+
+        std::shared_ptr<Tile_Grid> grid = collision_control->get_grid();
 
         if (speed_ == 0.0f || current_direction_.length() == 0.0f) return;
 
@@ -43,8 +50,7 @@ namespace Logic::Model{
 
         while (remaining_time > 0.0f) {
             // 1. Calculate the next integer coordinate on the path current_dir
-            Math::Vector2 next_cell;
-            // TODO ADD next_integer_coordinate(position_, current_direction_);
+            Math::Vector2 next_cell = grid->get_next_tile_center(position_, current_direction_);
 
             // 2. Calculate the maximum possible displacement to this coordinate
             Math::Vector2 to_cell = next_cell - position_;
@@ -56,29 +62,31 @@ namespace Logic::Model{
 
             // 3. Create a temporary hitbox
             std::shared_ptr<Collision::HitBoxe> hit_boxe = get_hitboxe()->clone();
-            hit_boxe->move_to(displacement);
+            hit_boxe->move_to(position_ + displacement);
 
             // 4. Checking for collisions
-            if (collision_control.collision_world(hit_boxe)) {
+            if (collision_control->collision_world(hit_boxe)) {
                 break;
             }
 
-            // 5.1 Update position
+            // 5 Update position
             position_ += displacement;
-            // 5.2 Update the hitbox position
-            get_hitboxe()->move_to(displacement);
-
-            // 7. Subtract the time used
-            remaining_time -= move_dist / speed_;
 
             // 6. If you have reached the center of the cell and there is a new direction
-
-
             if (std::abs(move_dist - dist_to_cell) < 1e-6f) {
-                bool at_cell_center = (std::abs(std::round(position_.x) - position_.x) < 1e-4f) && (std::abs(std::round(position_.y) - position_.y) < 1e-4f);
-                if (at_cell_center && next_dir_.length() > 0)
-                    current_direction_ = next_dir_;
+                if ((next_cell.x - position_.x) < 1e-4f && (next_cell.y - position_.y) < 1e-4f) {
+                    position_ = next_cell;
+                    if (next_dir_.length()>1) {
+                        current_direction_ = next_dir_;
+                    }
+                }
             }
+
+            // 7 Update the hitbox position
+            get_hitboxe()->move_to(position_);
+
+            // 8. Subtract the time used
+            remaining_time -= move_dist / speed_;
         }
     }
 

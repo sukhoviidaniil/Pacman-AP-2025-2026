@@ -20,23 +20,29 @@
 
 #include <fstream>
 
+#include "core/File_Reader.h"
 #include "core/info/Status_Info.h"
-// #include "func_open_file.h"
+#include "graphics/Graphics_Factory.h"
+#include "logic/Logic_Factory.h"
+#include "graphics/view/Actor_View.h"
 
 namespace Core {
-    nlohmann::json Reader_JSON::get_json_data(const std::string &filename) {
-        std::ifstream file;  //open_file(filename); TODO ADD OPEN FILE
-        nlohmann::json data;
-        file >> data;
-        file.close();
-        return data;
-    }
 
     Reader_JSON::Reader_JSON() = default;
 
     Reader_JSON::~Reader_JSON() = default;
 
     void Reader_JSON::load_SFML_Sprite(Graphics::SFML_Manager &manager, const std::string &filename) const {
+        nlohmann::json data = get_json_data(filename);
+        auto using_texture = data["using_texture"].get<std::string>();
+        const auto texOpt = manager.get_Texture(using_texture);
+        if (!texOpt) {
+            throw std::invalid_argument("Missing texture");
+        }
+        const sf::Texture& texture = texOpt->get();
+        const auto sprite = std::make_shared<sf::Sprite>(texture);
+        const auto name = data["name"].get<std::string>();
+        manager.add_Sprite(name, sprite);
         throw;
     }
 
@@ -114,27 +120,112 @@ namespace Core {
         }
     }
 
+    std::shared_ptr<Logic::Collision::HitBoxe> Reader_JSON::make_hitboxe(const std::string &filename) const {
+        nlohmann::json data = get_json_data(filename);
+        Logic::Collision::HitBoxe_Shape_Info info;
+        if (data.contains("position")) {
+            info.pos = from_json(data["position"]);
+        }
+        if (data.contains("width")) {
+            info.width = data["width"].get<float>();
+        }
+        if (data.contains("height")) {
+            info.height = data["height"].get<float>();
+        }
+        if (data.contains("layer")) {
+            info.layer= data["layer"].get<unsigned int>();
+        }
+        if (data.contains("height")) {
+           info.strength = data["strength"].get<unsigned int>();
+        }
+        return Logic::Logic_Factory::make_HitBox(info);
+    }
+
     std::shared_ptr<Graphics::Camera> Reader_JSON::make_Camera(const std::string &filename) const {
         nlohmann::json data = get_json_data(filename);
-        const unsigned int width = data["width"].get<unsigned int>();
-        const unsigned int height = data["height"].get<unsigned int>();
-        const float window_center_x = data["window_center_x"].get<float>();
-        const float window_center_y = data["window_center_y"].get<float>();
-        const float logic_center_x = data["logic_center_x"].get<float>();
-        const float logic_center_y = data["logic_center_y"].get<float>();
+        unsigned int width = 0;
+        unsigned int height = 0;
+        if (data.contains("width")) {
+            width = data["width"].get<unsigned int>();
+        }
+        if (data.contains("height")) {
+           height = data["height"].get<unsigned int>();
+        }
+        float window_center_x = 0;
+        float window_center_y = 0;
+        float logic_center_x = 0;
+        float logic_center_y = 0;
+        if (data.contains("window_center_x")) {
+            window_center_x = data["window_center_x"].get<float>();
+        }
+        if (data.contains("window_center_y")) {
+            window_center_y = data["window_center_y"].get<float>();
+        }
+        if (data.contains("logic_center_x")) {
+            logic_center_x = data["logic_center_x"].get<float>();
+        }
+        if (data.contains("logic_center_y")) {
+            logic_center_y = data["logic_center_y"].get<float>();
+        }
         return std::make_shared<Graphics::Camera>(width, height, Math::Vector2(window_center_x, window_center_y), Math::Vector2(logic_center_x, logic_center_y));
     }
 
-    std::shared_ptr<Logic::Tile_Grid> Reader_JSON::make_Tile_Grid(std::shared_ptr<::Info::Validation> &info,
-        std::shared_ptr<Stage> &stage, const Graphics::SFML_Manager &manage, const std::string &filename) const {
+    void Reader_JSON::load_Entities(
+        const std::shared_ptr<File_Reader> &fr,
+        const Graphics::SFML_Manager &manager,
+        std::shared_ptr<World> &world,
+        const std::string &filename) const {
+
         nlohmann::json data = get_json_data(filename);
-        const unsigned int width = data["width"].get<unsigned int>();
-        const unsigned int height = data["height"].get<unsigned int>();
-        const float tile_size = data["height"].get<float>();
-        const std::vector<std::vector<int>> grid = data["grid"].get<std::vector<std::vector<int>>>();
+        if (!data.contains("entities")) {
+            throw std::invalid_argument("File does not contain entities");
+        }
+
+        for (const auto& entity : data["entities"]) {
+            Entity_JSON_Info info(fr, manager, world, entity);
+            add_Entity(info);
+        }
     }
 
-    std::shared_ptr<Stage> Reader_JSON::make_Stage(std::shared_ptr<::Info::Validation> &info,
+    std::shared_ptr<Logic::Tile_Grid> Reader_JSON::make_Tile_Grid(
+        std::shared_ptr<Info::Validation> &info,
+        std::shared_ptr<Stage> &stage,
+        const Graphics::SFML_Manager &manager,
+        const std::string &filename) const {
+
+        nlohmann::json data = get_json_data(filename);
+
+        unsigned int width = 0;
+        unsigned int height = 0;
+        if (data.contains("width")) {
+            width = data["width"].get<unsigned int>();
+        }else {
+            info->add(Info::Error("The camera configuration " + filename+ " does not have a width parameter;"));
+        }
+        if (data.contains("height")) {
+            height = data["height"].get<unsigned int>();
+        }else {
+            info->add(Info::Error("The camera configuration " + filename+ " does not have a height parameter;"));
+        }
+
+        float tile_size = 1.0f;
+        std::vector<std::vector<int>> grid;
+        if (data.contains("tile_size")) {
+            tile_size = data["tile_size"].get<float>();
+        }else {
+            info->add(Info::Error("The camera configuration " + filename+ " does not have a tile_size parameter;"));
+        }
+        if (data.contains("grid")) {
+            grid = data["grid"].get<std::vector<std::vector<int>>>();
+        }else {
+            info->add(Info::Error("The camera configuration " + filename+ " does not have a grid parameter;"));
+        }
+
+        throw;
+        // TODO;
+    }
+
+    std::shared_ptr<Stage> Reader_JSON::make_Stage(std::shared_ptr<Info::Validation> &info,
         const std::shared_ptr<File_Reader> &fr, const Graphics::SFML_Manager &manage,
         const std::string &filename) const {
     }
@@ -143,4 +234,25 @@ namespace Core {
         const Graphics::SFML_Manager &manage, const std::string &path) {
     }
 
+    Info::Game_Info Reader_JSON::get_Game_Info(const std::string &filename) {
+        nlohmann::json data = get_json_data(filename);
+        Info::Game_Info info;
+        if (data.contains("graphics")) {
+            info.graphics = data["graphics"].get<std::string>();
+        }
+        if (data.contains("window_width")) {
+            info.window_width = data["window_width"].get<unsigned int>();
+        }
+        if (data.contains("window_height")) {
+            info.window_width = data["window_height"].get<unsigned int>();
+        }
+        if (data.contains("graphics_conf")) {
+            info.graphics_conf = data["graphics_conf"].get<std::string>();
+        }
+        if (data.contains("stage_mng")) {
+            info.stage_mng = data["stage_mng"].get<std::string>();
+        }
+        return info;
+
+    }
 }

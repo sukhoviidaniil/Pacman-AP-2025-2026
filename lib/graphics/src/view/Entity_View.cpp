@@ -21,6 +21,9 @@
 namespace Graphics {
     View::Entity_View::Entity_View() = default;
 
+    View::Entity_View::Entity_View(const std::string &name) : name_(name) {
+    }
+
     View::Entity_View::~Entity_View() = default;
 
 }

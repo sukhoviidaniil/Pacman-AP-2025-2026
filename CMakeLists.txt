@@ -49,15 +49,17 @@ set(RELEASE_SOURCE_FILES
 )
 
 # Collecting Function Resources
-file(GLOB_RECURSE FUNC_SOURCES "${INCLUDE_DIR}/func/*.h")
+#[[
+file(GLOB_RECURSE FUNC_SOURCES "${CMAKE_SOURCE_DIR}/func/*.h")
 set(FUNC_INCLUDE_DIRS
-        ${INCLUDE_DIR}/func
+        ${CMAKE_SOURCE_DIR}/func
 )
+#]]
 
 add_subdirectory(lib/math)
 add_subdirectory(lib/logic)
-add_subdirectory(lib/core)
 add_subdirectory(lib/graphics)
+add_subdirectory(lib/core)
 add_subdirectory(tests)
 
 # -----------------------------------------
@@ -66,7 +68,7 @@ add_subdirectory(tests)
 
 add_executable(${APP_TARGET}
         ${RELEASE_SOURCE_FILES}
-        ${FUNC_SOURCES}
+        #${FUNC_SOURCES}
 )
 
 target_link_libraries(${APP_TARGET}

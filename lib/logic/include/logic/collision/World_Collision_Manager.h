@@ -38,6 +38,10 @@ namespace Logic::Collision {
         [[nodiscard]] bool collision_world(const std::shared_ptr<HitBoxe>& entity) const;
 
         void update_Entity_Tile(const std::shared_ptr<Model::Entity>& entity) const;
+
+        [[nodiscard]] std::shared_ptr<Tile_Grid> get_grid() const;
+
+        [[nodiscard]] Math::Vector2 get_next_tile_center(const Math::Vector2& pos, const Math::Vector2& dir) const;
     };
 }
 

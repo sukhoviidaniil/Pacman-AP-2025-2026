@@ -24,18 +24,25 @@
 #include <memory>
 
 namespace Logic::Model {
+    struct Entity_Info {
+        std::string name;
+        Math::Vector2 position;
+        std::shared_ptr<Collision::HitBoxe> hitbox;
+        unsigned int max_status;
+    };
     class Entity {
         std::string name_;
     protected:
         Math::Vector2 position_;
         std::shared_ptr<Collision::HitBoxe> hitbox_;
         unsigned int status_ = 0;
+        unsigned int max_status_;
     public:
 
-        Entity(std::string name, const Math::Vector2 &position,
-            const std::shared_ptr<Collision::HitBoxe> &hitbox, unsigned int status);
-
-        explicit Entity(const Math::Vector2 & vector2);
+        Entity(
+            std::string name, const Math::Vector2 &position,
+            const std::shared_ptr<Collision::HitBoxe> &hitbox, unsigned int max_status
+        );
 
         virtual ~Entity();
 

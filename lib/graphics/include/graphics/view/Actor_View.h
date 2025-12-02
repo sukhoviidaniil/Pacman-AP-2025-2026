@@ -1,6 +1,6 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Actor_View.h
+ * File:          Actor.h
  *
  * Author:        Sukhovii Daniil
  * Created:       2025-11-20
@@ -18,12 +18,17 @@
 #ifndef PACMAN_ACTOR_VIEW_H
 #define PACMAN_ACTOR_VIEW_H
 
-#include "Entity_View.h"
-#include "logic/model/Actor.h"
+#include "graphics/view/Entity_View.h"
 #include "graphics/Sprite_Group.h"
+#include "logic/model/Actor.h"
 #include <memory>
 
 namespace Graphics::View {
+
+    struct Actor_View_Info {
+        std::string sprite_group_name;
+    };
+
     class Actor_View: public Entity_View {
         std::shared_ptr<Sprite_Group> sprite_;
         std::shared_ptr<Logic::Model::Actor> actor_model_ = nullptr;
