@@ -23,7 +23,6 @@
 
 namespace Graphics::View {
     class Entity_View {
-
     protected:
         std::string name_ = "None";
     public:

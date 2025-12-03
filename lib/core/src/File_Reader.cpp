@@ -41,19 +41,57 @@ namespace Core {
         readers_[extension] = reader;
     }
 
-    sf::Texture& File_Reader::load_SFML_texture(Graphics::SFML_Manager& manager, const std::string& name) const {
-        if (auto texOpt = manager.get_Texture(name); texOpt) {
-            return texOpt->get();
-        }
-
-        sf::Texture texture;
-        texture.loadFromFile(graphics_folder_ + name);
-        manager.add_Texture(name, texture);
-
-        return manager.get_Texture(name)->get();
+    void File_Reader::add_SFML_Manager(const std::shared_ptr<Graphics::SFML_Manager> &sfml_manager) {
+        sfml_manager_ = sfml_manager;
     }
 
-    void File_Reader::load_SFML_Sprite(Graphics::SFML_Manager &manager, const std::string &filename) const {
+    std::shared_ptr<Graphics::SFML_Manager> File_Reader::get_SFML_Manager() const {
+        return sfml_manager_;
+    }
+
+    const sf::Texture & File_Reader::load_SFML_texture(const std::string &filename) const {
+
+        if (sfml_manager_ == nullptr) {
+            throw std::runtime_error("No sfml manager found.");
+        }
+        if (const auto texOpt = sfml_manager_->get_Texture(filename); texOpt) {
+            return texOpt->get();
+        }
+        sf::Texture texture;
+        texture.loadFromFile(graphics_folder_ + filename);
+        sfml_manager_->add_Texture(filename, texture);
+        return sfml_manager_->get_Texture(filename)->get();
+    }
+
+    const sf::Texture& File_Reader::load_SFML_texture(
+        const std::shared_ptr<Graphics::SFML_Manager>& manager, const std::string& filename
+        ) const {
+
+        if (const auto texOpt = manager->get_Texture(filename); texOpt) {
+            return texOpt->get();
+        }
+        sf::Texture texture;
+        texture.loadFromFile(graphics_folder_ + filename);
+        manager->add_Texture(filename, std::move(texture));
+        return manager->get_Texture(filename)->get();
+    }
+
+    void File_Reader::load_SFML_Sprite(const std::string &filename) const {
+
+        if (sfml_manager_ == nullptr) {
+            throw std::runtime_error("No sfml manager found.");
+        }
+        const std::string extension = get_extension(filename);
+        const std::shared_ptr<Reader> reader = get_reader(extension);
+        if (!reader) {
+            throw std::runtime_error("No suitable reader was found for the configuration type " + extension);
+        }
+        reader->load_SFML_Sprite(sfml_manager_, configuration_folder_ + filename);
+    }
+
+    void File_Reader::load_SFML_Sprite(
+        const std::shared_ptr<Graphics::SFML_Manager>& manager, const std::string& filename
+        ) const {
         const std::string extension = get_extension(filename);
         const std::shared_ptr<Reader> reader = get_reader(extension);
         if (!reader) {
@@ -62,7 +100,14 @@ namespace Core {
         reader->load_SFML_Sprite(manager, configuration_folder_ + filename);
     }
 
-    void File_Reader::load_SFML_Sprite_Group(Graphics::SFML_Manager &manager, const std::string &filename) const {
+    void File_Reader::load_SFML_Sprite_Group(
+        const std::string &filename) const {
+
+    }
+
+    void File_Reader::load_SFML_Sprite_Group(
+        const std::shared_ptr<Graphics::SFML_Manager>& manager, const std::string &filename
+        ) const {
         const std::string extension = get_extension(filename);
         const std::shared_ptr<Reader> reader = get_reader(extension);
         if (!reader) {
@@ -71,16 +116,48 @@ namespace Core {
         reader->load_SFML_Sprite_Group(manager, configuration_folder_ + filename);
     }
 
-    std::shared_ptr<Logic::Collision::HitBoxe> File_Reader::make_hitboxe(const std::string &filename) const {
+    void File_Reader::load_SFML_Manager(const std::string &filename) {
         const std::string extension = get_extension(filename);
         const std::shared_ptr<Reader> reader = get_reader(extension);
         if (!reader) {
             throw std::runtime_error("No suitable reader was found for the configuration type " + extension);
         }
 
+        std::string path = configuration_folder_ + filename;
+        std::shared_ptr<const File_Reader> self = shared_from_this();
+        sfml_manager_ = reader->load_SFML_Manager(self, filename);
     }
 
-    Stage_Manager File_Reader::make_Stage_Manager(const Graphics::SFML_Manager &manage, const std::string &path) {
+    std::shared_ptr<Logic::Collision::HitBoxe> File_Reader::make_HitBoxe(const std::string &filename) const {
+        const std::string extension = get_extension(filename);
+        const std::shared_ptr<Reader> reader = get_reader(extension);
+        if (!reader) {
+            throw std::runtime_error("No suitable reader was found for the configuration type " + extension);
+        }
+        // TODO
+    }
+
+    std::shared_ptr<Stage> File_Reader::load_Stage(const std::string &filename) const {
+        const std::string extension = get_extension(filename);
+        const std::shared_ptr<Reader> reader = get_reader(extension);
+        if (!reader) {
+            throw std::runtime_error("No suitable reader was found for the configuration type " + extension);
+        }
+        // TODO
+    }
+
+    Stage_Manager File_Reader::load_Stage_Manager(const std::string &filename) {
+        auto self = shared_from_this(); // shared_ptr<File_Reader>
+        std::shared_ptr<const File_Reader> c_self = self;
+        Stage_Manager sm = Stage_Manager(c_self);
+
+        const std::string extension = get_extension(filename);
+        const std::shared_ptr<Reader> reader = get_reader(extension);
+        if (!reader) {
+            throw std::runtime_error("No suitable reader was found for the configuration type " + extension);
+        }
+        std::string path = configuration_folder_ + filename;
+        return reader->make_Stage_Manager(self, path);
     }
 
     Info::Game_Info File_Reader::get_Game_Info(const std::string &filename) const {

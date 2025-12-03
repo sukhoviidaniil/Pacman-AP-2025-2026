@@ -22,15 +22,25 @@
 
 namespace Graphics::View {
 
-    Terrain_View::Terrain_View(const std::string &name, const std::shared_ptr<sf::Sprite> &sprite) : Entity_View(name), sprite_(sprite) {
+    Terrain_View::Terrain_View(
+        const std::shared_ptr<Logic::Model::Terrain> &terrain,
+        const std::shared_ptr<sf::Sprite> &sprite) : Entity_View(terrain->get_name()), terrain_(terrain), sprite_(sprite)  {
+
         if (sprite_ == nullptr) {
-            placeholder = std::make_shared<sf::RectangleShape>(sf::Vector2f(32.f, 32.f));
+            placeholder_ = std::make_shared<sf::RectangleShape>(sf::Vector2f(32.f, 32.f));
             if (name_ == "Wall") {
-                placeholder->setFillColor(sf::Color(0, 0, 128));
+                placeholder_->setFillColor(sf::Color(0, 0, 255));
             }else {
-                placeholder->setFillColor(sf::Color(128, 128, 128));
+                placeholder_->setFillColor(sf::Color(0, 0, 0));
             }
         }
+    }
+
+    Terrain_View::~Terrain_View() = default;
+
+    Math::Vector2 Terrain_View::get_position() const {
+        if (terrain_ == nullptr) throw std::invalid_argument("Terrain view is invalid");
+        return terrain_->get_position();
     }
 
     void Terrain_View::render(sf::RenderWindow &window, const Math::Vector2 &pixel_pos) const {
@@ -39,8 +49,8 @@ namespace Graphics::View {
             sprite_->setPosition(pos);
             window.draw(*sprite_);
         }else {
-            placeholder->setPosition(pos);
-            window.draw(*placeholder);
+            placeholder_->setPosition(pos);
+            window.draw(*placeholder_);
         }
     }
 }

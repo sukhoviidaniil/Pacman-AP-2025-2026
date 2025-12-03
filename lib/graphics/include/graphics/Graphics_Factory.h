@@ -33,14 +33,22 @@ namespace Graphics {
     struct Tile_Grid_Pair {
         std::shared_ptr<Logic::Tile_Grid> tile_grid_model_;
         std::shared_ptr<View::Tile_Grid_View> tile_grid_view_;
+        std::vector<std::shared_ptr<View::Terrain_View>> terrain_views_;
     };
 
     class Graphics_Factory{
         public:
-        static Actor_Pair make_Actor(const SFML_Manager& manager, const View::Actor_View_Info &view_info, const Logic::Model::Actor_Info &model_info);
-        static Actor_Pair make_Actor(const SFML_Manager& manager, const View::Actor_View_Info &view_info, const std::shared_ptr<Logic::Model::Actor>& actor_model);
-        static Tile_Grid_Pair make_Tile_Grid(const SFML_Manager& manager, const Logic::Tile_Grid_Info &tile_grid_info);
+        static Actor_Pair make_Actor(
+            const std::shared_ptr<SFML_Manager>& manager,
+            const View::Actor_View_Info &view_info,
+            const Logic::Model::Actor_Info &model_info
+            );
+        static Actor_Pair make_Actor(
+            const std::shared_ptr<SFML_Manager>& manager,
+            const View::Actor_View_Info &view_info,
+            const std::shared_ptr<Logic::Model::Actor>& actor_model);
 
+        static Tile_Grid_Pair make_Tile_Grid(const std::shared_ptr<SFML_Manager>& manager, const Logic::Tile_Grid_Info &tile_grid_info);
     };
 
 }

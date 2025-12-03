@@ -25,6 +25,7 @@
 
 namespace Graphics::View {
 
+
     struct Actor_View_Info {
         std::string sprite_group_name;
     };

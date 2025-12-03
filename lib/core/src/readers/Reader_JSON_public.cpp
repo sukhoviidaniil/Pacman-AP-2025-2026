@@ -32,27 +32,31 @@ namespace Core {
 
     Reader_JSON::~Reader_JSON() = default;
 
-    void Reader_JSON::load_SFML_Sprite(Graphics::SFML_Manager &manager, const std::string &filename) const {
+    void Reader_JSON::load_SFML_Sprite(
+        const std::shared_ptr<Graphics::SFML_Manager>& sfml_manager, const std::string &filename
+        ) const {
         nlohmann::json data = get_json_data(filename);
         auto using_texture = data["using_texture"].get<std::string>();
-        const auto texOpt = manager.get_Texture(using_texture);
+        const auto texOpt = sfml_manager->get_Texture(using_texture);
         if (!texOpt) {
             throw std::invalid_argument("Missing texture");
         }
         const sf::Texture& texture = texOpt->get();
         const auto sprite = std::make_shared<sf::Sprite>(texture);
         const auto name = data["name"].get<std::string>();
-        manager.add_Sprite(name, sprite);
+        sfml_manager->add_Sprite(name, sprite);
         throw;
     }
 
-    void Reader_JSON::load_SFML_Sprite_Group(Graphics::SFML_Manager &manager, const std::string &filename) const {
+    void Reader_JSON::load_SFML_Sprite_Group(
+        const std::shared_ptr<Graphics::SFML_Manager>& sfml_manager, const std::string &filename
+        ) const {
 
         nlohmann::json data = get_json_data(filename);
 
         auto using_texture = data["using_texture"].get<std::string>();
 
-        const auto texOpt = manager.get_Texture(using_texture);
+        const auto texOpt = sfml_manager->get_Texture(using_texture);
         if (!texOpt) {
             throw std::invalid_argument("Missing texture");
         }
@@ -115,13 +119,39 @@ namespace Core {
                 }
             }
 
-            manager.add_Sprite_Group(name, std::make_shared<Graphics::Sprite_Group>(entity_sprites));
+            sfml_manager->add_Sprite_Group(name, std::make_shared<Graphics::Sprite_Group>(entity_sprites));
             left_index++;
         }
     }
 
-    std::shared_ptr<Logic::Collision::HitBoxe> Reader_JSON::make_hitboxe(const std::string &filename) const {
+    std::shared_ptr<Graphics::SFML_Manager> Reader_JSON::load_SFML_Manager(
+        const std::shared_ptr<const File_Reader> &fr, const std::string &filename
+        ) const {
         nlohmann::json data = get_json_data(filename);
+        std::shared_ptr<Graphics::SFML_Manager> manager;
+        if (!data.contains("textures")) {
+            throw std::invalid_argument("Missing textures");
+        }
+        for (const auto& name : data["textures"]) {
+            fr->load_SFML_texture(manager, name);
+        }
+        if (data.contains("sprites")) {
+            for (const auto& name : data["sprites"]) {
+                fr->load_SFML_Sprite(manager, name);
+            }
+        }
+        if (!data.contains("sprite_groups")) {
+            throw std::invalid_argument("Missing sprite_groups");
+        }
+        for (const auto& name : data["sprite_groups"]) {
+            fr->load_SFML_Sprite_Group(manager, name);
+        }
+        return manager;
+    }
+
+    std::shared_ptr<Logic::Collision::HitBoxe> Reader_JSON::load_HitBoxe(const std::string &filename) const {
+        nlohmann::json data = get_json_data(filename);
+
         Logic::Collision::HitBoxe_Shape_Info info;
         if (data.contains("position")) {
             info.pos = from_json(data["position"]);
@@ -141,7 +171,7 @@ namespace Core {
         return Logic::Logic_Factory::make_HitBox(info);
     }
 
-    std::shared_ptr<Graphics::Camera> Reader_JSON::make_Camera(const std::string &filename) const {
+    std::shared_ptr<Graphics::Camera> Reader_JSON::load_Camera(const std::string &filename) const {
         nlohmann::json data = get_json_data(filename);
         unsigned int width = 0;
         unsigned int height = 0;
@@ -171,8 +201,7 @@ namespace Core {
     }
 
     void Reader_JSON::load_Entities(
-        const std::shared_ptr<File_Reader> &fr,
-        const Graphics::SFML_Manager &manager,
+        const std::shared_ptr<const File_Reader> &fr,
         std::shared_ptr<World> &world,
         const std::string &filename) const {
 
@@ -182,15 +211,13 @@ namespace Core {
         }
 
         for (const auto& entity : data["entities"]) {
-            Entity_JSON_Info info(fr, manager, world, entity);
+            Entity_JSON_Info info(fr, entity, world);
             add_Entity(info);
         }
     }
 
-    std::shared_ptr<Logic::Tile_Grid> Reader_JSON::make_Tile_Grid(
-        std::shared_ptr<Info::Validation> &info,
+    std::shared_ptr<Logic::Tile_Grid> Reader_JSON::load_Tile_Grid(
         std::shared_ptr<Stage> &stage,
-        const Graphics::SFML_Manager &manager,
         const std::string &filename) const {
 
         nlohmann::json data = get_json_data(filename);
@@ -200,12 +227,14 @@ namespace Core {
         if (data.contains("width")) {
             width = data["width"].get<unsigned int>();
         }else {
-            info->add(Info::Error("The camera configuration " + filename+ " does not have a width parameter;"));
+            // TODO
+            // info->add(Info::Error("The camera configuration " + filename+ " does not have a width parameter;"));
         }
         if (data.contains("height")) {
             height = data["height"].get<unsigned int>();
         }else {
-            info->add(Info::Error("The camera configuration " + filename+ " does not have a height parameter;"));
+            // TODO
+            // info->add(Info::Error("The camera configuration " + filename+ " does not have a height parameter;"));
         }
 
         float tile_size = 1.0f;
@@ -213,25 +242,49 @@ namespace Core {
         if (data.contains("tile_size")) {
             tile_size = data["tile_size"].get<float>();
         }else {
-            info->add(Info::Error("The camera configuration " + filename+ " does not have a tile_size parameter;"));
+            // TODO
+            // info->add(Info::Error("The camera configuration " + filename+ " does not have a tile_size parameter;"));
         }
         if (data.contains("grid")) {
             grid = data["grid"].get<std::vector<std::vector<int>>>();
         }else {
-            info->add(Info::Error("The camera configuration " + filename+ " does not have a grid parameter;"));
+            // TODO
+            // info->add(Info::Error("The camera configuration " + filename+ " does not have a grid parameter;"));
         }
 
         throw;
         // TODO;
     }
 
-    std::shared_ptr<Stage> Reader_JSON::make_Stage(std::shared_ptr<Info::Validation> &info,
-        const std::shared_ptr<File_Reader> &fr, const Graphics::SFML_Manager &manage,
-        const std::string &filename) const {
+    std::shared_ptr<Stage> Reader_JSON::load_Stage(
+        const std::shared_ptr<const File_Reader> &fr,
+        const std::string &filename
+        ) const {
+
     }
 
-    Stage_Manager Reader_JSON::make_Stage_Manager(const std::shared_ptr<File_Reader> &fr,
-        const Graphics::SFML_Manager &manage, const std::string &path) {
+    Stage_Manager Reader_JSON::load_Stage_Manager(
+        const std::shared_ptr<const File_Reader> &fr,
+        const std::string &path
+        ) const {
+        Stage_Manager sm = Stage_Manager(fr);
+        nlohmann::json data = get_json_data(path);
+        if (!data.contains("stages")) {
+            throw std::invalid_argument("File does not contain stages");
+        }
+        for (const auto& stage : data["stages"]) {
+            std::unique_ptr<Stage_Info> info;
+            info->type = stage["type"].get<std::string>();
+            info->name = stage["name"].get<std::string>();
+            info->configuration = stage["configuration"].get<std::string>();
+            sm.add_Stage_Info(std::move(info));
+        }
+        if (!data.contains("start_stage")) {
+            throw std::invalid_argument("File does not contain stages");
+        }
+        const std::string start_stage = data["sstart_stage"].get<std::string>();
+        sm.push_stage(start_stage);
+        return sm;
     }
 
     Info::Game_Info Reader_JSON::get_Game_Info(const std::string &filename) {
@@ -253,6 +306,5 @@ namespace Core {
             info.stage_mng = data["stage_mng"].get<std::string>();
         }
         return info;
-
     }
 }

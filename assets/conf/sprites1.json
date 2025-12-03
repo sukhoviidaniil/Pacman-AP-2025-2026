@@ -1,10 +1,6 @@
 {
-  "graphics" : "SFML",
   "textures " : [
     "sprite.png"
-  ],
-  "sprites" : [
-
   ],
   "sprite_groups" : [
     "graf_ghosts.json"

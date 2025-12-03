@@ -22,8 +22,10 @@
 
 namespace Graphics {
     Actor_Pair Graphics_Factory::make_Actor(
-        const SFML_Manager &manager, const View::Actor_View_Info &view_info,
-        const Logic::Model::Actor_Info &model_info) {
+        const std::shared_ptr<SFML_Manager> &manager,
+        const View::Actor_View_Info &view_info,
+        const Logic::Model::Actor_Info &model_info
+        ) {
         std::shared_ptr<Logic::Model::Actor> actor_model = Logic::Logic_Factory::make_Actor(model_info);
         if (actor_model == nullptr) {
             throw std::runtime_error("Failed to create actor!");
@@ -31,10 +33,13 @@ namespace Graphics {
         return make_Actor(manager, view_info, actor_model);
     }
 
-    Actor_Pair Graphics_Factory::make_Actor(const SFML_Manager &manager, const View::Actor_View_Info &view_info,
-        const std::shared_ptr<Logic::Model::Actor> &actor_model) {
+    Actor_Pair Graphics_Factory::make_Actor(
+        const std::shared_ptr<SFML_Manager> &manager,
+        const View::Actor_View_Info &view_info,
+        const std::shared_ptr<Logic::Model::Actor> &actor_model
+        ) {
 
-        std::shared_ptr<Sprite_Group> sprite_group = manager.get_Sprite_Group(view_info.sprite_group_name);
+        std::shared_ptr<Sprite_Group> sprite_group = manager->get_Sprite_Group(view_info.sprite_group_name);
         if (sprite_group == nullptr) {
             throw std::runtime_error("Failed to create sprite group!");
         }
@@ -44,14 +49,25 @@ namespace Graphics {
     }
 
     Tile_Grid_Pair Graphics_Factory::make_Tile_Grid(
-        const SFML_Manager &manager,
-        const Logic::Tile_Grid_Info &tile_grid_info) {
-        std::shared_ptr<Logic::Tile_Grid> tile_grid_model = Logic::Logic_Factory::make_grid(tile_grid_info);
-        if (tile_grid_model == nullptr) {
+        const std::shared_ptr<SFML_Manager> &manager,
+        const Logic::Tile_Grid_Info &tile_grid_info
+        ) {
+        Tile_Grid_Pair p;
+        p.tile_grid_model_ = Logic::Logic_Factory::make_grid(tile_grid_info);
+        if (p.tile_grid_model_ == nullptr) {
             throw std::runtime_error("Failed to create tile grid!");
         }
-        // TODO ADD GRID VIEW
-        throw;
-    }
+        std::vector<std::vector<std::shared_ptr<Logic::Tile>>> all_tiles = p.tile_grid_model_->get_tiles();
 
+        for (const auto &tile_line : all_tiles) {
+            for (const auto &tile : tile_line) {
+                std::shared_ptr<Logic::Model::Terrain> terrain = tile->get_terrain();
+                std::string name = terrain->get_name();
+                std::shared_ptr<sf::Sprite> tile_sprite = manager->get_Sprite(name);
+                auto terrain_view = std::make_shared<View::Terrain_View>(terrain, tile_sprite);
+                p.terrain_views_.push_back(terrain_view);
+            }
+        }
+        return p;
+    }
 }

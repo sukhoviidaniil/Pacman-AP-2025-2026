@@ -20,18 +20,40 @@
 #include "core/File_Reader.h"
 #include "core/info/Game_Info.h"
 #include "core/readers/Reader_JSON.h"
-#include "logic/Logic_Factory.h"
+#include "logic/Delta_Timer.h"
 
 int main() {
-
     const std::string assets_dir = ASSETS_DIR;
     const std::string graphics_dir = assets_dir + "/graphics/";
     const std::string conf_dir = assets_dir + "/config/";
-    Core::File_Reader fr(graphics_dir, conf_dir);
-    const auto reader_json = std::make_shared<Core::Reader_JSON>();
-    fr.add_Reader(".json", reader_json);
-    Info::Game_Info game_ingo;
+    auto fr = std::make_shared<Core::File_Reader>(graphics_dir, conf_dir);
+    fr->add_Reader(".json", std::make_shared<Core::Reader_JSON_public>());
+    Core::Info::Game_Info game_info = fr->get_Game_Info("conf_game1.jsom");
+    if (game_info.graphics == "SFML") {
+        fr->load_SFML_Manager(game_info.graphics_conf);
 
-    std::shared_ptr<Logic::Tile_Grid> grid = Logic::Logic_Factory::make_grid(3, 3, 1, {{1, 1, 1}, {1,0,1}, {1,0,1}});
+        unsigned int width = game_info.window_width;
+        unsigned int height = game_info.window_height;
+        sf::RenderWindow window(sf::VideoMode(width, height), "SFML Window");
+        Core::Stage_Manager sm = fr->make_Stage_Manager(game_info.stage_mng);
+
+        Logic::Delta_Timer timer;
+        while (window.isOpen()) {
+            sf::Event event;
+            while (window.pollEvent(event)) {
+                if (event.type == sf::Event::Closed) {
+                    window.close();
+                }
+            }
+            if (window.isOpen()) {
+                float delta = timer.tick();
+                std::shared_ptr<Core::Stage> stage = sm.get_current_stage();
+                stage->simulate(delta);
+                stage->render(window);
+            }
+        }
+    }else {
+        throw std::runtime_error("Unknown type of graphics");
+    }
     return 0;
 }

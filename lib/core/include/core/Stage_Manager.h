@@ -24,17 +24,20 @@
 #include <stack>
 
 namespace Core {
+    class File_Reader;
     class Stage_Manager {
+        std::shared_ptr<const File_Reader> fr_;
         std::unordered_map<
             std::string,
-            std::shared_ptr<Stage>
-        > stages_;
+            std::unique_ptr<Stage_Info>
+        > stages_info;
         std::stack<std::shared_ptr<Stage>> current_stages_;
         public:
 
-        Stage_Manager();
+        explicit Stage_Manager(const std::shared_ptr<const File_Reader>& fr);
         ~Stage_Manager();
-        void add_Stage(const std::string &name, const std::shared_ptr<Stage> &stage);
+
+        void add_Stage_Info(std::unique_ptr<Stage_Info> info);
 
         void pop_stage();
         void push_stage(const std::string &name);

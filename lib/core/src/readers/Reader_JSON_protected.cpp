@@ -26,7 +26,7 @@
 
 namespace Core {
         void Reader_JSON::add_Actor(
-        const std::shared_ptr<File_Reader> &fr,
+        const std::shared_ptr<const File_Reader> &fr,
         std::shared_ptr<World> &world,
         const nlohmann::json &model) {
         Logic::Model::Actor_Info actor_info;
@@ -35,13 +35,13 @@ namespace Core {
         actor_info.speed = model["speed"].get<float>();
         actor_info.max_status = model["max_status"].get<unsigned int>();
         const std::string hitbox = model["hitbox"].get<std::string>();
-        actor_info.hitbox = fr->make_hitboxe(hitbox);
+        actor_info.hitbox = fr->make_HitBoxe(hitbox);
         std::shared_ptr<Logic::Model::Actor> actor = Logic::Logic_Factory::make_Actor(actor_info);
         world->add_Actor_Model(actor);
     }
 
 
-    void Reader_JSON::add_Actor(const Entity_JSON_Info &conf) {
+    void Reader_JSON::add_Actor(const Entity_JSON_Info &conf) const{
         const nlohmann::json &info = conf.info;
         std::string actor_name;
         if (info["Model"].is_object()) {
@@ -59,19 +59,23 @@ namespace Core {
             if (view.contains("Sprite_Group")) {
                 Graphics::View::Actor_View_Info avi;
                 avi.sprite_group_name = actor_name;
-                Graphics::Actor_Pair ap = Graphics::Graphics_Factory::make_Actor(conf.manager, avi, actor_model);
+                auto sfml_manager = conf.fr->get_SFML_Manager();
+                if (sfml_manager == nullptr) {
+                    throw std::runtime_error("Can't find sfml_manager");
+                }
+                Graphics::Actor_Pair ap = Graphics::Graphics_Factory::make_Actor(sfml_manager, avi, actor_model);
                 conf.world->add_entity_view(ap.actor_view_);
             }
         }
 
     }
 
-    void Reader_JSON::Entity_Register(std::unordered_map<std::string, void(Reader_JSON::*)(const Entity_JSON_Info &conf)> &outMap) {
+    void Reader_JSON::Entity_Register(std::unordered_map<std::string, void(Reader_JSON::*)(const Entity_JSON_Info &conf) const> &outMap) const {
         outMap["Actor"] = &Reader_JSON::add_Actor;
     }
 
     void Reader_JSON::add_Entity(const Entity_JSON_Info &conf) const {
-        std::unordered_map<std::string, void(Reader_JSON::*)(const Entity_JSON_Info &conf)> functionMap;
+        std::unordered_map<std::string, void(Reader_JSON::*)(const Entity_JSON_Info &conf) const> functionMap;
         Entity_Register(functionMap);
         const nlohmann::json &info = conf.info;
         if (!info.contains("Type")) {
@@ -88,6 +92,18 @@ namespace Core {
         }else {
             throw std::runtime_error("Entity type " + entity_type + " not found");
         }
+    }
+
+    void Reader_JSON::load_Game_Stage(const Reader_JSON_Base_Info &conf) const {
+
+    }
+
+    void Reader_JSON::Stage_Register(
+        std::unordered_map<std::string, void(Reader_JSON::*)(const Reader_JSON_Base_Info &conf) const> &outMap) const {
+    }
+
+    void Reader_JSON::HitBoxe_Register(
+        std::unordered_map<std::string, void(Reader_JSON::*)(const Reader_JSON_Base_Info &conf) const> &outMap) const {
     }
 
     nlohmann::json Reader_JSON::get_json_data(const std::string &filename) {

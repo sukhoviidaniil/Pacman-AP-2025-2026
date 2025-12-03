@@ -22,12 +22,17 @@
 
 
 namespace Core {
+    struct Stage_Info {
+        std::string type = "default";
+        std::string name = "default";
+        std::string configuration = "default";
+    };
     class Stage {
         public:
         Stage();
         virtual ~Stage();
 
-        virtual void simulate() = 0;
+        virtual void simulate(float delta) = 0;
         virtual void render(sf::RenderWindow& window) = 0;
     };
 }
