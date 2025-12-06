@@ -18,7 +18,6 @@ target_include_directories(run_tests
         ${GTEST_INCLUDE_DIR}
 )
 
-# Подключаем статические .lib/.a вручную
 target_link_directories(run_tests PRIVATE ${GTEST_LIB_DIR})
 target_link_libraries(run_tests
         PRIVATE

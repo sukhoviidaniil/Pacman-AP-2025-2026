@@ -18,6 +18,8 @@
 
 #include "core/Stage_Manager.h"
 
+#include "core/File_Reader.h"
+
 namespace Core {
 
     Stage_Manager::Stage_Manager(const std::shared_ptr<const File_Reader> &fr) : fr_(fr) {
@@ -25,11 +27,11 @@ namespace Core {
 
     Stage_Manager::~Stage_Manager() = default;
 
-    void Stage_Manager::add_Stage_Info(std::unique_ptr<Stage_Info> info) {
-        std::string name = info->name;
+    void Stage_Manager::add_Stage_Info(const std::shared_ptr<Stage_Info>& info) {
+        const std::string name = info->name;
         auto it = stages_info.find(name);
         if (it == stages_info.end()) {
-            stages_info[name] = std::move(info);
+            stages_info[name] = info;
             return;
         }
         throw std::runtime_error("Stage already exists");
@@ -43,7 +45,8 @@ namespace Core {
     void Stage_Manager::push_stage(const std::string &name) {
         auto it = stages_info.find(name);
         if (it == stages_info.end()) return;
-        // TODO
+        std::string filename = it->second->configuration;
+        current_stages_.push(fr_->load_Stage(filename));
     }
 
     std::shared_ptr<Stage> Stage_Manager::get_current_stage() {

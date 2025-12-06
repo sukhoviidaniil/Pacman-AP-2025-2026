@@ -16,22 +16,17 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include <utility>
-
 #include "logic/model/Entity.h"
 
 namespace Logic::Model {
 
     Entity::Entity(
-        std::string name,
-        const Math::Vector2 &position,
-        const std::shared_ptr<Collision::HitBoxe>& hitbox,
-        const unsigned int max_status):
-        name_(std::move(name)), position_(position), hitbox_(hitbox), max_status_(max_status){
-
-        hitbox_->move_to(position);
+        const std::string &name, const Math::Vector2 &position,
+        const std::shared_ptr<Collision::HitBoxe> &hitbox, unsigned int max_status
+        ):
+        name_(name), position_(position), hitbox_(hitbox), max_status_(max_status)
+    {
     }
-
 
     Entity::~Entity() = default;
 
@@ -51,4 +46,17 @@ namespace Logic::Model {
         return status_;
     }
 
+    Math::Vector2 Entity::get_direction() const {
+        throw std::logic_error("Entity not implemented");
+        return Math::Vector2();
+    }
+
+    void Entity::set_direction(const Math::Vector2 &direction) {
+        throw std::logic_error("Entity not implemented");
+    }
+
+    bool Entity::walkable() const {
+        throw std::logic_error("Entity not implemented");
+        return false;
+    }
 }

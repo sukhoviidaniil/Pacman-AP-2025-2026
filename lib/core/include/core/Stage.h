@@ -23,7 +23,6 @@
 
 namespace Core {
     struct Stage_Info {
-        std::string type = "default";
         std::string name = "default";
         std::string configuration = "default";
     };

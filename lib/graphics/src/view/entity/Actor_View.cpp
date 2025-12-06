@@ -16,28 +16,20 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-
-#include "graphics/view/Actor_View.h"
+#include "graphics/view/entity/Actor_View.h"
 
 namespace Graphics::View {
-    Math::Vector2 Actor_View::get_position() const {
-        return actor_model_->get_position();
-    }
+
 
     Actor_View::Actor_View(const std::shared_ptr<Sprite_Group> &sprite):
     sprite_(sprite){
 
     }
 
-    void Actor_View::set_actor_model(const std::shared_ptr<Logic::Model::Actor> &actor_model) {
-        actor_model_ = actor_model;
-    }
-
     void Actor_View::render(sf::RenderWindow& window, const Math::Vector2 &pixel_pos) const {
-        if (actor_model_ == nullptr) return;
+        if (entity_ == nullptr) return;
 
-        sprite_->render(window, pixel_pos, actor_model_->get_direction(), actor_model_->get_status());
-
+        sprite_->render(window, pixel_pos, entity_->get_direction(), entity_->get_status());
     }
 }
 

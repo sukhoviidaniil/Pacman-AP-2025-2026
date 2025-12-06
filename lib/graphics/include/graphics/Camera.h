@@ -24,40 +24,49 @@
 #include "SFML/Graphics.hpp"
 
 #include <memory>
-#include <vector>
 
 
 namespace Graphics {
-
-    class Camera {
-        unsigned int width_;
-        unsigned int height_;
-
-        // center of the logical window (in the logical coordinates of the world)
-        Math::Vector2 logic_center_;
-        // the point in pixels where the logical center should be on the screen
+    class Camera{
+        // ===== Expected dimensions =====
+        unsigned int base_window_width_ = 1000;
+        unsigned int base_window_height_ = 1000;
+        float ratio_x_ = 0.5f;
+        float ratio_y_ = 0.5f;
+        // The point in pixels where the Camera center should be on the screen
         Math::Vector2 window_center_;
 
+        // ===== Expected dimensions =====
+        // Camera working area dimensions
+        unsigned int camera_width_ = 100;
+        unsigned int camera_height_ = 100;
+        float camera_half_w_;
+        float camera_half_h_;
+
+        // Coordinate of the center of the shooting canvas.
+        Math::Vector2 camera_center_;
         float scale_ = 1.0f;
+    protected:
 
-        protected:
+        [[nodiscard]] std::optional<Math::Vector2> get_entity_position(const Math::Vector2& view) const;
+        [[nodiscard]] std::optional<Math::Vector2> get_entity_position(const sf::RenderWindow &window, const Math::Vector2& view) const;
 
-        [[nodiscard]] std::optional<Math::Vector2> get_entity_position(const std::shared_ptr<View::Entity_View>& view) const;
-        [[nodiscard]] std::vector<std::pair<Math::Vector2, std::shared_ptr<View::Entity_View>>> get_valid_views(const sf::RenderWindow &window, const std::vector<std::shared_ptr<View::Entity_View>> &views) const;
+    public:
+        Camera(
+            unsigned int window_width, unsigned int window_height, const Math::Vector2 &window_center,
+            unsigned int camera_width, unsigned int camera_height, const Math::Vector2 &camera_center);
+        Camera(
+            unsigned int window_width, unsigned int window_height, const Math::Vector2 &window_center,
+            unsigned int camera_width, unsigned int camera_height, const Math::Vector2 &camera_center, float scale);
 
-        public:
-        Camera(unsigned int width, unsigned int height);
+        virtual ~Camera();
 
-        Camera(unsigned int width, unsigned int height, const Math::Vector2 &logic_center, const Math::Vector2 &window_center);
+        // ===== Update =====
+        void update_base_window(unsigned int window_width, unsigned int window_height, const Math::Vector2 &window_center);
+        void update_window_center(const sf::RenderWindow *window);
 
-        void set_width(unsigned int width);
-        void set_height(unsigned int height);
-        void set_window_center(unsigned int recLeft, unsigned int recTop);
-        void set_window_center(const std::shared_ptr<sf::Window>& window);
-        void set_window_center(const Math::Vector2 &center);
-        void set_logic_center(const Math::Vector2 &center);
-
-        void render(sf::RenderWindow &window, const std::vector<std::shared_ptr<View::Entity_View>> &views) const;
+        // ===== Render =====
+        virtual void render(sf::RenderWindow &window, const std::shared_ptr<View::View> &view) const;
     };
 }
 

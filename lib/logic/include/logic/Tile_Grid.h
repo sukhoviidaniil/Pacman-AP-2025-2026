@@ -22,6 +22,7 @@
 #include "math/Vector2.h"
 
 #include <memory>
+#include <unordered_map>
 #include <vector>
 
 namespace Logic {

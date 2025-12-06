@@ -20,19 +20,18 @@
 
 #include "SFML_Manager.h"
 #include "logic/model/Actor.h"
-#include "graphics/view/Actor_View.h"
-#include "view/Tile_Grid_View.h"
+#include "view/entity/Actor_View.h"
+#include "view/entity/Terrain_View.h"
 
 namespace Graphics {
 
     struct Actor_Pair {
-        std::shared_ptr<Logic::Model::Actor> actor_model_;
-        std::shared_ptr<View::Actor_View> actor_view_;
+        std::shared_ptr<Logic::Model::Entity> actor_model_;
+        std::shared_ptr<View::View> actor_view_;
     };
 
     struct Tile_Grid_Pair {
         std::shared_ptr<Logic::Tile_Grid> tile_grid_model_;
-        std::shared_ptr<View::Tile_Grid_View> tile_grid_view_;
         std::vector<std::shared_ptr<View::Terrain_View>> terrain_views_;
     };
 
@@ -46,7 +45,7 @@ namespace Graphics {
         static Actor_Pair make_Actor(
             const std::shared_ptr<SFML_Manager>& manager,
             const View::Actor_View_Info &view_info,
-            const std::shared_ptr<Logic::Model::Actor>& actor_model);
+            const std::shared_ptr<Logic::Model::Entity>& actor_model);
 
         static Tile_Grid_Pair make_Tile_Grid(const std::shared_ptr<SFML_Manager>& manager, const Logic::Tile_Grid_Info &tile_grid_info);
     };

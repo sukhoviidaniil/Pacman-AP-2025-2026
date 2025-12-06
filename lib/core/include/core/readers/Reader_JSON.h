@@ -25,8 +25,6 @@
 #include "Reader_JSON_Info.h"
 namespace Core {
 
-
-
     class Reader_JSON final : public Reader {
 
         protected:
@@ -35,16 +33,17 @@ namespace Core {
             const std::shared_ptr<const File_Reader> &fr,
             std::shared_ptr<World> &world,
             const nlohmann::json &model);
-        void add_Actor (const Entity_JSON_Info &conf) const;
-        void Entity_Register(std::unordered_map<std::string, void(Reader_JSON::*)(const Entity_JSON_Info &conf) const> &outMap) const;
+        void add_Actor (Entity_JSON_Info &conf) const;
+        void Entity_Register(std::unordered_map<std::string, void(Reader_JSON::*)(Entity_JSON_Info &conf) const> &outMap) const;
         void add_Entity(
-            const Entity_JSON_Info& conf
+            Entity_JSON_Info& conf
             ) const;
 
-        void load_Game_Stage(
+        std::shared_ptr<Stage> load_Game_Stage(
             const Reader_JSON_Base_Info &conf
             ) const;
-        void Stage_Register(std::unordered_map<std::string, void(Reader_JSON::*)(const Reader_JSON_Base_Info &conf) const> &outMap) const;
+
+        static void Stage_Register(std::unordered_map<std::string, std::shared_ptr<Stage>(Reader_JSON::*)(const Reader_JSON_Base_Info &conf) const> &outMap);
 
         void HitBoxe_Register(std::unordered_map<std::string, void(Reader_JSON::*)(const Reader_JSON_Base_Info &conf) const> &outMap) const;
 
@@ -88,7 +87,7 @@ namespace Core {
             ) const override;
 
         [[nodiscard]] std::shared_ptr<Stage> load_Stage(
-            const std::shared_ptr<const File_Reader>& fr, const std::string& filename
+            const std::shared_ptr<const File_Reader>& fr, const std::string& path
             ) const override;
 
         [[nodiscard]] Stage_Manager load_Stage_Manager(

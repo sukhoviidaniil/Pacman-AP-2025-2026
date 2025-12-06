@@ -18,18 +18,24 @@
 
 #ifndef PACMAN_TERRAIN_H
 #define PACMAN_TERRAIN_H
+
 #include "logic/model/Entity.h"
 
 namespace Logic::Model {
     class Terrain : public Entity {
-        bool walkable_ = false;
         public:
         explicit Terrain(
             const std::string &name, const Math::Vector2 &position,
-            const std::shared_ptr<Collision::HitBoxe> &hitbox, unsigned int status, bool walkable = false);
+            const std::shared_ptr<Collision::HitBoxe> &hitbox, unsigned int max_status, bool walkable = false);
         ~Terrain() override;
 
-        [[nodiscard]] bool walkable() const;
+        [[nodiscard]] Math::Vector2 get_direction() const override;
+
+        void set_direction(const Math::Vector2 &direction) override;
+
+        void move(float deltaTime, const std::shared_ptr<Collision::World_Collision_Manager> &collision_control) override;
+
+        [[nodiscard]] bool walkable() const override;
     };
 }
 

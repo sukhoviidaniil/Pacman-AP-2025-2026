@@ -21,6 +21,9 @@
 #include <cmath>
 #include <unordered_set>
 
+#include "logic/Tile_Grid.h"
+#include "logic/model/Entity.h"
+
 namespace Logic::Collision {
     void World_Collision_Manager::resolve_сollision(const std::shared_ptr<Model::Entity> &entityA, const std::shared_ptr<Model::Entity> &entityB) const{
         // TODO
@@ -119,18 +122,22 @@ namespace Logic::Collision {
 
     bool World_Collision_Manager::collision_world(const std::shared_ptr<HitBoxe> &entity) const {
         const AABB aabb = entity->get_aabb();
+        const int grid_width = static_cast<int>(grid_->get_width());
+        const int grid_height = static_cast<int>(grid_->get_height());
+
         const size_t minTileX = static_cast<size_t>(std::max(0, static_cast<int>(std::floor(aabb.min_X))));
         const size_t minTileY = static_cast<size_t>(std::max(0, static_cast<int>(std::floor(aabb.min_Y))));
-        const size_t maxTileX = static_cast<size_t>(std::min(static_cast<int>(grid_->get_width())  - 1, static_cast<int>(std::floor(aabb.max_X))));
-        const size_t maxTileY = static_cast<size_t>(std::min(static_cast<int>(grid_->get_height()) - 1, static_cast<int>(std::floor(aabb.max_Y))));
+        const size_t maxTileX = static_cast<size_t>(std::min(grid_width  - 1, static_cast<int>(std::floor(aabb.max_X))));
+        const size_t maxTileY = static_cast<size_t>(std::min(grid_height - 1, static_cast<int>(std::floor(aabb.max_Y))));
 
         for (size_t y = minTileY; y <= maxTileY; ++y){
             for (size_t x = minTileX; x <= maxTileX; ++x){
                 const std::shared_ptr<Tile> tile = grid_->get_tile(x, y);
-                if (tile->get_status() == 0) {
-                    continue; // empty cell — skip
+                const std::shared_ptr<Model::Entity> terrain = tile->get_terrain();
+                if (terrain->walkable() == 0) {
+                    continue; // walkabl cell — skip
                 }
-                std::shared_ptr<HitBoxe> tile_hitbox = tile->get_hitbox();
+                const std::shared_ptr<HitBoxe> tile_hitbox = terrain->get_hitboxe();
                 if (control_->collision(entity, tile_hitbox)) {
                     return true;
                 }

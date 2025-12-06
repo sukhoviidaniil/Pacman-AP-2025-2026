@@ -20,13 +20,9 @@
 
 namespace Logic {
 
-    Tile::Tile(const std::shared_ptr<Model::Terrain> &terrain):
-    terrain_(terrain){
 
-    }
+    Tile::Tile(const std::shared_ptr<Model::Entity> &terrain) : terrain_(terrain) {
 
-    void Tile::set_status(int status) {
-        status_ = status;
     }
 
     void Tile::add_Entity(const std::shared_ptr<Model::Entity> &entity) {
@@ -51,17 +47,8 @@ namespace Logic {
         }
     }
 
-    int Tile::get_status() const {
-        return status_;
-    }
-
-    std::shared_ptr<Model::Terrain> Tile::get_terrain() const {
+    std::shared_ptr<Model::Entity> Tile::get_terrain() const {
         return terrain_;
-    }
-
-    std::shared_ptr<Collision::HitBoxe> Tile::get_hitbox() const {
-        if (terrain_ == nullptr) return nullptr;
-        return terrain_->get_hitboxe();
     }
 
     std::vector<std::shared_ptr<Model::Entity>> Tile::get_entities() const {

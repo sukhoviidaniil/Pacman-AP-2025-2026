@@ -28,14 +28,12 @@
 
 namespace Graphics::View {
     class Terrain_View : public Entity_View {
-        std::shared_ptr<Logic::Model::Terrain> terrain_ = nullptr;
         std::shared_ptr<sf::RectangleShape> placeholder_ = nullptr;
         std::shared_ptr<sf::Sprite> sprite_ = nullptr;
     public:
-        Terrain_View(const std::shared_ptr<Logic::Model::Terrain>& terrain, const std::shared_ptr<sf::Sprite>& sprite);
+        Terrain_View(const std::shared_ptr<Logic::Model::Entity>& entity, const std::shared_ptr<sf::Sprite>& sprite);
         ~Terrain_View() override;
 
-        Math::Vector2 get_position() const override;
         void render(sf::RenderWindow &window, const Math::Vector2& pixel_pos) const override;
     };
 }

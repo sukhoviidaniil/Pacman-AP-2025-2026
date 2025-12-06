@@ -26,7 +26,7 @@ namespace Graphics {
         const View::Actor_View_Info &view_info,
         const Logic::Model::Actor_Info &model_info
         ) {
-        std::shared_ptr<Logic::Model::Actor> actor_model = Logic::Logic_Factory::make_Actor(model_info);
+        std::shared_ptr<Logic::Model::Entity> actor_model = Logic::Logic_Factory::make_Actor(model_info);
         if (actor_model == nullptr) {
             throw std::runtime_error("Failed to create actor!");
         }
@@ -36,7 +36,7 @@ namespace Graphics {
     Actor_Pair Graphics_Factory::make_Actor(
         const std::shared_ptr<SFML_Manager> &manager,
         const View::Actor_View_Info &view_info,
-        const std::shared_ptr<Logic::Model::Actor> &actor_model
+        const std::shared_ptr<Logic::Model::Entity> &actor_model
         ) {
 
         std::shared_ptr<Sprite_Group> sprite_group = manager->get_Sprite_Group(view_info.sprite_group_name);
@@ -44,7 +44,7 @@ namespace Graphics {
             throw std::runtime_error("Failed to create sprite group!");
         }
         auto actor_view = std::make_shared<View::Actor_View>(sprite_group);
-        actor_view->set_actor_model(actor_model);
+        actor_view->set_Entity(actor_model);
         return Actor_Pair(actor_model, actor_view);
     }
 
@@ -61,7 +61,7 @@ namespace Graphics {
 
         for (const auto &tile_line : all_tiles) {
             for (const auto &tile : tile_line) {
-                std::shared_ptr<Logic::Model::Terrain> terrain = tile->get_terrain();
+                std::shared_ptr<Logic::Model::Entity> terrain = tile->get_terrain();
                 std::string name = terrain->get_name();
                 std::shared_ptr<sf::Sprite> tile_sprite = manager->get_Sprite(name);
                 auto terrain_view = std::make_shared<View::Terrain_View>(terrain, tile_sprite);

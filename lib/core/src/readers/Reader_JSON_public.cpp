@@ -24,7 +24,7 @@
 #include "core/info/Status_Info.h"
 #include "graphics/Graphics_Factory.h"
 #include "logic/Logic_Factory.h"
-#include "graphics/view/Actor_View.h"
+#include "../../../graphics/include/graphics/view/entity/Actor_View.h"
 
 namespace Core {
 
@@ -173,31 +173,34 @@ namespace Core {
 
     std::shared_ptr<Graphics::Camera> Reader_JSON::load_Camera(const std::string &filename) const {
         nlohmann::json data = get_json_data(filename);
-        unsigned int width = 0;
-        unsigned int height = 0;
-        if (data.contains("width")) {
-            width = data["width"].get<unsigned int>();
+
+        unsigned int base_window_width = 0;
+        unsigned int base_window_height = 0;
+        Math::Vector2 window_center;
+        if (data.contains("base_window_width")) {
+            base_window_width = data["base_window_width"].get<unsigned int>();
         }
-        if (data.contains("height")) {
-           height = data["height"].get<unsigned int>();
+        if (data.contains("base_window_height")) {
+           base_window_height = data["base_window_height"].get<unsigned int>();
         }
-        float window_center_x = 0;
-        float window_center_y = 0;
-        float logic_center_x = 0;
-        float logic_center_y = 0;
-        if (data.contains("window_center_x")) {
-            window_center_x = data["window_center_x"].get<float>();
+        if (data.contains("window_center")) {
+            window_center = from_json(data["window_center"]);
         }
-        if (data.contains("window_center_y")) {
-            window_center_y = data["window_center_y"].get<float>();
+
+        unsigned int camera_width = 0;
+        unsigned int camera_height = 0;
+        Math::Vector2 camera_center;
+        if (data.contains("camera_width")) {
+            camera_width = data["camera_width"].get<unsigned int>();
         }
-        if (data.contains("logic_center_x")) {
-            logic_center_x = data["logic_center_x"].get<float>();
+        if (data.contains("camera_height")) {
+            camera_height = data["camera_height"].get<unsigned int>();
         }
-        if (data.contains("logic_center_y")) {
-            logic_center_y = data["logic_center_y"].get<float>();
+        if (data.contains("camera_center")) {
+            camera_center = from_json(data["camera_center"]);
         }
-        return std::make_shared<Graphics::Camera>(width, height, Math::Vector2(window_center_x, window_center_y), Math::Vector2(logic_center_x, logic_center_y));
+
+        return std::make_shared<Graphics::Camera>(base_window_width, base_window_height, window_center, camera_width, camera_height, camera_center);
     }
 
     void Reader_JSON::load_Entities(
@@ -258,9 +261,27 @@ namespace Core {
 
     std::shared_ptr<Stage> Reader_JSON::load_Stage(
         const std::shared_ptr<const File_Reader> &fr,
-        const std::string &filename
+        const std::string &path
         ) const {
+        nlohmann::json data = get_json_data(path);
 
+        std::unordered_map<std::string, std::shared_ptr<Stage>(Reader_JSON::*)(const Reader_JSON_Base_Info &conf) const> functionMap;
+        Stage_Register(functionMap);
+
+        if (!data.contains("Type")) {
+            throw std::runtime_error("Entity dont have Type");
+        }
+        const std::string entity_type = data["Type"].get<std::string>();
+
+        auto it = functionMap.find(entity_type);
+        if (it != functionMap.end()) {
+            Reader_JSON_Base_Info conf;
+            conf.fr = fr;
+            conf.info = data;
+            auto memberFn = it->second;
+            return (this->*memberFn)(conf);
+        }
+        throw std::runtime_error("Stage type " + entity_type + " not found");
     }
 
     Stage_Manager Reader_JSON::load_Stage_Manager(
@@ -274,7 +295,6 @@ namespace Core {
         }
         for (const auto& stage : data["stages"]) {
             std::unique_ptr<Stage_Info> info;
-            info->type = stage["type"].get<std::string>();
             info->name = stage["name"].get<std::string>();
             info->configuration = stage["configuration"].get<std::string>();
             sm.add_Stage_Info(std::move(info));

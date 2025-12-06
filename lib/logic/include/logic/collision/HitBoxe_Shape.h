@@ -19,7 +19,6 @@
 #define PACMAN_HITBOXE_SHAPE_H
 
 #include "logic/collision/HitBoxe.h"
-#include "math/Vector2.h"
 
 namespace Logic::Collision {
 
@@ -43,7 +42,6 @@ namespace Logic::Collision {
         [[nodiscard]] std::vector<Math::Vector2> get_vector_to(const std::shared_ptr<HitBoxe> &hit_boxe) const override;
 
         [[nodiscard]] std::vector<Math::Vector2> get_normals() const override;
-
 
         [[nodiscard]] AABB get_aabb() const override;
 

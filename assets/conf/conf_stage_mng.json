@@ -1,7 +1,6 @@
 {
   "stages" : [
     {
-      "Type" : "Game_Stage",
       "name" : "Game_Stage2",
       "configuration" : "stage_game2.json"
     }

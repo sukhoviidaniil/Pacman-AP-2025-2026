@@ -157,7 +157,7 @@ namespace Core {
             throw std::runtime_error("No suitable reader was found for the configuration type " + extension);
         }
         std::string path = configuration_folder_ + filename;
-        return reader->make_Stage_Manager(self, path);
+        return reader->load_Stage_Manager(self, path);
     }
 
     Info::Game_Info File_Reader::get_Game_Info(const std::string &filename) const {

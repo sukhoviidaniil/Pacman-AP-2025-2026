@@ -36,12 +36,11 @@ namespace Core {
         actor_info.max_status = model["max_status"].get<unsigned int>();
         const std::string hitbox = model["hitbox"].get<std::string>();
         actor_info.hitbox = fr->make_HitBoxe(hitbox);
-        std::shared_ptr<Logic::Model::Actor> actor = Logic::Logic_Factory::make_Actor(actor_info);
+        std::shared_ptr<Logic::Model::Entity> actor = Logic::Logic_Factory::make_Actor(actor_info);
         world->add_Actor_Model(actor);
     }
 
-
-    void Reader_JSON::add_Actor(const Entity_JSON_Info &conf) const{
+    void Reader_JSON::add_Actor(Entity_JSON_Info& conf) const{
         const nlohmann::json &info = conf.info;
         std::string actor_name;
         if (info["Model"].is_object()) {
@@ -51,7 +50,7 @@ namespace Core {
         }else {
             actor_name = info["Model"].get<std::string>();
         }
-        std::shared_ptr<Logic::Model::Actor> actor_model = conf.world->get_Actor_Model(actor_name);
+        std::shared_ptr<Logic::Model::Entity> actor_model = conf.world->get_Actor_Model(actor_name);
         if (actor_model == nullptr) throw std::runtime_error("Actor model not added");
 
         if (info.contains("View")) {
@@ -70,12 +69,12 @@ namespace Core {
 
     }
 
-    void Reader_JSON::Entity_Register(std::unordered_map<std::string, void(Reader_JSON::*)(const Entity_JSON_Info &conf) const> &outMap) const {
+    void Reader_JSON::Entity_Register(std::unordered_map<std::string, void(Reader_JSON::*)(Entity_JSON_Info &conf) const> &outMap) const {
         outMap["Actor"] = &Reader_JSON::add_Actor;
     }
 
-    void Reader_JSON::add_Entity(const Entity_JSON_Info &conf) const {
-        std::unordered_map<std::string, void(Reader_JSON::*)(const Entity_JSON_Info &conf) const> functionMap;
+    void Reader_JSON::add_Entity(Entity_JSON_Info &conf) const {
+        std::unordered_map<std::string, void(Reader_JSON::*)(Entity_JSON_Info &conf) const> functionMap;
         Entity_Register(functionMap);
         const nlohmann::json &info = conf.info;
         if (!info.contains("Type")) {
@@ -94,12 +93,12 @@ namespace Core {
         }
     }
 
-    void Reader_JSON::load_Game_Stage(const Reader_JSON_Base_Info &conf) const {
+    std::shared_ptr<Stage> Reader_JSON::load_Game_Stage(const Reader_JSON_Base_Info &conf) const {
 
     }
 
-    void Reader_JSON::Stage_Register(
-        std::unordered_map<std::string, void(Reader_JSON::*)(const Reader_JSON_Base_Info &conf) const> &outMap) const {
+    void Reader_JSON::Stage_Register(std::unordered_map<std::string, std::shared_ptr<Stage>(Reader_JSON::*)(const Reader_JSON_Base_Info &conf) const> &outMap) {
+        outMap["Game_Stage"] = &Reader_JSON::load_Game_Stage;
     }
 
     void Reader_JSON::HitBoxe_Register(

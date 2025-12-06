@@ -42,14 +42,17 @@ namespace Graphics{
         public:
 
         SFML_Manager();
+        ~SFML_Manager();
 
+        // ===== Textures =====
         void add_Texture(const std::string& name, const sf::Texture& texture);
         [[nodiscard]] std::optional<std::reference_wrapper<const sf::Texture>> get_Texture(const std::string& name) const;
+
+        // ===== Sprites =====
         void add_Sprite(const std::string& name, const std::shared_ptr<sf::Sprite> &sprite);
         [[nodiscard]] std::shared_ptr<sf::Sprite> get_Sprite(const std::string& name) const;
         void add_Sprite_Group(const std::string& name, const std::shared_ptr<Sprite_Group> &sprite_group);
         [[nodiscard]] std::shared_ptr<Sprite_Group> get_Sprite_Group(const std::string& name) const;
-
     };
 }
 

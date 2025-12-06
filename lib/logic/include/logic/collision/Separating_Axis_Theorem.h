@@ -17,6 +17,7 @@
 ***************************************************************/
 #ifndef PACMAN_SEPARATING_AXIS_THEOREM_H
 #define PACMAN_SEPARATING_AXIS_THEOREM_H
+
 #include <memory>
 
 #include "logic/collision/Collision_Control.h"

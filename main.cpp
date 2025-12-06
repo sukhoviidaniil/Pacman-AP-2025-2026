@@ -27,7 +27,7 @@ int main() {
     const std::string graphics_dir = assets_dir + "/graphics/";
     const std::string conf_dir = assets_dir + "/config/";
     auto fr = std::make_shared<Core::File_Reader>(graphics_dir, conf_dir);
-    fr->add_Reader(".json", std::make_shared<Core::Reader_JSON_public>());
+    fr->add_Reader(".json", std::make_shared<Core::Reader_JSON>());
     Core::Info::Game_Info game_info = fr->get_Game_Info("conf_game1.jsom");
     if (game_info.graphics == "SFML") {
         fr->load_SFML_Manager(game_info.graphics_conf);
@@ -35,7 +35,7 @@ int main() {
         unsigned int width = game_info.window_width;
         unsigned int height = game_info.window_height;
         sf::RenderWindow window(sf::VideoMode(width, height), "SFML Window");
-        Core::Stage_Manager sm = fr->make_Stage_Manager(game_info.stage_mng);
+        Core::Stage_Manager sm = fr->load_Stage_Manager(game_info.stage_mng);
 
         Logic::Delta_Timer timer;
         while (window.isOpen()) {

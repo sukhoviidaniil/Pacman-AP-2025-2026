@@ -19,7 +19,6 @@
 #define PACMAN_ACTOR_H
 
 #include "logic/model/Entity.h"
-#include "logic/collision/World_Collision_Manager.h"
 
 namespace Logic::Model {
 
@@ -30,20 +29,22 @@ namespace Logic::Model {
 
     class Actor : public Entity {
         Math::Vector2 current_direction_;
-        Math::Vector2 next_dir_ = Math::Vector2(1, 0);
+        Math::Vector2 next_dir_;
         float speed_ = 0.1f;
         public:
-        [[nodiscard]] Math::Vector2 get_direction() const;
 
         explicit Actor(
             const std::string &name,
-            const Math::Vector2 &position, const std::shared_ptr<Collision::HitBoxe> &hitbox,
-            unsigned int status, float speed);
-        explicit Actor(const Actor_Info& info);
+            const Math::Vector2 &position,
+            const std::shared_ptr<Collision::HitBoxe> &hitbox,
+            unsigned int max_status,
+            const Math::Vector2& current_direction, float speed
+            );
 
-        void move(float deltaTime, const std::shared_ptr<Collision::World_Collision_Manager> &collision_control);
+        [[nodiscard]] Math::Vector2 get_direction() const override;
+        void set_direction(const Math::Vector2 &direction) override;
 
-        void set_direction(const Math::Vector2 &direction);
+        void move(float deltaTime, const std::shared_ptr<Collision::World_Collision_Manager> &collision_control) override;
     };
 }
 #endif //PACMAN_ACTOR_H

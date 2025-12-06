@@ -19,13 +19,24 @@
 #define PACMAN_AABB_H
 #include <limits>
 
+#include "math/Vector2.h"
 
 namespace Logic::Collision {
-    struct AABB {
+    class AABB {
+        public:
+        Math::Vector2 center;
+        Math::Vector2 extend;
+
+
         float min_X = std::numeric_limits<float>::max();
         float max_X = -std::numeric_limits<float>::max();
         float min_Y = std::numeric_limits<float>::max();
         float max_Y = -std::numeric_limits<float>::max();
+
+        [[nodiscard]] int get_floor_min_x() const;
+        [[nodiscard]] int get_floor_max_x() const;
+        [[nodiscard]] int get_floor_min_y() const;
+        [[nodiscard]] int get_floor_max_y() const;
     };
 }
 

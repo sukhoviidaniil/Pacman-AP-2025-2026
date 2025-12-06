@@ -20,7 +20,7 @@
 
 #include "core/Stage_Game.h"
 #include "graphics/SFML_Manager.h"
-#include "graphics/view/Actor_View.h"
+#include "../../graphics/include/graphics/view/entity/Actor_View.h"
 #include "logic/model/Actor.h"
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "SFML/Window/Event.hpp"

@@ -1,6 +1,6 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Collecteble_View.h
+ * File:          Actor.h
  *
  * Author:        Sukhovii Daniil
  * Created:       2025-11-20
@@ -15,22 +15,24 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_COLLECTEBLE_VIEW_H
-#define PACMAN_COLLECTEBLE_VIEW_H
-
-
+#ifndef PACMAN_ACTOR_VIEW_H
+#define PACMAN_ACTOR_VIEW_H
 
 #include "graphics/view/Entity_View.h"
-#include "SFML/Graphics/Sprite.hpp"
+#include "graphics/Sprite_Group.h"
 #include <memory>
-namespace Graphics::View {
-    class Collecteble_View : public Entity_View {
-        std::shared_ptr<sf::Sprite> sprite_;
-        public:
-        Collecteble_View(const std::shared_ptr<sf::Sprite>& sprite);
 
-        void render(const Math::Vector2& pixel_pos, const std::shared_ptr<sf::Window> &window) const override;
+namespace Graphics::View {
+    struct Actor_View_Info {
+        std::string sprite_group_name;
+    };
+
+    class Actor_View: public Entity_View {
+        std::shared_ptr<Sprite_Group> sprite_;
+        public:
+        explicit Actor_View(const std::shared_ptr<Sprite_Group>& sprite);
+        void render(sf::RenderWindow& window, const Math::Vector2& pixel_pos) const override;
     };
 }
 
-#endif //PACMAN_COLLECTEBLE_VIEW_H
+#endif //PACMAN_ACTOR_VIEW_H

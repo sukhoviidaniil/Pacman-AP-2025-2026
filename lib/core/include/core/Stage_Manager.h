@@ -29,7 +29,7 @@ namespace Core {
         std::shared_ptr<const File_Reader> fr_;
         std::unordered_map<
             std::string,
-            std::unique_ptr<Stage_Info>
+            std::shared_ptr<Stage_Info>
         > stages_info;
         std::stack<std::shared_ptr<Stage>> current_stages_;
         public:
@@ -37,7 +37,7 @@ namespace Core {
         explicit Stage_Manager(const std::shared_ptr<const File_Reader>& fr);
         ~Stage_Manager();
 
-        void add_Stage_Info(std::unique_ptr<Stage_Info> info);
+        void add_Stage_Info(const std::shared_ptr<Stage_Info>& info);
 
         void pop_stage();
         void push_stage(const std::string &name);

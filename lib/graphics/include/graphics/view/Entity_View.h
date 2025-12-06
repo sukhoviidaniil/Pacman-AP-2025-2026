@@ -18,21 +18,26 @@
 #ifndef PACMAN_ENTITY_VIEW_H
 #define PACMAN_ENTITY_VIEW_H
 
-#include "SFML/Graphics/RenderWindow.hpp"
-#include "math/Vector2.h"
+#include <memory>
+
+#include "View.h"
 
 namespace Graphics::View {
-    class Entity_View {
+    class Entity_View : public View {
     protected:
-        std::string name_ = "None";
+        std::shared_ptr<Logic::Model::Entity> entity_;
     public:
         Entity_View();
-        explicit Entity_View(const std::string& name);
-        virtual ~Entity_View();
+        explicit Entity_View(std::string name);
+        explicit Entity_View(const std::shared_ptr<Logic::Model::Entity>& entity);
+        ~Entity_View() override;
 
-        [[nodiscard]] virtual Math::Vector2 get_position() const = 0;
+        [[nodiscard]] Math::Vector2 get_position() const override;
+        [[nodiscard]] std::shared_ptr<Logic::Model::Entity> get_Entity() const override;
 
-        virtual void render(sf::RenderWindow &window, const Math::Vector2& pixel_pos) const = 0;
+        void set_Entity(const std::shared_ptr<Logic::Model::Entity> &entity);
+
+        void render(sf::RenderWindow &window, const Math::Vector2& pixel_pos) const override = 0;
     };
 }
 

@@ -19,100 +19,93 @@
 #include "graphics/Camera.h"
 
 namespace Graphics {
-    std::optional<Math::Vector2> Camera::get_entity_position(const std::shared_ptr<View::Entity_View> &view) const {
-        if (!view) return std::nullopt;
 
-        // Position of an entity in global coordinates
-        const Math::Vector2 world_pos = view->get_position();
-
-        // Translation into logical coordinates relative to the logical center
-        const Math::Vector2 logic_pos = world_pos - logic_center_;
-
-        // Checking for exit beyond the boundaries of the logical window
-        const float half_w = static_cast<float>(width_) * 0.5f;
-        const float half_h = static_cast<float>(height_) * 0.5f;
-        if (logic_pos.x < -half_w || logic_pos.x > half_w ||
-            logic_pos.y < -half_h || logic_pos.y > half_h){
+    std::optional<Math::Vector2> Camera::get_entity_position(const Math::Vector2 &view) const {
+        // Translation of logical position to screen position
+        const Math::Vector2 delta = (view - camera_center_) * scale_;
+        Math::Vector2 screen_pos = window_center_ + delta;
+        // Checking for entry into the working area
+        if (screen_pos.x < window_center_.x - camera_half_w_ ||
+            screen_pos.x > window_center_.x + camera_half_w_ ||
+            screen_pos.y < window_center_.y - camera_half_h_ ||
+            screen_pos.y > window_center_.y + camera_half_h_)
+        {
             return std::nullopt;
-            }
-
-        // Converting logical offset to pixels
-        const Math::Vector2 pixel_delta = logic_pos * scale_;
-
-        // Final position in pixels relative to the center of the window
-        Math::Vector2 window_pos = window_center_ + pixel_delta;
-
-        return window_pos;
+        }
+        return screen_pos;
     }
 
-    std::vector<std::pair<Math::Vector2, std::shared_ptr<View::Entity_View>>> Camera::get_valid_views(const sf::RenderWindow &window, const std::vector<std::shared_ptr<View::Entity_View>> &views) const {
-
-        std::vector<std::pair<Math::Vector2, std::shared_ptr<View::Entity_View>>> result;
+    std::optional<Math::Vector2> Camera::get_entity_position(const sf::RenderWindow &window, const Math::Vector2 &view) const {
+        std::optional<Math::Vector2> screen_pos = get_entity_position(view);
+        if (!screen_pos) return std::nullopt;
 
         const sf::Vector2u window_size = window.getSize();
-        const auto win_width = static_cast<float>(window_size.x);
-        const auto win_height = static_cast<float>(window_size.y);
+        const auto w = static_cast<float>(window_size.x);
+        const auto h = static_cast<float>(window_size.y);
 
-        for (const auto &view : views) {
-            if (!view) continue;
-
-            auto maybe_pos = get_entity_position(view);
-            if (!maybe_pos) continue;
-            const Math::Vector2 &pos = *maybe_pos;
-
-            if (pos.x < 0.0f || pos.x > win_width || pos.y < 0.0f || pos.y > win_height) {
-                continue;
-            }
-            result.emplace_back(pos, view);
+        // Checking for entry into the window area
+        if (screen_pos->x < 0 ||
+            screen_pos->x > w ||
+            screen_pos->y < 0 ||
+            screen_pos->y > h)
+        {
+            return std::nullopt;
         }
-        return result;
+        return screen_pos;
     }
 
-    Camera::Camera(const unsigned int width, const unsigned int height):
-    width_(width), height_(height){
+    Camera::Camera(
+        const unsigned int window_width, const unsigned int window_height, const Math::Vector2 &window_center,
+        const unsigned int camera_width, const unsigned int camera_height, const Math::Vector2 &camera_center
+        ):
+        camera_width_(camera_width),
+        camera_height_(camera_height),
+        camera_center_(camera_center)
+    {
+        camera_half_w_ = static_cast<float>(camera_width_) * 0.5f;
+        camera_half_h_ = static_cast<float>(camera_height_) * 0.5f;
+        update_base_window(window_width, window_height, window_center);
     }
 
-    Camera::Camera(const unsigned int width, const unsigned int height, const Math::Vector2 &logic_center, const Math::Vector2 &window_center):
-    width_(width), height_(height), logic_center_(logic_center), window_center_(window_center){
+    Camera::Camera(
+        const unsigned int window_width, const unsigned int window_height, const Math::Vector2& window_center,
+        const unsigned int camera_width, const unsigned int camera_height, const Math::Vector2& camera_center,
+        const float scale
+        ):
+        camera_width_(camera_width),
+        camera_height_(camera_height),
+        camera_center_(camera_center),
+        scale_(scale)
+    {
+        camera_half_w_ = static_cast<float>(camera_width_) * 0.5f;
+        camera_half_h_ = static_cast<float>(camera_height_) * 0.5f;
+        update_base_window(window_width, window_height, window_center);
     }
 
-    void Camera::set_width(unsigned int width) {
-        width_ = width;
+    Camera::~Camera() = default;
+
+    void Camera::update_base_window(
+        const unsigned int window_width, const unsigned int window_height, const Math::Vector2 &window_center)
+    {
+        base_window_width_ = window_width;
+        base_window_height_ = window_height;
+        // shares relative to the base window (fixed “ideal” proportions)
+        ratio_x_ = window_center.x / static_cast<float>(window_width);
+        ratio_y_ = window_center.y / static_cast<float>(window_height);
+        window_center_ = window_center;
     }
 
-    void Camera::set_height(unsigned int height) {
-        height_ = height;
+    void Camera::update_window_center(const sf::RenderWindow *window) {
+        // calculate the center for the new dimensions
+        const auto size = window->getSize();
+        window_center_.x = static_cast<float>(size.x)  * ratio_x_;
+        window_center_.y = static_cast<float>(size.y) * ratio_y_;
     }
 
-    void Camera::set_window_center(const unsigned int recLeft, const unsigned int recTop) {
-        window_center_ = Math::Vector2(static_cast<float>(recLeft+width_), static_cast<float>(recTop+height_));
-    }
-
-    void Camera::set_window_center(const std::shared_ptr<sf::Window> &window) {
-        const float w_width = static_cast<float>(window->getSize().x);
-        const float w_height = static_cast<float>(window->getSize().y);
-        window_center_ = Math::Vector2(w_width / 2, w_height / 2);
-    }
-
-    void Camera::set_window_center(const Math::Vector2 &center) {
-        window_center_ = center;
-    }
-
-    void Camera::set_logic_center(const Math::Vector2 &center) {
-        logic_center_ = center;
-    }
-
-
-    void Camera::render(sf::RenderWindow &window, const std::vector<std::shared_ptr<View::Entity_View>> &views) const {
-        const std::vector<
-            std::pair<
-                Math::Vector2,
-                std::shared_ptr<View::Entity_View>
-            >
-        > views_to_render = get_valid_views(window, views);
-
-        for (const auto &[pos, view] : views_to_render) {
-            view->render(window, pos);
-        }
+    void Camera::render(sf::RenderWindow &window, const std::shared_ptr<View::View> &view) const {
+        const Math::Vector2 pos = view->get_position();
+        const std::optional<Math::Vector2> screen_pos = get_entity_position(window, pos);
+        if (!screen_pos) return;
+        view->render(window, *screen_pos);
     }
 }

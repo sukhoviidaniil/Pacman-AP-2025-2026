@@ -19,22 +19,27 @@
 #include "logic/model/Actor.h"
 #include <cmath>
 
+#include "logic/Tile_Grid.h"
+#include "logic/collision/World_Collision_Manager.h"
 
 namespace Logic::Model{
+    Actor::Actor(
+        const std::string &name, const Math::Vector2 &position,
+        const std::shared_ptr<Collision::HitBoxe> &hitbox, const unsigned int max_status,
+        const Math::Vector2 &current_direction, const float speed
+        ):
+        Entity(name, position, hitbox, max_status), current_direction_(current_direction), speed_(speed)
+    {
+        next_dir_ = current_direction_;
+    }
 
     Math::Vector2 Actor::get_direction() const {
         return current_direction_;
     }
 
-    Actor::Actor(
-        const std::string &name,
-        const Math::Vector2 &position,
-        const std::shared_ptr<Collision::HitBoxe> &hitbox,
-        const unsigned int status, const float speed):
-        Entity(name, position, hitbox, status), speed_(speed){
-    }
-
-    Actor::Actor(const Actor_Info &info) : Entity(info.name, info.position, info.hitbox, info.max_status), speed_(info.speed) {
+    void Actor::set_direction(const Math::Vector2 &direction) {
+        next_dir_ = direction;
+        next_dir_.normalize();
     }
 
     void Actor::move(
@@ -90,8 +95,5 @@ namespace Logic::Model{
         }
     }
 
-    void Actor::set_direction(const Math::Vector2 &direction) {
-        next_dir_ = direction;
-        next_dir_.normalize();
-    }
+
 }

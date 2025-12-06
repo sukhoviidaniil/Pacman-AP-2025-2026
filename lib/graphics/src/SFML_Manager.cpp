@@ -21,6 +21,8 @@
 namespace Graphics {
     SFML_Manager::SFML_Manager() = default;
 
+    SFML_Manager::~SFML_Manager() = default;
+
     void SFML_Manager::add_Texture(const std::string &name, const sf::Texture& texture) {
         textures_[name] = texture;
     }

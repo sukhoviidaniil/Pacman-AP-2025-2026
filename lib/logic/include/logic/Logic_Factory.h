@@ -22,6 +22,7 @@
 #include "collision/HitBoxe_Shape.h"
 #include "logic/Tile_Grid.h"
 #include "model/Actor.h"
+#include "model/Terrain.h"
 
 namespace Logic {
     class Logic_Factory {
@@ -31,9 +32,9 @@ namespace Logic {
         public:
         virtual ~Logic_Factory() = default;
 
-        [[nodiscard]] static std::shared_ptr<Collision::HitBoxe_Shape> make_HitBox(const Collision::HitBoxe_Shape_Info& info);
+        [[nodiscard]] static std::shared_ptr<Collision::HitBoxe> make_HitBox(const Collision::HitBoxe_Shape_Info& info);
 
-        [[nodiscard]] static std::shared_ptr<Model::Actor> make_Actor(const Model::Actor_Info& info);
+        [[nodiscard]] static std::shared_ptr<Model::Entity> make_Actor(Model::Actor_Info info);
 
         [[nodiscard]] static std::shared_ptr<Tile_Grid> make_grid(const Tile_Grid_Info &tile_grid_info);
     };

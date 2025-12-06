@@ -21,14 +21,34 @@
 namespace Logic::Model {
     Terrain::Terrain(
         const std::string &name, const Math::Vector2 &position,
-        const std::shared_ptr<Collision::HitBoxe> &hitbox, const unsigned int status, const bool walkable):
-    Entity(name, position, hitbox, status), walkable_(walkable){
+        const std::shared_ptr<Collision::HitBoxe> &hitbox, const unsigned int max_status, const bool walkable):
+    Entity(name, position, hitbox, max_status){
+        if (max_status < 1) {
+            throw std::invalid_argument("Terrain: max_status must be > 1");
+        }
+        if (walkable) {
+            status_ = 1;
+        }else {
+            status_ = 0;
+        }
     }
 
     Terrain::~Terrain() = default;
 
+    Math::Vector2 Terrain::get_direction() const {
+        throw std::invalid_argument("Terrain: can't get direction");
+    }
+
+    void Terrain::set_direction(const Math::Vector2 &direction) {
+        throw std::invalid_argument("Terrain: can't set direction");
+    }
+
+    void Terrain::move(float deltaTime, const std::shared_ptr<Collision::World_Collision_Manager> &collision_control) {
+        throw std::invalid_argument("Terrain: can't move to terrain");
+    }
+
     bool Terrain::walkable() const {
-        return walkable_;
+        return status_;
     }
 }
 

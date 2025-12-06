@@ -68,7 +68,6 @@ add_subdirectory(tests)
 
 add_executable(${APP_TARGET}
         ${RELEASE_SOURCE_FILES}
-        #${FUNC_SOURCES}
 )
 
 target_link_libraries(${APP_TARGET}
@@ -78,11 +77,7 @@ target_link_libraries(${APP_TARGET}
         graphics_lib
         core_lib
 )
-#[[
-target_include_directories(${APP_TARGET} PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/external/json
-)
-]]#
+
 
 if(WIN32)
     message("CMAKE_CURRENT_BINARY_DIR - ${CMAKE_CURRENT_BINARY_DIR}")

@@ -19,6 +19,8 @@
 #include "logic/Tile_Grid.h"
 #include <complex>
 
+#include "logic/model/Entity.h"
+
 namespace Logic {
     Tile_Grid::Tile_Grid(size_t rows, size_t columns, float tile_size): rows_(rows), columns_(columns), tile_size_(tile_size) {
     }
@@ -129,8 +131,6 @@ namespace Logic {
 
 
     std::shared_ptr<Tile> Tile_Grid::get_tile(const Math::Vector2 & position) const {
-        // const Math::Vector2 m_position = position/tile_size; by base going to be 1
-        // Now index_position in form like (-1.333, -2, 444)
         const double x = position.x + offset_row_;
         const double y = position.y + offset_columns_;
         // Now x and y ALWAYS >0

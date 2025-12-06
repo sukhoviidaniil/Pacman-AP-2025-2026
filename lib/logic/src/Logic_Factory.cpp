@@ -17,7 +17,7 @@
 ***************************************************************/
 
 #include "logic/Logic_Factory.h"
-#include "logic/collision/HitBoxe_Shape.h"
+#include "logic/model/Actor.h"
 #include <filesystem>
 
 namespace Logic {
@@ -54,12 +54,20 @@ namespace Logic {
         return std::make_shared<Tile>(terrain);
     }
 
-    std::shared_ptr<Collision::HitBoxe_Shape> Logic_Factory::make_HitBox(const Collision::HitBoxe_Shape_Info &info) {
+    std::shared_ptr<Collision::HitBoxe> Logic_Factory::make_HitBox(const Collision::HitBoxe_Shape_Info &info) {
         return std::make_shared<Collision::HitBoxe_Shape>(info.pos, info.height, info.width, info.layer, info.strength);
     }
 
-    std::shared_ptr<Model::Actor> Logic_Factory::make_Actor(const Model::Actor_Info &info) {
-        return std::make_shared<Model::Actor>(info);
+    std::shared_ptr<Model::Entity> Logic_Factory::make_Actor(Model::Actor_Info info) {
+        std::shared_ptr<Model::Entity> a = std::make_shared<Model::Actor>(
+            info.name,
+            info.position,
+            info.hitbox,
+            info.max_status,
+            info.current_direction,
+            info.speed
+            );
+        return a;
     }
 
     std::shared_ptr<Tile_Grid> Logic_Factory::make_grid(const Tile_Grid_Info &tile_grid_info){

@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Sprite.h
+ * File:          AABB.cpp
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-11-26
+ * Created:       2025-12-06
  * Modified:      []
  *
  * Description:   []
@@ -15,18 +15,9 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_SPRITE_H
-#define PACMAN_SPRITE_H
 
-#include "math/Vector2.h"
+#include "logic/collision/AABB.h"
 
-namespace Graphics {
-    class Sprite {
+namespace Logic::Collision {
 
-        public:
-        virtual ~Sprite() = default;
-
-        virtual void set_Position(Math::Vector2 pos) = 0;
-    };
 }
-#endif //PACMAN_SPRITE_H

@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Tile_Grid_View.cpp
+ * File:          View.cpp
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-03
+ * Created:       2025-12-06
  * Modified:      []
  *
  * Description:   []
@@ -16,17 +16,19 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "graphics/view/Tile_Grid_View.h"
+#include <utility>
 
-namespace Graphics {
+#include "graphics/view/View.h"
 
-    View::Tile_Grid_View::Tile_Grid_View(const std::vector<std::shared_ptr<Terrain_View>> &terrain) : terrains_(terrain) {
+namespace Graphics::View {
+    View::View() = default;
+
+    View::View(std::string name) : name_(std::move(name)){
     }
 
-    View::Tile_Grid_View::~Tile_Grid_View() = default;
+    View::~View() = default;
 
-    void View::Tile_Grid_View::render(sf::RenderWindow &window, const Math::Vector2 &pixel_pos) const {
-
+    std::string View::get_name() const {
+        return name_;
     }
 }
-

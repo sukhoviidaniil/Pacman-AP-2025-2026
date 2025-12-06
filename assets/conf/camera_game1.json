@@ -1,8 +1,8 @@
 {
-  "width" : 100,
-  "height" : 200,
-  "window_center_x" : 200,
-  "window_center_y" : 200,
-  "logic_center_x" : 0,
-  "logic_center_y" : 0
+  "base_window_width" : 800,
+  "base_window_height" : 600,
+  "window_center" : {"x" :  400, "y" : 400},
+  "camera_width" : 100,
+  "camera_height" : 100,
+  "camera_center" : {"x" :  400, "y" : 400}
 }
