@@ -138,6 +138,17 @@ namespace Core {
         return reader->load_Entities(self, stage, path);
     }
 
+    void File_Reader::load_Entities(
+        const std::string &filename,
+        const std::shared_ptr<Stage> &stage,
+        const std::shared_ptr<Logic::Tile_Grid> &grid) const
+    {
+        const std::shared_ptr<Reader> reader = get_Reader(filename);
+        std::shared_ptr<const File_Reader> self = shared_from_this();
+        std::string path = configuration_folder_ + filename;
+        return reader->load_Entities(self, stage, grid, path);
+    }
+
     std::shared_ptr<Graphics::Camera> File_Reader::load_Camera(const std::string &filename) const {
         const std::shared_ptr<Reader> reader = get_Reader(filename);
         std::string path = configuration_folder_ + filename;

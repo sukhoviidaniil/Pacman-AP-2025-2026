@@ -223,6 +223,24 @@ namespace Core {
         }
     }
 
+    void Reader_JSON::load_Entities(
+        const std::shared_ptr<const File_Reader> &fr,
+        const std::shared_ptr<Stage> &stage,
+        const std::shared_ptr<Logic::Tile_Grid> &grid,
+        const std::string &filename) const {
+
+        nlohmann::json data = get_json_data(filename);
+        if (!data.contains("entities")) {
+            throw std::invalid_argument("File does not contain entities");
+        }
+
+        for (const auto& entity : data["entities"]) {
+            Stage_Info_JSON conf(fr, stage, entity);
+            load_Entity(conf, grid);
+        }
+
+    }
+
     Graphics::Tile_Grid_Pair Reader_JSON::load_Tile_Grid(
         std::shared_ptr<Graphics::SFML_Manager> sfml_manager,
         const std::string &filename) const {
@@ -250,7 +268,6 @@ namespace Core {
 
         return Graphics::Graphics_Factory::make_Tile_Grid(sfml_manager, info);
     }
-
 
     std::shared_ptr<Stage> Reader_JSON::load_Stage(
         const std::shared_ptr<const File_Reader> &fr,

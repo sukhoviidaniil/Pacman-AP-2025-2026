@@ -51,6 +51,7 @@ namespace Core {
     }
 
     void Stage_Game::simulate(float delta) {
+        world_->simulate(delta);
     }
 
     void Stage_Game::render(sf::RenderWindow& window) {

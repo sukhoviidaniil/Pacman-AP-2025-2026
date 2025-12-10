@@ -66,6 +66,8 @@ namespace Logic::Model {
         virtual void move(float deltaTime, const std::shared_ptr<Collision::World_Collision_Manager> &collision_control) = 0;
 
         [[nodiscard]] virtual bool walkable() const;
+
+        virtual void simulate(float deltaTime, const std::shared_ptr<Collision::World_Collision_Manager> &collision_control) = 0;
     };
 }
 

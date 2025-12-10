@@ -76,12 +76,14 @@ namespace Logic {
         float tile_size = tile_grid_info.tile_size;
         const std::vector<std::vector<int>>& grid = tile_grid_info.logic_grid;
 
+
         if (grid.empty()) throw std::invalid_argument("Grid is empty");
-        if (grid.size() != rows) throw std::invalid_argument("Grid rows doesn't match height");
+        if (grid.size() < rows) throw std::invalid_argument("Grid rows doesn't match height");
         for (const auto &row : grid) {
             if (row.empty()) throw std::invalid_argument("Grid is empty");
-            if (row.size() != columns) throw std::invalid_argument("Grid columns doesn't match width");
+            if (row.size() < columns) throw std::invalid_argument("Grid columns doesn't match width");
         }
+
 
         // ReSharper disable once CppTemplateArgumentsCanBeDeduced
         std::vector<std::vector<std::shared_ptr<Tile>>> tiles(rows, std::vector<std::shared_ptr<Tile>>(columns, nullptr));
@@ -92,9 +94,9 @@ namespace Logic {
 
         // Coordinates of the center of the tile in the upper left corner of the grid
         const float start_x = - width_size*0.5f + half_tile_size;
-        const float start_y = height_size*0.5f - half_tile_size;
+        const float start_y = - height_size*0.5f + half_tile_size;
         for (size_t i = 0 ; i < rows; i++) {
-            float y = start_y - tile_size * static_cast<float>(i);
+            float y = start_y + tile_size * static_cast<float>(i);
             for (size_t j = 0 ; j < columns; j++) {
                 float x = start_x + tile_size * static_cast<float>(j);
                 Math::Vector2 p(x, y);

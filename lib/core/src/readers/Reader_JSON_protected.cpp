@@ -31,7 +31,7 @@
 
 namespace Core {
 
-    std::shared_ptr<Logic::Model::Entity> Reader_JSON::load_Actor(Stage_Info_JSON& conf) const{
+    std::shared_ptr<Logic::Model::Entity> Reader_JSON::load_Actor(Stage_Info_JSON& conf, const std::shared_ptr<Logic::Tile_Grid> &grid) const{
         const nlohmann::json &data = conf.data_;
         const auto type = data["Type"].get<std::string>();
         std::string actor_name;
@@ -43,7 +43,8 @@ namespace Core {
             Logic::Model::Actor_Info actor_info;
             actor_info.name = model_data["name"].get<std::string>();
             actor_name = actor_info.name;
-            actor_info.position = from_json(model_data["position"]);
+            Math::Vector2 temp_p = from_json(model_data["position"]);
+            actor_info.position = grid->get_nearest_tile_center(temp_p);
             actor_info.speed = model_data["speed"].get<float>();
             actor_info.max_status = model_data["max_status"].get<unsigned int>();
             const std::string hitbox = model_data["hitbox"].get<std::string>();
@@ -59,25 +60,25 @@ namespace Core {
         return actor_model;
     }
 
-    void Reader_JSON::Entity_Register(std::unordered_map<std::string, std::shared_ptr<Logic::Model::Entity>(Reader_JSON::*)(Stage_Info_JSON &conf) const> &outMap) const {
+    void Reader_JSON::Entity_Register(std::unordered_map<std::string, std::shared_ptr<Logic::Model::Entity>(Reader_JSON::*)(Stage_Info_JSON &conf, const std::shared_ptr<Logic::Tile_Grid> &grid) const> &outMap) const {
         outMap["Actor"] = &Reader_JSON::load_Actor;
     }
 
-    void Reader_JSON::load_Entity(Stage_Info_JSON &conf) const {
+    void Reader_JSON::load_Entity(Stage_Info_JSON &conf, const std::shared_ptr<Logic::Tile_Grid> &grid) const {
         const nlohmann::json &data = conf.data_;
         if (!data.contains("Type")) {
             throw std::runtime_error("Entity dont have Type");
         }
         const std::string entity_type = data["Type"].get<std::string>();
 
-        std::unordered_map<std::string, std::shared_ptr<Logic::Model::Entity>(Reader_JSON::*)(Stage_Info_JSON &conf) const> functionMap;
+        std::unordered_map<std::string, std::shared_ptr<Logic::Model::Entity>(Reader_JSON::*)(Stage_Info_JSON &conf, const std::shared_ptr<Logic::Tile_Grid> &grid) const> functionMap;
         Entity_Register(functionMap);
         auto it = functionMap.find(entity_type);
         if (it == functionMap.end()) {
             throw std::runtime_error("Entity type " + entity_type + " not found");
         }
         auto memberFn = it->second;
-        const std::shared_ptr<Logic::Model::Entity> model = (this->*memberFn)(conf);
+        const std::shared_ptr<Logic::Model::Entity> model = (this->*memberFn)(conf, grid);
 
         if (data.contains("View")) {
             auto sfml_manager = conf.fr_->get_SFML_Manager();
@@ -98,6 +99,20 @@ namespace Core {
             Graphics::Actor_Pair ap = Graphics::Graphics_Factory::make_Actor(sfml_manager, avi, model);
             conf.stage_->add_View(entity_type, ap.actor_view_);
         }
+    }
+
+    std::shared_ptr<Logic::Model::Entity> Reader_JSON::load_Actor(Stage_Info_JSON &conf) const {
+        throw "Reader_JSON::load_Actor";
+    }
+
+    void Reader_JSON::Entity_Register(
+        std::unordered_map<std::string, std::shared_ptr<Logic::Model::Entity>(Reader_JSON::*)(Stage_Info_JSON &conf)
+        const> &outMap) const {
+        throw std::runtime_error("Entity_Register: OLD");
+    }
+
+    void Reader_JSON::load_Entity(Stage_Info_JSON &conf) const {
+        throw "load_Entity:: OLD";
     }
 
     std::shared_ptr<Stage> Reader_JSON::load_Game_Stage(const Reader_Base_Info_JSON &conf) const
@@ -132,7 +147,11 @@ namespace Core {
             tgp.tile_grid_model_
             );
         auto world = std::make_shared<Core::World>(tgp.tile_grid_model_, wcm, game_camera);
-        conf.fr_->load_Entities(entities, world);
+        for (const auto& view : tgp.terrain_views_) {
+            world->add_View("Terrain", view);
+        }
+
+        conf.fr_->load_Entities(entities, world, tgp.tile_grid_model_);
 
         auto stage = std::make_shared<Core::Stage_Game>(world);
 

@@ -1,6 +1,6 @@
 {
   "Type" : "Game_Stage",
-  "tile_grid" : "tile_grid1.json",
+  "tile_grid" : "tile_grid2.json",
   "camera_game" : "camera_game1.json",
-  "entities" : "entities1.json"
+  "entities" : "entities2.json"
 }

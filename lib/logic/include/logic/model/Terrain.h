@@ -36,6 +36,8 @@ namespace Logic::Model {
         void move(float deltaTime, const std::shared_ptr<Collision::World_Collision_Manager> &collision_control) override;
 
         [[nodiscard]] bool walkable() const override;
+
+        void simulate(float deltaTime, const std::shared_ptr<Collision::World_Collision_Manager> &collision_control) override;
     };
 }
 

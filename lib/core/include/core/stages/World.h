@@ -42,11 +42,6 @@ namespace Core {
 
         std::unordered_map<
             std::string,
-            View_Entry
-        > view_by_name;
-
-        std::unordered_map<
-            std::string,
             std::vector<std::shared_ptr<View>>
         > view_by_type;
 

@@ -32,9 +32,11 @@ int main() {
     if (game_info.graphics == "SFML") {
         fr->load_SFML_Manager(game_info.graphics_conf);
 
-        unsigned int width = game_info.window_width;
-        unsigned int height = game_info.window_height;
-        sf::RenderWindow window(sf::VideoMode(width, height), "SFML Window");
+        auto scene_width = static_cast<float>(game_info.window_width);
+        auto scene_height = static_cast<float>(game_info.window_height);
+        sf::RenderWindow window(sf::VideoMode(scene_width, scene_height), "SFML Window");
+        sf::View view(sf::FloatRect(0, 0, scene_width, scene_height));
+        window.setView(view);
         Core::Stage_Manager sm = fr->load_Stage_Manager(game_info.stage_mng);
 
         Logic::Delta_Timer timer;
@@ -45,13 +47,25 @@ int main() {
                     window.close();
                 }
             }
+            if (event.type == sf::Event::Resized) {
+
+                float aspect_ratio = static_cast<float>(event.size.width) / static_cast<float>(event.size.height);
+                float view_width = scene_width;
+                float view_height = scene_height;
+                if (aspect_ratio > scene_width / scene_height) {
+                    view_width = scene_height * aspect_ratio;
+                } else {
+                    view_height = scene_width / aspect_ratio;
+                }
+                view.setSize(view_width, view_height);
+                window.setView(view);
+            }
             window.clear();
 
             float delta = timer.tick();
             std::shared_ptr<Core::Stage> stage = sm.get_current_stage();
             stage->simulate(delta);
             stage->render(window);
-
             window.display();
         }
     }else {

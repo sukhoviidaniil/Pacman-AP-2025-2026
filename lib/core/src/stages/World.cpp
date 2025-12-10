@@ -74,26 +74,13 @@ namespace Core {
     }
 
     void World::add_View(const std::string &type, const std::shared_ptr<View> &view) {
-        const std::string& name = view->get_name();
-
-        // Uniqueness check
-        if (view_by_name.contains(name)) {
-            throw std::runtime_error("View with name '" + name + "' already exists");
-        }
-
         // Add to list by type
-        auto& vec = view_by_type[type];
-        size_t index = vec.size();
-        vec.push_back(view);
-
-        // Creating a record
-        View_Entry entry;
-        entry.name = name;
-        entry.type = type;
-        entry.index_in_type_vector = index;
-        entry.view = view;
-
-        view_by_name.emplace(name, std::move(entry));
+        auto it = view_by_type.find(type);
+        if (it == view_by_type.end()) {
+            view_by_type[type] = {view};
+        }else {
+            view_by_type[type].push_back(view);
+        }
     }
 
     std::vector<std::shared_ptr<View>> World::get_Views(const std::string &type) const {
@@ -105,17 +92,17 @@ namespace Core {
     }
 
     std::shared_ptr<View> World::get_View(const std::string &type, const std::string &name) const {
-        auto it = view_by_name.find(name);
-        if (it == view_by_name.end()) {
+        auto it = view_by_type.find(type);
+        if (it == view_by_type.end()) {
             return nullptr;
         }
 
-        // Проверка совпадения типа
-        if (it->second.type != type) {
-            return nullptr;
+        for (auto& view_ptr : it->second) {
+            if (view_ptr->get_name() == name) {
+                return view_ptr;
+            }
         }
-
-        return it->second.view;
+        return nullptr;
     }
 
     std::shared_ptr<Logic::Tile_Grid> World::get_grid() {
@@ -124,18 +111,27 @@ namespace Core {
 
     void World::simulate(float delta) {
         // Iteration through all types
-        for (auto& [type, vec] : view_by_type){
+        for (auto& [type, vec] : models_by_type){
             // Go through each View in the type
-            for (auto& view_ptr : vec){
-                if (!view_ptr) continue; // nullptr protection
-                // TODO
+            for (auto& model_ptr : vec){
+                if (!model_ptr) continue; // nullptr protection
+                model_ptr->simulate(delta, WCM_);
             }
         }
     }
 
     void World::render(sf::RenderWindow &window) {
+        std::string t = "Terrain";
+        auto world = view_by_type.find(t);
+        if (world != view_by_type.end()) {
+            for (auto& view_ptr : world->second){
+                if (!view_ptr) continue; // nullptr protection
+                game_camera_->render(window, view_ptr);
+            }
+        }
         // Iteration through all types
         for (auto& [type, vec] : view_by_type){
+            if (type == t) continue;
             // Go through each View in the type
             for (auto& view_ptr : vec){
                 if (!view_ptr) continue; // nullptr protection

@@ -27,7 +27,8 @@ namespace Graphics::View {
         const std::shared_ptr<sf::Sprite> &sprite) : Entity_View(entity), sprite_(sprite) {
 
         if (sprite_ == nullptr) {
-            placeholder_ = std::make_shared<sf::RectangleShape>(sf::Vector2f(32.f, 32.f));
+            placeholder_ = std::make_shared<sf::RectangleShape>(sf::Vector2f(30.f, 30.f));
+            placeholder_->setOrigin(17.5f, 17.5f);
             if (name_ == "Wall") {
                 placeholder_->setFillColor(sf::Color(0, 0, 255));
             }else {

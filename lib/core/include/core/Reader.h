@@ -63,8 +63,16 @@ namespace Core {
         virtual void load_Entities(
             const std::shared_ptr<const File_Reader> &fr,
             const std::shared_ptr<Stage>& stage,
+            const std::shared_ptr<Logic::Tile_Grid>& grid,
             const std::string& filename
             ) const = 0;
+
+        virtual void load_Entities(
+            const std::shared_ptr<const File_Reader> &fr,
+            const std::shared_ptr<Stage>& stage,
+            const std::string& filename
+            ) const = 0;
+
 
         [[nodiscard]] virtual std::shared_ptr<Stage> load_Stage(
             const std::shared_ptr<const File_Reader>& fr,

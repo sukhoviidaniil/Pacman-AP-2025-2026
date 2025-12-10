@@ -48,6 +48,7 @@ namespace Core {
         std::shared_ptr<Logic::Collision::HitBoxe> make_HitBoxe(const std::string& filename) const;
 
         void load_Entities(const std::string& filename, const std::shared_ptr<Stage>& stage) const;
+        void load_Entities(const std::string& filename, const std::shared_ptr<Stage>& stage, const std::shared_ptr<Logic::Tile_Grid>& grid) const;
 
         std::shared_ptr<Graphics::Camera> load_Camera(const std::string &filename) const;
 

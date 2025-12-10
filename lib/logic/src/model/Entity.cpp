@@ -44,6 +44,7 @@ namespace Logic::Model {
 
     unsigned int Entity::get_status() const {
         return status_;
+
     }
 
     Math::Vector2 Entity::get_direction() const {

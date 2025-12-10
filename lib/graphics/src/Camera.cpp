@@ -24,6 +24,9 @@ namespace Graphics {
         // Translation of logical position to screen position
         const Math::Vector2 delta = (view - camera_center_) * scale_;
         Math::Vector2 screen_pos = window_center_ + delta;
+
+        // screen_pos.y = window_center_.y - (screen_pos.y - window_center_.y);
+
         // Checking for entry into the working area
         if (screen_pos.x < window_center_.x - camera_half_w_ ||
             screen_pos.x > window_center_.x + camera_half_w_ ||
@@ -104,7 +107,7 @@ namespace Graphics {
 
     void Camera::render(sf::RenderWindow &window, const std::shared_ptr<View::View> &view) const {
         const Math::Vector2 pos = view->get_position();
-        const std::optional<Math::Vector2> screen_pos = get_entity_position(window, pos);
+        std::optional<Math::Vector2> screen_pos = get_entity_position(window, pos);
         if (!screen_pos) return;
         view->render(window, *screen_pos);
     }

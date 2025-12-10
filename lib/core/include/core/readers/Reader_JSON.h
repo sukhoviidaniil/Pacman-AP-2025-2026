@@ -42,7 +42,6 @@ namespace Core {
             const std::string& filename
             ) const override;
 
-
         [[nodiscard]] std::shared_ptr<Logic::Collision::HitBoxe> load_HitBoxe(
             const std::string& filename
             ) const override;
@@ -56,11 +55,17 @@ namespace Core {
             const std::string &filename
         ) const override;
 
+        void load_Entities(
+            const std::shared_ptr<const File_Reader> &fr,
+            const std::shared_ptr<Stage> &stage,
+            const std::shared_ptr<Logic::Tile_Grid> &grid,
+            const std::string &filename
+            ) const override;
+
         [[nodiscard]] Graphics::Tile_Grid_Pair load_Tile_Grid(
             std::shared_ptr<Graphics::SFML_Manager> sfml_manager,
             const std::string& filename
             ) const override;
-
 
         [[nodiscard]] std::shared_ptr<Stage> load_Stage(
             const std::shared_ptr<const File_Reader>& fr, const std::string& path
@@ -77,7 +82,14 @@ namespace Core {
 
     protected:
 
-        std::shared_ptr<Logic::Model::Entity> load_Actor (Stage_Info_JSON &conf) const;
+        std::shared_ptr<Logic::Model::Entity> load_Actor (Stage_Info_JSON &conf, const std::shared_ptr<Logic::Tile_Grid> &grid) const;
+        void Entity_Register(std::unordered_map<std::string, std::shared_ptr<Logic::Model::Entity>(Reader_JSON::*)(Stage_Info_JSON &conf, const std::shared_ptr<Logic::Tile_Grid> &grid) const> &outMap) const;
+        void load_Entity(
+            Stage_Info_JSON& conf,
+            const std::shared_ptr<Logic::Tile_Grid> &grid
+            ) const;
+
+        std::shared_ptr<Logic::Model::Entity> load_Actor(Stage_Info_JSON &conf) const;
         void Entity_Register(std::unordered_map<std::string, std::shared_ptr<Logic::Model::Entity>(Reader_JSON::*)(Stage_Info_JSON &conf) const> &outMap) const;
         void load_Entity(
             Stage_Info_JSON& conf
@@ -89,7 +101,7 @@ namespace Core {
 
         static void Stage_Register(std::unordered_map<std::string, std::shared_ptr<Stage>(Reader_JSON::*)(const Reader_Base_Info_JSON &conf) const> &outMap);
 
-        std::shared_ptr<Logic::Collision::HitBoxe> load_HitBox_Rectangle(const nlohmann::json& info) const;
+        [[nodiscard]] std::shared_ptr<Logic::Collision::HitBoxe> load_HitBox_Rectangle(const nlohmann::json& info) const;
         void HitBoxe_Register(std::unordered_map<std::string, std::shared_ptr<Logic::Collision::HitBoxe>(Reader_JSON::*)(const nlohmann::json& info) const> &outMap) const;
 
         static nlohmann::json get_json_data(

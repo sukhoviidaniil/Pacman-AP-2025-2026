@@ -29,7 +29,7 @@ namespace Logic::Model {
 
     class Actor : public Entity {
         Math::Vector2 current_direction_;
-        Math::Vector2 next_dir_;
+        Math::Vector2 next_dir_ = Math::Vector2(1,0);
         float speed_ = 0.1f;
         public:
 
@@ -45,6 +45,8 @@ namespace Logic::Model {
         void set_direction(const Math::Vector2 &direction) override;
 
         void move(float deltaTime, const std::shared_ptr<Collision::World_Collision_Manager> &collision_control) override;
+
+        void simulate(float deltaTime, const std::shared_ptr<Collision::World_Collision_Manager> &collision_control) override;
     };
 }
 #endif //PACMAN_ACTOR_H

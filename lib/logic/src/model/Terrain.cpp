@@ -50,5 +50,9 @@ namespace Logic::Model {
     bool Terrain::walkable() const {
         return status_;
     }
+
+    void Terrain::simulate(float deltaTime, const std::shared_ptr<Collision::World_Collision_Manager> &collision_control) {
+
+    }
 }
 

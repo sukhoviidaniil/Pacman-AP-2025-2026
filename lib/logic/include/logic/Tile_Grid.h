@@ -59,6 +59,8 @@ namespace Logic {
         [[nodiscard]] unsigned int get_width() const;
         [[nodiscard]] unsigned int get_height() const;
 
+        Math::Vector2 get_nearest_tile_center(const Math::Vector2 &pos) const;
+
         [[nodiscard]] Math::Vector2 get_next_tile_center(const Math::Vector2& pos, const Math::Vector2& dir) const;
 
         [[nodiscard]] std::vector<std::vector<std::shared_ptr<Tile>>> get_tiles() const;

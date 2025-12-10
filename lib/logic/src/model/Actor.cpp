@@ -30,6 +30,9 @@ namespace Logic::Model{
         ):
         Entity(name, position, hitbox, max_status), current_direction_(current_direction), speed_(speed)
     {
+        if (current_direction_.length() == 0.0f) {
+            current_direction_ = Math::Vector2(1.0f, 0.0f);
+        }
         next_dir_ = current_direction_;
     }
 
@@ -95,5 +98,7 @@ namespace Logic::Model{
         }
     }
 
-
+    void Actor::simulate(float deltaTime, const std::shared_ptr<Collision::World_Collision_Manager> &collision_control) {
+        move(deltaTime, collision_control);
+    }
 }

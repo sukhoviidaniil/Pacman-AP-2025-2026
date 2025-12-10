@@ -13,16 +13,6 @@
         "Sprite_Group" : "Blinky",
         "name" : "Blinky1"
       }
-    },
-    {
-      "Type" : "Actor",
-      "Model" : {
-        "name" : "Inky",
-        "position" : {"x" :  0, "y" : 0},
-        "speed" : 0.1,
-        "max_status" : 4,
-        "hitbox" : "hitbox1.json"
-      }
     }
   ]
 }
