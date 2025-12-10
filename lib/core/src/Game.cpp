@@ -18,7 +18,7 @@
 
 #include "core/Game.h"
 
-#include "core/Stage_Game.h"
+#include "../include/core/stages/Stage_Game.h"
 #include "graphics/SFML_Manager.h"
 #include "../../graphics/include/graphics/view/entity/Actor_View.h"
 #include "logic/model/Actor.h"

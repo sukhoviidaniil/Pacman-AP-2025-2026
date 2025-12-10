@@ -41,9 +41,9 @@ namespace Graphics {
 
         std::shared_ptr<Sprite_Group> sprite_group = manager->get_Sprite_Group(view_info.sprite_group_name);
         if (sprite_group == nullptr) {
-            throw std::runtime_error("Failed to create sprite group!");
+            throw std::runtime_error("Failed to get sprite group!");
         }
-        auto actor_view = std::make_shared<View::Actor_View>(sprite_group);
+        auto actor_view = std::make_shared<View::Actor_View>(sprite_group, view_info.name);
         actor_view->set_Entity(actor_model);
         return Actor_Pair(actor_model, actor_view);
     }

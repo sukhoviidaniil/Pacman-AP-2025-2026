@@ -10,7 +10,8 @@
         "hitbox" : "hitbox1.json"
       },
       "View" : {
-        "Sprite_Group" : "Blinky"
+        "Sprite_Group" : "Blinky",
+        "name" : "Blinky1"
       }
     },
     {
@@ -27,7 +28,8 @@
       "Type" : "Actor",
       "Model" : "Inky",
       "View" : {
-        "Sprite_Group" : "Blinky"
+        "Sprite_Group" : "Blinky",
+        "name" : "Blinky2"
       }
     }
   ]

@@ -45,18 +45,21 @@ namespace Graphics {
             animation = &it->second;
         }else {
             it = map.find({0,0});
-            if (it != map.end()) {
-                animation = &it->second;
+            if (it == map.end()) {
+                throw std::invalid_argument("No animation found for " + name_);
             }
+            animation = &it->second;
         }
 
         if (!animation) {
             throw std::invalid_argument("No animation found for " + name_);
         }
 
+
         if (animation_index >= animation->size()) {
             animation_index = 0;
         }
+
         sf::Sprite sprite = (*animation)[animation_index];
         sprite.setPosition({pos.x, pos.y});
         window.draw(sprite);

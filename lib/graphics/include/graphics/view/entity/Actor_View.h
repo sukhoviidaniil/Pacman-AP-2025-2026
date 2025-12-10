@@ -24,13 +24,14 @@
 
 namespace Graphics::View {
     struct Actor_View_Info {
+        std::string name;
         std::string sprite_group_name;
     };
 
     class Actor_View: public Entity_View {
         std::shared_ptr<Sprite_Group> sprite_;
         public:
-        explicit Actor_View(const std::shared_ptr<Sprite_Group>& sprite);
+        explicit Actor_View(const std::shared_ptr<Sprite_Group>& sprite, const std::string& name);
         void render(sf::RenderWindow& window, const Math::Vector2& pixel_pos) const override;
     };
 }

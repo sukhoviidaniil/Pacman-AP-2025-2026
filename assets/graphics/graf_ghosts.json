@@ -1,5 +1,5 @@
 {
-  "from_file" : "sprite.png",
+  "using_texture" : "sprite.png",
   "sprite_width": 35,
   "sprite_height": 35,
   "names" :  ["Blinky", "Pinky", "Inky", "Clyde", "Sludgy", "Shady"],
@@ -22,6 +22,12 @@
         {
           "expression" : "Forward",
           "direction" : [0,1]
+        },
+        {
+          "expression" : "Blanco",
+          "direction" : [0,0],
+          "recLeft" : 501,
+          "recTop" : 254
         }
       ],
       "number_of_expressions_per_direction" : 1,
@@ -51,6 +57,12 @@
         {
           "expression" : "Forward",
           "direction" : [0,1]
+        },
+        {
+          "expression" : "Blanco",
+          "direction" : [0,0],
+          "recLeft" : 501,
+          "recTop" : 254
         }
       ],
       "number_of_expressions_per_direction" : 1,

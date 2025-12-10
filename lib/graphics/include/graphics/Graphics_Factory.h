@@ -45,7 +45,7 @@ namespace Graphics {
         static Actor_Pair make_Actor(
             const std::shared_ptr<SFML_Manager>& manager,
             const View::Actor_View_Info &view_info,
-            const std::shared_ptr<Logic::Model::Entity>& actor_model);
+            const std::shared_ptr<Logic::Model::Entity>& model);
 
         static Tile_Grid_Pair make_Tile_Grid(const std::shared_ptr<SFML_Manager>& manager, const Logic::Tile_Grid_Info &tile_grid_info);
     };

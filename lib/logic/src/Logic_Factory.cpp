@@ -27,26 +27,26 @@ namespace Logic {
 
         auto hb = std::make_shared<Collision::HitBoxe_Shape>(pos, tile_size, tile_size, 0, 0);
         std::string name;
-        unsigned int status;
+        unsigned int max_status;
         bool walkable;
         switch (type) {
             case 0:
                 name = "Floor";
-                status = 0;
+                max_status = 1;
                 walkable = true;
                 break;
             case 1:
                 name = "Wall";
-                status = 0;
+                max_status = 1;
                 walkable = false;
                 break;
             default:
                 name = "Not assigned ";
-                status = 999;
+                max_status = 999;
                 walkable = false;
                 break;
         }
-        return std::make_shared<Model::Terrain>(name, pos, hb, status, walkable);
+        return std::make_shared<Model::Terrain>(name, pos, hb, max_status, walkable);
     }
 
     std::shared_ptr<Tile> Logic_Factory::make_Tile(float tile_size, const Math::Vector2 &pos, int type) {

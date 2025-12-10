@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Stage.h
+ * File:          World.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-11-19
+ * Created:       2025-11-26
  * Modified:      []
  *
  * Description:   []
@@ -15,41 +15,49 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_STAGE_H
-#define PACMAN_STAGE_H
+#ifndef PACMAN_WORLD_H
+#define PACMAN_WORLD_H
 
-#include "graphics/view/View.h"
-#include "logic/model/Entity.h"
-#include "SFML/Graphics/RenderWindow.hpp"
+
+#include "core/Stage.h"
+#include "graphics/Camera.h"
+#include "logic/Tile_Grid.h"
+#include "logic/collision/World_Collision_Manager.h"
 
 namespace Core {
+    class World : public Stage{
+        std::shared_ptr<Logic::Tile_Grid> grid_;
+        std::shared_ptr<Logic::Collision::World_Collision_Manager> WCM_;
+        std::shared_ptr<Graphics::Camera> game_camera_;
 
-    using Model = Logic::Model::Entity;
-    using View = Graphics::View::View;
+        std::unordered_map<
+            std::string,
+            Model_Entry
+        > models_by_name;
 
-    struct Model_Entry {
-        std::string name;
-        std::string type;
-        size_t index_in_type_vector; // position in vector
-        std::shared_ptr<Model> model;
-    };
+        std::unordered_map<
+            std::string,
+            std::vector<std::shared_ptr<Model>>
+        > models_by_type;
 
-    struct View_Entry {
-        std::string name;
-        std::string type;
-        size_t index_in_type_vector; // position in vector
-        std::shared_ptr<View> view;
-    };
+        std::unordered_map<
+            std::string,
+            View_Entry
+        > view_by_name;
 
-    struct Stage_Info {
-        std::string name = "default";
-        std::string configuration = "default";
-    };
+        std::unordered_map<
+            std::string,
+            std::vector<std::shared_ptr<View>>
+        > view_by_type;
 
-    class Stage {
         public:
-        Stage();
-        virtual ~Stage();
+        World(
+            const std::shared_ptr<Logic::Tile_Grid> &grid,
+            const std::shared_ptr<Logic::Collision::World_Collision_Manager> &WCM,
+            const std::shared_ptr<Graphics::Camera> &game_camera
+            );
+
+        ~World() override;
 
         /**
          * Adds a model to the world's model container.
@@ -59,7 +67,7 @@ namespace Core {
          * @param model Shared pointer to the model
          * @throw std::runtime_error if a model with the same name already exists
          */
-        virtual void add_Model(const std::string& type, const std::shared_ptr<Model>& model) = 0;
+        void add_Model(const std::string& type, const std::shared_ptr<Model>& model) override;
 
         /**
          * Returns all models of a given type.
@@ -68,7 +76,7 @@ namespace Core {
          * @return Vector of shared pointers to models of the specified type;
          *         empty vector if type does not exist
          */
-        virtual std::vector<std::shared_ptr<Model>> get_Models(const std::string& type) const = 0;
+        std::vector<std::shared_ptr<Model>> get_Models(const std::string& type) const override;
 
         /**
          * Returns a model by its type and name.
@@ -77,7 +85,7 @@ namespace Core {
          * @param name Name of the model
          * @return Shared pointer to the model, or nullptr if not found or type mismatch
          */
-        virtual std::shared_ptr<Model> get_Model(const std::string& type, const std::string& name) const = 0;
+        std::shared_ptr<Model> get_Model(const std::string& type, const std::string& name) const override;
 
         /**
          * Adds a view to the world's view container.
@@ -87,7 +95,7 @@ namespace Core {
          * @param view Shared pointer to the view
          * @throw std::runtime_error if a view with the same name already exists
          */
-        virtual void add_View(const std::string& type, const std::shared_ptr<View>& view) = 0;
+        void add_View(const std::string& type, const std::shared_ptr<View>& view) override;
 
         /**
          * Returns all views of a given type.
@@ -96,7 +104,7 @@ namespace Core {
          * @return Vector of shared pointers to views of the specified type;
          *         empty vector if type does not exist
          */
-        virtual std::vector<std::shared_ptr<View>> get_Views(const std::string& type) const = 0;
+        std::vector<std::shared_ptr<View>> get_Views(const std::string& type) const  override;
 
         /**
          * Returns a view by its type and name.
@@ -105,11 +113,13 @@ namespace Core {
          * @param name Name of the view
          * @return Shared pointer to the view, or nullptr if not found or type mismatch
          */
-        virtual std::shared_ptr<View> get_View(const std::string& type, const std::string& name) const = 0;
+        std::shared_ptr<View> get_View(const std::string& type, const std::string& name) const override;
 
-        virtual void simulate(float delta) = 0;
-        virtual void render(sf::RenderWindow& window) = 0;
+        std::shared_ptr<Logic::Tile_Grid> get_grid();
+
+        void simulate(float delta) override;
+        void render(sf::RenderWindow& window) override;
     };
 }
 
-#endif //PACMAN_STAGE_H
+#endif //PACMAN_WORLD_H

@@ -19,10 +19,10 @@
 #define PACMAN_READER_H
 
 #include "core/Stage_Manager.h"
-#include "core/info/Game_Info.h"
 #include "graphics/Camera.h"
+#include "graphics/Graphics_Factory.h"
 #include "graphics/SFML_Manager.h"
-#include "logic/Tile_Grid.h"
+#include "info/Game_Info.h"
 
 namespace Core {
 
@@ -55,8 +55,15 @@ namespace Core {
             const std::string& filename
             ) const = 0;
 
-        [[nodiscard]] virtual std::shared_ptr<Logic::Tile_Grid> load_Tile_Grid(
-            std::shared_ptr<Stage>& stage, const std::string& filename
+        [[nodiscard]] virtual Graphics::Tile_Grid_Pair load_Tile_Grid(
+            std::shared_ptr<Graphics::SFML_Manager> sfml_manager,
+            const std::string& filename
+            ) const = 0;
+
+        virtual void load_Entities(
+            const std::shared_ptr<const File_Reader> &fr,
+            const std::shared_ptr<Stage>& stage,
+            const std::string& filename
             ) const = 0;
 
         [[nodiscard]] virtual std::shared_ptr<Stage> load_Stage(
@@ -64,7 +71,7 @@ namespace Core {
             const std::string& filename
             ) const = 0;
 
-        virtual Stage_Manager load_Stage_Manager(
+        [[nodiscard]] virtual Stage_Manager load_Stage_Manager(
             const std::shared_ptr<const File_Reader>& fr, const std::string& path
             ) const = 0;
 

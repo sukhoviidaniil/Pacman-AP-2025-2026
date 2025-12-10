@@ -36,7 +36,7 @@ namespace Core::Info {
 
 
     inline void from_json(const nlohmann::json& j, Status_Info& s) {
-        s.facial_expressions.resize(j["facial_expressions"].size());
+        s.facial_expressions.reserve(j["facial_expressions"].size());
         for (auto& obj : j["facial_expressions"]) {
             s.facial_expressions.push_back(obj.get<Expression_Info>());
         }

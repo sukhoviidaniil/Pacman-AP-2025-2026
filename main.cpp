@@ -25,10 +25,10 @@
 int main() {
     const std::string assets_dir = ASSETS_DIR;
     const std::string graphics_dir = assets_dir + "/graphics/";
-    const std::string conf_dir = assets_dir + "/config/";
+    const std::string conf_dir = assets_dir + "/conf/";
     auto fr = std::make_shared<Core::File_Reader>(graphics_dir, conf_dir);
     fr->add_Reader(".json", std::make_shared<Core::Reader_JSON>());
-    Core::Info::Game_Info game_info = fr->get_Game_Info("conf_game1.jsom");
+    Core::Info::Game_Info game_info = fr->get_Game_Info("conf_game1.json");
     if (game_info.graphics == "SFML") {
         fr->load_SFML_Manager(game_info.graphics_conf);
 
@@ -45,12 +45,14 @@ int main() {
                     window.close();
                 }
             }
-            if (window.isOpen()) {
-                float delta = timer.tick();
-                std::shared_ptr<Core::Stage> stage = sm.get_current_stage();
-                stage->simulate(delta);
-                stage->render(window);
-            }
+            window.clear();
+
+            float delta = timer.tick();
+            std::shared_ptr<Core::Stage> stage = sm.get_current_stage();
+            stage->simulate(delta);
+            stage->render(window);
+
+            window.display();
         }
     }else {
         throw std::runtime_error("Unknown type of graphics");

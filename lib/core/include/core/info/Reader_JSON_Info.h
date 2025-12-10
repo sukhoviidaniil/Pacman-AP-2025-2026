@@ -17,12 +17,13 @@
 ***************************************************************/
 #ifndef PACMAN_READER_JSON_INFO_H
 #define PACMAN_READER_JSON_INFO_H
+#include "File_Reader_Additional_Structures.h"
 #include "json.hpp"
-#include "core/World.h"
 #include "math/Vector2.h"
 
 namespace Core {
     class File_Reader;
+
     static Math::Vector2 from_json(const nlohmann::json& j) {
         Math::Vector2 v;
         v.x = j.at("x").get<float>();
@@ -30,18 +31,24 @@ namespace Core {
         return v;
     }
 
-    struct Reader_JSON_Base_Info {
-        std::shared_ptr<const File_Reader> fr;
-        nlohmann::json info;
+    struct Reader_Base_Info_JSON : Reader_Base_Info {
+        nlohmann::json data_;
+        Reader_Base_Info_JSON(
+            const std::shared_ptr<const File_Reader> & fr,
+            nlohmann::json::const_reference json
+            ):
+        Reader_Base_Info(fr), data_(json)  {
+        }
     };
 
-    struct Entity_JSON_Info : Reader_JSON_Base_Info {
-        std::shared_ptr<World> world;
+    struct Stage_Info_JSON : Reader_Stage_Info {
+        nlohmann::json data_;
 
-        Entity_JSON_Info(
+        Stage_Info_JSON(
             const std::shared_ptr<const File_Reader> & fr,
-            const nlohmann::json &entity,
-            const std::shared_ptr<World> & world) : Reader_JSON_Base_Info(fr, entity), world(world){}
+            const std::shared_ptr<Stage> & stage,
+            nlohmann::json::const_reference json
+        ) : Reader_Stage_Info(fr, stage), data_(json){}
     };
 }
 

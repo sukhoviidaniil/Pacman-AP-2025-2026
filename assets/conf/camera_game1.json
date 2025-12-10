@@ -4,5 +4,5 @@
   "window_center" : {"x" :  400, "y" : 400},
   "camera_width" : 100,
   "camera_height" : 100,
-  "camera_center" : {"x" :  400, "y" : 400}
+  "camera_center" : {"x" :  0, "y" : 0}
 }

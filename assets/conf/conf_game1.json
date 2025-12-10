@@ -2,6 +2,6 @@
   "graphics" : "SFML",
   "window_width" : 800,
   "window_height" : 600,
-  "graphics_conf" : "sprites.json",
+  "graphics_conf" : "sprites1.json",
   "stage_mng" : "conf_stage_mng.json"
 }

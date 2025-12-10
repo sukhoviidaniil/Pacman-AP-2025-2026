@@ -20,10 +20,7 @@
 
 namespace Graphics::View {
 
-
-    Actor_View::Actor_View(const std::shared_ptr<Sprite_Group> &sprite):
-    sprite_(sprite){
-
+    Actor_View::Actor_View(const std::shared_ptr<Sprite_Group> &sprite, const std::string &name) : Entity_View(name), sprite_(sprite) {
     }
 
     void Actor_View::render(sf::RenderWindow& window, const Math::Vector2 &pixel_pos) const {
