@@ -49,6 +49,7 @@ namespace Math {
         virtual bool operator==(const Vector2& other) const;
         [[nodiscard]] bool is_between(const Vector2& start, const Vector2& end) const;
         [[nodiscard]] bool is_within_radius(const Vector2& other, float radius) const;
+        [[nodiscard]] bool has_same_direction(const Vector2& other) const;
 
         // ========== Output to stream ==========
         friend std::ostream& operator<<(std::ostream& os, const Vector2& vector);

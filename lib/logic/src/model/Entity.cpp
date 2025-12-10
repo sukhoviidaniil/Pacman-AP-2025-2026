@@ -26,6 +26,7 @@ namespace Logic::Model {
         ):
         name_(name), position_(position), hitbox_(hitbox), max_status_(max_status)
     {
+        hitbox_->move_to(position_);
     }
 
     Entity::~Entity() = default;

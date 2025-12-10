@@ -22,7 +22,6 @@
 #include <stdexcept>
 
 namespace Logic::Collision {
-
     Separating_Axis_Theorem::Separating_Axis_Theorem() = default;
 
     bool Separating_Axis_Theorem::collision(const std::shared_ptr<HitBoxe> &first) const {

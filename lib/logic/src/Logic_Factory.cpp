@@ -25,27 +25,36 @@ namespace Logic {
     std::shared_ptr<Model::Terrain> Logic_Factory::make_Terrain(
         float tile_size, const Math::Vector2 &pos, const int type) {
 
-        auto hb = std::make_shared<Collision::HitBoxe_Shape>(pos, tile_size, tile_size, 0, 0);
+
         std::string name;
         unsigned int max_status;
+        int layer;
+        int strength;
         bool walkable;
         switch (type) {
             case 0:
                 name = "Floor";
                 max_status = 1;
+                layer = 0;
+                strength = -999;
                 walkable = true;
                 break;
             case 1:
                 name = "Wall";
                 max_status = 1;
+                layer = 0;
+                strength = 999;
                 walkable = false;
                 break;
             default:
                 name = "Not assigned ";
                 max_status = 999;
+                layer = 0;
+                strength = 0;
                 walkable = false;
                 break;
         }
+        auto hb = std::make_shared<Collision::HitBoxe_Shape>(pos, tile_size, tile_size, layer, strength);
         return std::make_shared<Model::Terrain>(name, pos, hb, max_status, walkable);
     }
 

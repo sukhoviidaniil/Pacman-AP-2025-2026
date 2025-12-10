@@ -122,19 +122,21 @@ namespace Logic::Collision {
 
     bool World_Collision_Manager::collision_world(const std::shared_ptr<HitBoxe> &entity) const {
         const AABB aabb = entity->get_aabb();
-        const int grid_width = static_cast<int>(grid_->get_width());
-        const int grid_height = static_cast<int>(grid_->get_height());
 
-        const size_t minTileX = static_cast<size_t>(std::max(0, static_cast<int>(std::floor(aabb.min_X))));
-        const size_t minTileY = static_cast<size_t>(std::max(0, static_cast<int>(std::floor(aabb.min_Y))));
-        const size_t maxTileX = static_cast<size_t>(std::min(grid_width  - 1, static_cast<int>(std::floor(aabb.max_X))));
-        const size_t maxTileY = static_cast<size_t>(std::min(grid_height - 1, static_cast<int>(std::floor(aabb.max_Y))));
+        std::pair<size_t, size_t> adjusted_tile = grid_->get_nearest_tile_size_t(aabb.center);
+
+        size_t minTileX = adjusted_tile.first - 1;
+        size_t maxTileX = adjusted_tile.first + 1;
+        size_t minTileY = adjusted_tile.second - 1;
+        size_t maxTileY = adjusted_tile.second + 1;
 
         for (size_t y = minTileY; y <= maxTileY; ++y){
             for (size_t x = minTileX; x <= maxTileX; ++x){
                 const std::shared_ptr<Tile> tile = grid_->get_tile(x, y);
+                if (tile == nullptr) continue;
                 const std::shared_ptr<Model::Entity> terrain = tile->get_terrain();
-                if (terrain->walkable() == 0) {
+                if (terrain == nullptr) continue;
+                if (terrain->walkable()) {
                     continue; // walkabl cell — skip
                 }
                 const std::shared_ptr<HitBoxe> tile_hitbox = terrain->get_hitboxe();

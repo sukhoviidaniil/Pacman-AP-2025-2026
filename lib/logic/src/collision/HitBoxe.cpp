@@ -19,7 +19,7 @@
 #include "logic/collision/HitBoxe.h"
 
 namespace Logic::Collision {
-    HitBoxe::HitBoxe(const unsigned int layer, const unsigned int strength):
+    HitBoxe::HitBoxe(const int layer, const int strength):
     layer_(layer), strength_(strength){
     }
 
@@ -27,11 +27,11 @@ namespace Logic::Collision {
 
     HitBoxe::~HitBoxe() = default;
 
-    unsigned int HitBoxe::get_layer() const {
+    int HitBoxe::get_layer() const {
         return layer_;
     }
 
-    unsigned int HitBoxe::get_strength() const {
+    int HitBoxe::get_strength() const {
         return strength_;
     }
 

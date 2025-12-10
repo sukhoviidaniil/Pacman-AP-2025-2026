@@ -81,6 +81,7 @@ namespace Logic::Collision {
 
     AABB HitBoxe_Shape::get_aabb() const {
         AABB aabb;
+        aabb.center = get_centers().front();
         for (const Math::Vector2 &point : points_) {
             if (aabb.max_X < point.x) {
                 aabb.max_X = point.x;
@@ -95,6 +96,7 @@ namespace Logic::Collision {
                 aabb.min_Y = point.y;
             }
         }
+        aabb.extend = {aabb.max_X, aabb.max_Y};
         return aabb;
     }
 

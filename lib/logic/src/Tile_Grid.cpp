@@ -48,7 +48,7 @@ namespace Logic {
         return static_cast<unsigned int>(static_cast<float>(columns_) * tile_size_);
     }
 
-    Math::Vector2 Tile_Grid::get_nearest_tile_center(const Math::Vector2& pos) const {
+    std::pair<size_t, size_t> Tile_Grid::get_nearest_tile_size_t(const Math::Vector2 &pos) const {
         const float half_ts = tile_size_ * 0.5f;
 
         // Full dimensions
@@ -69,8 +69,19 @@ namespace Logic {
         if (cx >= static_cast<int>(columns_)) cx = static_cast<int>(columns_) - 1;
         if (cy >= static_cast<int>(rows_))    cy = static_cast<int>(rows_) - 1;
 
+        return {cx, cy};
+    }
+
+    std::shared_ptr<Tile> Tile_Grid::get_nearest_tile(const Math::Vector2 &pos) const {
+        std::pair<size_t, size_t> nearest_tiler_size_t = get_nearest_tile_size_t(pos);
+        return  tiles_[nearest_tiler_size_t.first][nearest_tiler_size_t.second];
+    }
+
+    Math::Vector2 Tile_Grid::get_nearest_tile_center(const Math::Vector2& pos) const {
+
+
         // Take the tile and ask it for its center
-        return tiles_[static_cast<size_t>(cy)][static_cast<size_t>(cx)]->get_terrain()->get_position();
+        return get_nearest_tile(pos)->get_terrain()->get_position();
     }
 
     Math::Vector2 Tile_Grid::get_next_tile_center(const Math::Vector2 &pos, const Math::Vector2 &dir) const {
@@ -168,6 +179,7 @@ namespace Logic {
     std::shared_ptr<Tile> Tile_Grid::get_tile(const size_t x, const size_t y) const {
         if (tiles_.empty()) return nullptr;
         if (x >= columns_ || y >= rows_) {
+            return nullptr;
             throw std::out_of_range("Position is out of TileGrid");
         }
         return tiles_[y][x];

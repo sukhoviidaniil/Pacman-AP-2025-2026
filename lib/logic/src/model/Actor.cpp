@@ -79,19 +79,20 @@ namespace Logic::Model{
 
             // 5 Update position
             position_ += displacement;
+            // 6 Update the hitbox position
+            hitbox_->move_to(position_);
 
-            // 6. If you have reached the center of the cell and there is a new direction
-            if (std::abs(move_dist - dist_to_cell) < 1e-6f) {
-                if ((next_cell.x - position_.x) < 1e-4f && (next_cell.y - position_.y) < 1e-4f) {
-                    position_ = next_cell;
-                    if (next_dir_.length()>1) {
-                        current_direction_ = next_dir_;
-                    }
-                }
+            bool at_cell = std::abs(move_dist - dist_to_cell) < 1e-6f;
+            bool reached_exact = (next_cell.x - position_.x) < 1e-4f && (next_cell.y - position_.y) < 1e-4f;
+            bool need_turn = at_cell ? reached_exact : next_dir_.has_same_direction(current_direction_);
+
+            // 7. If you have reached the center of the cell and there is a new direction
+
+            if (need_turn) {
+                if (next_dir_.length() != 1.0f) next_dir_.normalize();
+                current_direction_ = next_dir_;
+                if (at_cell) position_ = next_cell;
             }
-
-            // 7 Update the hitbox position
-            get_hitboxe()->move_to(position_);
 
             // 8. Subtract the time used
             remaining_time -= move_dist / speed_;

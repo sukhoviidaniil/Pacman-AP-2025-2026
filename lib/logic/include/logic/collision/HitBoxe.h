@@ -25,15 +25,15 @@
 
 namespace Logic::Collision {
     class HitBoxe {
-        unsigned int layer_ = 0;
-        unsigned int strength_ = 0;
+        int layer_ = 0;
+        int strength_ = 0;
     public:
-        explicit HitBoxe(unsigned int layer = 0, unsigned int strength = 0);
+        explicit HitBoxe(int layer = 0, int strength = 0);
         HitBoxe(const HitBoxe &other);
         virtual ~HitBoxe();
 
-        [[nodiscard]] unsigned int get_layer() const;
-        [[nodiscard]] unsigned int get_strength() const;
+        [[nodiscard]] int get_layer() const;
+        [[nodiscard]] int get_strength() const;
 
         [[nodiscard]] virtual std::shared_ptr<HitBoxe> clone() const = 0;
 

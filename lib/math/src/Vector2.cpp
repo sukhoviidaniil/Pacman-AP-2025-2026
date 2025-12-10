@@ -99,6 +99,17 @@ namespace Math {
         return distanceSquared <= radius * radius;
     }
 
+    bool Vector2::has_same_direction(const Vector2 &other) const {
+        float len1 = length();
+        float len2 = other.length();
+        if (len1 == 0.0f || len2 == 0.0f) return false;
+
+        float cos_angle = dot(other) / (len1 * len2);
+
+        // We consider directions to be identical if the angle between them is approximately 0.
+        return cos_angle > 0.999999f;
+    }
+
     // ========== Output to stream ==========
 
     std::ostream& operator<<(std::ostream& os, const Vector2& vector) {

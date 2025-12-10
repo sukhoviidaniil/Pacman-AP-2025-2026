@@ -24,6 +24,8 @@
 
 namespace Logic::Collision {
     class Separating_Axis_Theorem : public Collision_Control {
+
+        bool level_and_strength_check(const std::shared_ptr<HitBoxe>& first, const std::shared_ptr<HitBoxe>& second) const;
         public:
 
         Separating_Axis_Theorem();
