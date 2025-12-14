@@ -20,13 +20,13 @@
 
 #include <string>
 
-namespace Core::Info {
+namespace core {
     struct Game_Info {
         std::string graphics = "not SFML";
-        unsigned int window_width = 1000;
-        unsigned int window_height = 1000;
-        std::string graphics_conf = "no_conf.json";
-        std::string stage_mng = "no_conf.json";
+        int window_width = -1;
+        int window_height = -1;
+        std::string graphics_conf = "wrong_path_no_conf.json";
+        std::string stage_mng = "wrong_path_no_conf.json";
     };
 }
 

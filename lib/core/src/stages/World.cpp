@@ -18,22 +18,23 @@
 
 #include "core/stages/World.h"
 
-namespace Core {
+using Model = logic::model::Entity;
+namespace core {
     World::World(
-        const std::shared_ptr<Logic::Tile_Grid> &grid,
-        const std::shared_ptr<Logic::Collision::World_Collision_Manager> &WCM,
-        const std::shared_ptr<Graphics::Camera> &game_camera):
+        const std::shared_ptr<logic::Tile_Grid> &grid,
+        const std::shared_ptr<logic::collision::World_Collision_Manager> &WCM,
+        const std::shared_ptr<graphics::Camera> &game_camera):
         grid_(grid), WCM_(WCM), game_camera_(game_camera){
     }
 
     World::~World() = default;
 
-    void World::add_Model(const std::string &type, const std::shared_ptr<Model> &model) {
+    void World::add_model(const std::string &type, const std::shared_ptr<Model> &model) {
         const std::string& name = model->get_name();
 
         // Uniqueness check
         if (models_by_name.contains(name)) {
-            throw std::runtime_error("Model with name '" + name + "' already exists");
+            throw std::runtime_error("model with name '" + name + "' already exists");
         }
 
         // Add to list by type
@@ -42,7 +43,7 @@ namespace Core {
         vec.push_back(model);
 
         // Create a record
-        Model_Entry entry;
+        model_Entry entry;
         entry.name = name;
         entry.type = type;
         entry.index_in_type_vector = index;
@@ -51,7 +52,7 @@ namespace Core {
         models_by_name.emplace(name, std::move(entry));
     }
 
-    std::vector<std::shared_ptr<Model>> World::get_Models(const std::string &type) const {
+    std::vector<std::shared_ptr<Model>> World::get_models(const std::string &type) const {
         auto it = models_by_type.find(type);
         if (it == models_by_type.end()) {
             return {}; // empty list
@@ -59,7 +60,7 @@ namespace Core {
         return it->second; // copy
     }
 
-    std::shared_ptr<Model> World::get_Model(const std::string &type, const std::string &name) const {
+    std::shared_ptr<Model> World::get_model(const std::string &type, const std::string &name) const {
         auto it = models_by_name.find(name);
         if (it == models_by_name.end()) {
             return nullptr;
@@ -73,7 +74,7 @@ namespace Core {
         return it->second.model;
     }
 
-    void World::add_View(const std::string &type, const std::shared_ptr<View> &view) {
+    void World::add_View(const std::string &type, const std::shared_ptr<graphics::View> &view) {
         // Add to list by type
         auto it = view_by_type.find(type);
         if (it == view_by_type.end()) {
@@ -83,7 +84,7 @@ namespace Core {
         }
     }
 
-    std::vector<std::shared_ptr<View>> World::get_Views(const std::string &type) const {
+    std::vector<std::shared_ptr<graphics::View>> World::get_Views(const std::string &type) const {
         auto it = view_by_type.find(type);
         if (it == view_by_type.end()) {
             return {};
@@ -91,7 +92,7 @@ namespace Core {
         return it->second; // copy
     }
 
-    std::shared_ptr<View> World::get_View(const std::string &type, const std::string &name) const {
+    std::shared_ptr<graphics::View> World::get_View(const std::string &type, const std::string &name) const {
         auto it = view_by_type.find(type);
         if (it == view_by_type.end()) {
             return nullptr;
@@ -105,7 +106,7 @@ namespace Core {
         return nullptr;
     }
 
-    std::shared_ptr<Logic::Tile_Grid> World::get_grid() {
+    std::shared_ptr<logic::Tile_Grid> World::get_grid() {
         return grid_;
     }
 

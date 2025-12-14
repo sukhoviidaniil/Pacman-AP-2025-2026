@@ -21,29 +21,16 @@
 #include "core/info/Expression_Info.h"
 #include "core/info/rec_Info.h"
 
-namespace Core::Info {
-
-    class Status_Info {
-    public:
+namespace core {
+    struct Status_Info {
         std::vector<Expression_Info> facial_expressions;
         int number_of_expressions_per_direction = 1;
         rec_Info recLeft;
         rec_Info recTop;
 
         Status_Info() = default;
-        explicit Status_Info (const nlohmann::json& j);
+        // explicit Status_Info (const nlohmann::json& j);
     };
-
-
-    inline void from_json(const nlohmann::json& j, Status_Info& s) {
-        s.facial_expressions.reserve(j["facial_expressions"].size());
-        for (auto& obj : j["facial_expressions"]) {
-            s.facial_expressions.push_back(obj.get<Expression_Info>());
-        }
-        s.number_of_expressions_per_direction = j.value("number_of_expressions_per_direction", 1);
-        s.recLeft = j.value("recLeft", rec_Info());
-        s.recTop = j.value("recTop", rec_Info());
-    }
 }
 
 #endif //PACMAN_STATUS_INFO_H

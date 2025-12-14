@@ -16,19 +16,27 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
+/*
+#include <iostream>
 #include <string>
 #include "core/File_Reader.h"
 #include "core/info/Game_Info.h"
 #include "core/readers/Reader_JSON.h"
-#include "logic/Delta_Timer.h"
+#include "lib/gen/include/gen/Logger.h"
+#include "lib/gen/include/gen/LogScope.h"
+#include "lib/model/include/model/Delta_Timer.h"
+*/
+
 
 int main() {
+    /*
+
     const std::string assets_dir = ASSETS_DIR;
     const std::string graphics_dir = assets_dir + "/graphics/";
     const std::string conf_dir = assets_dir + "/conf/";
-    auto fr = std::make_shared<Core::File_Reader>(graphics_dir, conf_dir);
-    fr->add_Reader(".json", std::make_shared<Core::Reader_JSON>());
-    Core::Info::Game_Info game_info = fr->get_Game_Info("conf_game1.json");
+    auto fr = std::make_shared<core::File_Reader>(graphics_dir, conf_dir);
+    fr->add_Reader(".json", std::make_shared<core::Reader_JSON>());
+    core::Game_Info game_info = fr->get_Game_Info("conf_game1.json");
     if (game_info.graphics == "SFML") {
         fr->load_SFML_Manager(game_info.graphics_conf);
 
@@ -37,33 +45,36 @@ int main() {
         sf::RenderWindow window(sf::VideoMode(scene_width, scene_height), "SFML Window");
         sf::View view(sf::FloatRect(0, 0, scene_width, scene_height));
         window.setView(view);
-        Core::Stage_Manager sm = fr->load_Stage_Manager(game_info.stage_mng);
+        window.setFramerateLimit(30);
+        core::Stage_Manager sm = fr->load_Stage_Manager(game_info.stage_mng);
 
-        Logic::Delta_Timer timer;
+        logic::Delta_Timer timer;
         while (window.isOpen()) {
             sf::Event event;
             while (window.pollEvent(event)) {
+                if (event.type == sf::Event::Resized) {
+                    float aspect_ratio = static_cast<float>(event.size.width) / static_cast<float>(event.size.height);
+                    float view_width = scene_width;
+                    float view_height = scene_height;
+                    if (aspect_ratio > scene_width / scene_height) {
+                        view_width = scene_height * aspect_ratio;
+                    } else {
+                        view_height = scene_width / aspect_ratio;
+                    }
+                    view.setSize(view_width, view_height);
+                    window.setView(view);
+                }
                 if (event.type == sf::Event::Closed) {
                     window.close();
+                    break;
                 }
+                //stage->action(event);
             }
-            if (event.type == sf::Event::Resized) {
 
-                float aspect_ratio = static_cast<float>(event.size.width) / static_cast<float>(event.size.height);
-                float view_width = scene_width;
-                float view_height = scene_height;
-                if (aspect_ratio > scene_width / scene_height) {
-                    view_width = scene_height * aspect_ratio;
-                } else {
-                    view_height = scene_width / aspect_ratio;
-                }
-                view.setSize(view_width, view_height);
-                window.setView(view);
-            }
             window.clear();
 
             float delta = timer.tick();
-            std::shared_ptr<Core::Stage> stage = sm.get_current_stage();
+            std::shared_ptr<core::Stage> stage = sm.get_current_stage();
             stage->simulate(delta);
             stage->render(window);
             window.display();
@@ -71,5 +82,6 @@ int main() {
     }else {
         throw std::runtime_error("Unknown type of graphics");
     }
+    */
     return 0;
 }

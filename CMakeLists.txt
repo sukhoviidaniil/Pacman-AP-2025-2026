@@ -55,12 +55,11 @@ set(FUNC_INCLUDE_DIRS
         ${CMAKE_SOURCE_DIR}/func
 )
 #]]
-
+add_subdirectory(lib/gen)
 add_subdirectory(lib/math)
-add_subdirectory(lib/logic)
-add_subdirectory(lib/graphics)
-add_subdirectory(lib/core)
-add_subdirectory(tests)
+add_subdirectory(lib/model)
+add_subdirectory(lib/view)
+
 
 # -----------------------------------------
 # We connect all logical units of the project to the executable file/target
@@ -72,14 +71,15 @@ add_executable(${APP_TARGET}
 
 target_link_libraries(${APP_TARGET}
         PRIVATE
+        gen_lib
         math_lib
-        logic_lib
-        graphics_lib
-        core_lib
+        model_lib
+        view_lib
 )
 
 
 if(WIN32)
+    #[[
     message("CMAKE_CURRENT_BINARY_DIR - ${CMAKE_CURRENT_BINARY_DIR}")
     get_property(SFML_ABSOLUTE_DIR TARGET graphics_lib PROPERTY INTERFACE_SFML_ABSOLUTE_DIR)
     get_property(SFML_RELATIVE_DIR TARGET graphics_lib PROPERTY INTERFACE_SFML_RELATIVE_DIR)
@@ -94,6 +94,7 @@ if(WIN32)
             DEPENDS ${APP_TARGET}
     )
     add_custom_target(run_bat ALL DEPENDS "${BAT_FILE}")
+    #]]
 elseif(UNIX)
     # Linux: add RPATH so that ELF searches for .so in SFML/lib
     set_target_properties(${APP_TARGET} PROPERTIES
@@ -102,3 +103,7 @@ elseif(UNIX)
     )
 endif()
 target_compile_definitions(${APP_TARGET} PRIVATE ASSETS_DIR="${CMAKE_SOURCE_DIR}/assets")
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_definitions(-D_DEBUG)
+endif()

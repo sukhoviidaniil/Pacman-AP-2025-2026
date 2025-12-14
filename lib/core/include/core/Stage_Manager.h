@@ -23,7 +23,7 @@
 #include <memory>
 #include <stack>
 
-namespace Core {
+namespace core {
     class File_Reader;
     class Stage_Manager {
         std::shared_ptr<const File_Reader> fr_;

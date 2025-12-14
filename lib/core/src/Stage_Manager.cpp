@@ -20,7 +20,7 @@
 
 #include "core/File_Reader.h"
 
-namespace Core {
+namespace core {
 
     Stage_Manager::Stage_Manager(const std::shared_ptr<const File_Reader> &fr) : fr_(fr) {
     }

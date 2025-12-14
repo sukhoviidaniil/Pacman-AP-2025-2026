@@ -18,17 +18,12 @@
 #ifndef PACMAN_REC_INFO_H
 #define PACMAN_REC_INFO_H
 
-#include "json.hpp"
 
-namespace Core::Info {
+namespace core {
     struct rec_Info {
         unsigned int base = 0;
         unsigned int increase = 0;
     };
-    inline void from_json(const nlohmann::json& j, rec_Info& s) {
-        s.base = j.value<unsigned int>("base", 0);
-        s.increase = j.value<unsigned int>("increase", 0);
-    }
 }
 
 #endif //PACMAN_REC_INFO_H

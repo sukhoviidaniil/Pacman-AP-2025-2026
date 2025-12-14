@@ -18,7 +18,7 @@
 
 #include "core/Stage.h"
 
-namespace Core {
+namespace core {
     Stage::Stage() = default;
 
     Stage::~Stage() = default;

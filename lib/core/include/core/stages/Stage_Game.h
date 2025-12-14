@@ -21,7 +21,7 @@
 #include "core/Stage.h"
 #include <memory>
 
-namespace Core {
+namespace core {
     class World;
     class Stage_Game : public Stage {
         std::shared_ptr<World> world_;
@@ -30,17 +30,17 @@ namespace Core {
         explicit Stage_Game(const std::shared_ptr<World> &world);
         ~Stage_Game() override;
 
-        void add_Model(const std::string &type, const std::shared_ptr<Model> &model) override;
+        void add_model(const std::string &type, const std::shared_ptr<logic::model::Entity> &model) override;
 
-        std::vector<std::shared_ptr<Model>> get_Models(const std::string &type) const override;
+        [[nodiscard]] std::vector<std::shared_ptr<logic::model::Entity>> get_models(const std::string &type) const override;
 
-        std::shared_ptr<Model> get_Model(const std::string &type, const std::string &name) const override;
+        [[nodiscard]] std::shared_ptr<logic::model::Entity> get_model(const std::string &type, const std::string &name) const override;
 
-        void add_View(const std::string &type, const std::shared_ptr<View> &view) override;
+        void add_View(const std::string &type, const std::shared_ptr<graphics::View> &view) override;
 
-        std::vector<std::shared_ptr<View>> get_Views(const std::string &type) const override;
+        [[nodiscard]] std::vector<std::shared_ptr<graphics::View>> get_Views(const std::string &type) const override;
 
-        std::shared_ptr<View> get_View(const std::string &type, const std::string &name) const override;
+        [[nodiscard]] std::shared_ptr<graphics::View> get_View(const std::string &type, const std::string &name) const override;
 
         void simulate(float delta) override;
         void render(sf::RenderWindow& window) override;

@@ -20,7 +20,7 @@
 
 #include "SFML/Window/Event.hpp"
 
-namespace Core {
+namespace core::control{
     class Controller {
     public:
         virtual ~Controller() = default;

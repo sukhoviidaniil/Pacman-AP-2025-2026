@@ -27,37 +27,36 @@
 
 #include "info/Game_Info.h"
 
-namespace Core {
+namespace core {
 
     class File_Reader : public std::enable_shared_from_this<File_Reader>{
 
         public:
         File_Reader(std::string graphics_folder, std::string configuration_folder);
         void add_Reader(const std::string& extension, const std::shared_ptr<Reader> &reader);
-        void set_SFML_Manager(const std::shared_ptr<Graphics::SFML_Manager>& sfml_manager);
-        std::shared_ptr<Graphics::SFML_Manager> get_SFML_Manager() const;
+        void set_SFML_Manager(const std::shared_ptr<graphics::SFML_Manager>& sfml_manager);
+        std::shared_ptr<graphics::SFML_Manager> get_SFML_Manager() const;
 
         const sf::Texture& load_SFML_texture(const std::string& name) const;
-        const sf::Texture& load_SFML_texture(const std::shared_ptr<Graphics::SFML_Manager>& manager, const std::string& name) const;
+        const sf::Texture& load_SFML_texture(const std::shared_ptr<graphics::SFML_Manager>& manager, const std::string& name) const;
         void load_SFML_Sprite(const std::string& filename) const;
-        void load_SFML_Sprite(const std::shared_ptr<Graphics::SFML_Manager>& manager, const std::string& filename) const;
+        void load_SFML_Sprite(const std::shared_ptr<graphics::SFML_Manager>& manager, const std::string& filename) const;
         void load_SFML_Sprite_Group(const std::string& filename) const;
-        void load_SFML_Sprite_Group(const std::shared_ptr<Graphics::SFML_Manager>& manager, const std::string& filename) const;
+        void load_SFML_Sprite_Group(const std::shared_ptr<graphics::SFML_Manager>& manager, const std::string& filename) const;
         void load_SFML_Manager(const std::string &filename);
 
-        std::shared_ptr<Logic::Collision::HitBoxe> make_HitBoxe(const std::string& filename) const;
+        std::shared_ptr<logic::collision::HitBoxe> make_HitBoxe(const std::string& filename) const;
 
-        void load_Entities(const std::string& filename, const std::shared_ptr<Stage>& stage) const;
-        void load_Entities(const std::string& filename, const std::shared_ptr<Stage>& stage, const std::shared_ptr<Logic::Tile_Grid>& grid) const;
+        void load_Entities(const std::string& filename, const std::shared_ptr<Stage>& stage, const std::shared_ptr<logic::Tile_Grid>& grid) const;
 
-        std::shared_ptr<Graphics::Camera> load_Camera(const std::string &filename) const;
+        std::shared_ptr<graphics::Camera> load_Camera(const std::string &filename) const;
 
-        Graphics::Tile_Grid_Pair load_Tile_Grid(const std::string& filename) const;
+        graphics::Tile_Grid_Pair load_Tile_Grid(const std::string& filename) const;
 
         std::shared_ptr<Stage> load_Stage(const std::string& filename) const;
         Stage_Manager load_Stage_Manager(const std::string& filename);
 
-        Info::Game_Info get_Game_Info(const std::string& filename) const;
+        Game_Info get_Game_Info(const std::string& filename) const;
 
     protected:
 
@@ -69,7 +68,7 @@ namespace Core {
         std::string graphics_folder_;
         std::string configuration_folder_;
 
-        std::shared_ptr<Graphics::SFML_Manager> sfml_manager_;
+        std::shared_ptr<graphics::SFML_Manager> sfml_manager_;
 
         std::unordered_map<
             std::string,

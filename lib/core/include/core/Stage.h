@@ -18,27 +18,25 @@
 #ifndef PACMAN_STAGE_H
 #define PACMAN_STAGE_H
 
-#include "graphics/view/View.h"
+#include "Stage_Manager.h"
+#include "graphics/View.h"
 #include "logic/model/Entity.h"
-#include "SFML/Graphics/RenderWindow.hpp"
+#include "SFML/graphics/RenderWindow.hpp"
 
-namespace Core {
+namespace core {
 
-    using Model = Logic::Model::Entity;
-    using View = Graphics::View::View;
-
-    struct Model_Entry {
+    struct model_Entry {
         std::string name;
         std::string type;
         size_t index_in_type_vector; // position in vector
-        std::shared_ptr<Model> model;
+        std::shared_ptr<logic::model::Entity> model;
     };
 
     struct View_Entry {
         std::string name;
         std::string type;
         size_t index_in_type_vector; // position in vector
-        std::shared_ptr<View> view;
+        std::shared_ptr<graphics::View> view;
     };
 
     struct Stage_Info {
@@ -47,6 +45,9 @@ namespace Core {
     };
 
     class Stage {
+
+        std::shared_ptr<Stage_Manager> manager;
+
         public:
         Stage();
         virtual ~Stage();
@@ -59,7 +60,7 @@ namespace Core {
          * @param model Shared pointer to the model
          * @throw std::runtime_error if a model with the same name already exists
          */
-        virtual void add_Model(const std::string& type, const std::shared_ptr<Model>& model) = 0;
+        virtual void add_model(const std::string& type, const std::shared_ptr<logic::model::Entity>& model) = 0;
 
         /**
          * Returns all models of a given type.
@@ -68,7 +69,7 @@ namespace Core {
          * @return Vector of shared pointers to models of the specified type;
          *         empty vector if type does not exist
          */
-        virtual std::vector<std::shared_ptr<Model>> get_Models(const std::string& type) const = 0;
+        [[nodiscard]] virtual std::vector<std::shared_ptr<logic::model::Entity>> get_models(const std::string& type) const = 0;
 
         /**
          * Returns a model by its type and name.
@@ -77,7 +78,7 @@ namespace Core {
          * @param name Name of the model
          * @return Shared pointer to the model, or nullptr if not found or type mismatch
          */
-        virtual std::shared_ptr<Model> get_Model(const std::string& type, const std::string& name) const = 0;
+        [[nodiscard]] virtual std::shared_ptr<logic::model::Entity> get_model(const std::string& type, const std::string& name) const = 0;
 
         /**
          * Adds a view to the world's view container.
@@ -87,7 +88,7 @@ namespace Core {
          * @param view Shared pointer to the view
          * @throw std::runtime_error if a view with the same name already exists
          */
-        virtual void add_View(const std::string& type, const std::shared_ptr<View>& view) = 0;
+        virtual void add_View(const std::string& type, const std::shared_ptr<graphics::View>& view) = 0;
 
         /**
          * Returns all views of a given type.
@@ -96,7 +97,7 @@ namespace Core {
          * @return Vector of shared pointers to views of the specified type;
          *         empty vector if type does not exist
          */
-        virtual std::vector<std::shared_ptr<View>> get_Views(const std::string& type) const = 0;
+        [[nodiscard]] virtual std::vector<std::shared_ptr<graphics::View>> get_Views(const std::string& type) const = 0;
 
         /**
          * Returns a view by its type and name.
@@ -105,10 +106,12 @@ namespace Core {
          * @param name Name of the view
          * @return Shared pointer to the view, or nullptr if not found or type mismatch
          */
-        virtual std::shared_ptr<View> get_View(const std::string& type, const std::string& name) const = 0;
+        [[nodiscard]] virtual std::shared_ptr<graphics::View> get_View(const std::string& type, const std::string& name) const = 0;
 
         virtual void simulate(float delta) = 0;
         virtual void render(sf::RenderWindow& window) = 0;
+
+        virtual void pause() = 0;
     };
 }
 

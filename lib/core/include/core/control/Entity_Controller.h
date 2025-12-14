@@ -22,14 +22,14 @@
 #include "logic/model/Entity.h"
 #include <memory>
 
-namespace Core {
+namespace core::control {
     class Entity_Controller : public Controller {
     public:
         ~Entity_Controller() override;
         void respond(const sf::Event &event) override;
 
     private:
-        std::shared_ptr<Logic::Model::Entity> entity;
+        std::shared_ptr<logic::model::Entity> entity;
     };
 }
 

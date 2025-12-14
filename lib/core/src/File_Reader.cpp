@@ -20,7 +20,7 @@
 
 #include "core/File_Reader.h"
 
-namespace Core {
+namespace core {
     std::string File_Reader::get_extension(const std::string &path) {
         const auto pos = path.find_last_of('.');
         if (pos == std::string::npos) return ""; // no extensions
@@ -44,11 +44,11 @@ namespace Core {
         readers_[extension] = reader;
     }
 
-    void File_Reader::set_SFML_Manager(const std::shared_ptr<Graphics::SFML_Manager> &sfml_manager) {
+    void File_Reader::set_SFML_Manager(const std::shared_ptr<graphics::SFML_Manager> &sfml_manager) {
         sfml_manager_ = sfml_manager;
     }
 
-    std::shared_ptr<Graphics::SFML_Manager> File_Reader::get_SFML_Manager() const {
+    std::shared_ptr<graphics::SFML_Manager> File_Reader::get_SFML_Manager() const {
         return sfml_manager_;
     }
 
@@ -61,7 +61,7 @@ namespace Core {
     }
 
     const sf::Texture& File_Reader::load_SFML_texture(
-        const std::shared_ptr<Graphics::SFML_Manager>& manager, const std::string& filename
+        const std::shared_ptr<graphics::SFML_Manager>& manager, const std::string& filename
         ) const {
         if (manager == nullptr) {
             throw std::runtime_error("No sfml manager given.");
@@ -87,7 +87,7 @@ namespace Core {
     }
 
     void File_Reader::load_SFML_Sprite(
-        const std::shared_ptr<Graphics::SFML_Manager>& manager, const std::string& filename
+        const std::shared_ptr<graphics::SFML_Manager>& manager, const std::string& filename
         ) const {
         if (manager == nullptr) {
             throw std::runtime_error("No sfml manager given.");
@@ -110,7 +110,7 @@ namespace Core {
     }
 
     void File_Reader::load_SFML_Sprite_Group(
-        const std::shared_ptr<Graphics::SFML_Manager>& manager, const std::string &filename
+        const std::shared_ptr<graphics::SFML_Manager>& manager, const std::string &filename
         ) const {
 
         const std::shared_ptr<Reader> reader = get_Reader(filename);
@@ -125,23 +125,17 @@ namespace Core {
         sfml_manager_ = reader->load_SFML_Manager(self, path);
     }
 
-    std::shared_ptr<Logic::Collision::HitBoxe> File_Reader::make_HitBoxe(const std::string &filename) const {
+    std::shared_ptr<logic::collision::HitBoxe> File_Reader::make_HitBoxe(const std::string &filename) const {
         const std::shared_ptr<Reader> reader = get_Reader(filename);
         std::string path = configuration_folder_ + filename;
         return reader->load_HitBoxe(path);
     }
 
-    void File_Reader::load_Entities(const std::string &filename, const std::shared_ptr<Stage> &stage) const {
-        const std::shared_ptr<Reader> reader = get_Reader(filename);
-        std::shared_ptr<const File_Reader> self = shared_from_this();
-        std::string path = configuration_folder_ + filename;
-        return reader->load_Entities(self, stage, path);
-    }
 
     void File_Reader::load_Entities(
         const std::string &filename,
         const std::shared_ptr<Stage> &stage,
-        const std::shared_ptr<Logic::Tile_Grid> &grid) const
+        const std::shared_ptr<logic::Tile_Grid> &grid) const
     {
         const std::shared_ptr<Reader> reader = get_Reader(filename);
         std::shared_ptr<const File_Reader> self = shared_from_this();
@@ -149,13 +143,13 @@ namespace Core {
         return reader->load_Entities(self, stage, grid, path);
     }
 
-    std::shared_ptr<Graphics::Camera> File_Reader::load_Camera(const std::string &filename) const {
+    std::shared_ptr<graphics::Camera> File_Reader::load_Camera(const std::string &filename) const {
         const std::shared_ptr<Reader> reader = get_Reader(filename);
         std::string path = configuration_folder_ + filename;
         return reader->load_Camera(path);
     }
 
-    Graphics::Tile_Grid_Pair File_Reader::load_Tile_Grid(const std::string &filename) const {
+    graphics::Tile_Grid_Pair File_Reader::load_Tile_Grid(const std::string &filename) const {
         const std::shared_ptr<Reader> reader = get_Reader(filename);
         std::string path = configuration_folder_ + filename;
         return reader->load_Tile_Grid(sfml_manager_, path);
@@ -177,7 +171,7 @@ namespace Core {
         return reader->load_Stage_Manager(self, path);
     }
 
-    Info::Game_Info File_Reader::get_Game_Info(const std::string &filename) const {
+    Game_Info File_Reader::get_Game_Info(const std::string &filename) const {
         const std::shared_ptr<Reader> reader = get_Reader(filename);
         std::string path = configuration_folder_ + filename;
         return reader->get_Game_Info(path);

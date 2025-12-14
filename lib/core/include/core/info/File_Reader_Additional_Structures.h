@@ -17,10 +17,10 @@
 ***************************************************************/
 #ifndef PACMAN_FILE_READER_ADDITIONAL_STRUCTURES_H
 #define PACMAN_FILE_READER_ADDITIONAL_STRUCTURES_H
+
 #include <memory>
 
-namespace Core {
-
+namespace core {
     class File_Reader;
 
     struct Reader_Base_Info {
