@@ -19,10 +19,14 @@
 #include "model/collision/HitBox_Rectangle.h"
 
 namespace model::collision {
-
+    HitBox_Rectangle::HitBox_Rectangle(
+        const float width, const float height, const int strength
+        ) : HitBoxe(strength), width_(width), height_(height)
+    {
+    }
 
     HitBox_Rectangle::HitBox_Rectangle(
-        const math::Point2 &center, float width, float height, int strength
+        const math::Point2 &center, const float width, const float height, const int strength
         ) : HitBoxe(strength), center_(center), width_(width), height_(height)
     {
     }

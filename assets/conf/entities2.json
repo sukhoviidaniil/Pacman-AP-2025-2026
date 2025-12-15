@@ -4,14 +4,9 @@
       "Type" : "Actor",
       "Model" : {
         "name" : "Blinky",
-        "position" : {"x" :  -50, "y" : 0},
         "speed" : 35,
         "max_status" : 4,
         "hitbox" : "hitbox1.json"
-      },
-      "View" : {
-        "Sprite_Group" : "Blinky",
-        "name" : "Blinky1"
       }
     }
   ]

@@ -18,7 +18,7 @@
 #ifndef PACMAN_ENTITY_H
 #define PACMAN_ENTITY_H
 
-#include "math/Point2.h"
+#include "infra/math/Point2.h"
 
 #include <memory>
 
@@ -29,13 +29,13 @@ namespace model {
     public:
         virtual ~Entity();
         Entity(
-            std::string  name, const math::Point2 &position, const std::shared_ptr<collision::HitBoxe> &hitbox
+            std::string   name, const math::Point2 &position, const std::shared_ptr<collision::HitBoxe> &hitbox
         );
 
         // ===== Getters =====
         [[nodiscard]] std::string get_name() const;
         [[nodiscard]] math::Point2 get_position() const;
-        [[nodiscard]] std::shared_ptr<collision::HitBoxe> get_hitboxe();
+        [[nodiscard]] std::shared_ptr<const collision::HitBoxe> get_hitboxe();
 
     protected:
         // Position in world coordinates

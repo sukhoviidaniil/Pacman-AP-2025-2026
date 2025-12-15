@@ -19,7 +19,7 @@
 #define PACMAN_AABB_H
 #include <limits>
 
-#include "math/Vector2.h"
+#include "infra/math/Vector2.h"
 
 namespace model::collision {
     class AABB {

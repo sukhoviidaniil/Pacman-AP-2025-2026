@@ -18,7 +18,7 @@
 #ifndef PACMAN_HITBOXE_H
 #define PACMAN_HITBOXE_H
 
-#include "math/Vector2.h"
+#include "infra/math/Vector2.h"
 #include "model/collision/AABB.h"
 #include <vector>
 #include <memory>

@@ -23,6 +23,7 @@
 namespace model::collision {
     class HitBox_Rectangle : public HitBoxe {
         public:
+        HitBox_Rectangle(float width, float height, int strength);
         HitBox_Rectangle(const math::Point2& center, float width, float height, int strength);
 
         HitBox_Rectangle(const HitBox_Rectangle& other);

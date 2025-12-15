@@ -16,14 +16,19 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "graphics/Camera.h"
+#include <stdexcept>
 
-namespace graphics {
+#include "view/Camera.h"
+
+#include "infra/math/Vector2.h"
+
+namespace view {
     void Camera::set(
         const unsigned int window_width, const unsigned int window_height, const math::Vector2 &window_center,
         const unsigned int camera_width, const unsigned int camera_height, const math::Vector2 &camera_center, const float scale
         ) {
         if (window_height == 0) {
+            sf::Event event;
             throw std::runtime_error("Invalid Camera window_height!");
         }
         if (window_width == 0) {

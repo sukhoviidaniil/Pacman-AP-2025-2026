@@ -17,6 +17,7 @@
 ***************************************************************/
 #ifndef PACMAN_ACTOR_H
 #define PACMAN_ACTOR_H
+
 #include "model/Entity.h"
 #include "model/collision/World_Collision_Manager.h"
 

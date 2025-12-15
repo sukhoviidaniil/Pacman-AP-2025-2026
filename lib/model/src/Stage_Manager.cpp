@@ -1,0 +1,64 @@
+/***************************************************************
+ * Project:       Pacman
+ * File:          Stage_Manager.cpp
+ *
+ * Author:        Sukhovii Daniil
+ * Created:       2025-11-28
+ * Modified:      []
+ *
+ * Description:   []
+ *
+ * Contact:
+ *   Email:       sukhovii.daniil@gmail.com
+ *
+ * Disclaimer:
+ *   This file is part of Pacman.
+ *   Unauthorized use, reproduction, or distribution is prohibited.
+***************************************************************/
+
+#include "model/Stage_Manager.h"
+
+
+namespace model {
+    Stage_Manager::Stage_Manager() = default;
+
+    Stage_Manager::~Stage_Manager() = default;
+
+    void Stage_Manager::handle_PacmanDied() {
+        if (current_stages_.empty()) return;
+        const auto old_stage = get_top();
+        old_stage->onExit();
+
+        // TODO Use Factory to define Stage
+        int score = dynamic_cast<PlayingStage*>(old_stage.get())->score;
+        auto new_stage = std::make_shared<DeathStage>(score);
+
+
+        current_stages_.pop();
+        current_stages_.push(new_stage);
+        new_stage->onEnter();
+    }
+
+    void Stage_Manager::add_Stage_Info(const std::shared_ptr<Stage_Info>& info) {
+        const std::string name = info->name;
+        auto it = stages_info.find(name);
+        if (it == stages_info.end()) {
+            stages_info[name] = info;
+            return;
+        }
+        throw std::runtime_error("Stage already exists");
+    }
+
+    void Stage_Manager::pop_stage() {
+        if (current_stages_.empty()) return;
+        current_stages_.pop();
+    }
+
+    void Stage_Manager::push_stage(const std::shared_ptr<Stage> &stage) {
+        current_stages_.push(stage);
+    }
+
+    std::shared_ptr<Stage> Stage_Manager::get_top() {
+        return current_stages_.top();
+    }
+}

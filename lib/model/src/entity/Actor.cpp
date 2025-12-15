@@ -58,14 +58,14 @@ namespace model::entity{
 
         while (remaining_time > 0.0f) {
             // 1. Calculate the next tile coordinate on the path current_dir
-            std::optional<math::Point2> t = grid->get_next_center(position_, current_direction_);
-            if (!t) {
+            std::shared_ptr<const Tile> t = grid->get_next_tile(position_, current_direction_);
+            if (t == nullptr) {
                 throw std::invalid_argument("Not a valid tile for Actor - Actor out bounds;");
             }
-            const math::Point2& next_cell = t.value();
+            const math::Point2& next_tile_center = t->get_position();
 
             // 2. Calculate the maximum possible displacement to this coordinate
-            auto to_cell = math::Vector2(next_cell - position_);
+            auto to_cell = math::Vector2(next_tile_center - position_);
             float dist_to_cell = to_cell.length();
             float max_move = speed_ * remaining_time;
             const float move_dist = std::min(dist_to_cell, max_move);
@@ -88,13 +88,13 @@ namespace model::entity{
 
             // 7. If have reached the center of the cell and there is a new direction
             const bool at_cell = std::abs(move_dist - dist_to_cell) < 1e-6f;
-            const bool reached_exact = (next_cell.x - position_.x) < 1e-4f && (next_cell.y - position_.y) < 1e-4f;
+            const bool reached_exact = (next_tile_center.x - position_.x) < 1e-4f && (next_tile_center.y - position_.y) < 1e-4f;
             const bool need_turn = at_cell ? reached_exact : next_direction_.has_same_direction(current_direction_);
 
             if (need_turn) {
                 if (next_direction_.length() != 1.0f) next_direction_.normalize();
                 current_direction_ = next_direction_;
-                if (at_cell) position_ = next_cell;
+                if (at_cell) position_ = next_tile_center;
             }
 
             // 8. Subtract the time used

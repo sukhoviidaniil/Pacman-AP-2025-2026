@@ -55,8 +55,7 @@ set(FUNC_INCLUDE_DIRS
         ${CMAKE_SOURCE_DIR}/func
 )
 #]]
-add_subdirectory(lib/gen)
-add_subdirectory(lib/math)
+add_subdirectory(lib/infra)
 add_subdirectory(lib/model)
 add_subdirectory(lib/view)
 
@@ -71,8 +70,7 @@ add_executable(${APP_TARGET}
 
 target_link_libraries(${APP_TARGET}
         PRIVATE
-        gen_lib
-        math_lib
+        infra_lib
         model_lib
         view_lib
 )
