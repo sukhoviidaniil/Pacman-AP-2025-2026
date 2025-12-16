@@ -1,6 +1,6 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Sprits_Group.h
+ * File:          Sprite.h
  *
  * Author:        Sukhovii Daniil
  * Created:       2025-12-15
@@ -15,22 +15,13 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_SPRITE_GROUP_H
-#define PACMAN_SPRITE_GROUP_H
-#include <string>
-#include <vector>
-
-#include "AST_Base.h"
+#ifndef PACMAN_SPRITE_H
+#define PACMAN_SPRITE_H
 
 namespace infra::ast {
-    struct Sprits_Group {
-        std::string using_texture;
-        unsigned int sprits_width;
-        unsigned int sprits_height;
-        std::vector<std::string> groups_names;
-        unsigned int number_of_statuses;
-        std::vector<Sprite_Status> statuses;
+    struct Sprite : Node{
+
     };
 }
 
-#endif //PACMAN_SPRITE_GROUP_H
+#endif //PACMAN_SPRITE_H

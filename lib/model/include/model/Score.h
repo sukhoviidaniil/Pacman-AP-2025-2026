@@ -17,7 +17,7 @@
 ***************************************************************/
 #ifndef PACMAN_SCORE_H
 #define PACMAN_SCORE_H
-#include "infra/Observer.h"
+#include "../../../infra/include/infra/Observer.h"
 
 namespace model {
     class Score : public infra::Observer {

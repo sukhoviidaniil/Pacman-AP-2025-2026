@@ -16,7 +16,7 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "model/Stage.h"
+#include "../../core/include/core/Stage.h"
 
 namespace model {
     Stage::Stage() = default;

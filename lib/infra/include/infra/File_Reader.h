@@ -23,10 +23,11 @@
 #include <memory>
 #include <unordered_map>
 
-#include "ast/AST_Base.h"
-#include "ast/Sprite.h"
-#include "ast/Sprits_Group.h"
-#include "ast/View_Sprites.h"
+#include "ast/Application.h"
+#include "ast/sprite/Sprite.h"
+#include "ast/sprite/Sprits_Group.h"
+#include "ast/View.h"
+#include "ast/Application.h"
 #include "infra/Reader.h"
 
 
@@ -40,8 +41,10 @@ namespace infra {
 
         [[nodiscard]] ast::Sprite read_Sprite(const std::string& filename) const;
         [[nodiscard]] ast::Sprits_Group read_Sprits_Group(const std::string& filename) const;
-        [[nodiscard]] ast::View_Sprites read_View(const std::string &filename) const;
+        [[nodiscard]] ast::View read_View(const std::string &filename) const;
+        [[nodiscard]] ast::Model read_Model(const std::string &filename) const;
 
+        [[nodiscard]] ast::Application read_Application(const std::string &filename) const;
     protected:
         std::shared_ptr<Reader> get_Reader(const std::string& path) const;
         static std::string get_extension(const std::string& path);

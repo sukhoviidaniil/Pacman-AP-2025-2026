@@ -1,7 +1,38 @@
 {
-  "graphics" : "SFML",
-  "window_width" : 800,
-  "window_height" : 600,
-  "graphics_conf" : "sprites1.json",
-  "stage_mng" : "conf_stage_mng.json"
+  "view" : {
+    "type" : "SFML",
+    "window_width" : 800,
+    "window_height" : 600,
+    "textures" : [
+      "sprite.png"
+    ],
+    "sprite_groups" : [
+      "graf_ghosts.json"
+    ]
+  },
+  "models" : [
+    {
+      "rows": 3,
+      "columns": 6,
+      "grid" : [
+        ["W", "W", "W", "W", "W", "W"],
+        ["W", "P", "F", "F", "F", "W"],
+        ["W", "W", "W", "W", "W", "W"]
+      ],
+      "tile" : {
+        "tile_size" : 40
+      },
+      "coin" : {
+        "size" : 10
+      },
+      "pacman" : {
+        "speed" : 0.1,
+        "size" : 39
+      },
+      "ghost" : {
+        "speed" : 0.1,
+        "size" : 39
+      }
+    }
+  ]
 }

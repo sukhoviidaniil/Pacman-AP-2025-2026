@@ -19,9 +19,10 @@
 #define PACMAN_FROM_JSON_H
 
 #include "json.hpp"
-#include "infra/ast/Sprite_Expression.h"
-#include "infra/ast/Sprite_Rec.h"
-#include "infra/ast/Sprite_Status.h"
+#include "infra/loger/Logger.h"
+#include "infra/ast/sprite/Sprite_Expression.h"
+#include "infra/ast/sprite/Sprite_Rec.h"
+#include "infra/ast/sprite/Sprite_Status.h"
 
 #include "infra/math/Point2.h"
 #include "infra/math/Vector2.h"
@@ -38,35 +39,134 @@ namespace math {
     }
 }
 
+namespace infra {
+
+    inline nlohmann::json get_json_data(const std::string &filename) {
+        std::ifstream file(filename);
+        if (!file.is_open()) {
+            std::string error = "File not found: " + filename + "!\n";
+            LOG(error);
+            throw std::runtime_error("File not opened");
+        }
+        nlohmann::json data;
+        file >> data;
+        file.close();
+        return data;
+    }
+
+    inline void invalid_parameter(const std::string &path, const std::string &name, const std::string &object) {
+        const std::string error = "File " + path + " parameter " + name + " in " + object + " missing or invalid;";
+        LOG(error);
+        throw std::runtime_error(error);
+    }
+
+    template<class T>
+    T get_checked(
+    const T &default_value,
+    const std::string &key,
+    const nlohmann::json &j,
+    const std::string &path = "",
+    const std::string &object = "ROOT"
+    ) {
+        // Key not found -> return default
+        if (!j.contains(key))
+            return default_value;
+
+        const auto& value = j.at(key);
+
+        // If the JSON value type is correct -> return it
+        try {
+            return value.get<T>();
+        }
+        catch (...) {
+            invalid_parameter(path, key, object);
+        }
+        throw;
+    }
+
+    template<class T>
+    T get_checked(
+        const std::string &key,
+        const nlohmann::json &j,
+        const std::string &path,
+        const std::string &object = "ROOT"
+        ) {
+        // Key not found -> err
+        if (!j.contains(key)) {
+            invalid_parameter(path, key, object);
+        }
+        // If the JSON value type is correct -> return it
+        try {
+            return j.at(key).get<T>();
+        } catch (...) {
+            invalid_parameter(path, key, object);
+        }
+        throw;
+    }
+
+    template<class T>
+    T get_checked(
+    const nlohmann::json &j,
+    const std::string &path,
+    const std::string &object
+    ) {
+        // If the JSON value type is correct -> return it
+        try {
+            return j.get<T>();
+        } catch (...) {
+            invalid_parameter(path, "ROOT", object);
+        }
+        throw;
+    }
+}
+
 namespace infra::ast {
 
+    inline void from_json(const nlohmann::json& j, Sprite& s) {
+        // TODO IF NEEDED
+    }
+
     inline void from_json(const nlohmann::json& j, Sprite_Expression& s) {
-        s.name = j.value("expression", "None");
-
-        if (j.contains("direction")) from_json(j.at("direction"), s.direction);
-
-        s.recLeft = j.value("recLeft", -1);
-        s.recTop  = j.value("recTop", -1);
+        s.name = get_checked<std::string>(s.name , "expression", j);
+        s.direction = get_checked<math::Vector2>(s.direction , "direction", j);
+        s.recLeft = get_checked<int>(s.recLeft , "recLeft", j);
+        s.recTop  = get_checked<int>(s.recTop , "recTop", j);
     }
 
     inline void from_json(const nlohmann::json& j, Sprite_Rec& s) {
-        s.base = j.value<int>("base", -1);
-        s.increase = j.value<int>("increase", -1);
+        s.base = get_checked<int>(s.base , "base", j);
+        s.increase = get_checked<int>(s.increase , "increase", j);
     }
 
     inline void from_json(const nlohmann::json& j, Sprite_Status& s) {
-        if (j.contains("facial_expressions") && j["facial_expressions"].is_array()) {
-            s.facial_expressions.clear();
-            s.facial_expressions.reserve(j["facial_expressions"].size());
+        s.facial_expressions = get_checked<std::vector<Sprite_Expression>>(s.facial_expressions, "facial_expressions", j);
+        s.number_of_expressions_per_direction = get_checked<unsigned int>(s.number_of_expressions_per_direction, "number_of_expressions_per_direction", j);
+        s.recLeft = get_checked<Sprite_Rec>(s.recLeft, "recLeft", j);
+        s.recTop = get_checked<Sprite_Rec>(s.recLeft, "recTop", j);
+    }
 
-            for (const auto& obj : j["facial_expressions"]) {
-                s.facial_expressions.push_back(obj.get<Sprite_Expression>());
-            }
-        }
-        s.number_of_expressions_per_direction = j.value("number_of_expressions_per_direction", 1);
-        if (j.contains("recLeft")) from_json(j.at("recLeft"), s.recLeft);
+    inline void from_json(const nlohmann::json& j, Sprits_Group& s) {
+        s.using_texture = get_checked<std::string>(s.using_texture, "using_texture", j);
+        s.sprits_width = get_checked<unsigned int>(s.sprits_width, "sprits_width", j);
+        s.sprits_height = get_checked<unsigned int>(s.sprits_height, "sprits_height", j);
+        s.groups_names = get_checked<std::vector<std::string>>(s.groups_names ,"groups_names", j);
+        s.number_of_statuses = get_checked<unsigned int>(s.number_of_statuses, "number_of_statuses", j);
+        s.statuses = get_checked<std::vector<Sprite_Status>>(s.statuses ,"statuses", j);
+    }
 
-        if (j.contains("recTop")) from_json(j.at("recTop"), s.recTop);
+    inline void from_json(const nlohmann::json& j, View& s) {
+        s.type = get_checked<std::string>(s.type , "type", j);
+        s.window_width = get_checked<unsigned int>(s.window_width , "window_width", j);
+        s.window_height = get_checked<unsigned int>(s.window_height , "window_height", j);
+        s.textures = get_checked<std::vector<std::string>>(s.textures, "textures", j);
+        s.sprites = get_checked<std::vector<ast::Sprite>>(s.sprites, "sprites", j);
+        s.sprite_groups = get_checked<std::vector<ast::Sprits_Group>>(s.sprite_groups, "sprite_groups", j);
+    }
+
+    inline void from_json(const nlohmann::json& j, Model& s) {
+        s.columns = get_checked<unsigned int>(s.columns , "columns", j);
+        s.rows = get_checked<unsigned int>(s.rows , "rows", j);
+        s.grid = get_checked<std::vector<std::vector<std::string>>>(s.grid , "grid", j);
     }
 }
 

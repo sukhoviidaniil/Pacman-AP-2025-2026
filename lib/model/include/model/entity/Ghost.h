@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Stage_Node.h
+ * File:          Ghost.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-14
+ * Created:       2025-12-16
  * Modified:      []
  *
  * Description:   []
@@ -15,15 +15,13 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_STAGE_NODE_H
-#define PACMAN_STAGE_NODE_H
+#ifndef PACMAN_GHOST_H
+#define PACMAN_GHOST_H
 
-#include "infra/ast/AST_Base.h"
+namespace model::entity {
+    class Ghost {
 
-namespace infra::ast {
-    struct Stage : Node {
-        ~Stage() override = default;
     };
 }
 
-#endif //PACMAN_STAGE_NODE_H
+#endif //PACMAN_GHOST_H

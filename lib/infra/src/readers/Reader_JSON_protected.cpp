@@ -16,78 +16,8 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include <fstream>
-
-#include "infra/Logger.h"
-#include "infra/readers/Reader_JSON.h"
-
 
 namespace infra {
-
-    template<typename T>
-    T Reader_JSON::get_checked(
-        const T& default_value,
-        const nlohmann::json& j,
-        const std::string& key,
-        const std::string& path,
-        const std::string &object
-        )
-    {
-        // Key not found -> return default
-        if (!j.contains(key))
-            return default_value;
-
-        const auto& value = j.at(key);
-
-        // If the JSON value type is correct -> return it
-        try {
-            return value.get<T>();
-        }
-        catch (...) {
-            invalid_parameter(path, key, object);
-        }
-        throw;
-    }
-
-    template<typename T>
-    T Reader_JSON::get_checked(
-        const nlohmann::json& j,
-        const std::string& key,
-        const std::string& path,
-        const std::string &object
-        ) {
-        // Key not found -> err
-        if (!j.contains(key)) {
-            invalid_parameter(path, key, object);
-        }
-        // If the JSON value type is correct -> return it
-        try {
-            return j.at(key).get<T>();
-        } catch (...) {
-            invalid_parameter(path, key, object);
-        }
-        throw;
-    }
-
-
-    void Reader_JSON::invalid_parameter(const std::string &path, const std::string &name, const std::string &object) {
-        const std::string error = "File" + path + " parameter" + name + " in " + object + "missing or invalid;";
-        LOG(error);
-        throw std::runtime_error(error);
-    }
-
-    nlohmann::json Reader_JSON::get_json_data(const std::string &filename) {
-        std::ifstream file(filename);
-        if (!file.is_open()) {
-            std::string error = "File not found: " + filename + "!\n";
-            LOG(error);
-            throw std::runtime_error("File not opened");
-        }
-        nlohmann::json data;
-        file >> data;
-        file.close();
-        return data;
-    }
 
     /*
 

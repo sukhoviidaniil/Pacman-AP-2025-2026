@@ -16,6 +16,7 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
+/*
 #include "graphics/view/entity/Actor_View.h"
 
 namespace graphics::view {
@@ -29,4 +30,4 @@ namespace graphics::view {
         sprite_->render(window, pixel_pos, entity_->get_direction(), entity_->get_status());
     }
 }
-
+*/

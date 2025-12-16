@@ -19,8 +19,8 @@
 #ifndef PACMAN_READER_JSON_H
 #define PACMAN_READER_JSON_H
 
-#include "json.hpp"
 #include "infra/Reader.h"
+
 
 namespace infra {
 
@@ -29,29 +29,11 @@ namespace infra {
         Reader_JSON();
         ~Reader_JSON() override;
 
-
-    protected:
-        template<class T>
-        static T get_checked(
-            const T &default_value,
-            const nlohmann::json &j,
-            const std::string &key,
-            const std::string &path,
-            const std::string &object = "ROOT"
-            );
-
-        template<class T>
-        static T get_checked(
-            const nlohmann::json &j,
-            const std::string &key,
-            const std::string &path,
-            const std::string &object = "ROOT"
-            );
-
-        static void invalid_parameter(const std::string &path, const std::string &name, const std::string &object);
-        static nlohmann::json get_json_data(
-            const std::string &filename
-            );
+        [[nodiscard]] ast::Sprite read_Sprite(const std::string& filename) const override;
+        [[nodiscard]] ast::Sprits_Group read_Sprits_Group(const std::string& filename) const override;
+        [[nodiscard]] ast::View read_View(const std::string &filename, const std::shared_ptr<const File_Reader>& fr) const override;
+        [[nodiscard]] ast::Model read_Model(const std::string& path) const override;
+        [[nodiscard]] ast::Application read_Application(const std::string& path, const std::shared_ptr<const File_Reader>& fr) const override;
     };
 }
 

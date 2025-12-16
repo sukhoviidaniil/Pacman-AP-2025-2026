@@ -133,9 +133,11 @@ namespace view {
     }
 
     void Camera::render(sf::RenderWindow &window, const std::shared_ptr<View> &view) const {
+        /*
         const math::Vector2 pos = view->get_position();
         std::optional<math::Vector2> screen_pos = get_entity_position(window, pos);
         if (!screen_pos) return;
         view->render(window, *screen_pos);
+        */
     }
 }

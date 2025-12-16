@@ -43,7 +43,7 @@ namespace model::collision {
          * @param hit_boxe
          * @return All vectors that will go from the center of this hitbox to the center of another
          */
-        [[nodiscard]] virtual std::vector<math::Vector2> get_vector_to(const std::shared_ptr<HitBoxe> &hit_boxe) const;
+        [[nodiscard]] virtual std::vector<math::Vector2> get_vector_to(const std::shared_ptr<const HitBoxe> &hit_boxe) const;
 
 
         virtual void move_to(const math::Point2& newPos) = 0;

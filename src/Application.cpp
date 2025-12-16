@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Stage.h
+ * File:          Application.cpp
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-11-19
+ * Created:       2025-12-15
  * Modified:      []
  *
  * Description:   []
@@ -15,19 +15,16 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_STAGE_H
-#define PACMAN_STAGE_H
 
-#include "infra/Event_Bus.h"
+#include "Application.h"
 
-namespace model {
-    class Stage {
-    public:
-        infra::Event_Bus event_bus_;
-        Stage();
-        virtual ~Stage();
+#include "view/View.h"
 
-    };
+Application::Application(infra::ast::Application a) {
+
+    view_ = view::View(a.view);
+
+
+
+
 }
-
-#endif //PACMAN_STAGE_H

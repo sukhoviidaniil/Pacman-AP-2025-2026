@@ -16,9 +16,13 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-/*
+
 #include <iostream>
 #include <string>
+
+#include "infra/File_Reader.h"
+#include "infra/readers/Reader_JSON.h"
+/*
 #include "core/File_Reader.h"
 #include "core/info/Game_Info.h"
 #include "core/readers/Reader_JSON.h"
@@ -29,7 +33,12 @@
 
 
 int main() {
+    const std::string assets_dir = ASSETS_DIR;
+    const std::string conf_dir = assets_dir + "/conf/";
 
+    auto fr = std::make_shared<infra::File_Reader>(conf_dir);
+    fr->add_Reader(".json", std::make_shared<infra::Reader_JSON>());
+    infra::ast::Application t = fr->read_Application("conf_game1.json");
     /*
 
     const std::string assets_dir = ASSETS_DIR;

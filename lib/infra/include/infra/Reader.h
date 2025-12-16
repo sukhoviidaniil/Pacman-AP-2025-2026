@@ -19,22 +19,21 @@
 #define PACMAN_READER_H
 #include <memory>
 
+#include "infra/ast/View.h"
+#include "infra/ast/Application.h"
 
 namespace infra {
 
     class File_Reader;
 
-    struct Reader_Info {
-        const std::shared_ptr<const File_Reader>& fr;
-        const std::string& path;
-    };
-
     class Reader {
         public:
         virtual ~Reader() = default;
-        [[nodiscard]] virtual ast::Sprite read_Sprite(const std::string& filename) const = 0;
-        [[nodiscard]] virtual ast::Sprits_Group read_Sprits_Group(const std::string& filename) const = 0;
-        [[nodiscard]] virtual ast::View_Sprites read_View(const std::string &filename) const = 0;
+        [[nodiscard]] virtual ast::Sprite read_Sprite(const std::string& path) const = 0;
+        [[nodiscard]] virtual ast::Sprits_Group read_Sprits_Group(const std::string& path) const = 0;
+        [[nodiscard]] virtual ast::View read_View(const std::string& path, const std::shared_ptr<const File_Reader>& fr) const = 0;
+        [[nodiscard]] virtual ast::Model read_Model(const std::string& path) const = 0;
+        [[nodiscard]] virtual ast::Application read_Application(const std::string& path, const std::shared_ptr<const File_Reader>& fr) const = 0;
     };
 }
 

@@ -30,7 +30,7 @@ namespace model::collision {
 
         [[nodiscard]] std::shared_ptr<HitBoxe> clone() const override;
 
-        [[nodiscard]] std::vector<math::Vector2> get_vector_to(const std::shared_ptr<HitBoxe> &hit_boxe) const override;
+        [[nodiscard]] std::vector<math::Vector2> get_vector_to(const std::shared_ptr<const HitBoxe> &hit_boxe) const override;
 
         [[nodiscard]] std::vector<math::Vector2> get_normals() const override;
 

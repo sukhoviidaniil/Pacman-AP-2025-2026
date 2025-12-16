@@ -18,8 +18,8 @@
 #ifndef PACMAN_CAMERA_H
 #define PACMAN_CAMERA_H
 
-#include "graphics/View.h"
-#include "math/Vector2.h"
+#include "view/View.h"
+#include "infra/math/Vector2.h"
 
 #include "SFML/graphics.hpp"
 

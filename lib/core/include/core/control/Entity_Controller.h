@@ -18,20 +18,6 @@
 #ifndef PACMAN_ENTITY_CONTROLLER_H
 #define PACMAN_ENTITY_CONTROLLER_H
 
-#include "model/Controller.h"
-#include "model/Entity.h"
-#include <memory>
-
-namespace model::control {
-    class Entity_Controller : public Controller {
-    public:
-        ~Entity_Controller() override;
-        void respond(const sf::Event &event) override;
-
-    private:
-        std::shared_ptr<logic::model::Entity> entity;
-    };
-}
 
 
 #endif //PACMAN_ENTITY_CONTROLLER_H

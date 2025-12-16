@@ -66,7 +66,7 @@ namespace model::collision {
 
         for (size_t c = 0; c < columns; ++c) {
             for (size_t r = 0; r < rows; ++r) {
-                const std::shared_ptr<const Tile> tile = grid_->get_tile(r, c);
+                const std::shared_ptr<const entity::Tile> tile = grid_->get_tile(r, c);
                 if (!tile) continue;
 
                 const auto& entities = tile->get_entities();
@@ -89,7 +89,7 @@ namespace model::collision {
                             continue;
                         }
 
-                        std::shared_ptr<const Tile> neighbor = grid_->get_tile(static_cast<size_t>(nr), static_cast<size_t>(nc));
+                        std::shared_ptr<const entity::Tile> neighbor = grid_->get_tile(static_cast<size_t>(nr), static_cast<size_t>(nc));
                         if (!neighbor) continue;
 
                         const auto& neighbor_entities = neighbor->get_entities();
@@ -139,14 +139,16 @@ namespace model::collision {
 
         for (size_t y = minTileY; y <= maxTileY; ++y){
             for (size_t x = minTileX; x <= maxTileX; ++x){
-                const std::shared_ptr<const Tile> tile = grid_->get_tile(x, y);
+                const std::shared_ptr<const entity::Tile> tile = grid_->get_tile(x, y);
                 if (tile == nullptr) continue;
                 if (tile->walkable()) {
                     continue; // walkable cell — skip
                 }
-                if (control_->collision(entity, grid_->get_tile_hitboxe(x, y))) {// TODO
+                /*
+                if (control_->collision(entity ,tile->)) {// TODO
                     return true;
                 }
+                */
             }
         }
         return false;

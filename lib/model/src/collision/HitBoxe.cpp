@@ -31,7 +31,7 @@ namespace model::collision {
         return strength_;
     }
 
-    std::vector<math::Vector2> HitBoxe::get_vector_to(const std::shared_ptr<HitBoxe> &hit_boxe) const {
+    std::vector<math::Vector2> HitBoxe::get_vector_to(const std::shared_ptr<const HitBoxe> &hit_boxe) const {
         const std::vector<math::Point2> m_centers = get_centers();
         const std::vector<math::Point2> f_centers = hit_boxe->get_centers();
         std::vector<math::Vector2> all_centers;

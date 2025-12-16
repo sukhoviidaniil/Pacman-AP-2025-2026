@@ -19,27 +19,22 @@
 #define PACMAN_AST_NODE_H
 
 namespace infra::ast {
+
     // forward declarations
 
     struct Node;
-    struct Sprite_Rec;
-    struct Sprite_Expression;
-    struct Sprite_Status;
-    struct Stage;
-
 
     struct Visitor {
         virtual ~Visitor() = default;
-
-        /*
         virtual void visit(const Node&) {}
-        virtual void visit(const Stage_Node & stage_level_node) const = 0;
-        */
     };
+
 
     struct Node {
         virtual ~Node() = default;
-        virtual void accept(Visitor &v) const = 0;
+        virtual void accept(Visitor &v) const {
+
+        }
     };
 }
 

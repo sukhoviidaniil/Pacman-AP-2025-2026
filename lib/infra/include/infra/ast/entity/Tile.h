@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Controller.h
+ * File:          Tile.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-10
+ * Created:       2025-12-16
  * Modified:      []
  *
  * Description:   []
@@ -15,16 +15,7 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_CONTROLLER_H
-#define PACMAN_CONTROLLER_H
+#ifndef PACMAN_TILE_H
+#define PACMAN_TILE_H
 
-#include "SFML/Window/Event.hpp"
-
-namespace model::control{
-    class Controller {
-    public:
-        virtual ~Controller() = default;
-        virtual void respond(const sf::Event& event) = 0;
-    };
-}
-#endif //PACMAN_CONTROLLER_H
+#endif //PACMAN_TILE_H

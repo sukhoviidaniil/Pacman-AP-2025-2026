@@ -17,6 +17,9 @@
 ***************************************************************/
 
 
+#include "infra/File_Reader.h"
+#include "infra/ast/sprite/Sprite_Status.h"
+#include "infra/readers/from_JSON.h"
 #include "infra/readers/Reader_JSON.h"
 
 namespace infra {
@@ -24,6 +27,112 @@ namespace infra {
     Reader_JSON::Reader_JSON() = default;
 
     Reader_JSON::~Reader_JSON() = default;
+
+    ast::Sprite Reader_JSON::read_Sprite(const std::string &filename) const {
+        ast::Sprite sprite;
+        // TODO
+        return sprite;
+    }
+
+    ast::Sprits_Group Reader_JSON::read_Sprits_Group(const std::string &filename) const {
+        nlohmann::json data = get_json_data(filename);
+        ast::Sprits_Group sg;
+        sg.using_texture = get_checked<std::string>("using_texture", data, filename);
+        sg.sprits_width = get_checked<unsigned int>("sprits_width", data, filename);
+        sg.sprits_height = get_checked<unsigned int>("sprits_height", data, filename);
+        sg.groups_names = get_checked<std::vector<std::string>>("groups_names", data, filename);
+        sg.number_of_statuses = get_checked<unsigned int>("number_of_statuses", data, filename);
+
+        if (!data["statuses"].is_array() || data["statuses"].size() != sg.number_of_statuses) {
+            throw std::invalid_argument("Sprits_Group parameter statuses is not a list or its size is not equal to the parameter number_of_statuses");
+        }
+        sg.statuses = get_checked<std::vector<ast::Sprite_Status>>("statuses", data, filename);
+        return sg;
+    }
+
+    ast::View Reader_JSON::read_View(
+        const std::string &filename,
+        const std::shared_ptr<const File_Reader> &fr) const {
+        nlohmann::json data = get_json_data(filename);
+        ast::View vs;
+
+        vs.type = get_checked<std::string>("type", data, filename);
+        if (data.contains("textures")) {
+            vs.textures = get_checked<std::vector<std::string>>("textures", data, filename);
+        }
+        if (data.contains("sprites") && data["sprites"].is_array()) {
+            for (const auto &sprite : data["sprites"]) {
+                if (sprite.is_object()) {
+                    ast::Sprite s = get_checked<ast::Sprite>(sprite, filename, "sprites");
+                    vs.sprites.push_back(s);
+                    continue;
+                }
+                if (sprite.is_string()) {
+                    ast::Sprite s = fr->read_Sprite(sprite.get<std::string>());
+                    vs.sprites.push_back(s);
+                    continue;
+                }
+                throw std::invalid_argument("View_Sprites one of the parameters in the “sprites” list is neither a file name nor an object.");
+            }
+        }
+
+        if (data.contains("sprite_groups") && data["sprite_groups"].is_array()) {
+            for (const auto &sprite : data["sprites"]) {
+                if (sprite.is_object()) {
+                    vs.sprite_groups.push_back(get_checked<ast::Sprits_Group>(sprite, filename, "sprite_groups"));
+                    continue;
+                }
+                if (sprite.is_string()) {
+                    vs.sprite_groups.push_back(fr->read_Sprits_Group(sprite.get<std::string>()));
+                    continue;
+                }
+                throw std::invalid_argument("View_Sprites one of the parameters in the “sprite_groups” list is neither a file name nor an object.");
+            }
+        }
+        return vs;
+    }
+
+    ast::Model Reader_JSON::read_Model(const std::string& path) const {
+        nlohmann::json data = get_json_data(path);
+        return get_checked<ast::Model>(data, path, "ROOT");
+    }
+
+    ast::Application Reader_JSON::read_Application(
+        const std::string &path,
+        const std::shared_ptr<const File_Reader> &fr
+        ) const {
+        nlohmann::json data = get_json_data(path);
+        ast::Application app;
+        if (data.contains("view")) {
+            if (data["view"].is_object()) {
+                app.view = get_checked<ast::View>("view", data, path);
+            }else if (data["view"].is_string()) {
+                auto view = get_checked<std::string>("view", data, path);
+                app.view = fr->read_View(view);
+            }else {
+                throw std::invalid_argument("The view is neither a string nor an object, configuration reading error.");
+            }
+        }
+
+        std::string m = "models";
+        if (data.contains(m) && data[m].is_array()) {
+            for (const auto& model_data: data[m]) {
+                if (model_data.is_object()) {
+                    auto model = get_checked<ast::Model>(model_data, path, m);
+                    app.models.push_back(model);
+                    continue;
+                }
+                if (model_data.is_string()) {
+                    auto model_file = get_checked<std::string>(model_data, path, m);
+                    ast::Model model = fr->read_Model(model_file);
+                    app.models.push_back(model);
+                    continue;
+                }
+                throw std::invalid_argument("The model is neither a string nor an object, configuration reading error");
+            }
+        }
+        return app;
+    }
 
     /*
     void Reader_JSON::load_SFML_Sprite(

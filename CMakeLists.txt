@@ -46,6 +46,7 @@ set(JSON_DIR "${CMAKE_SOURCE_DIR}/external/json")
 # Collecting additional files that do not fall into general categories
 set(RELEASE_SOURCE_FILES
         main.cpp
+        src/Application.cpp
 )
 
 # Collecting Function Resources
@@ -58,6 +59,7 @@ set(FUNC_INCLUDE_DIRS
 add_subdirectory(lib/infra)
 add_subdirectory(lib/model)
 add_subdirectory(lib/view)
+add_subdirectory(lib/core)
 
 
 # -----------------------------------------
@@ -73,6 +75,7 @@ target_link_libraries(${APP_TARGET}
         infra_lib
         model_lib
         view_lib
+        core_lib
 )
 
 

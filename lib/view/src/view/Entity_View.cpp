@@ -16,6 +16,7 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
+/*
 #include "graphics/view/Entity_View.h"
 
 namespace graphics {
@@ -46,3 +47,4 @@ namespace graphics {
         entity_ = entity;
     }
 }
+*/

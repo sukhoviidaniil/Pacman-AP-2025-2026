@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Application.h
+ * File:          Coin.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-02
+ * Created:       2025-12-16
  * Modified:      []
  *
  * Description:   []
@@ -15,19 +15,13 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_AST_APPLICATION_H
-#define PACMAN_AST_APPLICATION_H
+#ifndef PACMAN_COIN_H
+#define PACMAN_COIN_H
 
+namespace model::entity {
+    class Coin {
 
-#include "infra/ast/AST_Base.h"
-#include "infra/ast/Model.h"
-#include "infra/ast/View.h"
-
-namespace infra::ast {
-    struct Application : Node{
-        View view;
-        std::vector<Model> models;
     };
 }
 
-#endif //PACMAN_AST_APPLICATION_H
+#endif //PACMAN_COIN_H

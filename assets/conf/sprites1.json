@@ -1,8 +1,0 @@
-{
-  "textures" : [
-    "sprite.png"
-  ],
-  "sprite_groups" : [
-    "graf_ghosts.json"
-  ]
-}

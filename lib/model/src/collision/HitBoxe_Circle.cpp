@@ -29,7 +29,7 @@ namespace model::collision {
 
     HitBoxe_Circle::~HitBoxe_Circle() = default;
 
-    std::vector<math::Vector2> HitBoxe_Circle::get_vector_to(const std::shared_ptr<HitBoxe> &hit_boxe) const {
+    std::vector<math::Vector2> HitBoxe_Circle::get_vector_to(const std::shared_ptr<const HitBoxe> &hit_boxe) const {
         return HitBoxe::get_vector_to(hit_boxe);
     }
 

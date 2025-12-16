@@ -41,7 +41,7 @@ namespace model::collision {
         return std::make_shared<HitBox_Rectangle>(*this);
     }
 
-    std::vector<math::Vector2> HitBox_Rectangle::get_vector_to(const std::shared_ptr<HitBoxe> &hit_boxe) const {
+    std::vector<math::Vector2> HitBox_Rectangle::get_vector_to(const std::shared_ptr<const HitBoxe> &hit_boxe) const {
         return HitBoxe::get_vector_to(hit_boxe);
     }
 

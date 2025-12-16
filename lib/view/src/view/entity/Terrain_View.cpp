@@ -16,6 +16,7 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
+/*
 #include "graphics/view/entity/Terrain_View.h"
 
 #include <SFML/graphics/RectangleShape.hpp>
@@ -51,3 +52,4 @@ namespace graphics::view {
         }
     }
 }
+*/

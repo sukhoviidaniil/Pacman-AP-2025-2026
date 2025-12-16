@@ -16,7 +16,7 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "infrastructure/Logger.h"
+#include "infra/loger/Logger.h"
 #include <sstream>
 
 Logger::Logger() : logfile_("debug.log"), depth_(0), indent_str_("  ") {
@@ -40,11 +40,11 @@ void Logger::lower_depth() {
     depth_--;
 }
 
-std::string Logger::indent(const std::string &message) {
+std::string Logger::indent(const std::string &message) const {
     std::stringstream ss;
     std::istringstream msgStream(message);
     std::string line;
-    std::string total_indent = "";
+    std::string total_indent;
     for (unsigned int i = 0; i < depth_; ++i)
         total_indent += indent_str_;
 

@@ -43,9 +43,19 @@ namespace infra {
         return reader->read_Sprits_Group(conf_directory_ + filename);
     }
 
-    ast::View_Sprites File_Reader::read_View(const std::string &filename) const {
+    ast::View File_Reader::read_View(const std::string &filename) const {
         const std::shared_ptr<Reader> reader = get_Reader(filename);
-        return reader->read_View(conf_directory_ + filename);
+        return reader->read_View(conf_directory_ + filename, shared_from_this());
+    }
+
+    ast::Model File_Reader::read_Model(const std::string &filename) const {
+        const std::shared_ptr<Reader> reader = get_Reader(filename);
+        return reader->read_Model(conf_directory_ + filename);
+    }
+
+    ast::Application File_Reader::read_Application(const std::string &filename) const {
+        const std::shared_ptr<Reader> reader = get_Reader(filename);
+        return reader->read_Application(conf_directory_ + filename, shared_from_this());
     }
 
     std::shared_ptr<Reader> File_Reader::get_Reader(const std::string &path) const {

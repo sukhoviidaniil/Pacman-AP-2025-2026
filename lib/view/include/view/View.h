@@ -18,8 +18,6 @@
 #ifndef PACMAN_VIEW_H
 #define PACMAN_VIEW_H
 
-
-
 #include "SFML/graphics/RenderWindow.hpp"
 
 #include <memory>
@@ -30,10 +28,8 @@ namespace view {
     protected:
         std::string name_ = "None";
     public:
-        View();
-        explicit View(std::string  name);
+        explicit View();
         virtual ~View();
-
     };
 }
 

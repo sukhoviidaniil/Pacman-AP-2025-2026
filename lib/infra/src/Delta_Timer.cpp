@@ -16,9 +16,9 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "../include/infra/Delta_Timer.h"
+#include "infra/Delta_Timer.h"
 
-namespace model {
+namespace infra {
     Delta_Timer::Delta_Timer() {
         last = clock::now();
     }

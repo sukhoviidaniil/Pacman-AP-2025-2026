@@ -1,6 +1,6 @@
 /***************************************************************
  * Project:       Pacman
- * File:          View_Sprites.h
+ * File:          View.h
  *
  * Author:        Sukhovii Daniil
  * Created:       2025-12-15
@@ -15,22 +15,23 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_VIEW_SPRITES_H
-#define PACMAN_VIEW_SPRITES_H
+#ifndef PACMAN_AST_VIEW_H
+#define PACMAN_AST_VIEW_H
 #include <string>
 #include <vector>
 
-#include "Sprite.h"
-#include "Sprits_Group.h"
+#include "sprite/Sprite.h"
+#include "sprite/Sprits_Group.h"
 
 namespace infra::ast {
-    struct View_Sprites {
-        std::string type;
+    struct View {
+        std::string type = "None";
+        unsigned int window_width = 0;
+        unsigned int window_height = 0;
         std::vector<std::string> textures;
         std::vector<Sprite> sprites;
         std::vector<Sprits_Group> sprite_groups;
-
     };
 }
 
-#endif //PACMAN_VIEW_SPRITES_H
+#endif //PACMAN_AST_VIEW_H

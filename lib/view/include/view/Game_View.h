@@ -19,7 +19,7 @@
 #define PACMAN_GAME_VIEW_H
 #include <iostream>
 
-#include "infra/Observer.h"
+#include "../../../core/include/core/Observer.h"
 #include "model/Game_Model.h"
 #include "model/Stage.h"
 

@@ -42,7 +42,7 @@ private:
     std::ofstream logfile_;
     unsigned int depth_;
     std::string indent_str_ = "\t";
-    std::string indent(const std::string& message);
+    std::string indent(const std::string& message) const;
 };
 
 #endif //PACMAN_LOGGER_H

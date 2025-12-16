@@ -16,6 +16,7 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
+/*
 #include "graphics/SFML_Manager.h"
 
 namespace graphics {
@@ -53,3 +54,4 @@ namespace graphics {
         return it->second;
     }
 }
+*/

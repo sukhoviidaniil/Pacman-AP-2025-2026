@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Expression_Info.h
+ * File:          Status_Info.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-11-09
+ * Created:       2025-11-19
  * Modified:      []
  *
  * Description:   []
@@ -15,20 +15,20 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_EXPRESSION_INFO_H
-#define PACMAN_EXPRESSION_INFO_H
+#ifndef PACMAN_STATUS_INFO_H
+#define PACMAN_STATUS_INFO_H
+#include <vector>
 
-
-
-#include "AST_Base.h"
-#include "infra/math/Vector2.h"
-#include <string>
+#include "infra/ast/AST_Base.h"
+#include "Sprite_Expression.h"
+#include "Sprite_Rec.h"
 
 namespace infra::ast {
-    struct Sprite_Expression : Node {
-        std::string name = "None";
-        math::Vector2 direction;
-        int recLeft = -1, recTop = -1;
+    struct Sprite_Status : Node{
+        std::vector<Sprite_Expression> facial_expressions;
+        unsigned int number_of_expressions_per_direction = 0;
+        Sprite_Rec recLeft;
+        Sprite_Rec recTop;
 
         void accept(Visitor &v) const override {
             v.visit(*this);
@@ -36,4 +36,4 @@ namespace infra::ast {
     };
 }
 
-#endif //PACMAN_EXPRESSION_INFO_H
+#endif //PACMAN_STATUS_INFO_H

@@ -21,7 +21,7 @@
 #include <memory>
 
 #include "model/Game_Model.h"
-#include "model/Stage.h"
+#include "../../../../core/include/core/Stage.h"
 
 namespace model::stage {
     class Stage_Game : public Stage {

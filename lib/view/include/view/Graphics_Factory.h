@@ -17,42 +17,31 @@
 ***************************************************************/
 #ifndef PACMAN_GRAPHICS_FACTORY_H
 #define PACMAN_GRAPHICS_FACTORY_H
+#include <memory>
 
-#include "sfml/SFML_Manager.h"
-#include "logic/model/Actor.h"
-#include "view/entity/Actor_View.h"
-#include "view/entity/Terrain_View.h"
-#include "graphics/Camera.h"
+#include "View.h"
+#include "infra/ast/Application.h"
 
-namespace graphics {
 
-    struct Actor_Pair {
-        std::shared_ptr<logic::model::Entity> actor_model_;
-        std::shared_ptr<View> actor_view_;
-    };
-
-    struct Tile_Grid_Pair {
-        std::shared_ptr<logic::Tile_Grid> tile_grid_model_;
-        std::vector<std::shared_ptr<View>> terrain_views_; // TODO view::Terrain_View -> View
-    };
-
+namespace view {
     class Graphics_Factory{
         public:
 
-        static std::shared_ptr<Camera> make_Camera(const Camera_Info& info);
-        static Actor_Pair make_Actor(
-            const std::shared_ptr<SFML_Manager>& manager,
-            const view::Actor_View_Info &view_info,
-            const logic::model::Actor_Info &model_info
-            );
-        static Actor_Pair make_Actor(
-            const std::shared_ptr<SFML_Manager>& manager,
-            const view::Actor_View_Info &view_info,
-            const std::shared_ptr<logic::model::Entity>& model);
+        static std::shared_ptr<View> make_View(const infra::ast::View &info, const std::string &path);
 
-        static Tile_Grid_Pair make_Tile_Grid(const std::shared_ptr<SFML_Manager>& manager, const logic::Tile_Grid_Info &tile_grid_info);
+
+
+    private:
+
+        static void Register(
+            std::unordered_map<
+                std::string,
+                std::shared_ptr<View> (*)(const infra::ast::View&, const std::string&)
+            > &outMap
+        );
+
+        static std::shared_ptr<View> SFML_View(const infra::ast::View& info, const std::string& path);
     };
-
 }
 
 #endif //PACMAN_GRAPHICS_FACTORY_H

@@ -16,9 +16,9 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "infrastructure/LogScope.h"
+#include "infra/loger/LogScope.h"
 
-#include "infrastructure/Logger.h"
+#include "infra/loger/Logger.h"
 
 LogScope::LogScope() {
     Logger::instance().add_depth();
