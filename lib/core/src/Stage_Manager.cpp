@@ -16,10 +16,10 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "../include/core/Stage_Manager.h"
+#include "core/Stage_Manager.h"
 
 
-namespace control  {
+namespace core  {
     /*
     Stage_Manager::Stage_Manager(const std::shared_ptr<Game_Model> &game_model) : game_model_(game_model) {
 
@@ -57,13 +57,13 @@ namespace control  {
         current_stages_.pop();
     }
 
-    void Stage_Manager::push_stage(const std::shared_ptr<model::Stage> &stage) {
+    void Stage_Manager::push_stage(const std::shared_ptr<core::Stage> &stage) {
         current_stages_.push(stage);
         un_track_all();
         track(stage);
     }
 
-    std::shared_ptr<model::Stage> Stage_Manager::get_top() {
+    std::shared_ptr<core::Stage> Stage_Manager::get_top() {
         return current_stages_.top();
     }
 }

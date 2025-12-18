@@ -21,13 +21,11 @@
 
 #include "Event_Bus.h"
 namespace infra {
-
     class Observer {
     public:
         virtual ~Observer() = default;
 
     protected:
-
         void track(Event_Bus::Subscription&& s) {
             subs_.emplace_back(std::move(s));
         }
@@ -40,7 +38,6 @@ namespace infra {
     private:
         std::vector<Event_Bus::Subscription> subs_;
     };
-
 }
 
 #endif //PACMAN_OBSERVER_H

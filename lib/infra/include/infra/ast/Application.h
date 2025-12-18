@@ -18,13 +18,12 @@
 #ifndef PACMAN_AST_APPLICATION_H
 #define PACMAN_AST_APPLICATION_H
 
-
-#include "infra/ast/AST_Base.h"
-#include "infra/ast/Model.h"
-#include "infra/ast/View.h"
+#include "infra/ast/Node.h"
+#include "model/Model.h"
+#include "view/View.h"
 
 namespace infra::ast {
-    struct Application : Node{
+    struct Application : Application_Node{
         View view;
         std::vector<Model> models;
     };

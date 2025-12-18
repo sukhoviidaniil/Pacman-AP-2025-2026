@@ -1,6 +1,6 @@
 /***************************************************************
  * Project:       Pacman
- * File:          HitBoxe_Shape.cpp
+ * File:          HitBox_Shape.cpp
  *
  * Author:        Sukhovii Daniil
  * Created:       2025-11-15
@@ -16,21 +16,21 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "model/collision/HitBoxe_Shape.h"
+#include "model/collision/HitBox_Shape.h"
 
 #include <limits>
 #include <stdexcept>
 
 namespace model::collision {
 
-    HitBoxe_Shape::HitBoxe_Shape(
+    HitBox_Shape::HitBox_Shape(
         const std::vector<math::Point2> &points, const int& strength):
-    HitBoxe(strength), points_(points){
+    HitBox(strength), points_(points){
     }
 
-    HitBoxe_Shape::HitBoxe_Shape(
+    HitBox_Shape::HitBox_Shape(
         const math::Point2 &pos, const float& height, const float& width, const int& strength):
-    HitBoxe(strength){
+    HitBox(strength){
         const float hw = width  * 0.5f;
         const float hh = height * 0.5f;
 
@@ -43,15 +43,15 @@ namespace model::collision {
         move_to(pos);
     }
 
-    HitBoxe_Shape::HitBoxe_Shape(const HitBoxe_Shape &other) = default;
+    HitBox_Shape::HitBox_Shape(const HitBox_Shape &other) = default;
 
-    HitBoxe_Shape::~HitBoxe_Shape() = default;
+    HitBox_Shape::~HitBox_Shape() = default;
 
-    std::shared_ptr<HitBoxe> HitBoxe_Shape::clone() const {
-        return std::make_shared<HitBoxe_Shape>(*this);
+    std::unique_ptr<HitBox> HitBox_Shape::clone() const {
+        return std::make_unique<HitBox_Shape>(*this);
     }
 
-    std::vector<math::Vector2> HitBoxe_Shape::get_normals() const {
+    std::vector<math::Vector2> HitBox_Shape::get_normals() const {
         std::vector<math::Vector2> normals;
         for (size_t first = 0; first < points_.size(); ++first) {
             const size_t second = (first + 1) % points_.size();
@@ -65,7 +65,7 @@ namespace model::collision {
     }
 
 
-    AABB HitBoxe_Shape::get_aabb() const {
+    AABB HitBox_Shape::get_aabb() const {
         AABB aabb;
         aabb.center = get_centers().front();
         for (const math::Point2 &point : points_) {
@@ -86,7 +86,7 @@ namespace model::collision {
         return aabb;
     }
 
-    void HitBoxe_Shape::move_to(const math::Point2 &newPos) {
+    void HitBox_Shape::move_to(const math::Point2 &newPos) {
         const std::vector<math::Point2> center = get_centers();
         const math::Point2 delta = newPos - center.front();
         for (auto& p : points_) {
@@ -94,7 +94,7 @@ namespace model::collision {
         }
     }
 
-    std::vector<float> HitBoxe_Shape::project(const math::Vector2 &axis) const {
+    std::vector<float> HitBox_Shape::project(const math::Vector2 &axis) const {
         float first = std::numeric_limits<float>::max();
         float second = -std::numeric_limits<float>::max();
         for (const auto& point : points_) {
@@ -105,7 +105,7 @@ namespace model::collision {
         return {first, second};
     }
 
-    std::vector<math::Point2> HitBoxe_Shape::get_centers() const {
+    std::vector<math::Point2> HitBox_Shape::get_centers() const {
         const size_t n = points_.size();
         if (n == 0) return {{0,0}};
 

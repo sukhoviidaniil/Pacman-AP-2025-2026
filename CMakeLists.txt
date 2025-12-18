@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.20)
 # -----------------------------------------
 
 # We specify the c++ standard
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 20)
 # If the compiler can't support it, it's an error
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # We force the compiler to disable all extensions and strictly follow the standard
@@ -44,10 +44,7 @@ set(JSON_DIR "${CMAKE_SOURCE_DIR}/external/json")
 # -----------------------------------------
 
 # Collecting additional files that do not fall into general categories
-set(RELEASE_SOURCE_FILES
-        main.cpp
-        src/Application.cpp
-)
+file(GLOB_RECURSE RELEASE_SOURCE_FILES "src/*.cpp")
 
 # Collecting Function Resources
 #[[
@@ -60,7 +57,6 @@ add_subdirectory(lib/infra)
 add_subdirectory(lib/model)
 add_subdirectory(lib/view)
 add_subdirectory(lib/core)
-
 
 # -----------------------------------------
 # We connect all logical units of the project to the executable file/target

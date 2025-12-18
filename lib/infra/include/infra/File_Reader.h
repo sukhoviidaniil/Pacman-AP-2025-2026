@@ -24,9 +24,9 @@
 #include <unordered_map>
 
 #include "ast/Application.h"
-#include "ast/sprite/Sprite.h"
-#include "ast/sprite/Sprits_Group.h"
-#include "ast/View.h"
+#include "ast/view/Sprite.h"
+#include "ast/view/Complex_Sprite.h"
+#include "ast/view/View.h"
 #include "ast/Application.h"
 #include "infra/Reader.h"
 
@@ -40,7 +40,7 @@ namespace infra {
         void add_Reader(const std::string& extension, const std::shared_ptr<Reader> &reader);
 
         [[nodiscard]] ast::Sprite read_Sprite(const std::string& filename) const;
-        [[nodiscard]] ast::Sprits_Group read_Sprits_Group(const std::string& filename) const;
+        [[nodiscard]] ast::Complex_Sprite read_Sprits_Group(const std::string& filename) const;
         [[nodiscard]] ast::View read_View(const std::string &filename) const;
         [[nodiscard]] ast::Model read_Model(const std::string &filename) const;
 

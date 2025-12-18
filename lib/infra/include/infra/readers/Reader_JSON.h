@@ -30,7 +30,7 @@ namespace infra {
         ~Reader_JSON() override;
 
         [[nodiscard]] ast::Sprite read_Sprite(const std::string& filename) const override;
-        [[nodiscard]] ast::Sprits_Group read_Sprits_Group(const std::string& filename) const override;
+        [[nodiscard]] ast::Complex_Sprite read_Sprits_Group(const std::string& filename) const override;
         [[nodiscard]] ast::View read_View(const std::string &filename, const std::shared_ptr<const File_Reader>& fr) const override;
         [[nodiscard]] ast::Model read_Model(const std::string& path) const override;
         [[nodiscard]] ast::Application read_Application(const std::string& path, const std::shared_ptr<const File_Reader>& fr) const override;

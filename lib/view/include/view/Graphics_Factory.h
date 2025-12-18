@@ -22,14 +22,11 @@
 #include "View.h"
 #include "infra/ast/Application.h"
 
-
 namespace view {
     class Graphics_Factory{
         public:
 
         static std::shared_ptr<View> make_View(const infra::ast::View &info, const std::string &path);
-
-
 
     private:
 

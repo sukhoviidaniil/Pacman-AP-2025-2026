@@ -25,15 +25,17 @@
 
 
 namespace model::collision {
+    /*
     void World_Collision_Manager::resolve_сollision(const std::shared_ptr<model::Entity> &entityA, const std::shared_ptr<model::Entity> &entityB) const{
-        // TODO
+
     }
+    */
 
     World_Collision_Manager::World_Collision_Manager(
-        const std::shared_ptr<Collision_Control> &control,
+        std::unique_ptr<Collision_Control> control,
         const std::shared_ptr<Tile_Grid> &world
         ):
-        control_(control), grid_(world)
+        control_(std::move(control)), grid_(world)
     {
     }
 
@@ -55,6 +57,7 @@ namespace model::collision {
         }
     };
 
+    /*
     void World_Collision_Manager::calculate_collision() const {
         if (!grid_ || !control_) return;
 
@@ -123,9 +126,10 @@ namespace model::collision {
             }
         }
     }
+    */
 
-    bool World_Collision_Manager::collision_world(const std::shared_ptr<const HitBoxe> &entity) const {
-        const AABB aabb = entity->get_aabb();
+    bool World_Collision_Manager::collision_world(const HitBox& entity) const {
+        const AABB aabb = entity.get_aabb();
 
         const std::optional<std::pair<size_t, size_t>> temp = grid_->get_nearest_tile_size_t(aabb.center);
         if (!temp) {
@@ -144,21 +148,15 @@ namespace model::collision {
                 if (tile->walkable()) {
                     continue; // walkable cell — skip
                 }
-                /*
-                if (control_->collision(entity ,tile->)) {// TODO
+                if (control_->collision(entity, tile->get_hitboxe())) {
                     return true;
                 }
-                */
             }
         }
         return false;
     }
 
-    void World_Collision_Manager::update_Entity_Tile(const std::shared_ptr<Entity> &entity) const {
-        grid_->update_Entity_Tile(entity);
-    }
-
-    std::shared_ptr<const Tile_Grid> World_Collision_Manager::get_grid() const {
+    std::shared_ptr<Tile_Grid> World_Collision_Manager::get_grid() const {
         return grid_;
     }
 }

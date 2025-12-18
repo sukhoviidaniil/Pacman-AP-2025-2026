@@ -24,17 +24,17 @@
 namespace model::collision {
     Separating_Axis_Theorem::Separating_Axis_Theorem() = default;
 
-    bool Separating_Axis_Theorem::collision(const std::shared_ptr<const HitBoxe> &first, const std::shared_ptr<const HitBoxe> &second) {
+    bool Separating_Axis_Theorem::collision(const HitBox& first, const HitBox& second) const  {
 
         std::vector<math::Vector2> axes;
         {
-            std::vector<math::Vector2> temp = first->get_normals();
+            std::vector<math::Vector2> temp = first.get_normals();
             axes.insert(axes.end(), temp.begin(), temp.end());
-            temp = second->get_normals();
+            temp = second.get_normals();
             axes.insert(axes.end(), temp.begin(), temp.end());
         }
         if (axes.empty()) {
-            std::vector<math::Vector2> temp = first->get_vector_to(second);
+            std::vector<math::Vector2> temp = first.get_vector_to(second);
         }
         if (axes.empty()) {
             throw std::runtime_error("No axis");
@@ -44,8 +44,8 @@ namespace model::collision {
             math::Vector2 axis = axis_raw;
             axis.normalize(); // required for correct depth
 
-            std::vector<float> f = first->project(axis);
-            std::vector<float> s = second->project(axis);
+            std::vector<float> f = first.project(axis);
+            std::vector<float> s = second.project(axis);
 
             const float first_min  = f.front();
             const float first_max  = f.back();
@@ -64,13 +64,13 @@ namespace model::collision {
     }
 
     std::optional<math::Vector2> Separating_Axis_Theorem::collision_mtv(
-        const std::shared_ptr<const HitBoxe>& first,
-        const std::shared_ptr<const HitBoxe>& second) {
+        const HitBox& first,
+        const HitBox& second) const{
         std::vector<math::Vector2> axes;
         {
-            auto temp = first->get_normals();
+            auto temp = first.get_normals();
             axes.insert(axes.end(), temp.begin(), temp.end());
-            temp = second->get_normals();
+            temp = second.get_normals();
             axes.insert(axes.end(), temp.begin(), temp.end());
         }
 
@@ -81,8 +81,8 @@ namespace model::collision {
             math::Vector2 axis = axis_raw;
             axis.normalize(); // required for correct depth
 
-            auto f = first->project(axis);
-            auto s = second->project(axis);
+            auto f = first.project(axis);
+            auto s = second.project(axis);
 
             const float first_min  = f.front();
             const float first_max  = f.back();

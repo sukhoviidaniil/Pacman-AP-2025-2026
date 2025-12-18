@@ -24,36 +24,30 @@
 #include "SFML/graphics.hpp"
 
 #include <memory>
+#include <optional>
+
+#include "../../../infra/include/infra/ast/view/Camera.h"
 
 namespace view {
-    struct Camera_Info {
-        unsigned int window_width = 0;
-        unsigned int window_height = 0;
-        math::Vector2 window_center;
-        unsigned int camera_width = 0;
-        unsigned int camera_height = 0;
-        math::Vector2 camera_center;
-        float scale = 1.0f;
-    };
     class Camera{
         // ===== Expected dimensions =====
-        unsigned int base_window_width_ = 1000;
-        unsigned int base_window_height_ = 1000;
-        float ratio_x_ = 0.5f;
-        float ratio_y_ = 0.5f;
+        unsigned int base_window_width_{};
+        unsigned int base_window_height_{};
+        float ratio_x_{};
+        float ratio_y_{};
         // The point in pixels where the Camera center should be on the screen
         math::Vector2 window_center_;
 
         // ===== Expected dimensions =====
         // Camera working area dimensions
-        unsigned int camera_width_ = 100;
-        unsigned int camera_height_ = 100;
-        float camera_half_w_ = 0;
-        float camera_half_h_ = 0;
+        unsigned int camera_width_{};
+        unsigned int camera_height_{};
+        float camera_half_w_{};
+        float camera_half_h_{};
 
         // Coordinate of the center of the shooting canvas.
         math::Vector2 camera_center_;
-        float scale_ = 1.0f;
+        float scale_{};
 
         void set(
             unsigned int window_width, unsigned int window_height, const math::Vector2 &window_center,
@@ -64,7 +58,6 @@ namespace view {
         [[nodiscard]] std::optional<math::Vector2> get_entity_position(const sf::RenderWindow &window, const math::Vector2& view) const;
 
     public:
-        Camera();
         Camera(
             unsigned int window_width, unsigned int window_height, const math::Vector2 &window_center,
             unsigned int camera_width, unsigned int camera_height, const math::Vector2 &camera_center);
@@ -72,7 +65,6 @@ namespace view {
             unsigned int window_width, unsigned int window_height, const math::Vector2 &window_center,
             unsigned int camera_width, unsigned int camera_height, const math::Vector2 &camera_center, float scale);
 
-        Camera(const Camera_Info& info);
         virtual ~Camera();
 
         // ===== Update =====

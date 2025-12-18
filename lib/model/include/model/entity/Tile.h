@@ -31,7 +31,7 @@ namespace model::entity {
         explicit Tile(
             std::string  name,
             const math::Point2 &position,
-            const std::shared_ptr<collision::HitBoxe> &hitbox,
+            const std::shared_ptr<collision::HitBox> &hitbox,
             bool walkable
             );
         

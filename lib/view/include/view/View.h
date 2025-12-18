@@ -18,18 +18,22 @@
 #ifndef PACMAN_VIEW_H
 #define PACMAN_VIEW_H
 
-#include "SFML/graphics/RenderWindow.hpp"
-
 #include <memory>
 #include <string>
 
+#include "core/Stage.h"
+#include "infra/Observer.h"
+#include "infra/ast/Visitor.h"
+
 namespace view {
-    class View {
+    class View : public infra::Observer, public infra::ast::View_Visitor{
     protected:
         std::string name_ = "None";
     public:
-        explicit View();
-        virtual ~View();
+        explicit View(const std::string& name);
+        ~View() override;
+        virtual void render(const infra::ast::Scene_Graph& graph) const = 0;
+        virtual void track(const std::shared_ptr<core::Stage>& stage) = 0;
     };
 }
 

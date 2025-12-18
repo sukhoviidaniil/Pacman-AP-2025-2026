@@ -25,23 +25,18 @@
 
 #include "infra/Observer.h"
 
-namespace control {
+namespace core {
     class Stage_Manager : public infra::Observer {
-
-        public:
-
+    public:
         explicit Stage_Manager();
         ~Stage_Manager() override;
-
         void handle_PacmanDied();
-
         void pop_stage();
-        void push_stage(const std::shared_ptr<model::Stage> &stage);
-
-        std::shared_ptr<model::Stage> get_top();
+        void push_stage(const std::shared_ptr<core::Stage> &stage);
+        std::shared_ptr<core::Stage> get_top();
     private:
-        void track(const std::shared_ptr<model::Stage> &stage);
-        std::stack<std::shared_ptr<model::Stage>> current_stages_;
+        void track(const std::shared_ptr<core::Stage> &stage);
+        std::stack<std::shared_ptr<core::Stage>> current_stages_;
     };
 }
 

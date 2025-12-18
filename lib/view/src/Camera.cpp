@@ -28,7 +28,6 @@ namespace view {
         const unsigned int camera_width, const unsigned int camera_height, const math::Vector2 &camera_center, const float scale
         ) {
         if (window_height == 0) {
-            sf::Event event;
             throw std::runtime_error("Invalid Camera window_height!");
         }
         if (window_width == 0) {
@@ -89,8 +88,6 @@ namespace view {
         return screen_pos;
     }
 
-    Camera::Camera() = default;
-
     Camera::Camera(
         const unsigned int window_width, const unsigned int window_height, const math::Vector2 &window_center,
         const unsigned int camera_width, const unsigned int camera_height, const math::Vector2 &camera_center
@@ -108,9 +105,6 @@ namespace view {
         set(window_width, window_height, window_center, camera_width, camera_height, camera_center, scale);
     }
 
-    Camera::Camera(const Camera_Info &info) {
-        set(info.window_width, info.window_height, info.window_center, info.camera_width, info.camera_height, info.camera_center, info.scale);
-    }
 
     Camera::~Camera() = default;
 

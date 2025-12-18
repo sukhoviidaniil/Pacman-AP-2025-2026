@@ -18,7 +18,7 @@
 #ifndef PACMAN_COLLISION_CONTROL_H
 #define PACMAN_COLLISION_CONTROL_H
 
-#include "model/collision/HitBoxe.h"
+#include "model/collision/HitBox.h"
 #include <optional>
 
 namespace model::collision {
@@ -26,21 +26,9 @@ namespace model::collision {
         public:
         virtual ~Collision_Control() = default;
 
-        /**
-         *
-         * @param first
-         * @param second
-         * @return
-         */
-        [[nodiscard]] virtual bool collision(const std::shared_ptr<const HitBoxe>& first, const std::shared_ptr<const HitBoxe>& second) = 0;
+        [[nodiscard]] virtual bool collision(const HitBox& first,const HitBox& second) const = 0;
 
-        /**
-         *
-         * @param first
-         * @param second
-         * @return
-         */
-        [[nodiscard]] virtual std::optional<math::Vector2> collision_mtv(const std::shared_ptr<const HitBoxe>& first, const std::shared_ptr<const HitBoxe>& second) = 0;
+        [[nodiscard]] virtual std::optional<math::Vector2> collision_mtv(const HitBox& first, const HitBox& second) const = 0;
 
     };
 }

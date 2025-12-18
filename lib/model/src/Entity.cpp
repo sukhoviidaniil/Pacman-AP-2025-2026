@@ -23,9 +23,9 @@
 namespace model {
 
     Entity::Entity(
-        std::string name, const math::Point2 &position, const std::shared_ptr<collision::HitBoxe> &hitbox
+        std::string name, const math::Point2 &position, std::unique_ptr<collision::HitBox> hitbox
         ):
-        position_(position), hitbox_(hitbox), name_(std::move(name))
+        position_(position), hitbox_(std::move(hitbox)), name_(std::move(name))
     {
         hitbox_->move_to(position_);
     }
@@ -40,7 +40,7 @@ namespace model {
         return position_;
     }
 
-    std::shared_ptr<const collision::HitBoxe> Entity::get_hitboxe() {
-        return hitbox_;
+    const collision::HitBox& Entity::get_hitboxe() const {
+        return *hitbox_;
     }
 }

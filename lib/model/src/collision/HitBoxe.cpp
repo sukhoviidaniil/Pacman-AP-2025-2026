@@ -1,6 +1,6 @@
 /***************************************************************
  * Project:       Pacman
- * File:          HitBoxe.cpp
+ * File:          HitBox.cpp
  *
  * Author:        Sukhovii Daniil
  * Created:       2025-11-16
@@ -16,24 +16,24 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "model/collision/HitBoxe.h"
+#include "model/collision/HitBox.h"
 
 namespace model::collision {
-    HitBoxe::HitBoxe(const int strength):
+    HitBox::HitBox(const int strength):
     strength_(strength){
     }
 
-    HitBoxe::HitBoxe(const HitBoxe &other) = default;
+    HitBox::HitBox(const HitBox &other) = default;
 
-    HitBoxe::~HitBoxe() = default;
+    HitBox::~HitBox() = default;
 
-    int HitBoxe::get_strength() const {
+    int HitBox::get_strength() const {
         return strength_;
     }
 
-    std::vector<math::Vector2> HitBoxe::get_vector_to(const std::shared_ptr<const HitBoxe> &hit_boxe) const {
+    std::vector<math::Vector2> HitBox::get_vector_to(const HitBox &hit_boxe) const {
         const std::vector<math::Point2> m_centers = get_centers();
-        const std::vector<math::Point2> f_centers = hit_boxe->get_centers();
+        const std::vector<math::Point2> f_centers = hit_boxe.get_centers();
         std::vector<math::Vector2> all_centers;
         for (const auto& f_center : f_centers) {
             for (const auto& m_center : m_centers) {

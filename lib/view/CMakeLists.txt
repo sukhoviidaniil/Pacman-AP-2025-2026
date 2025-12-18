@@ -5,8 +5,12 @@ add_library(view_lib STATIC ${VIEW_SRC})
 target_include_directories(view_lib PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
+target_link_libraries(view_lib PUBLIC
+        sfml-graphics
+        sfml-window
+        sfml-system
 
-target_link_libraries(view_lib PRIVATE
-        infra_lib model_lib
-        sfml-graphics sfml-window sfml-system
+        infra_lib
+        model_lib
+        core_lib
 )

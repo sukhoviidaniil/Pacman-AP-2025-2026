@@ -1,6 +1,6 @@
 {
   "view" : {
-    "type" : "SFML",
+    "type" : "SFreeML",
     "window_width" : 800,
     "window_height" : 600,
     "textures" : [
@@ -12,15 +12,15 @@
   },
   "models" : [
     {
-      "rows": 3,
-      "columns": 6,
-      "grid" : [
-        ["W", "W", "W", "W", "W", "W"],
-        ["W", "P", "F", "F", "F", "W"],
-        ["W", "W", "W", "W", "W", "W"]
-      ],
-      "tile" : {
-        "tile_size" : 40
+      "grid" : {
+        "rows": 3,
+        "columns": 6,
+        "tile_size" : 40,
+        "grid" : [
+          ["Wall", "Wall", "Wall", "Wall", "Wall", "Wall"],
+          ["Wall", "Pacman", "Free", "Free", "Free", "Wall"],
+          ["Wall", "Wall", "Wall", "Wall", "Wall", "Wall"]
+        ]
       },
       "coin" : {
         "size" : 10

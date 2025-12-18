@@ -25,10 +25,14 @@
 #include <unordered_map>
 #include <vector>
 
+#include "infra/ast/model/Grid.h"
+
 namespace model {
     class Tile_Grid {
     public:
         ~Tile_Grid();
+
+        explicit Tile_Grid(const infra::ast::Grid &grid_info);
         Tile_Grid(size_t rows, size_t columns, float tile_size, std::vector<std::vector<std::shared_ptr<entity::Tile>>> tiles);
 
         [[nodiscard]] size_t get_rows() const;

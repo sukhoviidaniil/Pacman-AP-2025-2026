@@ -20,9 +20,9 @@
 
 #include "json.hpp"
 #include "infra/loger/Logger.h"
-#include "infra/ast/sprite/Sprite_Expression.h"
-#include "infra/ast/sprite/Sprite_Rec.h"
-#include "infra/ast/sprite/Sprite_Status.h"
+#include "infra/ast/view/Sprite_Expression.h"
+#include "infra/ast/view/Sprite_Rec.h"
+#include "infra/ast/view/Sprite_Status.h"
 
 #include "infra/math/Point2.h"
 #include "infra/math/Vector2.h"
@@ -145,13 +145,13 @@ namespace infra::ast {
         s.recTop = get_checked<Sprite_Rec>(s.recLeft, "recTop", j);
     }
 
-    inline void from_json(const nlohmann::json& j, Sprits_Group& s) {
+    inline void from_json(const nlohmann::json& j, ast::Complex_Sprite& s) {
         s.using_texture = get_checked<std::string>(s.using_texture, "using_texture", j);
         s.sprits_width = get_checked<unsigned int>(s.sprits_width, "sprits_width", j);
         s.sprits_height = get_checked<unsigned int>(s.sprits_height, "sprits_height", j);
         s.groups_names = get_checked<std::vector<std::string>>(s.groups_names ,"groups_names", j);
         s.number_of_statuses = get_checked<unsigned int>(s.number_of_statuses, "number_of_statuses", j);
-        s.statuses = get_checked<std::vector<Sprite_Status>>(s.statuses ,"statuses", j);
+        s.sprite_statuses = get_checked<std::vector<Sprite_Status>>(s.sprite_statuses ,"statuses", j);
     }
 
     inline void from_json(const nlohmann::json& j, View& s) {
@@ -160,7 +160,7 @@ namespace infra::ast {
         s.window_height = get_checked<unsigned int>(s.window_height , "window_height", j);
         s.textures = get_checked<std::vector<std::string>>(s.textures, "textures", j);
         s.sprites = get_checked<std::vector<ast::Sprite>>(s.sprites, "sprites", j);
-        s.sprite_groups = get_checked<std::vector<ast::Sprits_Group>>(s.sprite_groups, "sprite_groups", j);
+        s.complex_sprites = get_checked<std::vector<ast::Complex_Sprite>>(s.complex_sprites, "sprite_groups", j);
     }
 
     inline void from_json(const nlohmann::json& j, Model& s) {

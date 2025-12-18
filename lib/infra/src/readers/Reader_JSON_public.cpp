@@ -18,7 +18,7 @@
 
 
 #include "infra/File_Reader.h"
-#include "infra/ast/sprite/Sprite_Status.h"
+#include "infra/ast/view/Sprite_Status.h"
 #include "infra/readers/from_JSON.h"
 #include "infra/readers/Reader_JSON.h"
 
@@ -34,9 +34,9 @@ namespace infra {
         return sprite;
     }
 
-    ast::Sprits_Group Reader_JSON::read_Sprits_Group(const std::string &filename) const {
+    ast::Complex_Sprite Reader_JSON::read_Sprits_Group(const std::string &filename) const {
         nlohmann::json data = get_json_data(filename);
-        ast::Sprits_Group sg;
+        ast::Complex_Sprite sg;
         sg.using_texture = get_checked<std::string>("using_texture", data, filename);
         sg.sprits_width = get_checked<unsigned int>("sprits_width", data, filename);
         sg.sprits_height = get_checked<unsigned int>("sprits_height", data, filename);
@@ -46,7 +46,7 @@ namespace infra {
         if (!data["statuses"].is_array() || data["statuses"].size() != sg.number_of_statuses) {
             throw std::invalid_argument("Sprits_Group parameter statuses is not a list or its size is not equal to the parameter number_of_statuses");
         }
-        sg.statuses = get_checked<std::vector<ast::Sprite_Status>>("statuses", data, filename);
+        sg.sprite_statuses = get_checked<std::vector<ast::Sprite_Status>>("statuses", data, filename);
         return sg;
     }
 
@@ -79,11 +79,11 @@ namespace infra {
         if (data.contains("sprite_groups") && data["sprite_groups"].is_array()) {
             for (const auto &sprite : data["sprites"]) {
                 if (sprite.is_object()) {
-                    vs.sprite_groups.push_back(get_checked<ast::Sprits_Group>(sprite, filename, "sprite_groups"));
+                    vs.complex_sprites.push_back(get_checked<ast::Complex_Sprite>(sprite, filename, "sprite_groups"));
                     continue;
                 }
                 if (sprite.is_string()) {
-                    vs.sprite_groups.push_back(fr->read_Sprits_Group(sprite.get<std::string>()));
+                    vs.complex_sprites.push_back(fr->read_Sprits_Group(sprite.get<std::string>()));
                     continue;
                 }
                 throw std::invalid_argument("View_Sprites one of the parameters in the “sprite_groups” list is neither a file name nor an object.");

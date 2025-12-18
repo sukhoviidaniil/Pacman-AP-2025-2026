@@ -23,25 +23,16 @@
 
 namespace model::collision {
     class World_Collision_Manager{
+    public:
 
-        protected:
+        World_Collision_Manager(std::unique_ptr<Collision_Control> control, const std::shared_ptr<Tile_Grid> &world);
 
-        void resolve_сollision(const std::shared_ptr<Entity>& entityA, const std::shared_ptr<Entity>& entityB) const;
+        [[nodiscard]] bool collision_world(const HitBox& entity) const;
 
-        public:
-
-        explicit World_Collision_Manager(const std::shared_ptr<Collision_Control> &control, const std::shared_ptr<Tile_Grid> &world);
-
-        void calculate_collision() const;
-
-        [[nodiscard]] bool collision_world(const std::shared_ptr<const HitBoxe>& entity) const;
-
-        void update_Entity_Tile(const std::shared_ptr<Entity>& entity) const;
-
-        [[nodiscard]] std::shared_ptr<const Tile_Grid> get_grid() const;
+        [[nodiscard]] std::shared_ptr<Tile_Grid> get_grid() const;
 
     private:
-        std::shared_ptr<Collision_Control> control_;
+        std::unique_ptr<Collision_Control> control_;
         std::shared_ptr<Tile_Grid> grid_;
     };
 }

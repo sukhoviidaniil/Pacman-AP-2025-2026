@@ -29,11 +29,10 @@ namespace model::collision {
 
         Separating_Axis_Theorem();
 
-        [[nodiscard]] bool collision(const std::shared_ptr<const HitBoxe>& first, const std::shared_ptr<const HitBoxe>& second) override;
+        [[nodiscard]] bool collision(const HitBox& first, const HitBox& second) const override;
 
-        [[nodiscard]] std::optional<math::Vector2> collision_mtv(const std::shared_ptr<const HitBoxe>& first, const std::shared_ptr<const HitBoxe>& second) override;
+        [[nodiscard]] std::optional<math::Vector2> collision_mtv(const HitBox& first, const HitBox& second) const override;
     };
-    using SAT = Separating_Axis_Theorem;
 }
 
 #endif //PACMAN_SEPARATING_AXIS_THEOREM_H

@@ -26,7 +26,7 @@ namespace model::entity {
         Actor(
             const std::string &name,
             const math::Point2 &position,
-            const std::shared_ptr<collision::HitBoxe> &hitbox,
+            const std::shared_ptr<collision::HitBox> &hitbox,
             const int &max_status,
             const math::Vector2 &current_direction,
             float speed

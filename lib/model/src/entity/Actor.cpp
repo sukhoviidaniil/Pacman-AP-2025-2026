@@ -25,7 +25,7 @@
 namespace model::entity{
     Actor::Actor(
         const std::string &name, const math::Point2 &position,
-        const std::shared_ptr<collision::HitBoxe> &hitbox, const int& max_status,
+        const std::shared_ptr<collision::HitBox> &hitbox, const int& max_status,
         const math::Vector2 &current_direction, const float speed
         ):
         Entity(name, position, hitbox), current_direction_(current_direction), speed_(speed), max_status_(max_status)
@@ -72,7 +72,7 @@ namespace model::entity{
             const math::Vector2 displacement = current_direction_ * move_dist;
 
             // 3. Create a temporary hitbox
-            std::shared_ptr<collision::HitBoxe> hit_boxe = get_hitboxe()->clone();
+            std::shared_ptr<collision::HitBox> hit_boxe = get_hitboxe()->clone();
             hit_boxe->move_to(position_ + displacement.to_Point2());
 
             // 4. Checking for collisions

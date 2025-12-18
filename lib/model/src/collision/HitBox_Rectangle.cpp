@@ -21,28 +21,28 @@
 namespace model::collision {
     HitBox_Rectangle::HitBox_Rectangle(
         const float width, const float height, const int strength
-        ) : HitBoxe(strength), width_(width), height_(height)
+        ) : HitBox(strength), width_(width), height_(height)
     {
     }
 
     HitBox_Rectangle::HitBox_Rectangle(
         const math::Point2 &center, const float width, const float height, const int strength
-        ) : HitBoxe(strength), center_(center), width_(width), height_(height)
+        ) : HitBox(strength), center_(center), width_(width), height_(height)
     {
     }
 
-    HitBox_Rectangle::HitBox_Rectangle(const HitBox_Rectangle &other)  : HitBoxe(other) {
+    HitBox_Rectangle::HitBox_Rectangle(const HitBox_Rectangle &other)  : HitBox(other) {
         center_ = other.center_;
         width_ = other.width_;
         height_ = other.height_;
     }
 
-    std::shared_ptr<HitBoxe> HitBox_Rectangle::clone() const {
+    std::shared_ptr<HitBox> HitBox_Rectangle::clone() const {
         return std::make_shared<HitBox_Rectangle>(*this);
     }
 
-    std::vector<math::Vector2> HitBox_Rectangle::get_vector_to(const std::shared_ptr<const HitBoxe> &hit_boxe) const {
-        return HitBoxe::get_vector_to(hit_boxe);
+    std::vector<math::Vector2> HitBox_Rectangle::get_vector_to(const std::shared_ptr<const HitBox> &hit_boxe) const {
+        return HitBox::get_vector_to(hit_boxe);
     }
 
     std::vector<math::Vector2> HitBox_Rectangle::get_normals() const {

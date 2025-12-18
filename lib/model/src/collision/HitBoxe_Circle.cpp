@@ -1,6 +1,6 @@
 /***************************************************************
  * Project:       Pacman
- * File:          HitBoxe_Circle.cpp
+ * File:          HitBox_Circle.cpp
  *
  * Author:        Sukhovii Daniil
  * Created:       2025-11-15
@@ -16,32 +16,32 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "model/collision/HitBoxe_Circle.h"
+#include "model/collision/HitBox_Circle.h"
 
 namespace model::collision {
-    HitBoxe_Circle::HitBoxe_Circle(const HitBoxe_Circle &other) = default;
+    HitBox_Circle::HitBox_Circle(const HitBox_Circle &other) = default;
 
-    HitBoxe_Circle::HitBoxe_Circle(
+    HitBox_Circle::HitBox_Circle(
         const int& strength, const math::Point2 &center, const float& radius
         ):
-        HitBoxe(strength), center_(center), radius_(radius) {
+        HitBox(strength), center_(center), radius_(radius) {
     }
 
-    HitBoxe_Circle::~HitBoxe_Circle() = default;
+    HitBox_Circle::~HitBox_Circle() = default;
 
-    std::vector<math::Vector2> HitBoxe_Circle::get_vector_to(const std::shared_ptr<const HitBoxe> &hit_boxe) const {
-        return HitBoxe::get_vector_to(hit_boxe);
+    std::vector<math::Vector2> HitBox_Circle::get_vector_to(const HitBox &hit_boxe) const {
+        return HitBox::get_vector_to(hit_boxe);
     }
 
-    void HitBoxe_Circle::move_to(const math::Point2 &pos) {
+    void HitBox_Circle::move_to(const math::Point2 &pos) {
         center_ = pos;
     }
 
-    std::shared_ptr<HitBoxe> HitBoxe_Circle::clone() const {
-        return std::make_shared<HitBoxe_Circle>(*this);
+    std::unique_ptr<HitBox> HitBox_Circle::clone() const {
+        return std::make_unique<HitBox_Circle>(*this);
     }
 
-    AABB HitBoxe_Circle::get_aabb() const {
+    AABB HitBox_Circle::get_aabb() const {
         AABB aabb;
         aabb.center = center_;
         aabb.extend = {radius_, radius_};
@@ -52,12 +52,12 @@ namespace model::collision {
         return aabb;
     }
 
-    std::vector<math::Vector2> HitBoxe_Circle::get_normals() const {
+    std::vector<math::Vector2> HitBox_Circle::get_normals() const {
         return {{0,1}, {1,0}};
     }
 
 
-    std::vector<float> HitBoxe_Circle::project(const math::Vector2 &axis) const {
+    std::vector<float> HitBox_Circle::project(const math::Vector2 &axis) const {
         std::vector<float> points;
         const float p_center = math::Vector2(center_) .dot(axis);
         points.push_back(p_center - radius_);
@@ -65,7 +65,7 @@ namespace model::collision {
         return points;
     }
 
-    std::vector<math::Point2> HitBoxe_Circle::get_centers() const {
+    std::vector<math::Point2> HitBox_Circle::get_centers() const {
         return {center_};
     }
 }

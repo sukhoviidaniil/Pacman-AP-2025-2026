@@ -18,19 +18,19 @@
 #ifndef PACMAN_HITBOX_RECTANGLE_H
 #define PACMAN_HITBOX_RECTANGLE_H
 
-#include "model/collision/HitBoxe.h"
+#include "model/collision/HitBox.h"
 
 namespace model::collision {
-    class HitBox_Rectangle : public HitBoxe {
+    class HitBox_Rectangle : public HitBox {
         public:
         HitBox_Rectangle(float width, float height, int strength);
         HitBox_Rectangle(const math::Point2& center, float width, float height, int strength);
 
         HitBox_Rectangle(const HitBox_Rectangle& other);
 
-        [[nodiscard]] std::shared_ptr<HitBoxe> clone() const override;
+        [[nodiscard]] std::shared_ptr<HitBox> clone() const override;
 
-        [[nodiscard]] std::vector<math::Vector2> get_vector_to(const std::shared_ptr<const HitBoxe> &hit_boxe) const override;
+        [[nodiscard]] std::vector<math::Vector2> get_vector_to(const std::shared_ptr<const HitBox> &hit_boxe) const override;
 
         [[nodiscard]] std::vector<math::Vector2> get_normals() const override;
 

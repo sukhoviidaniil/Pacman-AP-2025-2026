@@ -29,19 +29,19 @@ namespace model {
     public:
         virtual ~Entity();
         Entity(
-            std::string   name, const math::Point2 &position, const std::shared_ptr<collision::HitBoxe> &hitbox
+            std::string   name, const math::Point2 &position, std::unique_ptr<collision::HitBox> hitbox
         );
 
         // ===== Getters =====
         [[nodiscard]] std::string get_name() const;
         [[nodiscard]] math::Point2 get_position() const;
-        [[nodiscard]] std::shared_ptr<const collision::HitBoxe> get_hitboxe();
+        [[nodiscard]] const collision::HitBox& get_hitboxe() const;
 
     protected:
         // Position in world coordinates
         math::Point2 position_;
         // All Entities have some hitbox
-        std::shared_ptr<collision::HitBoxe> hitbox_;
+        std::unique_ptr<collision::HitBox> hitbox_;
     private:
         // Name for identification purposes
         std::string name_;
