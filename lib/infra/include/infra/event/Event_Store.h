@@ -25,13 +25,13 @@
 namespace infra::event {
     class Event_Store {
     public:
-        std::size_t size() const noexcept;
+        [[nodiscard]] std::size_t size() const noexcept;
 
-        bool empty() const noexcept;
+        [[nodiscard]] bool empty() const noexcept;
 
-        bool is(std::size_t i, std::type_index t) const;
+        [[nodiscard]] bool is(std::size_t i, std::type_index t) const;
 
-        bool matches(std::size_t i, EventMask mask) const;
+        [[nodiscard]] bool matches(std::size_t i, EventMask mask) const;
 
         template<typename Event>
         void push(Event e);
@@ -39,9 +39,11 @@ namespace infra::event {
         template<class Event>
         Event pop();
 
-        const EventConcept &peek() const;
+        std::unique_ptr<EventConcept> pop_concept();
 
-        const EventConcept& at(std::size_t i) const;
+        [[nodiscard]] const EventConcept& peek() const;
+
+        [[nodiscard]] const EventConcept& at(std::size_t i) const;
 
         template<typename Event>
         const Event& get(std::size_t i) const;

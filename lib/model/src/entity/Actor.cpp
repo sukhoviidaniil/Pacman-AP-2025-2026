@@ -23,26 +23,47 @@
 #include "model/collision/World_Collision_Manager.h"
 
 namespace model::entity{
+    Actor::~Actor() = default;
+
     Actor::Actor(
-        const std::string &name, const math::Point2 &position,
-        const std::shared_ptr<collision::HitBox> &hitbox, const int& max_status,
-        const math::Vector2 &current_direction, const float speed
-        ):
-        Entity(name, position, hitbox), current_direction_(current_direction), speed_(speed), max_status_(max_status)
-    {
+        const std::string &name, const infra::math::Point2 &position,
+        std::unique_ptr<collision::HitBox> hitbox, const infra::math::Vector2 &current_direction, float speed
+        )
+        : Entity(name, position, std::move(hitbox)), current_direction_(current_direction), speed_(speed){
+
         if (current_direction_.length() == 0.0f) {
-            current_direction_ = math::Vector2(1.0f, 0.0f);
+            current_direction_ = infra::math::Vector2(1.0f, 0.0f);
         }
         next_direction_ = current_direction_;
     }
 
-    math::Vector2 Actor::get_direction() const {
+    void Actor::set_status(const int &status) {
+        status_ = status;
+    }
+
+    infra::math::Vector2 Actor::get_direction() const {
         return current_direction_;
     }
 
-    void Actor::set_direction(const math::Vector2 &direction) {
+    void Actor::set_direction(const infra::math::Vector2 &direction) {
         next_direction_ = direction;
         next_direction_.normalize();
+    }
+
+    void Actor::to_left() {
+        set_direction(infra::math::Vector2(1.0f, 0.0f));
+    }
+
+    void Actor::to_right() {
+        set_direction(infra::math::Vector2(-1.0f, 0.0f));
+    }
+
+    void Actor::to_up() {
+        set_direction(infra::math::Vector2(1.0f, 0.0f));
+    }
+
+    void Actor::to_down() {
+        set_direction(infra::math::Vector2(-1.0f, 0.0f));
     }
 
     void Actor::move(
@@ -62,29 +83,27 @@ namespace model::entity{
             if (t == nullptr) {
                 throw std::invalid_argument("Not a valid tile for Actor - Actor out bounds;");
             }
-            const math::Point2& next_tile_center = t->get_position();
+            const infra::math::Point2& next_tile_center = t->get_position();
 
             // 2. Calculate the maximum possible displacement to this coordinate
-            auto to_cell = math::Vector2(next_tile_center - position_);
+            auto to_cell = infra::math::Vector2(next_tile_center - position_);
             float dist_to_cell = to_cell.length();
             float max_move = speed_ * remaining_time;
             const float move_dist = std::min(dist_to_cell, max_move);
-            const math::Vector2 displacement = current_direction_ * move_dist;
+            const infra::math::Vector2 displacement = current_direction_ * move_dist;
 
-            // 3. Create a temporary hitbox
-            std::shared_ptr<collision::HitBox> hit_boxe = get_hitboxe()->clone();
-            hit_boxe->move_to(position_ + displacement.to_Point2());
+            // 3. Move HitBox
+            hitbox_->move_to(position_ + displacement.to_Point2());
 
             // 4. Checking for collisions
-            if (collision_control->collision_world(hit_boxe)) {
+            if (collision_control->collision_world(*hitbox_)) {
+                // Abort move
+                hitbox_->move_to(position_ );
                 break;
             }
 
             // 5 Update position
             position_ += displacement.to_Point2();
-
-            // 6 Update the hitbox position
-            hitbox_->move_to(position_);
 
             // 7. If have reached the center of the cell and there is a new direction
             const bool at_cell = std::abs(move_dist - dist_to_cell) < 1e-6f;

@@ -31,7 +31,7 @@ namespace model::collision {
 
         [[nodiscard]] bool collision(const HitBox& first, const HitBox& second) const override;
 
-        [[nodiscard]] std::optional<math::Vector2> collision_mtv(const HitBox& first, const HitBox& second) const override;
+        [[nodiscard]] std::optional<infra::math::Vector2> collision_mtv(const HitBox& first, const HitBox& second) const override;
     };
 }
 

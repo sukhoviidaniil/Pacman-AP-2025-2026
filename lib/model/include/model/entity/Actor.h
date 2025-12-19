@@ -18,37 +18,39 @@
 #ifndef PACMAN_ACTOR_H
 #define PACMAN_ACTOR_H
 
-#include "model/Entity.h"
+#include "Entity.h"
 #include "model/collision/World_Collision_Manager.h"
 
 namespace model::entity {
     class Actor : public Entity {
+    public:
+        ~Actor() override;
         Actor(
             const std::string &name,
-            const math::Point2 &position,
-            const std::shared_ptr<collision::HitBox> &hitbox,
-            const int &max_status,
-            const math::Vector2 &current_direction,
+            const infra::math::Point2 &position,
+            std::unique_ptr<collision::HitBox> hitbox,
+            const infra::math::Vector2 &current_direction,
             float speed
             );
+        void set_status(const int& status);
+        void set_direction(const infra::math::Vector2 &direction);
+        void to_left();
+        void to_right();
+        void to_up();
+        void to_down();
 
-        [[nodiscard]] math::Vector2 get_direction() const;
-
-        void set_direction(const math::Vector2 &direction);
+        [[nodiscard]] infra::math::Vector2 get_direction() const;
 
         void move(float deltaTime, const std::shared_ptr<collision::World_Collision_Manager> &collision_control);
 
         void virtual act(float deltaTime, const std::shared_ptr<collision::World_Collision_Manager> &collision_control);
 
     private:
-        math::Vector2 current_direction_;
-        math::Vector2 next_direction_;
+        infra::math::Vector2 current_direction_;
+        infra::math::Vector2 next_direction_;
         // m/s
         float speed_;
         int status_ = 0;
-        int max_status_;
-
-
     };
 }
 

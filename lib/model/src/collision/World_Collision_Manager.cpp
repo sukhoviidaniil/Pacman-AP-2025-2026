@@ -21,7 +21,7 @@
 #include <cmath>
 #include <unordered_set>
 
-#include "model/Entity.h"
+#include "../../include/model/entity/Entity.h"
 
 
 namespace model::collision {
@@ -30,6 +30,8 @@ namespace model::collision {
 
     }
     */
+
+    World_Collision_Manager::World_Collision_Manager() = default;
 
     World_Collision_Manager::World_Collision_Manager(
         std::unique_ptr<Collision_Control> control,

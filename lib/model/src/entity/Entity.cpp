@@ -18,12 +18,12 @@
 
 #include <utility>
 
-#include "model/Entity.h"
+#include "../../include/model/entity/Entity.h"
 
 namespace model {
 
     Entity::Entity(
-        std::string name, const math::Point2 &position, std::unique_ptr<collision::HitBox> hitbox
+        std::string name, const infra::math::Point2 &position, std::unique_ptr<collision::HitBox> hitbox
         ):
         position_(position), hitbox_(std::move(hitbox)), name_(std::move(name))
     {
@@ -36,7 +36,7 @@ namespace model {
         return name_;
     }
 
-    math::Point2 Entity::get_position() const {
+    infra::math::Point2 Entity::get_position() const {
         return position_;
     }
 

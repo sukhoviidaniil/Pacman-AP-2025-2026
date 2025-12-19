@@ -23,6 +23,7 @@
 #include "entity/Coin.h"
 #include "entity/Pacman.h"
 #include "entity/Ghost.h"
+#include "infra/event/Event_Store.h"
 
 namespace model {
     class Model {
@@ -30,16 +31,15 @@ namespace model {
 
         explicit Model (const infra::ast::Model& m);
 
-        [[nodiscard]] bool all_coins_collected() const;
-        [[nodiscard]] bool all_ghosts_dead() const;
+        void run(float delta);
 
-
+        infra::event::Event_Store event_store_;
+        private:
         std::vector<std::shared_ptr<entity::Coin>> coins;
         std::vector<std::shared_ptr<entity::Ghost>> ghosts;
         std::shared_ptr<entity::Pacman> pacman;
         std::shared_ptr<Tile_Grid> grid;
         collision::World_Collision_Manager wcm_;
-
     };
 }
 

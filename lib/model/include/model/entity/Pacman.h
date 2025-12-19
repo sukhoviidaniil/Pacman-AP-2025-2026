@@ -23,8 +23,6 @@ namespace model::entity {
     class Pacman : public Actor {
     public:
         ~Pacman() override;
-
-        void act(float deltaTime, const std::shared_ptr<collision::World_Collision_Manager> &collision_control) override;
     };
 }
 

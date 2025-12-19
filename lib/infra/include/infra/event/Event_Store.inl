@@ -50,6 +50,17 @@ namespace infra::event {
         return value;
     }
 
+    inline std::unique_ptr<EventConcept> Event_Store::pop_concept() {
+        if (events_.empty()) {
+            // return nullptr;
+            throw std::out_of_range("Event_Store is empty");
+        }
+
+        auto ptr = std::move(events_.back());
+        events_.pop_back();
+        return ptr;
+    }
+
     inline const EventConcept& Event_Store::peek() const {
         return *events_.back();
     }

@@ -22,24 +22,24 @@
 
 #include <memory>
 
-#include "collision/collision_Control.h"
+#include "../collision/collision_Control.h"
 
 namespace model {
     class Entity {
     public:
         virtual ~Entity();
         Entity(
-            std::string   name, const math::Point2 &position, std::unique_ptr<collision::HitBox> hitbox
+            std::string   name, const infra::math::Point2 &position, std::unique_ptr<collision::HitBox> hitbox
         );
 
         // ===== Getters =====
         [[nodiscard]] std::string get_name() const;
-        [[nodiscard]] math::Point2 get_position() const;
+        [[nodiscard]] infra::math::Point2 get_position() const;
         [[nodiscard]] const collision::HitBox& get_hitboxe() const;
 
     protected:
         // Position in world coordinates
-        math::Point2 position_;
+        infra::math::Point2 position_;
         // All Entities have some hitbox
         std::unique_ptr<collision::HitBox> hitbox_;
     private:

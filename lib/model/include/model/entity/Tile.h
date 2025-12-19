@@ -21,7 +21,7 @@
 #include <memory>
 #include <vector>
 
-#include "model/Entity.h"
+#include "Entity.h"
 
 namespace model::entity {
     class Tile : public Entity{

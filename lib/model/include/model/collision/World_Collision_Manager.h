@@ -24,6 +24,7 @@
 namespace model::collision {
     class World_Collision_Manager{
     public:
+        World_Collision_Manager();
 
         World_Collision_Manager(std::unique_ptr<Collision_Control> control, const std::shared_ptr<Tile_Grid> &world);
 

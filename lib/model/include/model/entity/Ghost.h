@@ -19,7 +19,7 @@
 #define PACMAN_GHOST_H
 
 namespace model::entity {
-    class Ghost {
+    class Ghost : public Actor {
 
     };
 }
