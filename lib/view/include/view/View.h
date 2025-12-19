@@ -22,18 +22,19 @@
 #include <string>
 
 #include "core/Stage.h"
-#include "../../../infra/include/infra/event/Observer.h"
+#include "infra/event/Observer.h"
 #include "infra/ast/Visitor.h"
 
 namespace view {
-    class View : public infra::Observer, public infra::ast::View_Visitor{
-    protected:
-        std::string name_ = "None";
+    class View : public infra::event::Observer, public infra::ast::View_Visitor{
     public:
         explicit View(const std::string& name);
         ~View() override;
         virtual void render(const infra::ast::Scene_Graph& graph) const = 0;
-        virtual void track(const std::shared_ptr<core::Stage>& stage) = 0;
+        virtual void track_local(infra::event::Event_Bus& stage) = 0;
+        virtual void track_global(infra::event::Event_Bus& stage) = 0;
+    protected:
+        std::string name_ = "None";
     };
 }
 

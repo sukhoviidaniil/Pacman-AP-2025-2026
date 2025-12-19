@@ -9,7 +9,6 @@ target_link_libraries(view_lib PUBLIC
         sfml-graphics
         sfml-window
         sfml-system
-
         infra_lib
         model_lib
         core_lib

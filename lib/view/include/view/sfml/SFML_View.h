@@ -21,17 +21,22 @@
 #include <memory>
 #include <string>
 
+#include "ISFML_Event_Source.h"
 #include "SFML_Complex_Sprite.h"
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "view/View.h"
 
 namespace view {
-    class SFML_View : public View {
+    class SFML_View : public View, public ISFML_Event_Source{
     public:
         SFML_View(const infra::ast::View &info, const std::string & texture_dir_path);
-        void render(const infra::ast::Scene_Graph& graph) const;
-        void track(const std::shared_ptr<core::Stage>& stage);
+        void render(const infra::ast::Scene_Graph& graph) const override;
+        void track_local(infra::event::Event_Bus& stage) override;
+        void track_global(infra::event::Event_Bus& stage) override;
 
+        bool poll_event(sf::Event& e) override;
+
+        sf::RenderWindow window_;
     protected:
 
         std::optional<sf::Texture> get_Texture(const std::string& using_texture);
@@ -41,7 +46,7 @@ namespace view {
         void visit(const infra::ast::Complex_Sprite&) override;
     private:
 
-        sf::RenderWindow window_;
+
         // key - name of file
         std::map<
             std::string,

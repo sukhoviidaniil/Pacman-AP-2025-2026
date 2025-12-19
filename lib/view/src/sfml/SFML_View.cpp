@@ -30,8 +30,6 @@ namespace view {
         View(info.type),
         window_(sf::VideoMode(info.window_width, info.window_height), "Pacman")
     {
-
-
         for (const auto& texture_name : info.textures) {
             sf::Texture texture;
             std::string path = texture_dir_path + texture_name;
@@ -53,9 +51,17 @@ namespace view {
         // TODO
     }
 
-    void SFML_View::track(const std::shared_ptr<core::Stage> &stage) {
-        // TODO
+    void SFML_View::track_local(infra::event::Event_Bus &stage) {
     }
+
+    void SFML_View::track_global(infra::event::Event_Bus &stage) {
+
+    }
+
+    bool SFML_View::poll_event(sf::Event &e)  {
+        return window_.pollEvent(e);
+    }
+
 
     std::optional<sf::Texture> SFML_View::get_Texture(const std::string& using_texture) {
         const auto it = textures_.find(using_texture);
@@ -86,13 +92,13 @@ namespace view {
             std::vector<
                 std::unordered_map<
                     // key - direction of Sprite;
-                    math::Vector2,
+                    infra::math::Vector2,
                     // animation
                     std::vector<
                         sf::Sprite
                     >,
                     // custom hash function
-                    math::Vector2Hash
+                    infra::math::Vector2Hash
                 >
             > data;
 
@@ -104,11 +110,11 @@ namespace view {
             for (unsigned int i = 0; i < number_of_statuses; i++) {
                 // status = new coordinates
                 const infra::ast::Sprite_Status& status = complex_sprite.sprite_statuses[i];
-                const unsigned int facial_expressions = static_cast<unsigned int>(status.facial_expressions.size());
+                const auto facial_expressions = static_cast<unsigned int>(status.facial_expressions.size());
                 for (unsigned int top_index = 0; top_index < facial_expressions; ++top_index) {
                     const infra::ast::Sprite_Expression& sprite_expression = status.facial_expressions[top_index];
 
-                    math::Vector2 direction = sprite_expression.direction;
+                    infra::math::Vector2 direction = sprite_expression.direction;
 
                     int recLeft = sprite_expression.recLeft;
                     int recTop = sprite_expression.recTop;

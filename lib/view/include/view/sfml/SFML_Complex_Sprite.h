@@ -29,17 +29,17 @@ namespace view {
         std::vector<
             // key - direction of Sprite;
             std::unordered_map<
-                math::Vector2,
+                infra::math::Vector2,
                 // animation
                 std::vector<
                     sf::Sprite
                 >,
                 // custom hash function
-                math::Vector2Hash
+                infra::math::Vector2Hash
             >
         > sprites_;
     public:
-        explicit SFML_Complex_Sprite(const std::vector<std::unordered_map<math::Vector2,std::vector<sf::Sprite>,math::Vector2Hash>>& data);
+        explicit SFML_Complex_Sprite(const std::vector<std::unordered_map<infra::math::Vector2,std::vector<sf::Sprite>, infra::math::Vector2Hash>>& data);
     };
 }
 

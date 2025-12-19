@@ -20,7 +20,7 @@
 
 namespace view {
     SFML_Complex_Sprite::SFML_Complex_Sprite(
-        const std::vector<std::unordered_map<math::Vector2, std::vector<sf::Sprite>, math::Vector2Hash>> &data) : sprites_(data)
+        const std::vector<std::unordered_map<infra::math::Vector2, std::vector<sf::Sprite>, infra::math::Vector2Hash>> &data) : sprites_(data)
     {
     }
 }
