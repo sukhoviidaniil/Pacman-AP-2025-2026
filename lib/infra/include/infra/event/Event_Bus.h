@@ -25,7 +25,7 @@
 #include <vector>
 #include <cstdint>
 
-namespace infra {
+namespace infra::event {
     class Event_Bus : public std::enable_shared_from_this<Event_Bus>{
     public:
         using HandlerId = std::uint64_t;

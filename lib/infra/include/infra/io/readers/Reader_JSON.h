@@ -19,10 +19,10 @@
 #ifndef PACMAN_READER_JSON_H
 #define PACMAN_READER_JSON_H
 
-#include "infra/Reader.h"
+#include "infra/io/Reader.h"
 
 
-namespace infra {
+namespace infra::io {
 
     class Reader_JSON  : public Reader {
     public:

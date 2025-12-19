@@ -20,7 +20,7 @@
 
 #include <string>
 
-namespace math {
+namespace infra::math {
     Point2::~Point2() = default;
 
     Point2::Point2() = default;

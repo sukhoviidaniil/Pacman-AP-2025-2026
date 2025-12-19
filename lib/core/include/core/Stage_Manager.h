@@ -23,10 +23,10 @@
 #include <memory>
 #include <stack>
 
-#include "infra/Observer.h"
+#include "infra/event/Observer.h"
 
 namespace core {
-    class Stage_Manager : public infra::Observer {
+    class Stage_Manager : public infra::event::Observer {
     public:
         explicit Stage_Manager();
         ~Stage_Manager() override;

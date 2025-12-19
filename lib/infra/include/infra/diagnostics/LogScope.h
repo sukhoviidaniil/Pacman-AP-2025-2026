@@ -27,10 +27,12 @@
 #define LOG_SCOPE()
 #endif
 
-class LogScope {
-public:
-    LogScope();
-    ~LogScope();
-};
+namespace infra::diag {
+    class LogScope {
+    public:
+        LogScope();
+        ~LogScope();
+    };
+}
 
 #endif //PACMAN_LOGSCOPE_H

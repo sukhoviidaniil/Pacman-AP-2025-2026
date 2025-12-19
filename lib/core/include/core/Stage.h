@@ -18,7 +18,7 @@
 #ifndef PACMAN_STAGE_H
 #define PACMAN_STAGE_H
 
-#include "infra/Event_Bus.h"
+#include "../../../infra/include/infra/event/Event_Bus.h"
 #include "infra/ast/view/Drawable.h"
 
 namespace core {

@@ -20,7 +20,7 @@
 
 
 #include "Event_Bus.h"
-namespace infra {
+namespace infra::event {
     class Observer {
     public:
         virtual ~Observer() = default;

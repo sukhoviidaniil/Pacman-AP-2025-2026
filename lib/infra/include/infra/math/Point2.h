@@ -20,7 +20,7 @@
 
 #include <iosfwd>
 
-namespace math {
+namespace infra::math {
     class Point2 {
     public:
         float x=0.0, y=0.0;

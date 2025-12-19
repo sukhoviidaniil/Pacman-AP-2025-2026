@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Events.h
+ * File:          LayoutResult.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-17
+ * Created:       2025-12-19
  * Modified:      []
  *
  * Description:   []
@@ -15,12 +15,16 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_EVENTS_H
-#define PACMAN_EVENTS_H
-#include <vector>
+#ifndef PACMAN_LAYOUTRESULT_H
+#define PACMAN_LAYOUTRESULT_H
 
-namespace infra {
+#include "Base.h"
 
+namespace infra::ui {
+    struct LayoutResult {
+        Rect rect;
+    };
 }
 
-#endif //PACMAN_EVENTS_H
+
+#endif //PACMAN_LAYOUTRESULT_H

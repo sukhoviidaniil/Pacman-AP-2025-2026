@@ -3,7 +3,7 @@
 #include <cmath>
 #include <string>
 
-namespace math {
+namespace infra::math {
     Vector2::~Vector2() = default;
 
     Vector2::Vector2() = default;

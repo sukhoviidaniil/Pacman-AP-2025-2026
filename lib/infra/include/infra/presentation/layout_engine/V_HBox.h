@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          LogScope.cpp
+ * File:          V_HBox.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-10
+ * Created:       2025-12-19
  * Modified:      []
  *
  * Description:   []
@@ -15,15 +15,21 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
+#ifndef PACMAN_V_HBOX_H
+#define PACMAN_V_HBOX_H
 
-#include "../include/infra/diagnostics/LogScope.h"
+#include "LinearLayout.h"
 
-#include "../include/infra/diagnostics/Logger.h"
+namespace infra::ui {
+    class VBox : public LinearLayout {
+    protected:
+        bool horizontal() const override { return false; }
+    };
 
-LogScope::LogScope() {
-    Logger::instance().add_depth();
+    class HBox : public LinearLayout {
+    protected:
+        bool horizontal() const override { return true; }
+    };
 }
 
-LogScope::~LogScope() {
-    Logger::instance().lower_depth();
-}
+#endif //PACMAN_V_HBOX_H

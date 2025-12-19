@@ -17,8 +17,7 @@
 ***************************************************************/
 #pragma once
 
-namespace infra{
-
+namespace infra::event{
     inline Event_Bus::Subscription::Subscription(
         std::shared_ptr<Event_Bus> bus,
         const std::type_index type,

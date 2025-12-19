@@ -19,10 +19,10 @@
 #define PACMAN_READER_H
 #include <memory>
 
-#include "ast/view/View.h"
+#include "infra/ast/view/View.h"
 #include "infra/ast/Application.h"
 
-namespace infra {
+namespace infra::io {
 
     class File_Reader;
 

@@ -22,7 +22,7 @@
 #include <string>
 
 #include "core/Stage.h"
-#include "infra/Observer.h"
+#include "../../../infra/include/infra/event/Observer.h"
 #include "infra/ast/Visitor.h"
 
 namespace view {

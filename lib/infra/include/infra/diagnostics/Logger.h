@@ -31,18 +31,21 @@
 #define LOG_LOWER_DEPTH()
 #endif
 
-class Logger {
-public:
-    static Logger& instance();
-    void write(const std::string& message);
-    void add_depth();
-    void lower_depth();
-private:
-    Logger();
-    std::ofstream logfile_;
-    unsigned int depth_;
-    std::string indent_str_ = "\t";
-    std::string indent(const std::string& message) const;
-};
+namespace infra::diag {
+    class Logger {
+    public:
+        static Logger& instance();
+        void write(const std::string& message);
+        void add_depth();
+        void lower_depth();
+    private:
+        Logger();
+        std::ofstream logfile_;
+        unsigned int depth_;
+        std::string indent_str_ = "\t";
+        std::string indent(const std::string& message) const;
+    };
+}
+
 
 #endif //PACMAN_LOGGER_H

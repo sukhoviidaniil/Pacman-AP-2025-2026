@@ -15,13 +15,13 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef MY_SFML_VECTOR2_H
-#define MY_SFML_VECTOR2_H
+#ifndef PACMAN_VECTOR2_H
+#define PACMAN_VECTOR2_H
 
 #include "Point2.h"
 #include <functional>
 
-namespace math {
+namespace infra::math {
     class Vector2{
     public:
         float x=0.0, y=0.0;
@@ -70,5 +70,5 @@ namespace math {
     };
 }
 
-#endif //MY_SFML_VECTOR2_H
+#endif //PACMAN_VECTOR2_H
 

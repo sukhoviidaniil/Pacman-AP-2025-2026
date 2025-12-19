@@ -21,7 +21,7 @@
 #include <iostream>
 
 #include "infra/ast/view/View.h"
-#include "infra/loger/Logger.h"
+#include "../../../infra/include/infra/diagnostics/Logger.h"
 #include "SFML/Graphics/Texture.hpp"
 
 namespace view {

@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          LogScope.cpp
+ * File:          Alignment.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-10
+ * Created:       2025-12-19
  * Modified:      []
  *
  * Description:   []
@@ -15,15 +15,16 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
+#ifndef PACMAN_ALIGNMENT_H
+#define PACMAN_ALIGNMENT_H
 
-#include "../include/infra/diagnostics/LogScope.h"
-
-#include "../include/infra/diagnostics/Logger.h"
-
-LogScope::LogScope() {
-    Logger::instance().add_depth();
+namespace infra::ui {
+    enum class Align {
+        Start,
+        Center,
+        End,
+        Stretch
+    };
 }
 
-LogScope::~LogScope() {
-    Logger::instance().lower_depth();
-}
+#endif //PACMAN_ALIGNMENT_H

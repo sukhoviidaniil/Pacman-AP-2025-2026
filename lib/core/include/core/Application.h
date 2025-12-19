@@ -27,7 +27,7 @@
 class Application{
 
 public:
-    infra::Event_Bus eventbus_; // GLOBAL
+    infra::event::Event_Bus eventbus_; // GLOBAL
     Application(const infra::ast::Application &a, const std::string &path);
 private:
     // std::shared_ptr<TODO> control;

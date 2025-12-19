@@ -19,15 +19,19 @@
 #define PACMAN_FROM_JSON_H
 
 #include "json.hpp"
-#include "infra/loger/Logger.h"
+#include "infra/ast/model/Model.h"
+#include "infra/ast/view/Complex_Sprite.h"
+#include "infra/ast/view/Sprite.h"
+#include "infra/diagnostics/Logger.h"
 #include "infra/ast/view/Sprite_Expression.h"
 #include "infra/ast/view/Sprite_Rec.h"
 #include "infra/ast/view/Sprite_Status.h"
+#include "infra/ast/view/View.h"
 
 #include "infra/math/Point2.h"
 #include "infra/math/Vector2.h"
 
-namespace math {
+namespace infra::math {
     inline void from_json(const nlohmann::json& j, Point2& v) {
         v.x = j.at("x").get<float>();
         v.y = j.at("y").get<float>();
@@ -39,13 +43,13 @@ namespace math {
     }
 }
 
-namespace infra {
+namespace infra::io {
 
     inline nlohmann::json get_json_data(const std::string &filename) {
         std::ifstream file(filename);
         if (!file.is_open()) {
             std::string error = "File not found: " + filename + "!\n";
-            LOG(error);
+            diag::LOG(error);
             throw std::runtime_error("File not opened");
         }
         nlohmann::json data;
@@ -56,7 +60,7 @@ namespace infra {
 
     inline void invalid_parameter(const std::string &path, const std::string &name, const std::string &object) {
         const std::string error = "File " + path + " parameter " + name + " in " + object + " missing or invalid;";
-        LOG(error);
+        diag::LOG(error);
         throw std::runtime_error(error);
     }
 
@@ -127,46 +131,48 @@ namespace infra::ast {
     }
 
     inline void from_json(const nlohmann::json& j, Sprite_Expression& s) {
-        s.name = get_checked<std::string>(s.name , "expression", j);
-        s.direction = get_checked<math::Vector2>(s.direction , "direction", j);
-        s.recLeft = get_checked<int>(s.recLeft , "recLeft", j);
-        s.recTop  = get_checked<int>(s.recTop , "recTop", j);
+        s.name = io::get_checked<std::string>(s.name , "expression", j);
+        s.direction = io::get_checked<math::Vector2>(s.direction , "direction", j);
+        s.recLeft = io::get_checked<int>(s.recLeft , "recLeft", j);
+        s.recTop  = io::get_checked<int>(s.recTop , "recTop", j);
     }
 
     inline void from_json(const nlohmann::json& j, Sprite_Rec& s) {
-        s.base = get_checked<int>(s.base , "base", j);
-        s.increase = get_checked<int>(s.increase , "increase", j);
+        s.base = io::get_checked<int>(s.base , "base", j);
+        s.increase = io::get_checked<int>(s.increase , "increase", j);
     }
 
     inline void from_json(const nlohmann::json& j, Sprite_Status& s) {
-        s.facial_expressions = get_checked<std::vector<Sprite_Expression>>(s.facial_expressions, "facial_expressions", j);
-        s.number_of_expressions_per_direction = get_checked<unsigned int>(s.number_of_expressions_per_direction, "number_of_expressions_per_direction", j);
-        s.recLeft = get_checked<Sprite_Rec>(s.recLeft, "recLeft", j);
-        s.recTop = get_checked<Sprite_Rec>(s.recLeft, "recTop", j);
+        s.facial_expressions = io::get_checked<std::vector<Sprite_Expression>>(s.facial_expressions, "facial_expressions", j);
+        s.number_of_expressions_per_direction = io::get_checked<unsigned int>(s.number_of_expressions_per_direction, "number_of_expressions_per_direction", j);
+        s.recLeft = io::get_checked<Sprite_Rec>(s.recLeft, "recLeft", j);
+        s.recTop = io::get_checked<Sprite_Rec>(s.recLeft, "recTop", j);
     }
 
-    inline void from_json(const nlohmann::json& j, ast::Complex_Sprite& s) {
-        s.using_texture = get_checked<std::string>(s.using_texture, "using_texture", j);
-        s.sprits_width = get_checked<unsigned int>(s.sprits_width, "sprits_width", j);
-        s.sprits_height = get_checked<unsigned int>(s.sprits_height, "sprits_height", j);
-        s.groups_names = get_checked<std::vector<std::string>>(s.groups_names ,"groups_names", j);
-        s.number_of_statuses = get_checked<unsigned int>(s.number_of_statuses, "number_of_statuses", j);
-        s.sprite_statuses = get_checked<std::vector<Sprite_Status>>(s.sprite_statuses ,"statuses", j);
+    inline void from_json(const nlohmann::json& j, Complex_Sprite& s) {
+        s.using_texture = io::get_checked<std::string>(s.using_texture, "using_texture", j);
+        s.sprits_width = io::get_checked<unsigned int>(s.sprits_width, "sprits_width", j);
+        s.sprits_height = io::get_checked<unsigned int>(s.sprits_height, "sprits_height", j);
+        s.groups_names = io::get_checked<std::vector<std::string>>(s.groups_names ,"groups_names", j);
+        s.number_of_statuses = io::get_checked<unsigned int>(s.number_of_statuses, "number_of_statuses", j);
+        s.sprite_statuses = io::get_checked<std::vector<Sprite_Status>>(s.sprite_statuses ,"statuses", j);
     }
 
     inline void from_json(const nlohmann::json& j, View& s) {
-        s.type = get_checked<std::string>(s.type , "type", j);
-        s.window_width = get_checked<unsigned int>(s.window_width , "window_width", j);
-        s.window_height = get_checked<unsigned int>(s.window_height , "window_height", j);
-        s.textures = get_checked<std::vector<std::string>>(s.textures, "textures", j);
-        s.sprites = get_checked<std::vector<ast::Sprite>>(s.sprites, "sprites", j);
-        s.complex_sprites = get_checked<std::vector<ast::Complex_Sprite>>(s.complex_sprites, "sprite_groups", j);
+        s.type = io::get_checked<std::string>(s.type , "type", j);
+        s.window_width = io::get_checked<unsigned int>(s.window_width , "window_width", j);
+        s.window_height = io::get_checked<unsigned int>(s.window_height , "window_height", j);
+        s.textures = io::get_checked<std::vector<std::string>>(s.textures, "textures", j);
+        s.sprites = io::get_checked<std::vector<ast::Sprite>>(s.sprites, "sprites", j);
+        s.complex_sprites = io::get_checked<std::vector<ast::Complex_Sprite>>(s.complex_sprites, "sprite_groups", j);
     }
 
     inline void from_json(const nlohmann::json& j, Model& s) {
-        s.columns = get_checked<unsigned int>(s.columns , "columns", j);
-        s.rows = get_checked<unsigned int>(s.rows , "rows", j);
-        s.grid = get_checked<std::vector<std::vector<std::string>>>(s.grid , "grid", j);
+        /*
+        s.columns = io::get_checked<unsigned int>(s.columns , "columns", j);
+        s.rows = io::get_checked<unsigned int>(s.rows , "rows", j);
+        s.grid = io::get_checked<std::vector<std::vector<std::string>>>(s.grid , "grid", j);
+        */ // TODO
     }
 }
 

@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          LogScope.cpp
+ * File:          Base.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-10
+ * Created:       2025-12-19
  * Modified:      []
  *
  * Description:   []
@@ -15,15 +15,23 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
+#ifndef PACMAN_BASE_H
+#define PACMAN_BASE_H
 
-#include "../include/infra/diagnostics/LogScope.h"
+#pragma once
+#include <vector>
+#include <memory>
+#include <optional>
+#include <algorithm>
+#include <cassert>
 
-#include "../include/infra/diagnostics/Logger.h"
+namespace infra::ui {
+    struct Vec2 {
+        float x = 0, y = 0;
+    };
 
-LogScope::LogScope() {
-    Logger::instance().add_depth();
+    struct Rect {
+        float x, y, w, h;
+    };
 }
-
-LogScope::~LogScope() {
-    Logger::instance().lower_depth();
-}
+#endif //PACMAN_BASE_H

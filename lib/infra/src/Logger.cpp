@@ -16,7 +16,7 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "infra/loger/Logger.h"
+#include "../include/infra/diagnostics/Logger.h"
 #include <sstream>
 
 Logger::Logger() : logfile_("debug.log"), depth_(0), indent_str_("  ") {

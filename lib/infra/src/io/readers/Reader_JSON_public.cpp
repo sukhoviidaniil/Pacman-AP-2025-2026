@@ -17,12 +17,12 @@
 ***************************************************************/
 
 
-#include "infra/File_Reader.h"
+#include "../../include/infra/io/File_Reader.h"
 #include "infra/ast/view/Sprite_Status.h"
 #include "infra/readers/from_JSON.h"
 #include "infra/readers/Reader_JSON.h"
 
-namespace infra {
+namespace infra::io {
 
     Reader_JSON::Reader_JSON() = default;
 

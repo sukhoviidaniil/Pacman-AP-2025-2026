@@ -18,9 +18,9 @@
 
 #include <utility>
 
-#include "infra/File_Reader.h"
+#include "../../include/infra/io/File_Reader.h"
 
-namespace infra {
+namespace infra::io {
 
     File_Reader::File_Reader(std::string conf_directory) : conf_directory_(std::move(conf_directory)) {
     }
