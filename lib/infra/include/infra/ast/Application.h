@@ -18,14 +18,17 @@
 #ifndef PACMAN_AST_APPLICATION_H
 #define PACMAN_AST_APPLICATION_H
 
+#include "Event_Collector.h"
 #include "infra/ast/Node.h"
 #include "model/Model.h"
 #include "view/View.h"
 
 namespace infra::ast {
     struct Application : Application_Node{
-        View view;
-        std::vector<Model> models;
+        infra::ast::View view;
+        infra::ast::Event_Collector event_collector;
+        std::vector<infra::ast::Model> models;
+
     };
 }
 

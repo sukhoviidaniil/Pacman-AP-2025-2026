@@ -23,6 +23,7 @@
 #include <memory>
 #include <stack>
 
+#include "Stage_Factory.h"
 #include "infra/event/Observer.h"
 
 namespace core {
@@ -34,8 +35,10 @@ namespace core {
         void pop_stage();
         void push_stage(const std::shared_ptr<core::Stage> &stage);
         std::shared_ptr<core::Stage> get_top();
+        void track_local(infra::event::Event_Bus& stage);
+        void track_global(infra::event::Event_Bus& stage);
     private:
-        void track(const std::shared_ptr<core::Stage> &stage);
+        core::Stage_Factory& stage_factory_;
         std::stack<std::shared_ptr<core::Stage>> current_stages_;
     };
 }

@@ -18,4 +18,10 @@
 #ifndef PACMAN_CONTROLLER_H
 #define PACMAN_CONTROLLER_H
 
+namespace core {
+    class Controller {
+
+    };
+}
+
 #endif //PACMAN_CONTROLLER_H

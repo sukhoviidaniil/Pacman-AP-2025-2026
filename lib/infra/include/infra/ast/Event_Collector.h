@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Application.cpp
+ * File:          Event_Collector.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-15
+ * Created:       2025-12-20
  * Modified:      []
  *
  * Description:   []
@@ -15,20 +15,13 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
+#ifndef PACMAN_AST_EVENT_COLLECTOR_H
+#define PACMAN_AST_EVENT_COLLECTOR_H
+#include "Node.h"
 
-#include "core/Application.h"
+namespace infra::ast {
+    class Event_Collector : Application_Node {
 
-#include "core/View_Collector_Factory.h"
-
-namespace core {
-    Application::Application(const infra::ast::Application &a, const std::string &path) {
-
-        core::View_Collector_Factory vcf;
-        view_ = vcf.make_View(a.view, path);
-        event_collector_ = vcf.make_Event_Collector(a.event_collector);
-
-
-    }
+    };
 }
-
-
+#endif //PACMAN_AST_EVENT_COLLECTOR_H

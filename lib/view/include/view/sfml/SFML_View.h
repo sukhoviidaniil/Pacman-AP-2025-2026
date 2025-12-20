@@ -23,7 +23,7 @@
 
 #include "ISFML_Event_Source.h"
 #include "SFML_Complex_Sprite.h"
-#include "SFML/Graphics/RenderWindow.hpp"
+#include "SFML/Graphics.hpp"
 #include "view/View.h"
 
 namespace view {
@@ -36,7 +36,6 @@ namespace view {
 
         bool poll_event(sf::Event& e) override;
 
-        sf::RenderWindow window_;
     protected:
 
         std::optional<sf::Texture> get_Texture(const std::string& using_texture);
@@ -45,7 +44,6 @@ namespace view {
 
         void visit(const infra::ast::Complex_Sprite&) override;
     private:
-
 
         // key - name of file
         std::map<
@@ -64,6 +62,8 @@ namespace view {
             std::string,
             std::unique_ptr<SFML_Complex_Sprite>
         > complex_sprites_;
+
+        sf::RenderWindow window_;
     };
 }
 

@@ -22,20 +22,25 @@
 #include "infra/ast/Application.h"
 #include "Stage_Manager.h"
 #include "Stage_Factory.h"
+#include "event_collector/Event_Collector .h"
 #include "view/View.h"
 
-class Application{
 
-public:
-    infra::event::Event_Bus eventbus_; // GLOBAL
-    Application(const infra::ast::Application &a, const std::string &path);
-private:
-    // std::shared_ptr<TODO> control;
-    std::shared_ptr<view::View> view_;
+namespace core {
+    class Application{
+    public:
+        Application(const infra::ast::Application &a, const std::string &path);
+        infra::event::Event_Bus eventbus_; // GLOBAL
+    private:
+        std::shared_ptr<core::Controller> controller_;
+        std::shared_ptr<view::View> view_;
+        std::unique_ptr<core::Event_Collector> event_collector_;
 
-    std::shared_ptr<core::Score> score_;
-    core::Stage_Factory stage_factory_;
-    core::Stage_Manager stage_manager_;
-};
+        std::shared_ptr<core::Score> score_;
+        core::Stage_Factory stage_factory_;
+        core::Stage_Manager stage_manager_;
+    };
+}
+
 
 #endif //PACMAN_APPLICATION_H

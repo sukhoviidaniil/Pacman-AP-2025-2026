@@ -17,22 +17,31 @@
 ***************************************************************/
 #ifndef PACMAN_STAGE_FACTORY_H
 #define PACMAN_STAGE_FACTORY_H
-#include "model/Game_Model.h"
+#include "Controller.h"
+#include "model/Model.h"
+#include "view/View.h"
 
 namespace core {
     class Stage_Factory {
         public:
-        Stage_Factory(const std::vector<infra::ast::Model>& models, const std::shared_ptr<Score>& score);
+        explicit Stage_Factory(const std::vector<infra::ast::Model> &models);
+
+        void add_Score(const std::shared_ptr<Score> &score);
+
+        void add_View(const std::shared_ptr<view::View>& view);
+        void add_Controller(const std::shared_ptr<Controller>& controller);
 
         protected:
 
-        [[nodiscard]] std::shared_ptr<model::Game_Model> get_model() const;
+        [[nodiscard]] std::shared_ptr<model::Model> get_model() const;
         void make_new_model();
 
         private:
-        std::shared_ptr<model::Game_Model> current_model_;
+        std::shared_ptr<model::Model> current_model_ = nullptr;
         std::vector<infra::ast::Model> models_;
-        std::shared_ptr<Score> score_;
+        std::shared_ptr<Score> score_ = nullptr;
+        std::shared_ptr<view::View> view_ = nullptr;
+        std::shared_ptr<core::Controller> controller_ = nullptr;
     };
 }
 
