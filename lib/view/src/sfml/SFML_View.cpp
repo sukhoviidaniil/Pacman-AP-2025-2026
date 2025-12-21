@@ -51,10 +51,10 @@ namespace view {
         // TODO
     }
 
-    void SFML_View::track_local(infra::event::Event_Bus &stage) {
+    void SFML_View::track_local(const std::shared_ptr<infra::event::Event_Bus>& bus) {
     }
 
-    void SFML_View::track_global(infra::event::Event_Bus &stage) {
+    void SFML_View::track_global(const std::shared_ptr<infra::event::Event_Bus>& bus) {
 
     }
 

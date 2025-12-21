@@ -24,8 +24,8 @@
 namespace model::collision {
     class AABB {
         public:
-        math::Point2 center;
-        math::Vector2 extend;
+        infra::math::Point2 center;
+        infra::math::Vector2 extend;
 
         float min_X = std::numeric_limits<float>::max();
         float max_X = -std::numeric_limits<float>::max();

@@ -25,9 +25,9 @@
 #include <vector>
 #include <cstdint>
 
+#include "Event.h"
+
 namespace infra::event {
-    struct EventConcept;
-    enum class EventMask : std::uint32_t;
 
     class Event_Bus : public std::enable_shared_from_this<Event_Bus>{
     public:

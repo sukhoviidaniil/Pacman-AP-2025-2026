@@ -22,7 +22,7 @@
 
 #include "../lib/infra/include/infra/io/File_Reader.h"
 #include "infra/event/Event_Bus.h"
-#include "infra/readers/Reader_JSON.h"
+#include "infra/io/readers/Reader_JSON.h"
 /*
 #include "core/File_Reader.h"
 #include "core/info/Game_Info.h"

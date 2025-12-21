@@ -20,9 +20,8 @@
 #include <string>
 #include <vector>
 
-
+#include "infra/ast/Node.h"
 namespace infra::ast {
-    struct Model_Node;
     struct Grid : Model_Node {
         unsigned int rows;
         unsigned int columns;

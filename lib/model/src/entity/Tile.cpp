@@ -23,10 +23,10 @@ namespace model::entity {
 
     Tile::Tile(
         std::string name,
-        const math::Point2 &position,
-        const std::shared_ptr<collision::HitBox> &hitbox,
+        const infra::math::Point2 &position,
+        std::unique_ptr<collision::HitBox>  hitbox,
         const bool walkable
-        ): Entity(std::move(name), position, hitbox), walkable_(walkable)
+        ): Entity(std::move(name), position, std::move(hitbox)), walkable_(walkable)
     {
     }
 

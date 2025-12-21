@@ -26,22 +26,22 @@ namespace model::collision {
 
     bool Separating_Axis_Theorem::collision(const HitBox& first, const HitBox& second) const  {
 
-        std::vector<math::Vector2> axes;
+        std::vector<infra::math::Vector2> axes;
         {
-            std::vector<math::Vector2> temp = first.get_normals();
+            std::vector<infra::math::Vector2> temp = first.get_normals();
             axes.insert(axes.end(), temp.begin(), temp.end());
             temp = second.get_normals();
             axes.insert(axes.end(), temp.begin(), temp.end());
         }
         if (axes.empty()) {
-            std::vector<math::Vector2> temp = first.get_vector_to(second);
+            std::vector<infra::math::Vector2> temp = first.get_vector_to(second);
         }
         if (axes.empty()) {
             throw std::runtime_error("No axis");
         }
 
         for (const auto &axis_raw : axes) {
-            math::Vector2 axis = axis_raw;
+            infra::math::Vector2 axis = axis_raw;
             axis.normalize(); // required for correct depth
 
             std::vector<float> f = first.project(axis);
@@ -63,10 +63,10 @@ namespace model::collision {
         return true;
     }
 
-    std::optional<math::Vector2> Separating_Axis_Theorem::collision_mtv(
+    std::optional<infra::math::Vector2> Separating_Axis_Theorem::collision_mtv(
         const HitBox& first,
         const HitBox& second) const{
-        std::vector<math::Vector2> axes;
+        std::vector<infra::math::Vector2> axes;
         {
             auto temp = first.get_normals();
             axes.insert(axes.end(), temp.begin(), temp.end());
@@ -75,10 +75,10 @@ namespace model::collision {
         }
 
         float min_overlap = std::numeric_limits<float>::max();
-        math::Vector2 mtv_axis;
+        infra::math::Vector2 mtv_axis;
 
         for (const auto &axis_raw : axes) {
-            math::Vector2 axis = axis_raw;
+            infra::math::Vector2 axis = axis_raw;
             axis.normalize(); // required for correct depth
 
             auto f = first.project(axis);

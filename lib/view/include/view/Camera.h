@@ -36,7 +36,7 @@ namespace view {
         float ratio_x_{};
         float ratio_y_{};
         // The point in pixels where the Camera center should be on the screen
-        math::Vector2 window_center_;
+        infra::math::Vector2 window_center_;
 
         // ===== Expected dimensions =====
         // Camera working area dimensions
@@ -46,29 +46,29 @@ namespace view {
         float camera_half_h_{};
 
         // Coordinate of the center of the shooting canvas.
-        math::Vector2 camera_center_;
+        infra::math::Vector2 camera_center_;
         float scale_{};
 
         void set(
-            unsigned int window_width, unsigned int window_height, const math::Vector2 &window_center,
-            unsigned int camera_width, unsigned int camera_height, const math::Vector2 &camera_center, float scale);
+            unsigned int window_width, unsigned int window_height, const infra::math::Vector2 &window_center,
+            unsigned int camera_width, unsigned int camera_height, const infra::math::Vector2 &camera_center, float scale);
     protected:
 
-        [[nodiscard]] std::optional<math::Vector2> get_entity_position(const math::Vector2& view) const;
-        [[nodiscard]] std::optional<math::Vector2> get_entity_position(const sf::RenderWindow &window, const math::Vector2& view) const;
+        [[nodiscard]] std::optional<infra::math::Vector2> get_entity_position(const infra::math::Vector2& view) const;
+        [[nodiscard]] std::optional<infra::math::Vector2> get_entity_position(const sf::RenderWindow &window, const infra::math::Vector2& view) const;
 
     public:
         Camera(
-            unsigned int window_width, unsigned int window_height, const math::Vector2 &window_center,
-            unsigned int camera_width, unsigned int camera_height, const math::Vector2 &camera_center);
+            unsigned int window_width, unsigned int window_height, const infra::math::Vector2 &window_center,
+            unsigned int camera_width, unsigned int camera_height, const infra::math::Vector2 &camera_center);
         Camera(
-            unsigned int window_width, unsigned int window_height, const math::Vector2 &window_center,
-            unsigned int camera_width, unsigned int camera_height, const math::Vector2 &camera_center, float scale);
+            unsigned int window_width, unsigned int window_height, const infra::math::Vector2 &window_center,
+            unsigned int camera_width, unsigned int camera_height, const infra::math::Vector2 &camera_center, float scale);
 
         virtual ~Camera();
 
         // ===== Update =====
-        void update_base_window(unsigned int window_width, unsigned int window_height, const math::Vector2 &window_center);
+        void update_base_window(unsigned int window_width, unsigned int window_height, const infra::math::Vector2 &window_center);
         void update_window_center(const sf::RenderWindow *window);
 
         // ===== Render =====

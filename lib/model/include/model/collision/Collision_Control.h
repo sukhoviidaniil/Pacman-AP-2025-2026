@@ -28,7 +28,7 @@ namespace model::collision {
 
         [[nodiscard]] virtual bool collision(const HitBox& first,const HitBox& second) const = 0;
 
-        [[nodiscard]] virtual std::optional<math::Vector2> collision_mtv(const HitBox& first, const HitBox& second) const = 0;
+        [[nodiscard]] virtual std::optional<infra::math::Vector2> collision_mtv(const HitBox& first, const HitBox& second) const = 0;
 
     };
 }

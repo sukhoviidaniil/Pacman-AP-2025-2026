@@ -24,8 +24,8 @@
 
 namespace view {
     void Camera::set(
-        const unsigned int window_width, const unsigned int window_height, const math::Vector2 &window_center,
-        const unsigned int camera_width, const unsigned int camera_height, const math::Vector2 &camera_center, const float scale
+        const unsigned int window_width, const unsigned int window_height, const infra::math::Vector2 &window_center,
+        const unsigned int camera_width, const unsigned int camera_height, const infra::math::Vector2 &camera_center, const float scale
         ) {
         if (window_height == 0) {
             throw std::runtime_error("Invalid Camera window_height!");
@@ -51,10 +51,10 @@ namespace view {
         update_base_window(window_width, window_height, window_center);
     }
 
-    std::optional<math::Vector2> Camera::get_entity_position(const math::Vector2 &view) const {
+    std::optional<infra::math::Vector2> Camera::get_entity_position(const infra::math::Vector2 &view) const {
         // Translation of logical position to screen position
-        const math::Vector2 delta = (view - camera_center_) * scale_;
-        math::Vector2 screen_pos = window_center_ + delta;
+        const infra::math::Vector2 delta = (view - camera_center_) * scale_;
+        infra::math::Vector2 screen_pos = window_center_ + delta;
 
         // screen_pos.y = window_center_.y - (screen_pos.y - window_center_.y);
 
@@ -69,8 +69,8 @@ namespace view {
         return screen_pos;
     }
 
-    std::optional<math::Vector2> Camera::get_entity_position(const sf::RenderWindow &window, const math::Vector2 &view) const {
-        std::optional<math::Vector2> screen_pos = get_entity_position(view);
+    std::optional<infra::math::Vector2> Camera::get_entity_position(const sf::RenderWindow &window, const infra::math::Vector2 &view) const {
+        std::optional<infra::math::Vector2> screen_pos = get_entity_position(view);
         if (!screen_pos) return std::nullopt;
 
         const sf::Vector2u window_size = window.getSize();
@@ -89,16 +89,16 @@ namespace view {
     }
 
     Camera::Camera(
-        const unsigned int window_width, const unsigned int window_height, const math::Vector2 &window_center,
-        const unsigned int camera_width, const unsigned int camera_height, const math::Vector2 &camera_center
+        const unsigned int window_width, const unsigned int window_height, const infra::math::Vector2 &window_center,
+        const unsigned int camera_width, const unsigned int camera_height, const infra::math::Vector2 &camera_center
         )
     {
         set(window_width, window_height, window_center, camera_width, camera_height, camera_center, 1);
     }
 
     Camera::Camera(
-        const unsigned int window_width, const unsigned int window_height, const math::Vector2& window_center,
-        const unsigned int camera_width, const unsigned int camera_height, const math::Vector2& camera_center,
+        const unsigned int window_width, const unsigned int window_height, const infra::math::Vector2& window_center,
+        const unsigned int camera_width, const unsigned int camera_height, const infra::math::Vector2& camera_center,
         const float scale
         )
     {
@@ -109,7 +109,7 @@ namespace view {
     Camera::~Camera() = default;
 
     void Camera::update_base_window(
-        const unsigned int window_width, const unsigned int window_height, const math::Vector2 &window_center)
+        const unsigned int window_width, const unsigned int window_height, const infra::math::Vector2 &window_center)
     {
         base_window_width_ = window_width;
         base_window_height_ = window_height;

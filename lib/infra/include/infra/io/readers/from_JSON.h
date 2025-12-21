@@ -49,7 +49,7 @@ namespace infra::io {
         std::ifstream file(filename);
         if (!file.is_open()) {
             std::string error = "File not found: " + filename + "!\n";
-            diag::LOG(error);
+            LOG(error);
             throw std::runtime_error("File not opened");
         }
         nlohmann::json data;
@@ -60,7 +60,7 @@ namespace infra::io {
 
     inline void invalid_parameter(const std::string &path, const std::string &name, const std::string &object) {
         const std::string error = "File " + path + " parameter " + name + " in " + object + " missing or invalid;";
-        diag::LOG(error);
+        LOG(error);
         throw std::runtime_error(error);
     }
 

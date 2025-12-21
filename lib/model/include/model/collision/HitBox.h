@@ -36,17 +36,17 @@ namespace model::collision {
 
         [[nodiscard]] virtual AABB get_aabb() const = 0;
 
-        [[nodiscard]] virtual std::vector<math::Vector2> get_normals() const = 0;
+        [[nodiscard]] virtual std::vector<infra::math::Vector2> get_normals() const = 0;
 
         /**
          *
          * @param hit_boxe
          * @return All vectors that will go from the center of this hitbox to the center of another
          */
-        [[nodiscard]] virtual std::vector<math::Vector2> get_vector_to(const HitBox& hit_boxe) const;
+        [[nodiscard]] virtual std::vector<infra::math::Vector2> get_vector_to(const HitBox& hit_boxe) const;
 
 
-        virtual void move_to(const math::Point2& newPos) = 0;
+        virtual void move_to(const infra::math::Point2& newPos) = 0;
 
         /** Each pair in the vector is a separate sub-hitbox.
          *
@@ -54,13 +54,13 @@ namespace model::collision {
          * @param axis The axis onto which the projection will be made; It can be normalized and ONLY NORMALIZED; no change in direction is allowed.
          * @return Vector of all projections onto the axis
          */
-        [[nodiscard]] virtual std::vector<float> project(const math::Vector2 &axis) const = 0;
+        [[nodiscard]] virtual std::vector<float> project(const infra::math::Vector2 &axis) const = 0;
 
         /**
          *
          * @return All centers of all sub-hitboxes, including the common one
          */
-        [[nodiscard]] virtual std::vector<math::Point2> get_centers() const = 0;
+        [[nodiscard]] virtual std::vector<infra::math::Point2> get_centers() const = 0;
     private:
         int strength_ = 0;
     };

@@ -23,20 +23,34 @@
 namespace infra::event {
     class Observer {
     public:
-        virtual ~Observer() = default;
+        Observer() = default;
+        virtual ~Observer() {
+            un_track_all();
+        }
+
+        // Copying is prohibited.
+        Observer(const Observer&) = delete;
+        Observer& operator=(const Observer&) = delete;
+
+        // Allow movement
+        Observer(Observer&&) noexcept = default;
+        Observer& operator=(Observer&&) noexcept = default;
 
     protected:
-        void track(Event_Bus::Subscription&& s) {
-            subs_.emplace_back(std::move(s));
+        void track(std::unique_ptr<Event_Bus::Subscription> s) {
+            subs_.push_back(std::move(s));
         }
 
         void un_track_all() {
             for (auto& sub : subs_) {
-                sub.unsubscribe();
+                if (sub) {
+                    sub->unsubscribe();
+                }
             }
+            subs_.clear();
         }
     private:
-        std::vector<Event_Bus::Subscription> subs_;
+        std::vector<std::unique_ptr<Event_Bus::Subscription>> subs_;
     };
 }
 

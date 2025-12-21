@@ -17,11 +17,9 @@
 ***************************************************************/
 #ifndef PACMAN_EVENTS_H
 #define PACMAN_EVENTS_H
+
 #include <cstdint>
 #include <typeindex>
-#include <vector>
-
-#include "Event_Bus.h"
 
 namespace infra::event {
     enum class EventMask : std::uint32_t {
@@ -31,13 +29,13 @@ namespace infra::event {
         Game   = 1 << 2,   // 0100
     };
 
-    inline EventMask operator&(EventMask a, EventMask b) {
+    inline EventMask operator&(infra::event::EventMask a, infra::event::EventMask b) {
         return static_cast<EventMask>(static_cast<uint32_t>(a) & static_cast<uint32_t>(b));
     }
 
     struct EventConcept {
         virtual ~EventConcept() = default;
-        [[nodiscard]] virtual EventMask mask() const = 0;
+        [[nodiscard]] virtual infra::event::EventMask mask() const = 0;
         [[nodiscard]] virtual std::type_index type() const = 0;
         [[nodiscard]] virtual const void* data() const = 0;
         //virtual void emit(Event_Bus& bus) const = 0;
@@ -58,11 +56,6 @@ namespace infra::event {
         }
 
         [[nodiscard]] const void* data() const override { return &value; }
-        /*
-        void emit(Event_Bus& bus) const override {
-            bus.emit<Event>(value);
-        }
-        */
     };
 }
 

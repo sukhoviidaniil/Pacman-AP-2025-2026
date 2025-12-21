@@ -24,12 +24,12 @@
 namespace model::collision {
 
     HitBox_Shape::HitBox_Shape(
-        const std::vector<math::Point2> &points, const int& strength):
+        const std::vector<infra::math::Point2> &points, const int& strength):
     HitBox(strength), points_(points){
     }
 
     HitBox_Shape::HitBox_Shape(
-        const math::Point2 &pos, const float& height, const float& width, const int& strength):
+        const infra::math::Point2 &pos, const float& height, const float& width, const int& strength):
     HitBox(strength){
         const float hw = width  * 0.5f;
         const float hh = height * 0.5f;
@@ -51,12 +51,12 @@ namespace model::collision {
         return std::make_unique<HitBox_Shape>(*this);
     }
 
-    std::vector<math::Vector2> HitBox_Shape::get_normals() const {
-        std::vector<math::Vector2> normals;
+    std::vector<infra::math::Vector2> HitBox_Shape::get_normals() const {
+        std::vector<infra::math::Vector2> normals;
         for (size_t first = 0; first < points_.size(); ++first) {
             const size_t second = (first + 1) % points_.size();
-            const math::Point2 d = points_[second] - points_[first];
-            math::Vector2 normal = {d.y, -d.x};
+            const infra::math::Point2 d = points_[second] - points_[first];
+            infra::math::Vector2 normal = {d.y, -d.x};
             // skip normalization ->
             //normal.normalize();
             normals.push_back(normal);
@@ -68,7 +68,7 @@ namespace model::collision {
     AABB HitBox_Shape::get_aabb() const {
         AABB aabb;
         aabb.center = get_centers().front();
-        for (const math::Point2 &point : points_) {
+        for (const infra::math::Point2 &point : points_) {
             if (aabb.max_X < point.x) {
                 aabb.max_X = point.x;
             }
@@ -86,26 +86,26 @@ namespace model::collision {
         return aabb;
     }
 
-    void HitBox_Shape::move_to(const math::Point2 &newPos) {
-        const std::vector<math::Point2> center = get_centers();
-        const math::Point2 delta = newPos - center.front();
+    void HitBox_Shape::move_to(const infra::math::Point2 &newPos) {
+        const std::vector<infra::math::Point2> center = get_centers();
+        const infra::math::Point2 delta = newPos - center.front();
         for (auto& p : points_) {
             p += delta;
         }
     }
 
-    std::vector<float> HitBox_Shape::project(const math::Vector2 &axis) const {
+    std::vector<float> HitBox_Shape::project(const infra::math::Vector2 &axis) const {
         float first = std::numeric_limits<float>::max();
         float second = -std::numeric_limits<float>::max();
         for (const auto& point : points_) {
-            const float a = math::Vector2(point).dot(axis);
+            const float a = infra::math::Vector2(point).dot(axis);
             first  = std::min(first,  a);
             second = std::max(second, a);
         }
         return {first, second};
     }
 
-    std::vector<math::Point2> HitBox_Shape::get_centers() const {
+    std::vector<infra::math::Point2> HitBox_Shape::get_centers() const {
         const size_t n = points_.size();
         if (n == 0) return {{0,0}};
 
@@ -113,8 +113,8 @@ namespace model::collision {
         float cx = 0.0f, cy = 0.0f;
 
         for (size_t i = 0; i < n; ++i) {
-            const auto& current = math::Vector2(points_[i]);
-            const auto& next    = math::Vector2(points_[(i+1) % n]);
+            const auto& current = infra::math::Vector2(points_[i]);
+            const auto& next    = infra::math::Vector2(points_[(i+1) % n]);
             const float cross = current.cross(next);
             area += cross;
             cx += (current.x + next.x) * cross;

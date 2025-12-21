@@ -36,6 +36,7 @@ namespace core {
             const std::shared_ptr<infra::event::Event_Bus>& eventbus
             );
         void set_global(const std::shared_ptr<infra::event::Event_Bus>& eventbus);
+        void dispatch_events() const;
 
         void run();
         std::shared_ptr<infra::event::Event_Bus> eventbus_l_; // LOCAL

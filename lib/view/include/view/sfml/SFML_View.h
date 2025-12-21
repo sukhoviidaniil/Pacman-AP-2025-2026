@@ -31,8 +31,8 @@ namespace view {
     public:
         SFML_View(const infra::ast::View &info, const std::string & texture_dir_path);
         void render(const infra::ast::Scene_Graph& graph) const override;
-        void track_local(infra::event::Event_Bus& stage) override;
-        void track_global(infra::event::Event_Bus& stage) override;
+        void track_local(const std::shared_ptr<infra::event::Event_Bus>& bus) override;
+        void track_global(const std::shared_ptr<infra::event::Event_Bus>& bus) override;
 
         bool poll_event(sf::Event& e) override;
 

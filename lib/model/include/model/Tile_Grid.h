@@ -41,16 +41,16 @@ namespace model {
         [[nodiscard]] unsigned int get_height() const;
 
         std::shared_ptr<const entity::Tile> get_tile(const size_t& x, const size_t& y) const;
-        std::optional<std::pair<size_t, size_t>> get_nearest_tile_size_t(const math::Point2 &pos) const;
+        std::optional<std::pair<size_t, size_t>> get_nearest_tile_size_t(const infra::math::Point2 &pos) const;
         /**
          *
          * @param pos Arbitrary coordinates within the coordinate grid
          * @return Tile to which the position coordinate belongs
          */
-        [[nodiscard]] std::shared_ptr<const entity::Tile> get_nearest_tile(const math::Point2 &pos) const;
+        [[nodiscard]] std::shared_ptr<const entity::Tile> get_nearest_tile(const infra::math::Point2 &pos) const;
 
 
-        [[nodiscard]] std::shared_ptr<const entity::Tile> get_next_tile(const math::Point2& pos, const math::Vector2& dir) const;
+        [[nodiscard]] std::shared_ptr<const entity::Tile> get_next_tile(const infra::math::Point2& pos, const infra::math::Vector2& dir) const;
 
         [[nodiscard]] std::vector<std::vector<std::shared_ptr<const entity::Tile>>> get_tiles() const;
 

@@ -37,12 +37,12 @@ namespace infra::event {
         }
     }
 
-    Event_Bus::Subscription::Subscription(Subscription &&other) noexcept {
-        *this = std::move(other);
+    Event_Bus::Subscription::Subscription(Subscription&& other) noexcept
+    : bus_(std::move(other.bus_)), type_(other.type_), id_(other.id_) {
+        other.bus_ = nullptr;
     }
 
     Event_Bus::Subscription & Event_Bus::Subscription::operator=(Subscription &&other) noexcept {
-        unsubscribe();
         bus_  = std::move(other.bus_);
         type_ = other.type_;
         id_   = other.id_;
@@ -65,7 +65,7 @@ namespace infra::event {
     void Event_Bus::sort(std::vector<Handler> &list) {
         std::sort(list.begin(), list.end(),
             [](const Handler& a, const Handler& b) {
-                return a.priority < b.priority;
+                return a.priority > b.priority;
             });
     }
 

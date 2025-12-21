@@ -22,18 +22,18 @@ namespace model::collision {
     HitBox_Circle::HitBox_Circle(const HitBox_Circle &other) = default;
 
     HitBox_Circle::HitBox_Circle(
-        const int& strength, const math::Point2 &center, const float& radius
+        const int& strength, const infra::math::Point2 &center, const float& radius
         ):
         HitBox(strength), center_(center), radius_(radius) {
     }
 
     HitBox_Circle::~HitBox_Circle() = default;
 
-    std::vector<math::Vector2> HitBox_Circle::get_vector_to(const HitBox &hit_boxe) const {
+    std::vector<infra::math::Vector2> HitBox_Circle::get_vector_to(const HitBox &hit_boxe) const {
         return HitBox::get_vector_to(hit_boxe);
     }
 
-    void HitBox_Circle::move_to(const math::Point2 &pos) {
+    void HitBox_Circle::move_to(const infra::math::Point2 &pos) {
         center_ = pos;
     }
 
@@ -52,20 +52,20 @@ namespace model::collision {
         return aabb;
     }
 
-    std::vector<math::Vector2> HitBox_Circle::get_normals() const {
+    std::vector<infra::math::Vector2> HitBox_Circle::get_normals() const {
         return {{0,1}, {1,0}};
     }
 
 
-    std::vector<float> HitBox_Circle::project(const math::Vector2 &axis) const {
+    std::vector<float> HitBox_Circle::project(const infra::math::Vector2 &axis) const {
         std::vector<float> points;
-        const float p_center = math::Vector2(center_) .dot(axis);
+        const float p_center = infra::math::Vector2(center_) .dot(axis);
         points.push_back(p_center - radius_);
         points.push_back(p_center + radius_);
         return points;
     }
 
-    std::vector<math::Point2> HitBox_Circle::get_centers() const {
+    std::vector<infra::math::Point2> HitBox_Circle::get_centers() const {
         return {center_};
     }
 }

@@ -56,12 +56,12 @@ namespace model {
             for (size_t j = 0 ; j < columns_; j++) {
                 const float x = start_x + tile_size_ * static_cast<float>(j);
                 const std::string& name = grid[i][j];
-                math::Point2 position(x, y);
+                infra::math::Point2 position(x, y);
                 bool walkable = true;
                 if (name == "Wall") {
                     walkable = false;
                 }
-                auto hitbox = std::make_unique<collision::HitBox_Rectangle>(math::Point2{0,0}, tile_size_, tile_size_, 0);
+                auto hitbox = std::make_unique<collision::HitBox_Rectangle>(infra::math::Point2{0,0}, tile_size_, tile_size_, 0);
                 tiles_[i][j] = std::make_shared<entity::Tile>(name, position, std::move(hitbox), walkable);
             }
         }
@@ -91,7 +91,7 @@ namespace model {
         return tiles_[y][x];
     }
 
-    std::optional<std::pair<size_t, size_t>> Tile_Grid::get_nearest_tile_size_t(const math::Point2 &pos) const {
+    std::optional<std::pair<size_t, size_t>> Tile_Grid::get_nearest_tile_size_t(const infra::math::Point2 &pos) const {
         const float half_ts = tile_size_ * 0.5f;
 
         const float W = static_cast<float>(columns_) * tile_size_;
@@ -117,7 +117,7 @@ namespace model {
         };
     }
 
-    std::shared_ptr<const entity::Tile> Tile_Grid::get_nearest_tile(const math::Point2 &pos) const {
+    std::shared_ptr<const entity::Tile> Tile_Grid::get_nearest_tile(const infra::math::Point2 &pos) const {
         std::optional<std::pair<size_t, size_t>> res = get_nearest_tile_size_t(pos);
         if (res.has_value()) {
             auto [x, y] = res.value();
@@ -126,7 +126,7 @@ namespace model {
         return nullptr;
     }
 
-    std::shared_ptr<const entity::Tile> Tile_Grid::get_next_tile(const math::Point2 &pos, const math::Vector2 &dir) const {
+    std::shared_ptr<const entity::Tile> Tile_Grid::get_next_tile(const infra::math::Point2 &pos, const infra::math::Vector2 &dir) const {
         auto cur = get_nearest_tile_size_t(pos);
         if (!cur)
             return nullptr;

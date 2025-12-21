@@ -42,7 +42,6 @@ namespace core {
         eventbus_l_ = std::make_shared<infra::event::Event_Bus>();
 
         // Make Stage_Factory and Stage_Manager
-        stage_manager_ = core::Stage_Manager();
         stage_manager_.track_local(eventbus_l_);
         core::Stage_Factory sf = core::Stage_Factory(eventbus_l_, score_, a.models);
         stage_manager_.set_stage_factory(sf);
@@ -60,6 +59,17 @@ namespace core {
 
     void Application::set_global(const std::shared_ptr<infra::event::Event_Bus>& eventbus) {
         eventbus_g_ = eventbus;
+    }
+
+    void Application::dispatch_events() const {
+        if (event_collector_ == nullptr) {
+            return;
+        }
+        event_collector_->collect();
+        while (!event_collector_->event_store_.empty()) {
+            std::unique_ptr<infra::event::EventConcept> c =  event_collector_->event_store_.pop_concept();
+            eventbus_g_->emit(*c);
+        }
     }
 
     void Application::run() {

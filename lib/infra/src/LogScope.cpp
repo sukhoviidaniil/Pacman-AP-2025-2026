@@ -16,14 +16,16 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "../include/infra/diagnostics/LogScope.h"
+#include "infra/diagnostics/LogScope.h"
 
-#include "../include/infra/diagnostics/Logger.h"
+#include "infra/diagnostics/Logger.h"
 
-LogScope::LogScope() {
-    Logger::instance().add_depth();
-}
+namespace infra::diag{
+    LogScope::LogScope() {
+        Logger::instance().add_depth();
+    }
 
-LogScope::~LogScope() {
-    Logger::instance().lower_depth();
+    LogScope::~LogScope() {
+        Logger::instance().lower_depth();
+    }
 }
