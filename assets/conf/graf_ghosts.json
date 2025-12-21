@@ -1,5 +1,5 @@
 {
-  "using_texture" : "sprite.png",
+  "using_texture" : "textures/sprite.png",
   "sprits_width": 35,
   "sprits_height": 35,
   "groups_names" :  ["Blinky", "Pinky", "Inky", "Clyde", "Sludgy", "Shady"],

@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          View.cpp
+ * File:          Score.cpp
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-06
+ * Created:       2025-12-21
  * Modified:      []
  *
  * Description:   []
@@ -16,15 +16,13 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
+#include "core/Score.h"
+namespace core {
+    Score::Score() = default;
 
-#include <utility>
+    Score::~Score() = default;
 
-#include "view/View.h"
+    void Score::track_local(const std::shared_ptr<infra::event::Event_Bus> &bus) {
 
-namespace view {
-    View::View(std::string name) : name_(std::move(name)) {
     }
-
-    View::~View() = default;
 }
-

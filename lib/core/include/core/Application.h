@@ -25,7 +25,6 @@
 #include "event_collector/Event_Collector .h"
 #include "view/View.h"
 
-
 namespace core {
     class Application : public infra::event::Observer{
     public:
@@ -37,7 +36,7 @@ namespace core {
             );
         void set_global(const std::shared_ptr<infra::event::Event_Bus>& eventbus);
         void dispatch_events() const;
-
+        void track_global(const std::shared_ptr<infra::event::Event_Bus>& bus);
         void run();
         std::shared_ptr<infra::event::Event_Bus> eventbus_l_; // LOCAL
     private:

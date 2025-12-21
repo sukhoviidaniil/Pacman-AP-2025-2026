@@ -28,7 +28,6 @@ namespace core {
         Score();
         ~Score() override;
         virtual void track_local(const std::shared_ptr<infra::event::Event_Bus>& bus);
-
     };
 }
 

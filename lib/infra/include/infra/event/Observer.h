@@ -37,20 +37,18 @@ namespace infra::event {
         Observer& operator=(Observer&&) noexcept = default;
 
     protected:
-        void track(std::unique_ptr<Event_Bus::Subscription> s) {
+        void track(Event_Bus::Subscription s) {
             subs_.push_back(std::move(s));
         }
 
         void un_track_all() {
             for (auto& sub : subs_) {
-                if (sub) {
-                    sub->unsubscribe();
-                }
+                sub.unsubscribe();
             }
             subs_.clear();
         }
     private:
-        std::vector<std::unique_ptr<Event_Bus::Subscription>> subs_;
+        std::vector<Event_Bus::Subscription> subs_;
     };
 }
 

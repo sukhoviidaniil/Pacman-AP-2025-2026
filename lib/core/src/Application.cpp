@@ -22,7 +22,6 @@
 #include "infra/Delta_Timer.h"
 #include "infra/event/events/window.hpp"
 
-
 namespace core {
     Application::~Application() = default;
 
@@ -32,11 +31,7 @@ namespace core {
         const std::shared_ptr<infra::event::Event_Bus>& eventbus
         ) {
         eventbus_g_ = eventbus;
-        eventbus_g_->subscribe<infra::event::window::Closed>(
-            [this](const infra::event::window::Closed&) {
-                running_ = false;
-            }
-        );
+        track_global(eventbus);
 
         // Make new Local Event_Bus
         eventbus_l_ = std::make_shared<infra::event::Event_Bus>();
@@ -54,6 +49,7 @@ namespace core {
         core::View_Collector_Factory vcf;
         view_ = vcf.make_View(a.view, path);
         view_->track_local(eventbus_l_);
+        view_->track_global(eventbus_g_);
         event_collector_ = vcf.make_Event_Collector(a.event_collector);
     }
 
@@ -72,12 +68,28 @@ namespace core {
         }
     }
 
+    void Application::track_global(const std::shared_ptr<infra::event::Event_Bus> &bus) {
+        track(
+            bus->subscribe<infra::event::window::Closed>(
+                [this](const infra::event::window::Closed&) {
+                    running_ = false;
+                }
+            )
+        );
+
+    }
+
     void Application::run() {
         infra::Delta_Timer dt;
         while (running_) {
             float delta = dt.tick();
             std::shared_ptr<Stage> current_stage = stage_manager_.get_top();
-            current_stage->run(delta);
+            if (current_stage != nullptr) {
+                current_stage->run(delta);
+            }
+            infra::ast::Scene_Graph v;
+            view_->render(v);
+            dispatch_events();
         }
     }
 }

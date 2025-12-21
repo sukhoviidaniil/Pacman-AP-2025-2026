@@ -22,6 +22,7 @@
 
 #include "infra/ast/view/View.h"
 #include "../../../infra/include/infra/diagnostics/Logger.h"
+#include "infra/event/events/window.hpp"
 #include "SFML/Graphics/Texture.hpp"
 
 namespace view {
@@ -30,12 +31,17 @@ namespace view {
         View(info.type),
         window_(sf::VideoMode(info.window_width, info.window_height), "Pacman")
     {
+        sf::View view(sf::FloatRect(0, 0, static_cast<float>(info.window_width), static_cast<float>(info.window_height)));
+        window_.setView(view);
+        window_.setFramerateLimit(30);
+
         for (const auto& texture_name : info.textures) {
             sf::Texture texture;
-            std::string path = texture_dir_path + texture_name;
-            if (!texture.loadFromFile("path/to/image.png")) {
-                std::cerr << "Unable to load textures \n";
-                throw std::runtime_error("Unable to load textures \n");
+            const std::string path = texture_dir_path + texture_name;
+            if (!texture.loadFromFile(path)) {
+                const std::string err = "Unable to load textures;\n";
+                LOG(err);
+                throw std::runtime_error(err);
             }
             textures_[texture_name] = texture;
         }
@@ -47,15 +53,39 @@ namespace view {
         }
     }
 
-    void SFML_View::render(const infra::ast::Scene_Graph &graph) const {
-        // TODO
+    void SFML_View::render(const infra::ast::Scene_Graph &graph) {
+        if (window_.isOpen()) {
+            window_.display();
+        }
     }
 
     void SFML_View::track_local(const std::shared_ptr<infra::event::Event_Bus>& bus) {
     }
 
     void SFML_View::track_global(const std::shared_ptr<infra::event::Event_Bus>& bus) {
+        using namespace infra::event::window;
+        // Closing the window
+        track(
+            bus->subscribe<Closed>(
+                [this](const Closed&) {
+                    window_.close();
+                }
+            )
+        );
+        // Change window size
+        track(
+            bus->subscribe<Resized>(
+                [this](const Resized& e) {
+                    sf::View v = window_.getView();
+                    v.setSize(static_cast<float>(e.width),
+                              static_cast<float>(e.height));
+                    v.setCenter(v.getSize() * 0.5f);
+                    window_.setView(v);
+                }
+            )
+        );
 
+        // Loss/gain of focus
     }
 
     bool SFML_View::poll_event(sf::Event &e)  {

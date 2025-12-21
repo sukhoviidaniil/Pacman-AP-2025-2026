@@ -1,13 +1,13 @@
 {
   "view" : {
-    "type" : "SFreeML",
+    "type" : "SFML",
     "window_width" : 800,
     "window_height" : 600,
     "textures" : [
-      "sprite.png"
+      "textures/sprite.png"
     ],
     "sprite_groups" : [
-      "graf_ghosts.json"
+      "conf/graf_ghosts.json"
     ]
   },
   "models" : [

@@ -62,7 +62,8 @@ namespace core  {
         stage_factory_ = std::move(stage_factory);
     }
 
-
+    void Stage_Manager::track_local(const std::shared_ptr<infra::event::Event_Bus> &bus) {
+    }
 
     void Stage_Manager::pop_stage() {
         if (current_stages_.empty()) return;
@@ -75,6 +76,7 @@ namespace core  {
     }
 
     std::shared_ptr<core::Stage> Stage_Manager::get_top() {
+        if (current_stages_.empty()) return nullptr;
         return current_stages_.top();
     }
 }

@@ -81,7 +81,6 @@ namespace infra::event {
 
         static void sort(std::vector<Handler>& list);
 
-
         std::unordered_map<std::type_index, std::vector<Handler>> handlers_;
         HandlerId next_id_ = 1;
     };

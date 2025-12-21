@@ -20,28 +20,26 @@
 
 #include <string>
 
-#include "../lib/infra/include/infra/io/File_Reader.h"
+#include "infra/io/File_Reader.h"
+#include "core/Application.h"
 #include "infra/event/Event_Bus.h"
 #include "infra/io/readers/Reader_JSON.h"
-/*
-#include "core/File_Reader.h"
-#include "core/info/Game_Info.h"
-#include "core/readers/Reader_JSON.h"
-#include "lib/gen/include/gen/Logger.h"
-#include "lib/gen/include/gen/LogScope.h"
-#include "lib/model/include/model/Delta_Timer.h"
-*/
 
 
 int main() {
-    infra::event::Event_Bus eventbus_; // GLOBAL
+    const auto eventbus_ = std::make_shared<infra::event::Event_Bus>(); // GLOBAL
 
     const std::string assets_dir = ASSETS_DIR;
-    const std::string conf_dir = assets_dir + "/conf/";
+    const std::string conf_dir = assets_dir + "conf/";
 
-    auto fr = std::make_shared<infra::io::File_Reader>(conf_dir);
+    const auto fr = std::make_shared<infra::io::File_Reader>(conf_dir);
     fr->add_Reader(".json", std::make_shared<infra::io::Reader_JSON>());
     infra::ast::Application t = fr->read_Application("conf_game1.json");
+    auto a = core::Application(t, assets_dir, eventbus_);
+    a.run();
+    return 0;
+}
+
     /*
 
     const std::string assets_dir = ASSETS_DIR;
@@ -96,5 +94,3 @@ int main() {
         throw std::runtime_error("Unknown type of graphics");
     }
     */
-    return 0;
-}

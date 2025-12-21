@@ -30,7 +30,7 @@ namespace view {
     class SFML_View : public View, public ISFML_Event_Source{
     public:
         SFML_View(const infra::ast::View &info, const std::string & texture_dir_path);
-        void render(const infra::ast::Scene_Graph& graph) const override;
+        void render(const infra::ast::Scene_Graph& graph) override;
         void track_local(const std::shared_ptr<infra::event::Event_Bus>& bus) override;
         void track_global(const std::shared_ptr<infra::event::Event_Bus>& bus) override;
 

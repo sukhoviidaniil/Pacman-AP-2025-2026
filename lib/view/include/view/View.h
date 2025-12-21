@@ -28,9 +28,9 @@
 namespace view {
     class View : public infra::event::Observer, public infra::ast::View_Visitor{
     public:
-        explicit View(const std::string& name);
+        explicit View(std::string name);
         ~View() override;
-        virtual void render(const infra::ast::Scene_Graph& graph) const = 0;
+        virtual void render(const infra::ast::Scene_Graph& graph) = 0;
         virtual void track_local(const std::shared_ptr<infra::event::Event_Bus>& bus) = 0;
         virtual void track_global(const std::shared_ptr<infra::event::Event_Bus>& bus) = 0;
     protected:

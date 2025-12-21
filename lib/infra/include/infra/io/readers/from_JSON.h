@@ -19,10 +19,10 @@
 #define PACMAN_FROM_JSON_H
 
 #include "json.hpp"
+#include "infra/diagnostics/Logger.h"
 #include "infra/ast/model/Model.h"
 #include "infra/ast/view/Complex_Sprite.h"
 #include "infra/ast/view/Sprite.h"
-#include "infra/diagnostics/Logger.h"
 #include "infra/ast/view/Sprite_Expression.h"
 #include "infra/ast/view/Sprite_Rec.h"
 #include "infra/ast/view/Sprite_Status.h"
@@ -163,8 +163,8 @@ namespace infra::ast {
         s.window_width = io::get_checked<unsigned int>(s.window_width , "window_width", j);
         s.window_height = io::get_checked<unsigned int>(s.window_height , "window_height", j);
         s.textures = io::get_checked<std::vector<std::string>>(s.textures, "textures", j);
-        s.sprites = io::get_checked<std::vector<ast::Sprite>>(s.sprites, "sprites", j);
-        s.complex_sprites = io::get_checked<std::vector<ast::Complex_Sprite>>(s.complex_sprites, "sprite_groups", j);
+        // s.sprites = io::get_checked<std::vector<ast::Sprite>>(s.sprites, "sprites", j);
+        // s.complex_sprites = io::get_checked<std::vector<ast::Complex_Sprite>>(s.complex_sprites, "sprite_groups", j);
     }
 
     inline void from_json(const nlohmann::json& j, Model& s) {

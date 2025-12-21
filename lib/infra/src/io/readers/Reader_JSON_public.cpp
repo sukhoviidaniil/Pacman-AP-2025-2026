@@ -18,12 +18,11 @@
 
 
 #include "infra/io/File_Reader.h"
-#include "infra/ast/view/Sprite_Status.h"
 #include "infra/io/readers/from_JSON.h"
 #include "infra/io/readers/Reader_JSON.h"
 
-namespace infra::io {
 
+namespace infra::io {
     Reader_JSON::Reader_JSON() = default;
 
     Reader_JSON::~Reader_JSON() = default;
@@ -51,24 +50,22 @@ namespace infra::io {
     }
 
     ast::View Reader_JSON::read_View(
+        nlohmann::json data,
+        const std::shared_ptr<const File_Reader> &fr,
         const std::string &filename,
-        const std::shared_ptr<const File_Reader> &fr) const {
-        nlohmann::json data = get_json_data(filename);
-        ast::View vs;
+        const std::string &object
+        ){
 
-        vs.type = get_checked<std::string>("type", data, filename);
-        if (data.contains("textures")) {
-            vs.textures = get_checked<std::vector<std::string>>("textures", data, filename);
-        }
+        auto vs = get_checked<ast::View>(data, filename, object);;
         if (data.contains("sprites") && data["sprites"].is_array()) {
             for (const auto &sprite : data["sprites"]) {
-                if (sprite.is_object()) {
-                    ast::Sprite s = get_checked<ast::Sprite>(sprite, filename, "sprites");
+                if (sprite.is_string()) {
+                    ast::Sprite s = fr->read_Sprite(sprite.get<std::string>());
                     vs.sprites.push_back(s);
                     continue;
                 }
-                if (sprite.is_string()) {
-                    ast::Sprite s = fr->read_Sprite(sprite.get<std::string>());
+                if (sprite.is_structured()) {
+                    auto s = get_checked<ast::Sprite>(sprite, filename, "sprites", object);
                     vs.sprites.push_back(s);
                     continue;
                 }
@@ -78,18 +75,25 @@ namespace infra::io {
 
         if (data.contains("sprite_groups") && data["sprite_groups"].is_array()) {
             for (const auto &sprite : data["sprites"]) {
-                if (sprite.is_object()) {
-                    vs.complex_sprites.push_back(get_checked<ast::Complex_Sprite>(sprite, filename, "sprite_groups"));
-                    continue;
-                }
                 if (sprite.is_string()) {
                     vs.complex_sprites.push_back(fr->read_Sprits_Group(sprite.get<std::string>()));
+                    continue;
+                }
+                if (sprite.is_structured()) {
+                    vs.complex_sprites.push_back(get_checked<ast::Complex_Sprite>(sprite, filename, "sprite_groups"));
                     continue;
                 }
                 throw std::invalid_argument("View_Sprites one of the parameters in the “sprite_groups” list is neither a file name nor an object.");
             }
         }
         return vs;
+    }
+
+    ast::View Reader_JSON::read_View(
+        const std::string &filename,
+        const std::shared_ptr<const File_Reader> &fr) const {
+        const nlohmann::json data = get_json_data(filename);
+        return read_View(data, fr, filename, "ROOT");
     }
 
     ast::Model Reader_JSON::read_Model(const std::string& path) const {
@@ -103,14 +107,15 @@ namespace infra::io {
         ) const {
         nlohmann::json data = get_json_data(path);
         ast::Application app;
-        if (data.contains("view")) {
-            if (data["view"].is_object()) {
-                app.view = get_checked<ast::View>("view", data, path);
-            }else if (data["view"].is_string()) {
-                auto view = get_checked<std::string>("view", data, path);
+        const std::string view_name = "view";
+        if (data.contains(view_name)) {
+            if (data[view_name].is_string()) {
+                const auto view = get_checked<std::string>(view_name, data, path);
                 app.view = fr->read_View(view);
+            }else if (data[view_name].is_structured()) {
+                app.view = read_View(data[view_name], fr, path, view_name);
             }else {
-                throw std::invalid_argument("The view is neither a string nor an object, configuration reading error.");
+                throw std::invalid_argument("The view is neither a string nor an structured, configuration reading error.");
             }
         }
 

@@ -99,7 +99,7 @@ elseif(UNIX)
             INSTALL_RPATH "${SFML_ROOT}/lib"
     )
 endif()
-target_compile_definitions(${APP_TARGET} PRIVATE ASSETS_DIR="${CMAKE_SOURCE_DIR}/assets")
+target_compile_definitions(${APP_TARGET} PRIVATE ASSETS_DIR="${CMAKE_SOURCE_DIR}/assets/")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_definitions(-D_DEBUG)

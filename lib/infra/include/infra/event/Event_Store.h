@@ -51,5 +51,6 @@ namespace infra::event {
         std::vector<std::unique_ptr<EventConcept>> events_;
     };
 }
+#include "Event_Store.inl"
 
 #endif //PACMAN_EVENT_STORE_H
