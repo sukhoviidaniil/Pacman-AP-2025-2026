@@ -18,18 +18,19 @@
 #ifndef PACMAN_STAGE_FACTORY_H
 #define PACMAN_STAGE_FACTORY_H
 #include "Controller.h"
+#include "Score.h"
 #include "model/Model.h"
 #include "view/View.h"
 
 namespace core {
     class Stage_Factory {
         public:
-        explicit Stage_Factory(const std::vector<infra::ast::Model> &models);
-
-        void add_Score(const std::shared_ptr<Score> &score);
-
-        void add_View(const std::shared_ptr<view::View>& view);
-        void add_Controller(const std::shared_ptr<Controller>& controller);
+        Stage_Factory();
+        explicit Stage_Factory(
+            const std::shared_ptr<infra::event::Event_Bus>& eventbus,
+            const std::shared_ptr<core::Score>& score,
+            const std::vector<infra::ast::Model> &models
+            );
 
         protected:
 
@@ -37,11 +38,11 @@ namespace core {
         void make_new_model();
 
         private:
-        std::shared_ptr<model::Model> current_model_ = nullptr;
+
+        std::shared_ptr<infra::event::Event_Bus> eventbus_; // LOCAL
+        std::shared_ptr<core::Score> score_;
+        std::shared_ptr<model::Model> current_model_;
         std::vector<infra::ast::Model> models_;
-        std::shared_ptr<Score> score_ = nullptr;
-        std::shared_ptr<view::View> view_ = nullptr;
-        std::shared_ptr<core::Controller> controller_ = nullptr;
     };
 }
 

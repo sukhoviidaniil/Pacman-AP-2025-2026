@@ -28,17 +28,18 @@
 
 namespace core {
     class Stage_Manager : public infra::event::Observer {
+
     public:
-        explicit Stage_Manager();
         ~Stage_Manager() override;
-        void handle_PacmanDied();
+        explicit Stage_Manager();
+
+        void set_stage_factory(core::Stage_Factory stage_factory);
+        virtual void track_local(const std::shared_ptr<infra::event::Event_Bus>& bus);
         void pop_stage();
         void push_stage(const std::shared_ptr<core::Stage> &stage);
         std::shared_ptr<core::Stage> get_top();
-        void track_local(infra::event::Event_Bus& stage);
-        void track_global(infra::event::Event_Bus& stage);
     private:
-        core::Stage_Factory& stage_factory_;
+        core::Stage_Factory stage_factory_;
         std::stack<std::shared_ptr<core::Stage>> current_stages_;
     };
 }

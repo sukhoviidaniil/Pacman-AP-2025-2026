@@ -27,18 +27,30 @@
 
 
 namespace core {
-    class Application{
+    class Application : public infra::event::Observer{
     public:
-        Application(const infra::ast::Application &a, const std::string &path);
-        infra::event::Event_Bus eventbus_; // GLOBAL
+        ~Application() override;
+        Application(
+            const infra::ast::Application &a,
+            const std::string &path,
+            const std::shared_ptr<infra::event::Event_Bus>& eventbus
+            );
+        void set_global(const std::shared_ptr<infra::event::Event_Bus>& eventbus);
+
+        void run();
+        std::shared_ptr<infra::event::Event_Bus> eventbus_l_; // LOCAL
     private:
-        std::shared_ptr<core::Controller> controller_;
-        std::shared_ptr<view::View> view_;
+        bool running_ = true;
+
+        std::unique_ptr<core::Controller> controller_;
+        std::shared_ptr<view::View> view_; // Can be used in Event_Collector
         std::unique_ptr<core::Event_Collector> event_collector_;
 
         std::shared_ptr<core::Score> score_;
-        core::Stage_Factory stage_factory_;
+        std::shared_ptr<core::Stage_Factory> stage_factory_;
         core::Stage_Manager stage_manager_;
+
+        std::shared_ptr<infra::event::Event_Bus> eventbus_g_ = nullptr; // GLOBAL
     };
 }
 

@@ -20,13 +20,7 @@
 #include "Event_Store.h"
 
 namespace infra::event {
-    inline std::size_t Event_Store::size() const noexcept {
-        return events_.size();
-    }
 
-    inline bool Event_Store::empty() const noexcept {
-        return events_.empty();
-    }
 
     template<typename Event>
     void Event_Store::push(Event e) {
@@ -50,37 +44,10 @@ namespace infra::event {
         return value;
     }
 
-    inline std::unique_ptr<EventConcept> Event_Store::pop_concept() {
-        if (events_.empty()) {
-            // return nullptr;
-            throw std::out_of_range("Event_Store is empty");
-        }
-
-        auto ptr = std::move(events_.back());
-        events_.pop_back();
-        return ptr;
-    }
-
-    inline const EventConcept& Event_Store::peek() const {
-        return *events_.back();
-    }
-
-    inline const EventConcept& Event_Store::at(std::size_t i) const {
-        return *events_[i];
-    }
-
     template<typename Event>
     const Event& Event_Store::get(std::size_t i) const {
         auto& e = *events_[i];
         // it is assumed that the type has already been verified
         return static_cast<const EventInstance<Event>&>(e).value;
-    }
-
-    inline bool Event_Store::is(const std::size_t i, const std::type_index t) const {
-        return events_[i]->type() == t;
-    }
-
-    inline bool Event_Store::matches(const std::size_t i, const EventMask mask) const {
-        return static_cast<bool>(events_[i]->mask() & mask);
     }
 }

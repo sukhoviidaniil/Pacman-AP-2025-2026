@@ -17,10 +17,10 @@
 ***************************************************************/
 
 
-#include "../../include/infra/io/File_Reader.h"
+#include "infra/io/File_Reader.h"
 #include "infra/ast/view/Sprite_Status.h"
-#include "infra/readers/from_JSON.h"
-#include "infra/readers/Reader_JSON.h"
+#include "infra/io/readers/from_JSON.h"
+#include "infra/io/readers/Reader_JSON.h"
 
 namespace infra::io {
 

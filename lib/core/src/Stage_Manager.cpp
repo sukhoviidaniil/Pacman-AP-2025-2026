@@ -16,6 +16,8 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
+#include <utility>
+
 #include "core/Stage_Manager.h"
 
 
@@ -52,6 +54,16 @@ namespace core  {
     }
     */
 
+    Stage_Manager::~Stage_Manager() = default;
+
+    Stage_Manager::Stage_Manager() = default;
+
+    void Stage_Manager::set_stage_factory(core::Stage_Factory stage_factory) {
+        stage_factory_ = std::move(stage_factory);
+    }
+
+
+
     void Stage_Manager::pop_stage() {
         if (current_stages_.empty()) return;
         current_stages_.pop();
@@ -60,7 +72,6 @@ namespace core  {
     void Stage_Manager::push_stage(const std::shared_ptr<core::Stage> &stage) {
         current_stages_.push(stage);
         un_track_all();
-        track(stage);
     }
 
     std::shared_ptr<core::Stage> Stage_Manager::get_top() {

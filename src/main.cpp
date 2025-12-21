@@ -21,6 +21,7 @@
 #include <string>
 
 #include "../lib/infra/include/infra/io/File_Reader.h"
+#include "infra/event/Event_Bus.h"
 #include "infra/readers/Reader_JSON.h"
 /*
 #include "core/File_Reader.h"
@@ -33,11 +34,13 @@
 
 
 int main() {
+    infra::event::Event_Bus eventbus_; // GLOBAL
+
     const std::string assets_dir = ASSETS_DIR;
     const std::string conf_dir = assets_dir + "/conf/";
 
-    auto fr = std::make_shared<infra::File_Reader>(conf_dir);
-    fr->add_Reader(".json", std::make_shared<infra::Reader_JSON>());
+    auto fr = std::make_shared<infra::io::File_Reader>(conf_dir);
+    fr->add_Reader(".json", std::make_shared<infra::io::Reader_JSON>());
     infra::ast::Application t = fr->read_Application("conf_game1.json");
     /*
 

@@ -28,7 +28,6 @@ namespace core {
         virtual ~Stage();
         virtual void run(float tick) = 0;
         virtual infra::ast::Scene_Graph get_Scene_Graph() const = 0;
-        infra::event::Event_Bus eventbus_; // LOCAL
     };
 }
 

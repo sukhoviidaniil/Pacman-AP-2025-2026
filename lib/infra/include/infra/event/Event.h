@@ -21,6 +21,8 @@
 #include <typeindex>
 #include <vector>
 
+#include "Event_Bus.h"
+
 namespace infra::event {
     enum class EventMask : std::uint32_t {
         None   = 0,        // 0000
@@ -35,8 +37,10 @@ namespace infra::event {
 
     struct EventConcept {
         virtual ~EventConcept() = default;
-        virtual EventMask mask() const = 0;
-        virtual std::type_index type() const = 0;
+        [[nodiscard]] virtual EventMask mask() const = 0;
+        [[nodiscard]] virtual std::type_index type() const = 0;
+        [[nodiscard]] virtual const void* data() const = 0;
+        //virtual void emit(Event_Bus& bus) const = 0;
     };
 
     template<typename Event>
@@ -45,13 +49,20 @@ namespace infra::event {
 
         explicit EventInstance(Event v) : value(std::move(v)) {}
 
-        EventMask mask() const override {
+        [[nodiscard]] EventMask mask() const override {
             return Event::mask;
         }
 
-        std::type_index type() const override {
+        [[nodiscard]] std::type_index type() const override {
             return typeid(Event);
         }
+
+        [[nodiscard]] const void* data() const override { return &value; }
+        /*
+        void emit(Event_Bus& bus) const override {
+            bus.emit<Event>(value);
+        }
+        */
     };
 }
 

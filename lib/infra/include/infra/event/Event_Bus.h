@@ -26,6 +26,9 @@
 #include <cstdint>
 
 namespace infra::event {
+    struct EventConcept;
+    enum class EventMask : std::uint32_t;
+
     class Event_Bus : public std::enable_shared_from_this<Event_Bus>{
     public:
         using HandlerId = std::uint64_t;
@@ -64,13 +67,20 @@ namespace infra::event {
         template<typename Event>
         void emit(const Event& event);
 
+        void emit(const EventConcept& e);
+
     private:
         struct Handler {
             HandlerId id;
             int priority;
-            std::function<void(const void*)> fn;
+            EventMask mask;
+            std::function<void(const EventConcept&)> fn;
         };
+
         void unsubscribe(std::type_index type, HandlerId id);
+
+        static void sort(std::vector<Handler>& list);
+
 
         std::unordered_map<std::type_index, std::vector<Handler>> handlers_;
         HandlerId next_id_ = 1;

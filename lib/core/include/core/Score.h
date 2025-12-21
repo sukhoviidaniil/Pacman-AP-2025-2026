@@ -17,17 +17,18 @@
 ***************************************************************/
 #ifndef PACMAN_SCORE_H
 #define PACMAN_SCORE_H
-#include "../../../infra/include/infra/event/Observer.h"
+
+#include "infra/event/Observer.h"
 
 namespace core {
-    class Score : public infra::Observer {
+    class Score : public infra::event::Observer {
         unsigned int lives_remaining = 3;
         unsigned int points_score = 0;
         public:
         Score();
         ~Score() override;
+        virtual void track_local(const std::shared_ptr<infra::event::Event_Bus>& bus);
 
-        void track(const std::shared_ptr<core::Stage>& stage);
     };
 }
 
