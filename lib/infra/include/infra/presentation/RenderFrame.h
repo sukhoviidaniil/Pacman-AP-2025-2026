@@ -22,7 +22,6 @@
 #include "base/Color.h"
 #include "infra/presentation/base/Rect.h"
 #include "infra/math/Direction.h"
-#include "infra/math/Vector2.h"
 
 namespace infra::ui {
     enum class Space {

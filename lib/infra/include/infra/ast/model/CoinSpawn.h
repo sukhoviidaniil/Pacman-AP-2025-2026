@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Model.h
+ * File:          CoinSpawn.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-15
+ * Created:       2025-12-16
  * Modified:      []
  *
  * Description:   []
@@ -15,23 +15,14 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_AST_MODEL_H
-#define PACMAN_AST_MODEL_H
-
-#include "CoinSpawn.h"
-#include "GhostSpawn.h"
-#include "Grid.h"
-#include "PacmanSpawn.h"
-#include "PowerPelletSpawn.h"
+#ifndef PACMAN_AST_COINSPAWN_H
+#define PACMAN_AST_COINSPAWN_H
+#include "Entity_Node.h"
 
 namespace infra::ast {
-    struct Model : Model_Node{
-        Grid grid;
-        PacmanSpawn pacman_spawn;
-        GhostSpawn ghost_spawn;
-        CoinSpawn coin_spawn;
-        PowerPelletSpawn power_pellet_spawn;
+    struct CoinSpawn : Entity_Node {
+        int price = 100;
     };
 }
 
-#endif //PACMAN_AST_MODEL_H
+#endif //PACMAN_AST_COINSPAWN_H

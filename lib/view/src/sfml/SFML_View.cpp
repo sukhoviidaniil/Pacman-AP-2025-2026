@@ -53,7 +53,7 @@ namespace view {
         }
     }
 
-    void SFML_View::render(const infra::ast::Scene_Graph &graph) {
+    void SFML_View::render(const infra::ui::RenderFrameGraph& graph) {
         if (window_.isOpen()) {
             window_.display();
         }

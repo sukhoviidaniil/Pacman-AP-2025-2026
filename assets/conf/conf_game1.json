@@ -12,27 +12,32 @@
   },
   "models" : [
     {
-      "grid" : {
+      "Grid" : {
         "rows": 3,
         "columns": 6,
         "tile_size" : 40,
         "grid" : [
           ["Wall", "Wall", "Wall", "Wall", "Wall", "Wall"],
-          ["Wall", "Pacman", "Free", "Free", "Free", "Wall"],
+          ["Wall", "PacmanSpawn", "Empty", "Empty", "Empty", "Wall"],
           ["Wall", "Wall", "Wall", "Wall", "Wall", "Wall"]
         ]
       },
-      "coin" : {
-        "size" : 10
+      "PacmanSpawn" : {
+        "size" : 39,
+        "speed" : 0.1
       },
-      "pacman" : {
-        "speed" : 0.1,
-        "size" : 39
+      "GhostSpawn" : {
+
       },
-      "ghost" : {
-        "speed" : 0.1,
-        "size" : 39
+      "CoinSpawn" : {
+        "size" : 10,
+        "price" : 100
+      },
+      "PowerPelletSpawn" : {
+        "size" : 10,
+        "buff_duration" : 5.0
       }
     }
-  ]
+  ],
+  "score" : "score.json"
 }

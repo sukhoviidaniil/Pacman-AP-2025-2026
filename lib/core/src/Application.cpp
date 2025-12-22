@@ -42,7 +42,7 @@ namespace core {
         stage_manager_.set_stage_factory(sf);
 
         // Make Score
-        score_ = std::make_shared<core::Score>();
+        score_ = std::make_shared<infra::Score>();
         score_->track_local(eventbus_l_);
 
         // Make View and Event_Collector

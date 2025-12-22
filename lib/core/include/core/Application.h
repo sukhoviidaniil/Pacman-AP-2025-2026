@@ -46,7 +46,7 @@ namespace core {
         std::shared_ptr<view::View> view_; // Can be used in Event_Collector
         std::unique_ptr<core::Event_Collector> event_collector_;
 
-        std::shared_ptr<core::Score> score_;
+        std::shared_ptr<infra::Score> score_;
         std::shared_ptr<core::Stage_Factory> stage_factory_;
         core::Stage_Manager stage_manager_;
 

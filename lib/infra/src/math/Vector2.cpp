@@ -5,8 +5,6 @@
 
 namespace infra::math {
 
-    constexpr Vector2::Vector2() = default;
-
     constexpr Vector2::Vector2(const float x, const float y) : x(x), y(y) {
     }
 

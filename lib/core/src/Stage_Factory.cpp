@@ -25,7 +25,7 @@ namespace core {
 
     Stage_Factory::Stage_Factory(
         const std::shared_ptr<infra::event::Event_Bus> &eventbus,
-        const std::shared_ptr<core::Score> &score,
+        const std::shared_ptr<infra::Score> &score,
         const std::vector<infra::ast::Model> &models
         ) : eventbus_(eventbus), score_(score), models_(models) {
     }

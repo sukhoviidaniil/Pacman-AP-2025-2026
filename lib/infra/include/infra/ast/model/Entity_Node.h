@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Coin.h
+ * File:          Entity_Node.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-16
+ * Created:       2025-12-22
  * Modified:      []
  *
  * Description:   []
@@ -15,7 +15,14 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_COIN_H
-#define PACMAN_COIN_H
+#ifndef PACMAN_ENTITY_NODE_H
+#define PACMAN_ENTITY_NODE_H
+#include "infra/ast/Node.h"
 
-#endif //PACMAN_COIN_H
+namespace infra::ast {
+    struct Entity_Node : Model_Node {
+        float size = 39;
+    };
+}
+
+#endif //PACMAN_ENTITY_NODE_H

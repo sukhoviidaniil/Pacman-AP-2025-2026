@@ -1,6 +1,6 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Tile.h
+ * File:          Pacman.h
  *
  * Author:        Sukhovii Daniil
  * Created:       2025-12-16
@@ -15,7 +15,16 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_TILE_H
-#define PACMAN_TILE_H
+#ifndef PACMAN_AST_PACMAN_H
+#define PACMAN_AST_PACMAN_H
+#include "Entity_Node.h"
 
-#endif //PACMAN_TILE_H
+
+namespace infra::ast {
+    struct PacmanSpawn : Entity_Node {
+        float size = 39;
+        float speed = 1.0;
+    };
+}
+
+#endif //PACMAN_AST_PACMAN_H

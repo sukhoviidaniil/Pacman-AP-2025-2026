@@ -23,14 +23,16 @@
 #include <cstdint>
 
 namespace infra::ast {
+
     enum class Tile : std::uint8_t {
         Empty,
         Wall,
-        Coin,
-        PowerPellet,
+        CoinSpawn,
+        PowerPelletSpawn,
         PacmanSpawn,
         GhostSpawn
     };
+
     struct Grid : Model_Node {
         unsigned int rows;
         unsigned int columns;

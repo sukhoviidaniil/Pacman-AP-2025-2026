@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Pacman.h
+ * File:          PowerPelletSpawn.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-16
+ * Created:       2025-12-22
  * Modified:      []
  *
  * Description:   []
@@ -15,7 +15,14 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_PACMAN_H
-#define PACMAN_PACMAN_H
+#ifndef PACMAN_POWERPELLETSPAWN_H
+#define PACMAN_POWERPELLETSPAWN_H
+#include "Entity_Node.h"
 
-#endif //PACMAN_PACMAN_H
+namespace infra::ast {
+    struct PowerPelletSpawn : Entity_Node {
+        float buff_duration = 0.f;
+    };
+}
+
+#endif //PACMAN_POWERPELLETSPAWN_H
