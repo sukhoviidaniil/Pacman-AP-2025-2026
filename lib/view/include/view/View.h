@@ -30,7 +30,7 @@ namespace view {
     public:
         explicit View(std::string name);
         ~View() override;
-        virtual void render(const infra::ast::Scene_Graph& graph) = 0;
+        virtual void render(const infra::ui::RenderFrameGraph& graph) = 0;
         virtual void track_local(const std::shared_ptr<infra::event::Event_Bus>& bus) = 0;
         virtual void track_global(const std::shared_ptr<infra::event::Event_Bus>& bus) = 0;
     protected:

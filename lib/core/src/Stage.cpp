@@ -22,4 +22,8 @@ namespace core {
     Stage::Stage() = default;
 
     Stage::~Stage() = default;
+
+    void Stage::set_local_eventbus(const std::shared_ptr<infra::event::Event_Bus> &eventbus) {
+        eventbus_ = eventbus;
+    }
 }

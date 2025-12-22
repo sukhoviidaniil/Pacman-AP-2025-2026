@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Score.cpp
+ * File:          LogScope.cpp
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-21
+ * Created:       2025-12-10
  * Modified:      []
  *
  * Description:   []
@@ -16,13 +16,15 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "core/Score.h"
-namespace core {
-    Score::Score() = default;
+#include "infra/diagnostics/LogScope.h"
+#include "infra/diagnostics/Logger.h"
 
-    Score::~Score() = default;
+namespace infra::diag{
+    LogScope::LogScope() {
+        Logger::instance().add_depth();
+    }
 
-    void Score::track_local(const std::shared_ptr<infra::event::Event_Bus> &bus) {
-
+    LogScope::~LogScope() {
+        Logger::instance().lower_depth();
     }
 }

@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Alignment.h
+ * File:          Color.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-19
+ * Created:       2025-12-22
  * Modified:      []
  *
  * Description:   []
@@ -15,16 +15,16 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_ALIGNMENT_H
-#define PACMAN_ALIGNMENT_H
+#ifndef PACMAN_COLOR_H
+#define PACMAN_COLOR_H
+#include <cstdint>
 
 namespace infra::ui {
-    enum class Align {
-        Start,
-        Center,
-        End,
-        Stretch
+
+    struct Color {
+        std::uint8_t r, g, b;
     };
 }
 
-#endif //PACMAN_ALIGNMENT_H
+
+#endif //PACMAN_COLOR_H

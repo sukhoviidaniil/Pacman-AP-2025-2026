@@ -17,16 +17,25 @@
 ***************************************************************/
 #ifndef PACMAN_GRID_H
 #define PACMAN_GRID_H
-#include <string>
-#include <vector>
 
 #include "infra/ast/Node.h"
+#include <vector>
+#include <cstdint>
+
 namespace infra::ast {
+    enum class Tile : std::uint8_t {
+        Empty,
+        Wall,
+        Coin,
+        PowerPellet,
+        PacmanSpawn,
+        GhostSpawn
+    };
     struct Grid : Model_Node {
         unsigned int rows;
         unsigned int columns;
         float tile_size;
-        std::vector<std::vector<std::string>> grid;
+        std::vector<std::vector<Tile>> grid;
     };
 }
 #endif //PACMAN_GRID_H

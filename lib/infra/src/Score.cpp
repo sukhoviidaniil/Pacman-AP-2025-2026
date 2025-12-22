@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Base.h
+ * File:          Score.cpp
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-19
+ * Created:       2025-12-21
  * Modified:      []
  *
  * Description:   []
@@ -15,23 +15,14 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_BASE_H
-#define PACMAN_BASE_H
 
-#pragma once
-#include <vector>
-#include <memory>
-#include <optional>
-#include <algorithm>
-#include <cassert>
+#include "infra/Score.h"
+namespace infra {
+    Score::Score() = default;
 
-namespace infra::ui {
-    struct Vec2 {
-        float x = 0, y = 0;
-    };
+    Score::~Score() = default;
 
-    struct Rect {
-        float x, y, w, h;
-    };
+    void Score::track_local(const std::shared_ptr<infra::event::Event_Bus> &bus) {
+
+    }
 }
-#endif //PACMAN_BASE_H

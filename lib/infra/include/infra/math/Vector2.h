@@ -22,14 +22,12 @@
 #include <functional>
 
 namespace infra::math {
-    class Vector2{
-    public:
+    struct  Vector2{
         float x=0.0, y=0.0;
 
-        virtual ~Vector2();
-        [[nodiscard]] Vector2();
-        [[nodiscard]] Vector2(float x, float y);
-        [[nodiscard]] explicit Vector2(const Point2& p);
+        [[nodiscard]] constexpr Vector2();
+        [[nodiscard]] constexpr Vector2(float x, float y);
+        [[nodiscard]] constexpr explicit Vector2(const Point2& p);
 
         [[nodiscard]] Point2 to_Point2() const;
 

@@ -18,7 +18,7 @@
 
 #include "core/Stage_Factory.h"
 
-#include "core/Score.h"
+#include "../../infra/include/infra/Score.h"
 
 namespace core {
     Stage_Factory::Stage_Factory() = default;

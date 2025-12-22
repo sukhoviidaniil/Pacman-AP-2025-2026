@@ -19,6 +19,7 @@
 #define PACMAN_ACTOR_H
 
 #include "Entity.h"
+#include "infra/math/Direction.h"
 #include "model/collision/World_Collision_Manager.h"
 
 namespace model::entity {
@@ -29,25 +30,26 @@ namespace model::entity {
             const std::string &name,
             const infra::math::Point2 &position,
             std::unique_ptr<collision::HitBox> hitbox,
-            const infra::math::Vector2 &current_direction,
+            const infra::math::Direction &current_direction,
             float speed
             );
         void set_status(const int& status);
-        void set_direction(const infra::math::Vector2 &direction);
+        void set_direction(const infra::math::Direction &direction);
         void to_left();
         void to_right();
         void to_up();
         void to_down();
 
-        [[nodiscard]] infra::math::Vector2 get_direction() const;
+        [[nodiscard]] infra::math::Direction get_direction() const;
 
         void move(float deltaTime, const std::shared_ptr<collision::World_Collision_Manager> &collision_control);
 
         void virtual act(float deltaTime, const std::shared_ptr<collision::World_Collision_Manager> &collision_control);
 
-    private:
-        infra::math::Vector2 current_direction_;
-        infra::math::Vector2 next_direction_;
+
+        private:
+        infra::math::Direction current_direction_;
+        infra::math::Direction next_direction_;
         // m/s
         float speed_;
         int status_ = 0;

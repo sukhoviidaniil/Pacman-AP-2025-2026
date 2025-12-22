@@ -23,6 +23,7 @@
 #include <memory>
 
 #include "../collision/collision_Control.h"
+#include "infra/presentation/base/Rect.h"
 
 namespace model {
     class Entity {
@@ -36,13 +37,14 @@ namespace model {
         [[nodiscard]] std::string get_name() const;
         [[nodiscard]] infra::math::Point2 get_position() const;
         [[nodiscard]] const collision::HitBox& get_hitboxe() const;
+        [[nodiscard]] infra::ui::Rect get_rect() const;
 
-    protected:
+
         // Position in world coordinates
         infra::math::Point2 position_;
         // All Entities have some hitbox
         std::unique_ptr<collision::HitBox> hitbox_;
-    private:
+
         // Name for identification purposes
         std::string name_;
     };

@@ -34,10 +34,7 @@ namespace infra::ast {
         std::vector<std::string> textures;
         std::vector<Sprite> sprites;
         std::vector<Complex_Sprite> complex_sprites;
-
-        std::optional<Camera> ui_camera;
         std::optional<Camera> model_camera;
-
     };
 }
 

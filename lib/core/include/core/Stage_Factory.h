@@ -18,7 +18,7 @@
 #ifndef PACMAN_STAGE_FACTORY_H
 #define PACMAN_STAGE_FACTORY_H
 #include "Controller.h"
-#include "Score.h"
+#include "../../../infra/include/infra/Score.h"
 #include "model/Model.h"
 #include "view/View.h"
 

@@ -21,35 +21,34 @@
 #include <string>
 
 namespace infra::math {
-    Point2::~Point2() = default;
 
-    Point2::Point2() = default;
+    constexpr Point2::Point2() = default;
 
-    Point2::Point2(float x, float y) : x(x), y(y) {
+    constexpr Point2::Point2(float x, float y) : x(x), y(y) {
     }
 
     Point2 Point2::operator*(const float scalar) const {
-        return Point2(x * scalar, y * scalar);
+        return {x * scalar, y * scalar};
     }
 
     Point2 Point2::operator/(const float scalar) const {
-        return Point2(x / scalar, y / scalar);
+        return {x / scalar, y / scalar};
     }
 
     Point2 Point2::operator+(const Point2 &other) const {
-        return Point2(x + other.x, y + other.y);
+        return {x + other.x, y + other.y};
     }
 
     Point2 Point2::operator-(const Point2 &other) const {
-        return Point2(x - other.x, y - other.y);
+        return {x - other.x, y - other.y};
     }
 
     Point2 Point2::operator*(const Point2 &other) const {
-        return Point2(x * other.x, y * other.y);
+        return {x * other.x, y * other.y};
     }
 
     Point2 Point2::operator/(const Point2 &other) const {
-        return Point2(x / other.x, y / other.y);
+        return {x / other.x, y / other.y};
     }
 
     Point2 & Point2::operator*=(float scalar) {

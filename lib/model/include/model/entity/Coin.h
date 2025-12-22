@@ -17,10 +17,12 @@
 ***************************************************************/
 #ifndef PACMAN_COIN_H
 #define PACMAN_COIN_H
+#include "Entity.h"
 
 namespace model::entity {
-    class Coin {
-
+    class Coin : public Entity{
+    public:
+        ~Coin() override;
     };
 }
 

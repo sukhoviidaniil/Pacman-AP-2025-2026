@@ -35,7 +35,7 @@ namespace model {
         rows_ = grid_info.rows;
         columns_ = grid_info.columns;
         tile_size_ = grid_info.tile_size;
-        const std::vector<std::vector<std::string>> & grid = grid_info.grid;
+        const std::vector<std::vector<infra::ast::Tile>> & grid = grid_info.grid;
 
         if (grid.size() != rows_) throw std::invalid_argument("Grid rows doesn't match height");
         for (const auto &row : grid) {
@@ -45,24 +45,31 @@ namespace model {
         tiles_ = std::vector(rows_, std::vector<std::shared_ptr<entity::Tile>>(columns_));
 
         const float half_tile_size = tile_size_ * 0.5f;
-        const float height_size = static_cast<float>(rows_) * tile_size_;
-        const float width_size = static_cast<float>(columns_) * tile_size_;
+        // const float height_size = static_cast<float>(rows_) * tile_size_;
+        // const float width_size = static_cast<float>(columns_) * tile_size_;
 
         // Coordinates of the center of the tile in the upper left corner of the grid
-        const float start_x = - width_size*0.5f + half_tile_size;
-        const float start_y = - height_size*0.5f + half_tile_size;
+        const float start_x = half_tile_size;
+        const float start_y = half_tile_size;
         for (size_t i = 0 ; i < rows_; i++) {
             const float y = start_y + tile_size_ * static_cast<float>(i);
             for (size_t j = 0 ; j < columns_; j++) {
                 const float x = start_x + tile_size_ * static_cast<float>(j);
-                const std::string& name = grid[i][j];
+                const infra::ast::Tile& tile = grid[i][j];
+                std::string tile_name;
+                bool walkable;
                 infra::math::Point2 position(x, y);
-                bool walkable = true;
-                if (name == "Wall") {
-                    walkable = false;
+                switch (tile) {
+                    case infra::ast::Tile::Wall:
+                        walkable = false;
+                        tile_name = "Wall";
+                        break;
+                    default:
+                        walkable = true;
+                        tile_name = "Free";
                 }
                 auto hitbox = std::make_unique<collision::HitBox_Rectangle>(infra::math::Point2{0,0}, tile_size_, tile_size_, 0);
-                tiles_[i][j] = std::make_shared<entity::Tile>(name, position, std::move(hitbox), walkable);
+                tiles_[i][j] = std::make_shared<entity::Tile>(tile_name, position, std::move(hitbox), walkable);
             }
         }
     }
@@ -83,7 +90,7 @@ namespace model {
         return static_cast<unsigned int>(static_cast<float>(columns_) * tile_size_);
     }
 
-    std::shared_ptr<const entity::Tile> Tile_Grid::get_tile(const size_t &x, const size_t &y) const {
+    std::shared_ptr<const entity::Tile> Tile_Grid::get_tile( const size_t &y, const size_t &x) const {
         if (x >= columns_ || y >= rows_)
         {
             return nullptr;

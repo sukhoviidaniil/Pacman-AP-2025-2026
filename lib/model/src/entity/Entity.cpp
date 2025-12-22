@@ -43,4 +43,9 @@ namespace model {
     const collision::HitBox& Entity::get_hitboxe() const {
         return *hitbox_;
     }
+
+    infra::ui::Rect Entity::get_rect() const {
+        collision::AABB aabb = get_hitboxe().get_aabb();
+        return {{aabb.center.x, aabb.center.y}, {aabb.extend.x, aabb.extend.y}};
+    }
 }

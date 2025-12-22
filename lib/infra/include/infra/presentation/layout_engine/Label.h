@@ -17,21 +17,44 @@
 ***************************************************************/
 #ifndef PACMAN_LABEL_H
 #define PACMAN_LABEL_H
-#include "Base.h"
+#include "base/Base.h"
 #include "UIElement.h"
 
 namespace infra::ui {
+    /**
+     * @brief Simple text label UI element.
+     *
+     * Represents a leaf layout element that displays a single line of text.
+     * The label participates in the layout system by reporting its desired
+     * size based on the text content.
+     */
     class Label : public UIElement {
     public:
-
+        /// @brief Virtual destructor.
         ~Label() override = default;
+
+        /**
+         * @brief Constructs a label with the given text.
+         *
+         * @param text Text content of the label.
+         */
         explicit Label(std::string text) : text(std::move(text)) {}
 
-        Vec2 measure(Vec2) override {
+        /**
+         * @brief Measures the desired size of the label.
+         *
+         * Uses a simplified text metric: a fixed width per character
+         * and a constant line height.
+         *
+         * @param available Available space (ignored).
+         * @return Desired size of the label.
+         */
+        math::Vector2 measure(const math::Vector2& available) override {
             // Conditional: 8px per character
             return { static_cast<float>(text.size() * 8), 16 };
         }
 
+        /// @brief Text content of the label.
         std::string text;
     };
 }

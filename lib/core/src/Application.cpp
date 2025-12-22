@@ -87,7 +87,7 @@ namespace core {
             if (current_stage != nullptr) {
                 current_stage->run(delta);
             }
-            infra::ast::Scene_Graph v;
+            infra::ui::RenderFrameGraph v;
             view_->render(v);
             dispatch_events();
         }

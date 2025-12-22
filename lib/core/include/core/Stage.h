@@ -19,15 +19,18 @@
 #define PACMAN_STAGE_H
 
 #include "infra/event/Event_Bus.h"
-#include "infra/ast/view/Drawable.h"
+#include "infra/presentation/RenderFrame.h"
 
 namespace core {
     class Stage {
     public:
         Stage();
         virtual ~Stage();
+        virtual void set_local_eventbus(const std::shared_ptr<infra::event::Event_Bus>& eventbus);
         virtual void run(float tick) = 0;
-        virtual infra::ast::Scene_Graph get_Scene_Graph() const = 0;
+        [[nodiscard]] virtual infra::ui::RenderFrameGrid get_Scene_Graph() const = 0;
+
+        std::shared_ptr<infra::event::Event_Bus> eventbus_; /// Local Event Bus
     };
 }
 

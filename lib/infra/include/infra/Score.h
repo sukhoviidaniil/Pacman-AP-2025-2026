@@ -20,14 +20,16 @@
 
 #include "infra/event/Observer.h"
 
-namespace core {
+namespace infra {
     class Score : public infra::event::Observer {
-        unsigned int lives_remaining = 3;
-        unsigned int points_score = 0;
         public:
         Score();
         ~Score() override;
         virtual void track_local(const std::shared_ptr<infra::event::Event_Bus>& bus);
+
+        unsigned int lives_remaining = 3;
+        unsigned int points_score = 0;
+        unsigned int level = 1;
     };
 }
 

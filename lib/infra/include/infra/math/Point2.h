@@ -21,13 +21,11 @@
 #include <iosfwd>
 
 namespace infra::math {
-    class Point2 {
-    public:
+    struct Point2 {
         float x=0.0, y=0.0;
 
-        virtual ~Point2();
-        [[nodiscard]] Point2();
-        [[nodiscard]] Point2(float x, float y);
+        [[nodiscard]] constexpr Point2();
+        [[nodiscard]] constexpr Point2(float x, float y);
 
         // ========== Arithmetic operators ==========
         Point2 operator*(float scalar) const;

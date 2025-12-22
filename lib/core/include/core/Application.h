@@ -18,7 +18,7 @@
 #ifndef PACMAN_APPLICATION_H
 #define PACMAN_APPLICATION_H
 
-#include "Score.h"
+#include "../../../infra/include/infra/Score.h"
 #include "infra/ast/Application.h"
 #include "Stage_Manager.h"
 #include "Stage_Factory.h"

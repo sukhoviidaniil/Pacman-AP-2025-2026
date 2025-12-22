@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          LogScope.cpp
+ * File:          Pacman.cpp
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-10
+ * Created:       2025-12-22
  * Modified:      []
  *
  * Description:   []
@@ -16,16 +16,14 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "infra/diagnostics/LogScope.h"
+#include "model/entity/Pacman.h"
 
-#include "infra/diagnostics/Logger.h"
+#include "infra/math/Direction.h"
 
-namespace infra::diag{
-    LogScope::LogScope() {
-        Logger::instance().add_depth();
-    }
+namespace model::entity {
+    Pacman::~Pacman() = default;
 
-    LogScope::~LogScope() {
-        Logger::instance().lower_depth();
+    Pacman::Pacman(const infra::math::Point2 &position, std::unique_ptr<collision::HitBox> hitbox, float speed)
+        : Actor("Pacman", position, std::move(hitbox), infra::math::Direction::Right, speed){
     }
 }

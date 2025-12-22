@@ -22,22 +22,54 @@
 #include "UIElement.h"
 
 namespace infra::ui {
+    /**
+     * @brief Button UI element.
+     *
+     * A container element that displays a clickable button with text.
+     * Internally contains a Label as its child and adds padding around it.
+     */
     class Button : public UIElement {
     public:
+        /// @brief Virtual destructor.
         ~Button() override = default;
+
+        /**
+         * @brief Constructs a button with the given text.
+         *
+         * Automatically creates a child Label and sets default padding.
+         *
+         * @param text Text content of the button.
+         */
         explicit Button(std::string text) {
             add(std::make_shared<Label>(std::move(text)));
             padding = {8, 4};
         }
 
-        Vec2 measure(Vec2 avail) override {
-            Vec2 c = children[0]->measure(avail);
+        /**
+         * @brief Measures the desired size of the button.
+         *
+         * Calculates the size based on the child Label and adds
+         * horizontal and vertical padding.
+         *
+         * @param avail Available space from the parent.
+         * @return Desired size of the button.
+         */
+        math::Vector2 measure(const math::Vector2 &avail) override {
+            math::Vector2 c = children[0]->measure(avail);
             return {c.x + padding.x * 2, c.y + padding.y * 2};
         }
 
-        void layout(Rect r) override {
+        /**
+         * @brief Assigns the final layout rectangle to the button.
+         *
+         * Stores the final rectangle for the button itself and
+         * positions its child Label inside the padded area.
+         *
+         * @param r Final rectangle assigned by the layout engine.
+         */
+        void layout(const Rect r) override {
             result.rect = r;
-            Rect inner {
+            const Rect inner {
                 r.x + padding.x,
                 r.y + padding.y,
                 r.w - padding.x * 2,

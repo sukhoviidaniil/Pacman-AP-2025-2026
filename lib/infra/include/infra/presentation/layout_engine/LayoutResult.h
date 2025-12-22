@@ -18,11 +18,17 @@
 #ifndef PACMAN_LAYOUTRESULT_H
 #define PACMAN_LAYOUTRESULT_H
 
-#include "Base.h"
+#include "infra/presentation/base/Rect.h"
 
 namespace infra::ui {
+    /**
+     * @brief Result of a layout computation.
+     *
+     * Contains the resolved rectangle assigned to a UI element
+     * after the layout engine finishes its calculations.
+     */
     struct LayoutResult {
-        Rect rect;
+        Rect rect; ///< Final computed rectangle
     };
 }
 

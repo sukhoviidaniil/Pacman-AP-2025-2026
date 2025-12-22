@@ -40,7 +40,7 @@ namespace model {
         [[nodiscard]] unsigned int get_width() const;
         [[nodiscard]] unsigned int get_height() const;
 
-        std::shared_ptr<const entity::Tile> get_tile(const size_t& x, const size_t& y) const;
+        std::shared_ptr<const entity::Tile> get_tile(const size_t& y, const size_t& x) const;
         std::optional<std::pair<size_t, size_t>> get_nearest_tile_size_t(const infra::math::Point2 &pos) const;
         /**
          *

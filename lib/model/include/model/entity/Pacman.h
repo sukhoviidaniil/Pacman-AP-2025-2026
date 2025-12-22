@@ -23,6 +23,12 @@ namespace model::entity {
     class Pacman : public Actor {
     public:
         ~Pacman() override;
+
+        Pacman(
+            const infra::math::Point2 &position,
+            std::unique_ptr<collision::HitBox> hitbox,
+            float speed
+            );
     };
 }
 

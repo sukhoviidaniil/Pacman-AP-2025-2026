@@ -4,14 +4,13 @@
 #include <string>
 
 namespace infra::math {
-    Vector2::~Vector2() = default;
 
-    Vector2::Vector2() = default;
+    constexpr Vector2::Vector2() = default;
 
-    Vector2::Vector2(const float x, const float y) : x(x), y(y) {
+    constexpr Vector2::Vector2(const float x, const float y) : x(x), y(y) {
     }
 
-    Vector2::Vector2(const Point2 &p) : x(p.x), y(p.y) {
+    constexpr Vector2::Vector2(const Point2 &p) : x(p.x), y(p.y) {
     }
 
     Point2 Vector2::to_Point2() const {

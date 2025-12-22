@@ -17,27 +17,53 @@
 ***************************************************************/
 #ifndef PACMAN_LINEARLAYOUT_H
 #define PACMAN_LINEARLAYOUT_H
-#include "Alignment.h"
-#include "Base.h"
-#include "UIElement.h"
 
+#include "UIElement.h"
+#include "infra/presentation/base/Alignment.h"
+#include "infra/presentation/base/Rect.h"
 
 namespace infra::ui {
+
+    /**
+     * @brief Base class for linear layout containers.
+     *
+     * Arranges child elements in a single row or column, optionally
+     * supporting alignment, spacing, and flexible growth.
+     */
     class LinearLayout : public UIElement {
     public:
+        /// @brief Alignment of children along the cross axis.
         Align align = Align::Start;
+        /// @brief Spacing between consecutive children.
         float spacing = 0.f;
 
     protected:
+        /**
+         * @brief Determines if the layout is horizontal or vertical.
+         *
+         * Must be implemented by derived classes.
+         *
+         * @return true if horizontal, false if vertical.
+         */
         virtual bool horizontal() const = 0;
 
-        Vec2 measure(Vec2 available) override {
-            Vec2 total {0, 0};
+        /**
+         * @brief Measures the desired size of the layout.
+         *
+         * Accumulates the sizes of visible children along the main axis
+         * and takes the maximum along the cross axis. Spacing between
+         * children is included in the measurement.
+         *
+         * @param available Available space from the parent.
+         * @return Desired size of the layout.
+         */
+        math::Vector2 measure(const math::Vector2 &available) override {
+            math::Vector2 total {0, 0};
 
             for (auto& c : children) {
                 if (!c->visible) continue;
 
-                Vec2 cs = c->measure(available);
+                math::Vector2 cs = c->measure(available);
 
                 if (horizontal()) {
                     total.x += cs.x + spacing;
@@ -51,11 +77,20 @@ namespace infra::ui {
             return total;
         }
 
+        /**
+         * @brief Lays out children within the assigned rectangle.
+         *
+         * Calculates positions and sizes for each child, taking into
+         * account fixed and flexible elements, alignment, and spacing.
+         *
+         * @param r Final rectangle assigned by the parent layout.
+         */
         void layout(Rect r) override {
             result.rect = r;
-
-            float main = horizontal() ? r.w : r.h;
-            float cross = horizontal() ? r.h : r.w;
+            math::Point2 p = r.p;
+            math::Vector2 v = r.v;
+            float main = horizontal() ? v.x : v.y;
+            float cross = horizontal() ? v.y : v.x;
 
             float fixed = 0;
             float flex_sum = 0;
@@ -64,18 +99,18 @@ namespace infra::ui {
                 if (!c->visible) continue;
                 if (c->flex > 0) flex_sum += c->flex;
                 else {
-                    Vec2 s = c->measure({r.w, r.h});
+                    math::Vector2 s = c->measure({v.x, v.y});
                     fixed += horizontal() ? s.x : s.y;
                 }
             }
 
             const float free = main - fixed - spacing * (static_cast<float>(children.size()) - 1);
-            float cursor = horizontal() ? r.x : r.y;
+            float cursor = horizontal() ? p.x : p.y;
 
             for (const auto& c : children) {
                 if (!c->visible) continue;
 
-                Vec2 s = c->measure({r.w, r.h});
+                math::Vector2 s = c->measure({v.x, v.x});
 
                 float main_size =
                     c->flex > 0 ? free * (c->flex / flex_sum)
@@ -88,9 +123,9 @@ namespace infra::ui {
                 Rect cr;
 
                 if (horizontal()) {
-                    cr = {cursor, r.y, main_size, cross_size};
+                    cr = {math::Point2(cursor, p.y), math::Vector2(main_size, cross_size)};
                 } else {
-                    cr = {r.x, cursor, cross_size, main_size};
+                    cr = {math::Point2(p.x, cursor), math::Vector2(cross_size, main_size)};
                 }
 
                 c->layout(cr);

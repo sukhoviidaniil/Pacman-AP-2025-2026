@@ -167,12 +167,39 @@ namespace infra::ast {
         // s.complex_sprites = io::get_checked<std::vector<ast::Complex_Sprite>>(s.complex_sprites, "sprite_groups", j);
     }
 
+    inline Tile parse_tile(const std::string& s) {
+        if (s == "wall")  return Tile::Wall;
+        if (s == "coin")  return Tile::Coin;
+        if (s == "empty") return Tile::Empty;
+        throw std::runtime_error("Unknown tile");
+    }
+
+    inline void from_json(const nlohmann::json& json, Grid& s) {
+        // rows x columns
+        s.columns = io::get_checked<unsigned int>(s.columns , "columns", json);
+        s.rows = io::get_checked<unsigned int>(s.rows , "rows", json);
+        const auto grid = io::get_checked<std::vector<std::vector<std::string>>>(s.grid , "grid", json);
+        if (grid.size() != s.rows) {
+            throw std::runtime_error("Grid size mismatch");
+        }
+        for (size_t i = 0; i < s.rows; ++i) {
+            if (grid[i].size() != s.columns) {
+                throw std::runtime_error("Grid size mismatch");
+            }
+        }
+        s.grid.resize(s.rows, std::vector<Tile>(s.columns));
+        for (size_t y = 0; y < s.rows; ++y) {
+            for (size_t x = 0; x < s.columns; ++x) {
+                // y -> rows
+                // x -> columns
+                s.grid[y][x] =  parse_tile(grid[y][x]);
+            }
+        }
+    }
+
     inline void from_json(const nlohmann::json& j, Model& s) {
-        /*
-        s.columns = io::get_checked<unsigned int>(s.columns , "columns", j);
-        s.rows = io::get_checked<unsigned int>(s.rows , "rows", j);
-        s.grid = io::get_checked<std::vector<std::vector<std::string>>>(s.grid , "grid", j);
-        */ // TODO
+        s.grid = io::get_checked<Grid>(s.grid, "grid", j);
+
     }
 }
 

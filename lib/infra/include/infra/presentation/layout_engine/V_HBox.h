@@ -21,13 +21,27 @@
 #include "LinearLayout.h"
 
 namespace infra::ui {
+    /**
+     * @brief Vertical box layout.
+     *
+     * Arranges child elements vertically in a single column.
+     * Inherits linear layout behavior with horizontal() = false.
+     */
     class VBox : public LinearLayout {
     protected:
+        /// @brief Indicates that the layout is vertical.
         bool horizontal() const override { return false; }
     };
 
+    /**
+     * @brief Horizontal box layout.
+     *
+     * Arranges child elements horizontally in a single row.
+     * Inherits linear layout behavior with horizontal() = true.
+     */
     class HBox : public LinearLayout {
     protected:
+        /// @brief Indicates that the layout is horizontal.
         bool horizontal() const override { return true; }
     };
 }
