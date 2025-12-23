@@ -26,7 +26,9 @@
 namespace core {
     class Stage_Game : public Stage {
     public:
-        explicit Stage_Game();
+        explicit Stage_Game(
+
+            );
         ~Stage_Game() override;
 
         void simulate(float delta);

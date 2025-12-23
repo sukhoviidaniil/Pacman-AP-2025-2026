@@ -13,6 +13,11 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_compile_options(-Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion)
 
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_definitions(-D_DEBUG)
+    message("-- Debugmod on")
+endif()
+
 # -----------------------------------------
 # Create an executable file/target
 # -----------------------------------------
@@ -53,6 +58,7 @@ set(FUNC_INCLUDE_DIRS
         ${CMAKE_SOURCE_DIR}/func
 )
 #]]
+
 add_subdirectory(lib/infra)
 add_subdirectory(lib/model)
 add_subdirectory(lib/view)
@@ -101,6 +107,4 @@ elseif(UNIX)
 endif()
 target_compile_definitions(${APP_TARGET} PRIVATE ASSETS_DIR="${CMAKE_SOURCE_DIR}/assets/")
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    add_definitions(-D_DEBUG)
-endif()
+

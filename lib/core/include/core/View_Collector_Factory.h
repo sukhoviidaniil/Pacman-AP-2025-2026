@@ -17,10 +17,10 @@
 ***************************************************************/
 #ifndef PACMAN_VIEW_COLLECTOR_FACTORY_H
 #define PACMAN_VIEW_COLLECTOR_FACTORY_H
-#include "event_collector/Event_Collector .h"
-#include "infra/ast/Event_Collector.h"
-#include "view/View.h"
 
+#include "core/event_collector/Event_Collector.h"
+#include "view/View.h"
+#include "infra/ast/Event_Collector.h"
 
 namespace core {
     class View_Collector_Factory{

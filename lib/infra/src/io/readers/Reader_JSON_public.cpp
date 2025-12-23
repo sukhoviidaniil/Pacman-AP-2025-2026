@@ -35,17 +35,7 @@ namespace infra::io {
 
     ast::Complex_Sprite Reader_JSON::read_Sprits_Group(const std::string &filename) const {
         nlohmann::json data = get_json_data(filename);
-        ast::Complex_Sprite sg;
-        sg.using_texture = get_checked<std::string>("using_texture", data, filename);
-        sg.sprits_width = get_checked<unsigned int>("sprits_width", data, filename);
-        sg.sprits_height = get_checked<unsigned int>("sprits_height", data, filename);
-        sg.groups_names = get_checked<std::vector<std::string>>("groups_names", data, filename);
-        sg.number_of_statuses = get_checked<unsigned int>("number_of_statuses", data, filename);
-
-        if (!data["statuses"].is_array() || data["statuses"].size() != sg.number_of_statuses) {
-            throw std::invalid_argument("Sprits_Group parameter statuses is not a list or its size is not equal to the parameter number_of_statuses");
-        }
-        sg.sprite_statuses = get_checked<std::vector<ast::Sprite_Status>>("statuses", data, filename);
+        auto sg = get_checked<ast::Complex_Sprite>(data);
         return sg;
     }
 
@@ -56,7 +46,7 @@ namespace infra::io {
         const std::string &object
         ){
 
-        auto vs = get_checked<ast::View>(data, filename, object);;
+        auto vs = get_checked<ast::View>(data);
         if (data.contains("sprites") && data["sprites"].is_array()) {
             for (const auto &sprite : data["sprites"]) {
                 if (sprite.is_string()) {
@@ -65,7 +55,7 @@ namespace infra::io {
                     continue;
                 }
                 if (sprite.is_structured()) {
-                    auto s = get_checked<ast::Sprite>(sprite, filename, "sprites", object);
+                    auto s = get_checked<ast::Sprite>(sprite, "sprites");
                     vs.sprites.push_back(s);
                     continue;
                 }
@@ -74,13 +64,13 @@ namespace infra::io {
         }
 
         if (data.contains("sprite_groups") && data["sprite_groups"].is_array()) {
-            for (const auto &sprite : data["sprites"]) {
+            for (const auto &sprite : data["sprite_groups"]) {
                 if (sprite.is_string()) {
                     vs.complex_sprites.push_back(fr->read_Sprits_Group(sprite.get<std::string>()));
                     continue;
                 }
                 if (sprite.is_structured()) {
-                    vs.complex_sprites.push_back(get_checked<ast::Complex_Sprite>(sprite, filename, "sprite_groups"));
+                    vs.complex_sprites.push_back(get_checked<ast::Complex_Sprite>(sprite, "sprite_groups"));
                     continue;
                 }
                 throw std::invalid_argument("View_Sprites one of the parameters in the “sprite_groups” list is neither a file name nor an object.");
@@ -98,7 +88,7 @@ namespace infra::io {
 
     ast::Model Reader_JSON::read_Model(const std::string& path) const {
         nlohmann::json data = get_json_data(path);
-        return get_checked<ast::Model>(data, path, "ROOT");
+        return get_checked<ast::Model>(data);
     }
 
     ast::Application Reader_JSON::read_Application(
@@ -110,7 +100,7 @@ namespace infra::io {
         const std::string view_name = "view";
         if (data.contains(view_name)) {
             if (data[view_name].is_string()) {
-                const auto view = get_checked<std::string>(view_name, data, path);
+                const auto view = get_checked<std::string>(data, view_name);
                 app.view = fr->read_View(view);
             }else if (data[view_name].is_structured()) {
                 app.view = read_View(data[view_name], fr, path, view_name);
@@ -123,12 +113,12 @@ namespace infra::io {
         if (data.contains(m) && data[m].is_array()) {
             for (const auto& model_data: data[m]) {
                 if (model_data.is_object()) {
-                    auto model = get_checked<ast::Model>(model_data, path, m);
+                    auto model = get_checked<ast::Model>(model_data);
                     app.models.push_back(model);
                     continue;
                 }
                 if (model_data.is_string()) {
-                    auto model_file = get_checked<std::string>(model_data, path, m);
+                    auto model_file = get_checked<std::string>(model_data);
                     ast::Model model = fr->read_Model(model_file);
                     app.models.push_back(model);
                     continue;

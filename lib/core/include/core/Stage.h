@@ -24,9 +24,10 @@
 namespace core {
     class Stage {
     public:
-        Stage();
         virtual ~Stage();
-        virtual void set_local_eventbus(const std::shared_ptr<infra::event::Event_Bus>& eventbus);
+
+        explicit Stage(const std::shared_ptr<infra::event::Event_Bus>& eventbus);
+
         virtual void run(float tick) = 0;
         [[nodiscard]] virtual infra::ui::RenderFrameGraph get_Scene_Graph() const = 0;
 

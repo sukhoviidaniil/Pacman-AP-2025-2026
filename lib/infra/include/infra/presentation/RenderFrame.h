@@ -18,10 +18,12 @@
 #ifndef PACMAN_RENDERFRAME_H
 #define PACMAN_RENDERFRAME_H
 
-#include "Animation.h"
-#include "base/Color.h"
-#include "infra/presentation/base/Rect.h"
+#include <optional>
 #include "infra/math/Direction.h"
+#include "infra/presentation/base/Color.h"
+#include "infra/presentation/base/Rect.h"
+#include "infra/presentation/Animation.h"
+#include "infra/Status.h"
 
 namespace infra::ui {
     enum class Space {
@@ -33,9 +35,9 @@ namespace infra::ui {
         /// The size of the screen area in which View draws the scene. Screen pixels
         math::Vector2 viewport_size;
         /// Camera position in world coordinates
-        math::Vector2 camera_pos;
+        math::Vector2 position;
 
-        float camera_zoom = 1.f;
+        float zoom = 1.f;
     };
 
     enum class ItemType {
@@ -61,13 +63,13 @@ namespace infra::ui {
          * @brief Optional direction (e.g., "up", "down", "left", "right").
          * Can be empty if not needed.
          */
-        math::Direction direction;
+        std::optional<math::Direction> direction;
 
         /**
          * @brief Optional status (e.g., "idle", "walking", "attacking").
          * Can be empty if not needed.
          */
-        std::string status;
+        std::optional<Status> status;
 
         std::optional<Animation> animation;
 

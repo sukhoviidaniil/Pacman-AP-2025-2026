@@ -1,15 +1,13 @@
-#include "infra/math/Vector2.h"
 
 #include <cmath>
 #include <string>
+#include "infra/math/Vector2.h"
 
 namespace infra::math {
 
-    constexpr Vector2::Vector2(const float x, const float y) : x(x), y(y) {
-    }
 
-    constexpr Vector2::Vector2(const Point2 &p) : x(p.x), y(p.y) {
-    }
+
+
 
     Point2 Vector2::to_Point2() const {
         return {x, y};

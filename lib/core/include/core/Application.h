@@ -18,12 +18,13 @@
 #ifndef PACMAN_APPLICATION_H
 #define PACMAN_APPLICATION_H
 
-#include "../../../infra/include/infra/Score.h"
+#include "infra/Score.h"
 #include "infra/ast/Application.h"
-#include "Stage_Manager.h"
-#include "Stage_Factory.h"
-#include "event_collector/Event_Collector .h"
 #include "view/View.h"
+#include "core/Controller.h"
+#include "core/event_collector/Event_Collector.h"
+#include "core/Stage_Manager.h"
+#include "core/Stage_Factory.h"
 
 namespace core {
     class Application : public infra::event::Observer{

@@ -18,11 +18,9 @@
 #ifndef PACMAN_ENTITY_H
 #define PACMAN_ENTITY_H
 
-#include "infra/math/Point2.h"
-
 #include <memory>
 
-#include "../collision/collision_Control.h"
+#include "model/collision/HitBox.h"
 #include "infra/presentation/base/Rect.h"
 
 namespace model {

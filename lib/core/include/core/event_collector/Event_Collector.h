@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Color.h
+ * File:          Event_Collector.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-22
+ * Created:       2025-12-19
  * Modified:      []
  *
  * Description:   []
@@ -15,17 +15,18 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_COLOR_H
-#define PACMAN_COLOR_H
+#ifndef PACMAN_EVENT_COLLECTOR_H
+#define PACMAN_EVENT_COLLECTOR_H
+#include "infra/event/Event_Store.h"
 
-#include <cstdint>
+namespace core {
+    class Event_Collector {
+    public:
+        virtual ~Event_Collector() = default;
 
-namespace infra::ui {
-
-    struct Color {
-        std::uint8_t r, g, b;
+        virtual void collect() = 0;
+        infra::event::Event_Store event_store_;
     };
 }
 
-
-#endif //PACMAN_COLOR_H
+#endif //PACMAN_EVENT_COLLECTOR_H

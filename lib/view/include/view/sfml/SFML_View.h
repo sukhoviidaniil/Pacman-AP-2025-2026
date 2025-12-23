@@ -30,6 +30,8 @@ namespace view {
     class SFML_View : public View, public ISFML_Event_Source{
     public:
         SFML_View(const infra::ast::View &info, const std::string & texture_dir_path);
+
+
         void render(const infra::ui::RenderFrameGraph& graph) override;
         void track_local(const std::shared_ptr<infra::event::Event_Bus>& bus) override;
         void track_global(const std::shared_ptr<infra::event::Event_Bus>& bus) override;
@@ -38,7 +40,11 @@ namespace view {
 
     protected:
 
-        std::optional<sf::Texture> get_Texture(const std::string& using_texture);
+        void render(const infra::ui::RenderFrame& frame);
+
+        void render_ComplexSprite(const infra::ui::RenderItem& item);
+
+        std::optional<std::reference_wrapper<const sf::Texture>> get_Texture(const std::string& using_texture);
 
         void visit(const infra::ast::Sprite&) override;
 

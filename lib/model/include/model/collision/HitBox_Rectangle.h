@@ -41,7 +41,7 @@ namespace model::collision {
         [[nodiscard]] std::vector<infra::math::Point2> get_centers() const override;
 
     private:
-        infra::math::Point2 center_;
+        infra::math::Point2 center_ = {0,0};
         float width_;
         float height_;
     };

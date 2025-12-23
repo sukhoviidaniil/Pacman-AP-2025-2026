@@ -18,13 +18,11 @@
 #ifndef PACMAN_STAGE_MANAGER_H
 #define PACMAN_STAGE_MANAGER_H
 
-#include "Stage.h"
+#include "Stage_Factory.h"
+#include "infra/event/Observer.h"
 
 #include <memory>
 #include <stack>
-
-#include "Stage_Factory.h"
-#include "infra/event/Observer.h"
 
 namespace core {
     class Stage_Manager : public infra::event::Observer {
@@ -39,6 +37,9 @@ namespace core {
         void push_stage(const std::shared_ptr<core::Stage> &stage);
         std::shared_ptr<core::Stage> get_top();
     private:
+
+        bool track = false;
+        bool complete = false;
         core::Stage_Factory stage_factory_;
         std::stack<std::shared_ptr<core::Stage>> current_stages_;
     };

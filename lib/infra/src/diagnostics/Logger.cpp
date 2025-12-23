@@ -21,6 +21,7 @@
 
 namespace infra::diag {
     Logger::Logger() : logfile_("debug.log"), depth_(0), indent_str_("  ") {
+        logfile_.flush();
     }
 
     Logger & Logger::instance() {

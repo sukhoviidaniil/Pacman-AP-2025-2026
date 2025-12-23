@@ -21,6 +21,7 @@
 #include <vector>
 
 #include "Sprite_Status.h"
+#include "infra/Status.h"
 #include "infra/ast/Node.h"
 
 namespace infra::ast {
@@ -29,8 +30,11 @@ namespace infra::ast {
         unsigned int sprits_width;
         unsigned int sprits_height;
         std::vector<std::string> groups_names;
-        unsigned int number_of_statuses;
-        std::vector<Sprite_Status> sprite_statuses;
+        std::unordered_map<
+            Status,
+            Sprite_Status
+        > sprites_;
+
         void accept(View_Visitor &v) const override {
             v.visit(*this);
         }

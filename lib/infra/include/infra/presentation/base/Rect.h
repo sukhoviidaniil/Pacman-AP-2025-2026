@@ -18,13 +18,6 @@
 #ifndef PACMAN_RECT_H
 #define PACMAN_RECT_H
 
-#pragma once
-#include <vector>
-#include <memory>
-#include <optional>
-#include <algorithm>
-#include <cassert>
-
 #include "infra/math/Point2.h"
 #include "infra/math/Vector2.h"
 
@@ -36,8 +29,8 @@ namespace infra::ui {
      * position and size of UI elements.
      */
     struct Rect {
-        math::Point2 p; ///< X position (left) | Y position (top)
-        math::Vector2 v; ///< Width | Height
+        math::Point2 p = {0,0}; ///< X position (left) | Y position (top)
+        math::Vector2 v = {0,0}; ///< Width | Height
     };
 }
 #endif //PACMAN_RECT_H

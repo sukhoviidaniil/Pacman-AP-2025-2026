@@ -17,10 +17,10 @@
 ***************************************************************/
 #ifndef PACMAN_DIRECTION_H
 #define PACMAN_DIRECTION_H
-#include "infra/math/Vector2.h"
 
 namespace infra::math {
     enum class Direction {
+        Any,
         Up,
         Right,
         Down,
@@ -29,14 +29,10 @@ namespace infra::math {
         Unknown
     };
 
-    constexpr Vector2 to_vec(const Direction d) {
-        switch (d) {
-            case Direction::Up:     return {0,-1};
-            case Direction::Right:  return {1,0};
-            case Direction::Down:   return {0,1};
-            case Direction::Left:   return {-1,0};
-            default:                return {0,0};
-        }
+    constexpr bool equal(const Direction first, const Direction second) {
+        if (first == Direction::Any) return true;
+        if (second == Direction::Any) return false;
+        return first == second;
     }
 }
 

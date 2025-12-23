@@ -26,8 +26,8 @@ namespace infra::math {
         float x=0.0, y=0.0;
 
         [[nodiscard]] constexpr Vector2() = default;
-        [[nodiscard]] constexpr Vector2(float x, float y);
-        [[nodiscard]] explicit constexpr Vector2(const Point2& p);
+        [[nodiscard]] constexpr Vector2(float x, float y) : x(x), y(y){}
+        [[nodiscard]] explicit constexpr Vector2(const Point2& p) : x(p.x), y(p.y) {}
 
         [[nodiscard]] Point2 to_Point2() const;
 

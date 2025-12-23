@@ -18,39 +18,29 @@
 
 #include "model/Model.h"
 
-#include "infra/presentation/RenderFrame.h"
 #include "model/collision/HitBox_Rectangle.h"
 #include "model/collision/Separating_Axis_Theorem.h"
 
 namespace model {
     Model::Model(const infra::ast::Model &m, const unsigned int& level) {
-        grid = std::make_shared<Tile_Grid>(m.grid);
-        auto sat = std::make_unique<collision::Separating_Axis_Theorem>();
-        wcm_ = collision::World_Collision_Manager(std::move(sat), grid);
+        create_model(m, level);
 
-        const std::vector<std::vector<infra::ast::Tile>>& s_grid = m.grid.grid;
-        const unsigned int rows = m.grid.rows;
-        const unsigned int columns = m.grid.columns;
-
-        for (unsigned int y = 0; y < rows; ++y) {
-            for (unsigned int x = 0; x < columns; ++x) {
-                const infra::ast::Tile& in_cell = s_grid[y][x];
-                std::shared_ptr<const entity::Tile> tile = grid->get_tile(y, x);
-                if (tile == nullptr) continue;
-                infra::math::Point2 position = tile->get_position();
-                switch (in_cell) {
-                    case infra::ast::Tile::PacmanSpawn: {
-                        auto h = std::make_unique<collision::HitBox_Rectangle>(position, 40, 40, 0);
-                        pacman = std::make_shared<entity::Pacman>(position, std::move(h), 1);
-                        break;
-                    }
-                    default:
-                        break;
-                }
-            }
-        }
     }
 
+    Model::Model(
+        const infra::ast::Model &m, const unsigned int &level,
+        const std::vector<std::shared_ptr<entity::Coin>> &coins
+        ) {
+        create_model(m, level, coins);
+    }
+
+    std::vector<std::shared_ptr<entity::Coin>> Model::get_coins() const {
+
+    }
+
+    bool Model::all_coins_eaten() const {
+        return coins.empty();
+    }
 
 
     void Model::run(const float delta) {
@@ -76,7 +66,6 @@ namespace model {
                     tile_item.rect = tile->get_rect();
                     tile_item.sprite = "tile";
                     tile_item.direction = infra::math::Direction::None;
-                    tile_item.status = "";
                     frame.items.push_back(tile_item);
                 }
             }
@@ -91,14 +80,15 @@ namespace model {
 
         // Pacman
         if (pacman) {
+            // TODO pacman render
             infra::ui::RenderItem pac_item;
-            pac_item.type = infra::ui::ItemType::Sprite;
+            pac_item.type = infra::ui::ItemType::ComplexSprite;
             pac_item.space = infra::ui::Space::World;
             pac_item.rect =pacman->get_rect();
-            pac_item.sprite = "Pacman";
+            pac_item.sprite = "Blinky";
             pac_item.direction = pacman->get_direction();
-            // pac_item.status = pacman->status;
-            pac_item.animation = get_animation("Pacman", infra::ast::Tile::PacmanSpawn);
+            pac_item.status = pacman->status_;
+            pac_item.animation = get_animation("Blinky", infra::ast::Tile::PacmanSpawn);
             frame.items.push_back(pac_item);
         }
 
@@ -148,5 +138,42 @@ namespace model {
         }
         // Animation not found
         return std::nullopt;
+    }
+
+    void Model::create_model(const infra::ast::Model &m, const unsigned int &level) {
+
+        grid = std::make_shared<Tile_Grid>(m.grid);
+        auto sat = std::make_unique<collision::Separating_Axis_Theorem>();
+        wcm_ = collision::World_Collision_Manager(std::move(sat), grid);
+
+        const std::vector<std::vector<infra::ast::Tile>>& s_grid = m.grid.grid;
+        const unsigned int rows = m.grid.rows;
+        const unsigned int columns = m.grid.columns;
+
+        for (unsigned int y = 0; y < rows; ++y) {
+            for (unsigned int x = 0; x < columns; ++x) {
+                const infra::ast::Tile& in_cell = s_grid[y][x];
+                std::shared_ptr<const entity::Tile> tile = grid->get_tile(y, x);
+                if (tile == nullptr) continue;
+                infra::math::Point2 position = tile->get_position();
+                switch (in_cell) {
+                    case infra::ast::Tile::PacmanSpawn: {
+                        float size = m.pacman_spawn.size;
+                        float speed = m.pacman_spawn.speed;
+                        auto h = std::make_unique<collision::HitBox_Rectangle>(position, size, size, 0);
+                        pacman = std::make_shared<entity::Pacman>(position, std::move(h), speed);
+
+                        animation["Blinky"] = infra::ui::Animation(4, 1, 0);
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    void Model::create_model(const infra::ast::Model &m, const unsigned int &level,
+        std::vector<std::shared_ptr<entity::Coin>>) {
     }
 }

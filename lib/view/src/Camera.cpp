@@ -16,13 +16,11 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include <stdexcept>
 
 #include "view/Camera.h"
 
-#include "infra/math/Vector2.h"
-
 namespace view {
+    /*
     void Camera::set(
         const unsigned int window_width, const unsigned int window_height, const infra::math::Vector2 &window_center,
         const unsigned int camera_width, const unsigned int camera_height, const infra::math::Vector2 &camera_center, const float scale
@@ -127,11 +125,11 @@ namespace view {
     }
 
     void Camera::render(sf::RenderWindow &window, const std::shared_ptr<View> &view) const {
-        /*
+
         const math::Vector2 pos = view->get_position();
         std::optional<math::Vector2> screen_pos = get_entity_position(window, pos);
         if (!screen_pos) return;
         view->render(window, *screen_pos);
-        */
-    }
+
+    }*/
 }

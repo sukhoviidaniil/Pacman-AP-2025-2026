@@ -16,17 +16,16 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-
-
 #include <string>
-
 #include "infra/io/File_Reader.h"
-#include "core/Application.h"
-#include "infra/event/Event_Bus.h"
 #include "infra/io/readers/Reader_JSON.h"
+#include "infra/event/Event_Bus.h"
+#include "core/Application.h"
+#include "infra/diagnostics/Logger.h"
 
 
 int main() {
+    infra::diag::Logger::instance();
     const auto eventbus_ = std::make_shared<infra::event::Event_Bus>(); // GLOBAL
 
     const std::string assets_dir = ASSETS_DIR;

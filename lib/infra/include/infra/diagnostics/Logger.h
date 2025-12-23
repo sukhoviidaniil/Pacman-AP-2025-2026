@@ -22,14 +22,15 @@
 #include <string>
 
 #ifdef _DEBUG
-#define LOG(x) Logger::instance().write(x)
-#define LOG_ADD_DEPTH() Logger::instance().add_depth();
-#define LOG_LOWER_DEPTH() Logger::instance().lower_depth();
+#define LOG(x) infra::diag::Logger::instance().write(x)
+#define LOG_ADD_DEPTH() infra::diag::Logger::instance().add_depth();
+#define LOG_LOWER_DEPTH() infra::diag::Logger::instance().lower_depth();
 #else
 #define LOG(x)
 #define LOG_ADD_DEPTH()
 #define LOG_LOWER_DEPTH()
 #endif
+
 
 namespace infra::diag {
     class Logger {
@@ -46,6 +47,8 @@ namespace infra::diag {
         std::string indent(const std::string& message) const;
     };
 }
+
+
 
 
 #endif //PACMAN_LOGGER_H

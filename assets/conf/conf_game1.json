@@ -7,7 +7,7 @@
       "textures/sprite.png"
     ],
     "sprite_groups" : [
-      "conf/graf_ghosts.json"
+      "graf_ghosts.json"
     ]
   },
   "models" : [

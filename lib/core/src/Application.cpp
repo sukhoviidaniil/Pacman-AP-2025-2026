@@ -36,14 +36,15 @@ namespace core {
         // Make new Local Event_Bus
         eventbus_l_ = std::make_shared<infra::event::Event_Bus>();
 
+        // Make Score
+        score_ = std::make_shared<infra::Score>();
+        score_->track_local(eventbus_l_);
+
+
         // Make Stage_Factory and Stage_Manager
         stage_manager_.track_local(eventbus_l_);
         core::Stage_Factory sf = core::Stage_Factory(eventbus_l_, score_, a.models);
         stage_manager_.set_stage_factory(sf);
-
-        // Make Score
-        score_ = std::make_shared<infra::Score>();
-        score_->track_local(eventbus_l_);
 
         // Make View and Event_Collector
         core::View_Collector_Factory vcf;
@@ -84,10 +85,8 @@ namespace core {
         while (running_) {
             float delta = dt.tick();
             std::shared_ptr<Stage> current_stage = stage_manager_.get_top();
-            if (current_stage != nullptr) {
-                current_stage->run(delta);
-            }
-            infra::ui::RenderFrameGraph v;
+            current_stage->run(delta);
+            infra::ui::RenderFrameGraph v = current_stage->get_Scene_Graph();
             view_->render(v);
             dispatch_events();
         }

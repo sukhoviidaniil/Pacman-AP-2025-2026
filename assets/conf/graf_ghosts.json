@@ -6,26 +6,22 @@
   "number_of_statuses" : 4,
   "statuses" : [
     {
+      "status" : "Alive",
       "facial_expressions" : [
         {
-          "expression" : "To the right",
-          "direction" : [1,0]
+          "direction" : "Right"
         },
         {
-          "expression" : "Back",
-          "direction" : [0,-1]
+          "direction" : "Down"
         },
         {
-          "expression" : "To the left",
-          "direction" : [-1,0]
+          "direction" : "Left"
         },
         {
-          "expression" : "Forward",
-          "direction" : [0,1]
+          "direction" : "Up"
         },
         {
-          "expression" : "Blanco",
-          "direction" : [0,0],
+          "direction" : "Any",
           "recLeft" : 501,
           "recTop" : 254
         }
@@ -41,26 +37,22 @@
       }
     },
     {
+      "status" : "Dead",
       "facial_expressions" : [
         {
-          "expression" : "To the right",
-          "direction" : [1,0]
+          "direction" : "Right"
         },
         {
-          "expression" : "Back",
-          "direction" : [0,-1]
+          "direction" : "Down"
         },
         {
-          "expression" : "To the left",
-          "direction" : [-1,0]
+          "direction" : "Left"
         },
         {
-          "expression" : "Forward",
-          "direction" : [0,1]
+          "direction" : "Up"
         },
         {
-          "expression" : "Blanco",
-          "direction" : [0,0],
+          "direction" : "Any",
           "recLeft" : 501,
           "recTop" : 254
         }
@@ -76,26 +68,25 @@
       }
     },
     {
+      "status" : "Weak",
       "facial_expressions" : [
         {
-          "expression" : "Blanco",
-          "direction" : [0,0],
+          "direction" : "Any",
           "recLeft" : 1,
           "recTop" : 554
         }
       ]
     },
     {
+      "status" : "SlightlyWeak",
       "facial_expressions" : [
         {
-          "expression" : "Blanco",
-          "direction" : [0,0],
+          "direction" : "Any",
           "recLeft" : 1,
           "recTop" : 554
         },
         {
-          "expression" : "Blanco",
-          "direction" : [0,0],
+          "direction" : "Any",
           "recLeft" : 51,
           "recTop" : 554
         }

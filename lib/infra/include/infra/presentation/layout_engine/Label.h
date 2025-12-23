@@ -17,7 +17,7 @@
 ***************************************************************/
 #ifndef PACMAN_LABEL_H
 #define PACMAN_LABEL_H
-#include "base/Base.h"
+
 #include "UIElement.h"
 
 namespace infra::ui {

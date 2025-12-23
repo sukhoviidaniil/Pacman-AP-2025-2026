@@ -22,7 +22,6 @@
 
 namespace infra::ast {
     struct PacmanSpawn : Entity_Node {
-        float size = 39;
         float speed = 1.0;
     };
 }

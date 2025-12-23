@@ -19,13 +19,11 @@
 #define PACMAN_EXPRESSION_INFO_H
 
 #include "infra/ast/Node.h"
-#include "infra/math/Vector2.h"
-#include <string>
+#include "infra/math/Direction.h"
 
 namespace infra::ast {
     struct Sprite_Expression : View_Node {
-        std::string name = "None";
-        math::Vector2 direction;
+        math::Direction direction;
         int recLeft = -1, recTop = -1;
     };
 }

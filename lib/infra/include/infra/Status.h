@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Event_Collector .h
+ * File:          Status.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-19
+ * Created:       2025-12-23
  * Modified:      []
  *
  * Description:   []
@@ -15,18 +15,17 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_EVENT_COLLECTOR_H
-#define PACMAN_EVENT_COLLECTOR_H
-#include "infra/event/Event_Store.h"
+#ifndef PACMAN_STATUS_H
+#define PACMAN_STATUS_H
 
-namespace core {
-    class Event_Collector {
-    public:
-        virtual ~Event_Collector() = default;
-
-        virtual void collect() = 0;
-        infra::event::Event_Store event_store_;
+namespace infra {
+    enum class Status {
+        Dead,
+        Alive,
+        Powered,
+        Weak,
+        SlightlyWeak
     };
 }
 
-#endif //PACMAN_EVENT_COLLECTOR_H
+#endif //PACMAN_STATUS_H

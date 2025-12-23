@@ -28,6 +28,7 @@ namespace infra::ui {
         float elapsed_ = 0.f;
         bool loop_ = true;
 
+        Animation() = default;
         explicit Animation(const Animation& other, const float elapsed) :
             frames_size_(other.frames_size_),
             frames_(other.frames_),

@@ -20,6 +20,8 @@
 
 #include "json.hpp"
 #include "infra/diagnostics/Logger.h"
+#include "infra/math/Point2.h"
+#include "infra/math/Vector2.h"
 #include "infra/ast/model/Model.h"
 #include "infra/ast/view/Complex_Sprite.h"
 #include "infra/ast/view/Sprite.h"
@@ -27,9 +29,6 @@
 #include "infra/ast/view/Sprite_Rec.h"
 #include "infra/ast/view/Sprite_Status.h"
 #include "infra/ast/view/View.h"
-
-#include "infra/math/Point2.h"
-#include "infra/math/Vector2.h"
 
 namespace infra::math {
     inline void from_json(const nlohmann::json& j, Point2& v) {
@@ -41,6 +40,17 @@ namespace infra::math {
         v.x = j.at("x").get<float>();
         v.y = j.at("y").get<float>();
     }
+
+
+    inline Direction parse_Direction(const std::string& name) {
+        if (name == "Any") return Direction::Any;
+        if (name == "Left") return Direction::Left;
+        if (name == "Right") return Direction::Right;
+        if (name == "Up") return Direction::Up;
+        if (name == "Down") return Direction::Down;
+        throw std::runtime_error("Unknown tile");
+    }
+
 }
 
 namespace infra::io {
@@ -48,9 +58,9 @@ namespace infra::io {
     inline nlohmann::json get_json_data(const std::string &filename) {
         std::ifstream file(filename);
         if (!file.is_open()) {
-            std::string error = "File not found: " + filename + "!\n";
+            const std::string error = "File not found: " + filename + "!\n";
             LOG(error);
-            throw std::runtime_error("File not opened");
+            throw std::runtime_error(error);
         }
         nlohmann::json data;
         file >> data;
@@ -66,11 +76,9 @@ namespace infra::io {
 
     template<class T>
     T get_checked(
-    const T &default_value,
-    const std::string &key,
     const nlohmann::json &j,
-    const std::string &path = "",
-    const std::string &object = "ROOT"
+    const std::string &key,
+    const T &default_value
     ) {
         // Key not found -> return default
         if (!j.contains(key))
@@ -82,46 +90,46 @@ namespace infra::io {
         try {
             return value.get<T>();
         }
-        catch (...) {
-            invalid_parameter(path, key, object);
+        catch (const std::exception& e) {
+            LOG(e.what());
+            throw;
         }
-        throw;
     }
 
     template<class T>
     T get_checked(
-        const std::string &key,
         const nlohmann::json &j,
-        const std::string &path,
-        const std::string &object = "ROOT"
+        const std::string &key
         ) {
         // Key not found -> err
         if (!j.contains(key)) {
-            invalid_parameter(path, key, object);
+            const std::string error = "nlohmann::json " + key + " parameter missing or invalid;";
+            LOG(error);
+            throw std::runtime_error(error);
         }
         // If the JSON value type is correct -> return it
         try {
             return j.at(key).get<T>();
-        } catch (...) {
-            invalid_parameter(path, key, object);
+        } catch (const std::exception& e) {
+            LOG(e.what());
+            throw;
         }
-        throw;
     }
+
 
     template<class T>
     T get_checked(
-    const nlohmann::json &j,
-    const std::string &path,
-    const std::string &object
+    const nlohmann::json &j
     ) {
         // If the JSON value type is correct -> return it
         try {
             return j.get<T>();
-        } catch (...) {
-            invalid_parameter(path, "ROOT", object);
+        } catch (const std::exception& e) {
+            LOG(e.what());
+            throw;
         }
-        throw;
     }
+
 }
 
 namespace infra::ast {
@@ -131,54 +139,71 @@ namespace infra::ast {
     }
 
     inline void from_json(const nlohmann::json& j, Sprite_Expression& s) {
-        s.name = io::get_checked<std::string>(s.name , "expression", j);
-        s.direction = io::get_checked<math::Vector2>(s.direction , "direction", j);
-        s.recLeft = io::get_checked<int>(s.recLeft , "recLeft", j);
-        s.recTop  = io::get_checked<int>(s.recTop , "recTop", j);
+        const auto d_name = io::get_checked<std::string>(j, "direction");
+        s.direction = math::parse_Direction(d_name);
+        s.recLeft = io::get_checked<int>(j, "recLeft", s.recLeft);
+        s.recTop  = io::get_checked<int>(j,"recTop", s.recTop);
     }
 
     inline void from_json(const nlohmann::json& j, Sprite_Rec& s) {
-        s.base = io::get_checked<int>(s.base , "base", j);
-        s.increase = io::get_checked<int>(s.increase , "increase", j);
+        s.base = io::get_checked<int>(j, "base", s.base);
+        s.increase = io::get_checked<int>(j, "increase", s.increase);
     }
 
     inline void from_json(const nlohmann::json& j, Sprite_Status& s) {
-        s.facial_expressions = io::get_checked<std::vector<Sprite_Expression>>(s.facial_expressions, "facial_expressions", j);
-        s.number_of_expressions_per_direction = io::get_checked<unsigned int>(s.number_of_expressions_per_direction, "number_of_expressions_per_direction", j);
-        s.recLeft = io::get_checked<Sprite_Rec>(s.recLeft, "recLeft", j);
-        s.recTop = io::get_checked<Sprite_Rec>(s.recLeft, "recTop", j);
+        const std::string facial_expressions = "facial_expressions";
+        s.facial_expressions = io::get_checked<std::vector<Sprite_Expression>>(j, facial_expressions, s.facial_expressions);
+        s.number_of_expressions_per_direction = io::get_checked<unsigned int>(j, "number_of_expressions_per_direction", s.number_of_expressions_per_direction);
+        s.recLeft = io::get_checked<Sprite_Rec>(j, "recLeft", s.recLeft);
+        s.recTop = io::get_checked<Sprite_Rec>(j, "recTop", s.recLeft);
+    }
+
+
+    inline Status parse_Status(const std::string& s) {
+        if (s == "Dead")  return Status::Dead;
+        if (s == "Alive")  return Status::Alive;
+        if (s == "Powered")  return Status::Powered;
+        if (s == "Weak")  return Status::Weak;
+        if (s == "SlightlyWeak")  return Status::SlightlyWeak;
+        throw std::runtime_error("Unknown Status");
     }
 
     inline void from_json(const nlohmann::json& j, Complex_Sprite& s) {
-        s.using_texture = io::get_checked<std::string>(s.using_texture, "using_texture", j);
-        s.sprits_width = io::get_checked<unsigned int>(s.sprits_width, "sprits_width", j);
-        s.sprits_height = io::get_checked<unsigned int>(s.sprits_height, "sprits_height", j);
-        s.groups_names = io::get_checked<std::vector<std::string>>(s.groups_names ,"groups_names", j);
-        s.number_of_statuses = io::get_checked<unsigned int>(s.number_of_statuses, "number_of_statuses", j);
-        s.sprite_statuses = io::get_checked<std::vector<Sprite_Status>>(s.sprite_statuses ,"statuses", j);
+        s.using_texture = io::get_checked<std::string>(j, "using_texture", s.using_texture);
+        s.sprits_width = io::get_checked<unsigned int>(j,"sprits_width",  s.sprits_width);
+        s.sprits_height = io::get_checked<unsigned int>(j, "sprits_height", s.sprits_height);
+        s.groups_names = io::get_checked<std::vector<std::string>>(j, "groups_names", s.groups_names);
+        if (j.contains("statuses") && j["statuses"].is_array()) {
+            for (const auto& status : j["statuses"]) {
+                std::string status_name = status["status"];
+                s.sprites_[parse_Status(status_name)] = io::get_checked<Sprite_Status>(status);
+            }
+        }
     }
 
     inline void from_json(const nlohmann::json& j, View& s) {
-        s.type = io::get_checked<std::string>(s.type , "type", j);
-        s.window_width = io::get_checked<unsigned int>(s.window_width , "window_width", j);
-        s.window_height = io::get_checked<unsigned int>(s.window_height , "window_height", j);
-        s.textures = io::get_checked<std::vector<std::string>>(s.textures, "textures", j);
-        // s.sprites = io::get_checked<std::vector<ast::Sprite>>(s.sprites, "sprites", j);
-        // s.complex_sprites = io::get_checked<std::vector<ast::Complex_Sprite>>(s.complex_sprites, "sprite_groups", j);
+        s.type = io::get_checked<std::string>(j,"type", s.type);
+        s.window_width = io::get_checked<unsigned int>(j, "window_width", s.window_width );
+        s.window_height = io::get_checked<unsigned int>(j, "window_height", s.window_height);
+        s.textures = io::get_checked<std::vector<std::string>>(j, "textures", s.textures);
     }
 
     inline Tile parse_tile(const std::string& s) {
-        if (s == "wall")  return Tile::Wall;
-        if (s == "coin")  return Tile::Coin;
-        if (s == "empty") return Tile::Empty;
+        if (s == "Wall")  return Tile::Wall;
+        if (s == "PacmanSpawn")  return Tile::PacmanSpawn;
+        if (s == "GhostSpawn")  return Tile::GhostSpawn;
+        if (s == "PowerPelletSpawn")  return Tile::PowerPelletSpawn;
+        if (s == "CoinSpawn")  return Tile::CoinSpawn;
+        if (s == "Empty") return Tile::Empty;
         throw std::runtime_error("Unknown tile");
     }
 
     inline void from_json(const nlohmann::json& json, Grid& s) {
         // rows x columns
-        s.columns = io::get_checked<unsigned int>(s.columns , "columns", json);
-        s.rows = io::get_checked<unsigned int>(s.rows , "rows", json);
-        const auto grid = io::get_checked<std::vector<std::vector<std::string>>>(s.grid , "grid", json);
+        s.rows = io::get_checked<unsigned int>(json, "rows", s.rows);
+        s.columns = io::get_checked<unsigned int>(json, "columns", s.columns);
+        s.tile_size = io::get_checked<float>(json, "tile_size", s.tile_size);
+        const auto grid = io::get_checked<std::vector<std::vector<std::string>>>(json, "grid");
         if (grid.size() != s.rows) {
             throw std::runtime_error("Grid size mismatch");
         }
@@ -197,8 +222,14 @@ namespace infra::ast {
         }
     }
 
+    inline void from_json(const nlohmann::json& json, PacmanSpawn& s) {
+        s.size = io::get_checked<float>(json, "size", s.size);
+        s.speed = io::get_checked<float>(json,"speed",  s.size);
+    }
+
     inline void from_json(const nlohmann::json& j, Model& s) {
-        s.grid = io::get_checked<Grid>(s.grid, "grid", j);
+        s.grid = io::get_checked<Grid>(j, "Grid", s.grid);
+        s.pacman_spawn = io::get_checked<PacmanSpawn>(j, "PacmanSpawn", s.pacman_spawn);
 
     }
 }

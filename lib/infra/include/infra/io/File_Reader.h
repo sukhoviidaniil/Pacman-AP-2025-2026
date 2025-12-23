@@ -18,24 +18,17 @@
 #ifndef PACMAN_FILE_READER_H
 #define PACMAN_FILE_READER_H
 
-
-
 #include <memory>
 #include <unordered_map>
-
 #include "infra/ast/Application.h"
-#include "infra/ast/view/Sprite.h"
-#include "infra/ast/view/Complex_Sprite.h"
 #include "infra/ast/view/View.h"
-#include "infra/ast/Application.h"
-#include "Reader.h"
-
+#include "infra/io/Reader.h"
 
 namespace infra::io {
     class File_Reader : public std::enable_shared_from_this<File_Reader>{
 
         public:
-        File_Reader(std::string  conf_directory);
+        explicit File_Reader(std::string  conf_directory);
         void add_Reader(const std::string& extension, const std::shared_ptr<Reader> &reader);
 
         [[nodiscard]] ast::Sprite read_Sprite(const std::string& filename) const;

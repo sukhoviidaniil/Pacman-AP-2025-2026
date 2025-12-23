@@ -18,12 +18,12 @@
 #ifndef PACMAN_UIELEMENT_H
 #define PACMAN_UIELEMENT_H
 
-#include "infra/presentation/layout_engine/LayoutResult.h"
-#include "infra/presentation/base/Rect.h"
-#include "infra/presentation/base/Size.h"
-#include "infra/math/Vector2.h"
-#include "infra/presentation/RenderFrame.h"
+#include <memory>
 
+#include "infra/presentation/layout_engine/LayoutResult.h"
+
+#include "infra/presentation/RenderFrame.h"
+#include "infra/presentation/base/Size.h"
 
 namespace infra::ui {
     /**

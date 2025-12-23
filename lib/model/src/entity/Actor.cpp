@@ -16,11 +16,9 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "model/entity/Actor.h"
 #include <cmath>
-
-#include "model/Tile_Grid.h"
-#include "model/collision/World_Collision_Manager.h"
+#include "infra/math/to_Vector2.h"
+#include "model/entity/Actor.h"
 
 namespace model::entity{
     Actor::~Actor() = default;
@@ -33,9 +31,6 @@ namespace model::entity{
         next_direction_ = current_direction_;
     }
 
-    void Actor::set_status(const int &status) {
-        status_ = status;
-    }
 
     infra::math::Direction Actor::get_direction() const {
         return current_direction_;

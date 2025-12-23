@@ -16,9 +16,8 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "infra/math/Point2.h"
-
 #include <string>
+#include "infra/math/Point2.h"
 
 namespace infra::math {
 

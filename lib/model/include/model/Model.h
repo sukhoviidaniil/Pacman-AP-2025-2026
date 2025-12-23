@@ -20,18 +20,23 @@
 #include <future>
 
 #include "infra/ast/model/Model.h"
+#include "infra/presentation/RenderFrame.h"
+#include "infra/event/Event_Store.h"
+
 #include "entity/Coin.h"
 #include "entity/Pacman.h"
 #include "entity/Ghost.h"
 #include "infra/Score.h"
-#include "infra/event/Event_Store.h"
-#include "infra/presentation/RenderFrame.h"
 
 namespace model {
     class Model {
         public:
 
         explicit Model(const infra::ast::Model& m, const unsigned int& level);
+        explicit Model(const infra::ast::Model& m, const unsigned int& level, const std::vector<std::shared_ptr<entity::Coin>>& coins);
+
+        std::vector<std::shared_ptr<entity::Coin>> get_coins() const;
+        bool all_coins_eaten() const;
 
         void run(float delta);
 
@@ -44,6 +49,9 @@ namespace model {
 
         infra::event::Event_Store event_store_;
         private:
+
+        void create_model(const infra::ast::Model& m, const unsigned int& level);
+        void create_model(const infra::ast::Model& m, const unsigned int& level, std::vector<std::shared_ptr<entity::Coin>>);
 
         std::vector<std::shared_ptr<entity::Coin>> coins;
         std::vector<std::shared_ptr<entity::Ghost>> ghosts;

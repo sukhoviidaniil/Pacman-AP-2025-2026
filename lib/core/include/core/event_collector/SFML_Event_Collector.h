@@ -17,7 +17,7 @@
 ***************************************************************/
 #ifndef PACMAN_SFML_EVENT_COLLECTOR_H
 #define PACMAN_SFML_EVENT_COLLECTOR_H
-#include "Event_Collector .h"
+#include "Event_Collector.h"
 #include "SFML/Window/Event.hpp"
 #include "view/sfml/ISFML_Event_Source.h"
 

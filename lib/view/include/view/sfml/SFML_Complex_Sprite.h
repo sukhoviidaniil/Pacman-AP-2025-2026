@@ -20,26 +20,40 @@
 #include <unordered_map>
 #include <vector>
 
-#include "infra/math/Vector2.h"
+#include "infra/Status.h"
+#include "infra/math/Direction.h"
 #include "SFML/Graphics/Sprite.hpp"
 
 namespace view {
     class SFML_Complex_Sprite {
-        // key - status of Sprite;
-        std::vector<
-            // key - direction of Sprite;
+
+    public:
+        explicit SFML_Complex_Sprite(const
             std::unordered_map<
-                infra::math::Vector2,
+                infra::Status,
+                std::unordered_map<
+                    infra::math::Direction,
+                    // animation
+                    std::vector<
+                        sf::Sprite
+                    >
+                >
+            > & data);
+
+        [[nodiscard]] sf::Sprite &sprite(infra::Status status, infra::math::Direction dir, std::size_t frame);
+        [[nodiscard]] const sf::Sprite &sprite(infra::Status status, infra::math::Direction dir, std::size_t frame) const;
+
+    private:
+        std::unordered_map<
+            infra::Status,
+            std::unordered_map<
+                infra::math::Direction,
                 // animation
                 std::vector<
                     sf::Sprite
-                >,
-                // custom hash function
-                infra::math::Vector2Hash
+                >
             >
         > sprites_;
-    public:
-        explicit SFML_Complex_Sprite(const std::vector<std::unordered_map<infra::math::Vector2,std::vector<sf::Sprite>, infra::math::Vector2Hash>>& data);
     };
 }
 

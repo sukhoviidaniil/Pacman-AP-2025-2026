@@ -17,8 +17,8 @@
 ***************************************************************/
 #ifndef PACMAN_STAGE_FACTORY_H
 #define PACMAN_STAGE_FACTORY_H
-#include "Controller.h"
-#include "../../../infra/include/infra/Score.h"
+
+#include "infra/Score.h"
 #include "model/Model.h"
 #include "view/View.h"
 
@@ -32,17 +32,25 @@ namespace core {
             const std::vector<infra::ast::Model> &models
             );
 
+        std::shared_ptr<core::Stage> make_start_stage();
+        std::shared_ptr<core::Stage> make_pause_stage();
+        std::shared_ptr<core::Stage> make_game_stage();
+        std::shared_ptr<core::Stage> make_win_stage();
+        std::shared_ptr<core::Stage> make_death_stage();
+
         protected:
 
-        [[nodiscard]] std::shared_ptr<model::Model> get_model() const;
+        [[nodiscard]] std::shared_ptr<model::Model> get_model();
         void make_new_model();
 
         private:
 
         std::shared_ptr<infra::event::Event_Bus> eventbus_; // LOCAL
         std::shared_ptr<infra::Score> score_;
-        std::shared_ptr<model::Model> current_model_;
-        std::vector<infra::ast::Model> models_;
+        std::shared_ptr<model::Model> current_model_ = nullptr;
+        bool random_model_order_ = false;
+        size_t selected_model_;
+        std::vector<infra::ast::Model> models_variants_;
     };
 }
 
