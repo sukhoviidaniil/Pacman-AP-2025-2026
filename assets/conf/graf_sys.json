@@ -1,0 +1,28 @@
+{
+  "using_texture" : "textures/sprite.png",
+  "sprits_width": 35,
+  "sprits_height": 35,
+  "Sprites" : [
+    {
+      "name" : "Warning",
+      "recLeft" : 451,
+      "recTop" : 454
+    }
+  ],
+  "SpriteLists" : [
+    {
+      "sprits_width": 17,
+      "sprits_height": 10,
+      "Order" : "Horizontally",
+      "names" : ["Coin0", "Coin10", "Coin20", "Coin30", "Coin40", "Coin50", "Coin60", "Coin70", "Coin80", "Coin90", "Coin100"],
+      "recLeft" : {
+        "base" :  287,
+        "increase" : 17
+      },
+      "recTop" : {
+        "base" : 607,
+        "increase" : 0
+      }
+    }
+  ]
+}

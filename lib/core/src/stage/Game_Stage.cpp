@@ -18,7 +18,8 @@
 
 #include "core/stage/Game_Stage.h"
 
-
+#include "view/presentation/layout_engine/Map.h"
+#include "view/presentation/layout_engine/V_HBox.h"
 
 
 namespace core {
@@ -28,23 +29,42 @@ namespace core {
         const std::shared_ptr<infra::event::Event_Bus> &eventbus,
         const std::shared_ptr<model::Model> &model) :
     Stage(eventbus), model_(model){
+
+        //1 Create a root horizontal container
+        ui_root_ = std::make_shared<view::ui::HBox>();
+        auto left_col   = std::make_shared<view::ui::UIElement>();
+        auto middle_col = std::make_shared<view::ui::UIElement>();
+        auto right_col  = std::make_shared<view::ui::UIElement>();
+
+        //2 Add three columns
+        // Make all columns the same width
+        left_col->flex   = 1.f;
+        middle_col->flex = 3.f;
+        right_col->flex  = 1.f;
+        //
+        ui_root_->add(left_col);
+        ui_root_->add(middle_col);
+        ui_root_->add(right_col);
+
+
+        //3 Create a UIElement for the model
+        auto model_view_ui = std::make_shared<view::ui::Map>();
+        middle_col->add(model_view_ui);
     }
 
     void Game_Stage::run(float tick) {
 
     }
 
-    infra::ui::RenderFrameGraph Game_Stage::get_Scene_Graph() const {
-        infra::ui::RenderFrameGraph g;
-        const infra::ui::Camera camera{
-            .viewport_size = {600, 400},
-            .position = {0,0},
-            .zoom = 1
-        };
-
-        g.redraw = true;
-        g.constant_frames.emplace_back(model_->build_render_frame_Grid(camera));
-        g.temp_frames.emplace_back(model_->build_render_frame_Entity(camera));
-        return g;
+    view::ui::RenderFrame Game_Stage::get_RenderFrame(const infra::math::Vector2 &screen_size, bool redraw) const {
+        //4 Measurement and layout of the entire tree
+        ui_root_->measure(screen_size);
+        //5 Preparing RenderFrame and context
+        ui_root_->layout({0, 0, screen_size.x, screen_size.y});
+        view::ui::RenderFrame frame;
+        //6 Collecting RenderItems
+        view::ViewContext ctx( TODO, redraw);
+        ui_root_->append_render_items(frame, ctx);
+        return frame;
     }
 }

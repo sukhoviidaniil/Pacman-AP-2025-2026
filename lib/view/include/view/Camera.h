@@ -26,7 +26,7 @@
 #include <memory>
 #include <optional>
 
-#include "../../../infra/include/infra/ast/view/Camera.h"
+#include "../../../infra/include/infra/ast/view/external/Camera.h"
 
 namespace view {
     class Camera{

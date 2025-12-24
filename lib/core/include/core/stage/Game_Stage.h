@@ -19,6 +19,8 @@
 #define PACMAN_GAME_STAGE_H
 #include "core/Stage.h"
 #include "model/Model.h"
+#include "view/presentation/layout_engine/UIElement.h"
+#include "view/presentation/render/RenderFrame.h"
 
 namespace core{
     class Game_Stage : public Stage {
@@ -33,11 +35,12 @@ namespace core{
 
         void run(float tick) override;
 
-        [[nodiscard]] infra::ui::RenderFrameGraph get_Scene_Graph() const override;
+        [[nodiscard]] view::ui::RenderFrame get_RenderFrame(const infra::math::Vector2& screen_size, bool redraw) const override;
         private:
 
         std::shared_ptr<model::Model> model_;
 
+        std::shared_ptr<view::ui::UIElement> ui_root_;
     };
 }
 

@@ -1,0 +1,150 @@
+/***************************************************************
+ * Project:       Pacman
+ * File:          SFML_View_Visitor.cpp
+ *
+ * Author:        Sukhovii Daniil
+ * Created:       2025-12-24
+ * Modified:      []
+ *
+ * Description:   []
+ *
+ * Contact:
+ *   Email:       sukhovii.daniil@gmail.com
+ *
+ * Disclaimer:
+ *   This file is part of Pacman.
+ *   Unauthorized use, reproduction, or distribution is prohibited.
+***************************************************************/
+#include "infra/diagnostics/Logger.h"
+#include "view/sfml/SFML_View.h"
+
+namespace view {
+    void SFML_View::visit(const infra::ast::Sprite &i_sprite) {
+        const std::string name = i_sprite.name;
+        auto it = sprites_.find(name);
+        if (it != sprites_.end()) {
+            // A minor error.
+            std::string err = "The Sprite named " + name + " has already been loaded, configuration Warning.";
+            LOG(err);
+            return;
+        }
+
+        const sf::Texture& texture = get_Texture(i_sprite.using_texture, "infra::ast::Sprite " + name);
+        const int sprite_width = static_cast<int>(i_sprite.sprits_width);
+        const int sprite_height = static_cast<int>(i_sprite.sprits_height);
+        int recLeft = i_sprite.recLeft.base;
+        int recTop = i_sprite.recTop.base;
+
+        if (recLeft < 0) {
+            // A minor error.
+            std::string err = "The Sprite named " + name + " recLeft < 0.";
+            LOG(err);
+            recLeft = 0;
+        }
+        if (recTop < 0) {
+            // A minor error.
+            std::string err = "The Sprite named " + name + " recTop < 0.";
+            LOG(err);
+            recTop = 0;
+        }
+
+        const sf::IntRect rect(recLeft, recTop, sprite_width, sprite_height);
+        sf::Sprite sprite(texture, rect);
+        sprite.setOrigin(static_cast<float>(rect.width) / 2.f, static_cast<float>(rect.height) / 2.f);
+
+        sprites_[name] = std::move(sprite);
+    }
+
+    void SFML_View::visit(const infra::ast::SpriteList &list) {
+        // TODO
+    }
+
+    void SFML_View::visit(const infra::ast::Complex_Sprite &complex_sprite) {
+
+        const sf::Texture& texture = get_Texture(complex_sprite.using_texture, "infra::ast::Complex_Sprite");
+        int left_index = 0;
+        for (const std::string& name : complex_sprite.groups_names) {
+            auto it = complex_sprites_.find(name);
+            if (it != complex_sprites_.end()) {
+                // A minor error.
+                std::string err = "The complex splice named " + name + " has already been loaded, configuration error.";
+                LOG(err);
+                continue;
+            }
+            std::unordered_map<
+                infra::Status,
+                std::unordered_map<
+                    infra::math::Direction,
+                    // animation
+                    std::unique_ptr<ISFML_Sprite>
+                >
+            > data;
+
+            const int sprite_width = static_cast<int>(complex_sprite.sprits_width);
+            const int sprite_height = static_cast<int>(complex_sprite.sprits_height);
+
+            for (const auto& group :  complex_sprite.groups_) {
+
+                // status = new coordinates
+                const infra::ast::Sprite_Status& status = group.second;
+                const auto directions = static_cast<unsigned int>(status.sprite_directions.size());
+                unsigned int sprites_per_direction = status.sprites_per_direction;
+
+                if (sprites_per_direction <= 0) {
+                    return;
+                }
+
+
+                for (unsigned int top_index = 0; top_index < directions; ++top_index) {
+                    const infra::ast::Sprite_Direction& sprite_direction = status.sprite_directions[top_index];
+                    infra::math::Direction direction = sprite_direction.direction;
+                    int recLeft = sprite_direction.recLeft;
+                    int recTop = sprite_direction.recTop;
+
+                    // If it is negative, it means that such a parameter was not found.
+                    if (recLeft < 0) {
+                        // left_index = move left
+                        const int base = status.recLeft.base;
+                        const  int increase = status.recLeft.increase;
+                        recLeft = base + increase * left_index;
+                    }
+                    // If it is negative, it means that such a parameter was not found.
+                    if (recTop < 0) {
+                        // facial_expression = move down
+                        const int base = status.recTop.base;
+                        const int increase = status.recTop.increase;
+                        recTop = base + increase * static_cast<int>(top_index);
+                    }
+
+                    const sf::IntRect rect(recLeft, recTop, sprite_width, sprite_height);
+                    sf::Sprite sprite(texture, rect);
+                    sprite.setOrigin(static_cast<float>(rect.width) / 2.f, static_cast<float>(rect.height) / 2.f);
+
+                    if (sprites_per_direction == 1) {
+                        data[group.first][direction] = std::make_unique<SFML_Sprite>(std::move(sprite));
+                    }else {
+                        // TODO
+                    }
+
+                }
+            }
+            complex_sprites_[name] = std::make_unique<SFML_Complex_Sprite>(std::move(data));
+            left_index++;
+        }
+    }
+
+    const sf::Texture& SFML_View::get_Texture(const std::string& using_texture, const std::string& by_who) {
+        if (using_texture == "") {
+            const std::string err = "The " + by_who +  " texture not specified.";
+            LOG(err);
+            throw std::invalid_argument(err);
+        }
+        const auto it = textures_.find(using_texture);
+        if (it == textures_.end()) {
+            const std::string err = "Missing " + by_who + " texture " + using_texture;
+            LOG(err);
+            throw std::invalid_argument(err);
+        }
+        return std::cref(it->second);
+    }
+}

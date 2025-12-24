@@ -1,30 +1,27 @@
 {
-  "from file" : "sprite.png",
+  "using_texture" : "textures/sprite.png",
   "sprite_width": 35,
   "sprite_height": 35,
-  "names" : ["Mr. Pacman", "Mr. Gray"],
+  "groups_names" : ["Mr. Pacman", "Mr. Gray"],
   "number_of_statuses" : 2,
   "statuses" : [
     {
-      "facial_expressions" : [
+      "Status" : "Alive",
+      "Directions" : [
         {
-          "expression" : "To the right",
-          "direction" : [1,0]
+          "direction" : "Right"
         },
         {
-          "expression" : "Back",
-          "direction" : [0,-1]
+          "direction" : "Down"
         },
         {
-          "expression" : "To the left",
-          "direction" : [-1,0]
+          "direction" : "Left"
         },
         {
-          "expression" : "Forward",
-          "direction" : [0,1]
+          "direction" : "Up"
         }
       ],
-      "number_of_expressions_per_direction" : 3,
+      "NSprites_per_direction" : 3,
       "recLeft" : {
         "base" : 851,
         "increase" : 50
@@ -35,13 +32,13 @@
       }
     },
     {
-      "facial_expressions" : [
+      "Status" : "Dead",
+      "Directions" : [
         {
-          "expression" : "Blanco",
-          "direction" : [0,0]
+          "direction" : "Any"
         }
       ],
-      "number_of_expressions_per_direction" : 11,
+      "NSprites_per_direction" : 11,
       "recLeft" : {
         "base" : 351,
         "increase" : 50

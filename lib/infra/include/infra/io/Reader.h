@@ -19,7 +19,7 @@
 #define PACMAN_READER_H
 #include <memory>
 
-#include "infra/ast/view/View.h"
+#include "../ast/view/View.h"
 #include "infra/ast/Application.h"
 
 namespace infra::io {

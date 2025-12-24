@@ -18,7 +18,7 @@
 #ifndef PACMAN_AST_APPLICATION_H
 #define PACMAN_AST_APPLICATION_H
 
-#include "Event_Collector.h"
+#include "event/Event_Collector.h"
 #include "infra/ast/Node.h"
 #include "model/Model.h"
 #include "view/View.h"

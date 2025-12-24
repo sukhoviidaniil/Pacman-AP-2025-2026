@@ -19,7 +19,7 @@
 #define PACMAN_STAGE_H
 
 #include "infra/event/Event_Bus.h"
-#include "infra/presentation/RenderFrame.h"
+#include "view/presentation/render/RenderFrame.h"
 
 namespace core {
     class Stage {
@@ -29,7 +29,8 @@ namespace core {
         explicit Stage(const std::shared_ptr<infra::event::Event_Bus>& eventbus);
 
         virtual void run(float tick) = 0;
-        [[nodiscard]] virtual infra::ui::RenderFrameGraph get_Scene_Graph() const = 0;
+
+        [[nodiscard]] virtual view::ui::RenderFrame get_RenderFrame(const infra::math::Vector2& screen_size, bool redraw) const = 0;
 
         std::shared_ptr<infra::event::Event_Bus> eventbus_; /// Local Event Bus
     };

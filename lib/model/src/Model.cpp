@@ -44,10 +44,7 @@ namespace model {
 
 
     void Model::run(const float delta) {
-        elapsed += delta;
-        for (auto& a : animation) {
-            a.second.elapsed_ += delta;
-        }
+
     }
 
     infra::ui::RenderFrame Model::build_render_frame_Grid(const infra::ui::Camera &camera) const {
@@ -88,7 +85,7 @@ namespace model {
             pac_item.sprite = "Blinky";
             pac_item.direction = pacman->get_direction();
             pac_item.status = pacman->status_;
-            pac_item.animation = get_animation("Blinky", infra::ast::Tile::PacmanSpawn);
+            //pac_item.animation = get_animation("Blinky", infra::ast::Tile::PacmanSpawn);
             frame.items.push_back(pac_item);
         }
 
@@ -102,7 +99,7 @@ namespace model {
             ghost_item.sprite = "Ghost";
             ghost_item.direction = g->get_direction();
             // ghost_item.status = g->status;
-            ghost_item.animation = get_animation("Ghost", infra::ast::Tile::GhostSpawn);
+            //ghost_item.animation = get_animation("Ghost", infra::ast::Tile::GhostSpawn);
             frame.items.push_back(ghost_item);
         }
 
@@ -125,20 +122,6 @@ namespace model {
         return pacman;
     }
 
-    std::optional<infra::ui::Animation> Model::get_animation(const std::string &name, const infra::ast::Tile& type) const {
-        auto it1 = animation.find(name);
-        if (it1 != animation.end()) {
-            // A specific animator was found.
-            return it1->second;
-        }
-        auto it2 = animation_variant.find(type);
-        if (it2 != animation_variant.end()) {
-            // A common animation was found.
-            return infra::ui::Animation(it2->second, elapsed);
-        }
-        // Animation not found
-        return std::nullopt;
-    }
 
     void Model::create_model(const infra::ast::Model &m, const unsigned int &level) {
 
@@ -162,8 +145,6 @@ namespace model {
                         float speed = m.pacman_spawn.speed;
                         auto h = std::make_unique<collision::HitBox_Rectangle>(position, size, size, 0);
                         pacman = std::make_shared<entity::Pacman>(position, std::move(h), speed);
-
-                        animation["Blinky"] = infra::ui::Animation(4, 1, 0);
                         break;
                     }
                     default:

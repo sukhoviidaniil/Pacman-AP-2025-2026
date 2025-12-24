@@ -23,12 +23,12 @@
 #include "infra/math/Point2.h"
 #include "infra/math/Vector2.h"
 #include "infra/ast/model/Model.h"
-#include "infra/ast/view/Complex_Sprite.h"
+#include "../../ast/sprites/Complex_Sprite.h"
 #include "infra/ast/view/Sprite.h"
-#include "infra/ast/view/Sprite_Expression.h"
-#include "infra/ast/view/Sprite_Rec.h"
-#include "infra/ast/view/Sprite_Status.h"
-#include "infra/ast/view/View.h"
+#include "../../ast/view/external/Sprite_Direction.h"
+#include "../../ast/view/external/Sprite_Rec.h"
+#include "../../ast/view/external/Sprite_Status.h"
+#include "../../ast/view/View.h"
 
 namespace infra::math {
     inline void from_json(const nlohmann::json& j, Point2& v) {
@@ -138,7 +138,7 @@ namespace infra::ast {
         // TODO IF NEEDED
     }
 
-    inline void from_json(const nlohmann::json& j, Sprite_Expression& s) {
+    inline void from_json(const nlohmann::json& j, Sprite_Direction& s) {
         const auto d_name = io::get_checked<std::string>(j, "direction");
         s.direction = math::parse_Direction(d_name);
         s.recLeft = io::get_checked<int>(j, "recLeft", s.recLeft);
@@ -151,9 +151,8 @@ namespace infra::ast {
     }
 
     inline void from_json(const nlohmann::json& j, Sprite_Status& s) {
-        const std::string facial_expressions = "facial_expressions";
-        s.facial_expressions = io::get_checked<std::vector<Sprite_Expression>>(j, facial_expressions, s.facial_expressions);
-        s.number_of_expressions_per_direction = io::get_checked<unsigned int>(j, "number_of_expressions_per_direction", s.number_of_expressions_per_direction);
+        s.sprite_directions = io::get_checked<std::vector<Sprite_Direction>>(j, "Directions", s.sprite_directions);
+        s.sprites_per_direction = io::get_checked<unsigned int>(j, "NSprites_per_direction", s.sprites_per_direction);
         s.recLeft = io::get_checked<Sprite_Rec>(j, "recLeft", s.recLeft);
         s.recTop = io::get_checked<Sprite_Rec>(j, "recTop", s.recLeft);
     }
@@ -175,8 +174,8 @@ namespace infra::ast {
         s.groups_names = io::get_checked<std::vector<std::string>>(j, "groups_names", s.groups_names);
         if (j.contains("statuses") && j["statuses"].is_array()) {
             for (const auto& status : j["statuses"]) {
-                std::string status_name = status["status"];
-                s.sprites_[parse_Status(status_name)] = io::get_checked<Sprite_Status>(status);
+                std::string status_name = status["Status"];
+                s.groups_[parse_Status(status_name)] = io::get_checked<Sprite_Status>(status);
             }
         }
     }

@@ -1,4 +1,0 @@
-Game_Model = data = source of truth.
-Stage = events = source of changes.
-
-View must be linked to both.

@@ -21,7 +21,7 @@
 #include <memory>
 #include <unordered_map>
 #include "infra/ast/Application.h"
-#include "infra/ast/view/View.h"
+#include "../ast/view/View.h"
 #include "infra/io/Reader.h"
 
 namespace infra::io {

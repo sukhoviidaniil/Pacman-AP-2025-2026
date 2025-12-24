@@ -2,93 +2,97 @@
   "using_texture" : "textures/sprite.png",
   "sprits_width": 35,
   "sprits_height": 35,
-  "groups_names" :  ["Blinky", "Pinky", "Inky", "Clyde", "Sludgy", "Shady"],
-  "number_of_statuses" : 4,
-  "statuses" : [
+  "Complex_Sprite" : [
     {
-      "status" : "Alive",
-      "facial_expressions" : [
+      "groups_names":  ["Blinky", "Pinky", "Inky", "Clyde", "Sludgy", "Shady"],
+      "number_of_statuses" : 4,
+      "statuses" : [
         {
-          "direction" : "Right"
+          "Status" : "Alive",
+          "Directions" : [
+            {
+              "direction" : "Right"
+            },
+            {
+              "direction" : "Down"
+            },
+            {
+              "direction" : "Left"
+            },
+            {
+              "direction" : "Up"
+            },
+            {
+              "direction" : "Any",
+              "recLeft" : 501,
+              "recTop" : 254
+            }
+          ],
+          "NSprites_per_direction" : 1,
+          "recLeft" : {
+            "base" : 1,
+            "increase" : 50
+          },
+          "recTop" : {
+            "base" : 4,
+            "increase" : 100
+          }
         },
         {
-          "direction" : "Down"
+          "Status" : "Dead",
+          "Directions" : [
+            {
+              "direction" : "Right"
+            },
+            {
+              "direction" : "Down"
+            },
+            {
+              "direction" : "Left"
+            },
+            {
+              "direction" : "Up"
+            },
+            {
+              "direction" : "Any",
+              "recLeft" : 501,
+              "recTop" : 254
+            }
+          ],
+          "NSprites_per_direction" : 1,
+          "recLeft" : {
+            "base" : 301,
+            "increase" : 0
+          },
+          "recTop" : {
+            "base" : 254,
+            "increase" : 50
+          }
         },
         {
-          "direction" : "Left"
+          "Status" : "Weak",
+          "Directions" : [
+            {
+              "direction" : "Any",
+              "recLeft" : 1,
+              "recTop" : 554
+            }
+          ]
         },
         {
-          "direction" : "Up"
-        },
-        {
-          "direction" : "Any",
-          "recLeft" : 501,
-          "recTop" : 254
-        }
-      ],
-      "number_of_expressions_per_direction" : 1,
-      "recLeft" : {
-        "base" : 1,
-        "increase" : 50
-      },
-      "recTop" : {
-        "base" : 4,
-        "increase" : 100
-      }
-    },
-    {
-      "status" : "Dead",
-      "facial_expressions" : [
-        {
-          "direction" : "Right"
-        },
-        {
-          "direction" : "Down"
-        },
-        {
-          "direction" : "Left"
-        },
-        {
-          "direction" : "Up"
-        },
-        {
-          "direction" : "Any",
-          "recLeft" : 501,
-          "recTop" : 254
-        }
-      ],
-      "number_of_expressions_per_direction" : 1,
-      "recLeft" : {
-        "base" : 301,
-        "increase" : 0
-      },
-      "recTop" : {
-        "base" : 254,
-        "increase" : 50
-      }
-    },
-    {
-      "status" : "Weak",
-      "facial_expressions" : [
-        {
-          "direction" : "Any",
-          "recLeft" : 1,
-          "recTop" : 554
-        }
-      ]
-    },
-    {
-      "status" : "SlightlyWeak",
-      "facial_expressions" : [
-        {
-          "direction" : "Any",
-          "recLeft" : 1,
-          "recTop" : 554
-        },
-        {
-          "direction" : "Any",
-          "recLeft" : 51,
-          "recTop" : 554
+          "Status" : "SlightlyWeak",
+          "Directions" : [
+            {
+              "direction" : "Any",
+              "recLeft" : 1,
+              "recTop" : 554
+            },
+            {
+              "direction" : "Any",
+              "recLeft" : 51,
+              "recTop" : 554
+            }
+          ]
         }
       ]
     }

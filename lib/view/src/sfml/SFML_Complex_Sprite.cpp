@@ -21,26 +21,31 @@
 namespace view {
 
     SFML_Complex_Sprite::SFML_Complex_Sprite(
-        const std::unordered_map<infra::Status, std::unordered_map<infra::math::Direction, std::vector<sf::Sprite>>> &
-        data) : sprites_(data){
+        std::unordered_map<infra::Status, std::unordered_map<infra::math::Direction, std::unique_ptr<ISFML_Sprite>>>
+        data) : sprites_(std::move(data)){
     }
 
+    void SFML_Complex_Sprite::elapsed(const float delta) const {
+        for (const auto& m_status : sprites_) {
+            for (auto& m_direction : m_status.second) {
+                m_direction.second->elapsed(delta);
+            }
+        }
+    }
 
 
     sf::Sprite& SFML_Complex_Sprite::sprite(
         infra::Status status,
-        infra::math::Direction dir,
-        std::size_t frame = 0
+        infra::math::Direction dir
     ) {
-        return sprites_.at(status).at(dir).at(frame);
+        return sprites_.at(status).at(dir)->sprite();
     }
 
 
     const sf::Sprite& SFML_Complex_Sprite::sprite(
         infra::Status status,
-        infra::math::Direction dir,
-        std::size_t frame = 0
+        infra::math::Direction dir
     ) const {
-        return sprites_.at(status).at(dir).at(frame);
+        return sprites_.at(status).at(dir)->sprite();
     }
 }

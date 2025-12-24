@@ -21,7 +21,7 @@
 #include <memory>
 
 #include "model/collision/HitBox.h"
-#include "infra/presentation/base/Rect.h"
+#include "infra/presentation/external/Rect.h"
 
 namespace model {
     class Entity {

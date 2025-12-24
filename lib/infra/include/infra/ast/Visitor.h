@@ -19,22 +19,6 @@
 #define PACMAN_VISITOR_H
 
 namespace infra::ast {
-    // forward declarations
-
-    // View
-    struct Sprite;
-    struct Sprite_Expression;
-    struct Sprite_Rec;
-    struct Sprite_Status;
-    struct Complex_Sprite;
-    struct Camera;
-    struct View;
-    struct Text;
-    struct Rectangle;
-    struct Scene_Entity;
-    struct Scene_Model;
-    struct Scene_UI;
-    struct Scene_Graph;
 
     // Model
     struct Model;
@@ -48,25 +32,6 @@ namespace infra::ast {
     // ----------------------------
     struct Visitor {
         virtual ~Visitor() = default;
-    };
-
-    // ----------------------------
-    // Interfaces by category
-    // ----------------------------
-    struct View_Visitor : Visitor {
-        virtual void visit(const Sprite&) {}
-        virtual void visit(const Sprite_Expression&) {}
-        virtual void visit(const Sprite_Rec&) {}
-        virtual void visit(const Sprite_Status&) {}
-        virtual void visit(const Complex_Sprite&) {}
-        virtual void visit(const Camera&) {}
-        virtual void visit(const View&) {}
-        virtual void visit(const Text&) {}
-        virtual void visit(const Rectangle&) {}
-        virtual void visit(const Scene_Entity&) {}
-        virtual void visit(const Scene_Model&) {}
-        virtual void visit(const Scene_UI&) {}
-        virtual void visit(const Scene_Graph&) {}
     };
 
     struct Model_Visitor : Visitor {

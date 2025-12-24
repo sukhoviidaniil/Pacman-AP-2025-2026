@@ -6,7 +6,14 @@
     "textures" : [
       "textures/sprite.png"
     ],
-    "sprite_groups" : [
+    "Sprite":[
+
+    ],
+    "SpriteList":[
+
+    ],
+    "Complex_Sprite" : [
+      "graf_pacman.json",
       "graf_ghosts.json"
     ]
   },

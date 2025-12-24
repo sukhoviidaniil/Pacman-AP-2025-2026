@@ -1,0 +1,31 @@
+{
+  "using_texture" : "textures/sprite.png",
+  "sprits_width": 35,
+  "sprits_height": 35,
+  "SpriteLists" : [
+    {
+      "Order" : "Vertically",
+      "names" : ["Lobster", "Fly", "Hamburger", "Egg dish", "Candy"],
+      "recLeft" : {
+        "base" : 501,
+        "increase" : 0
+      },
+      "recTop" : {
+        "base" : 4,
+        "increase" : 50
+      }
+    },
+    {
+      "Order" : "Vertically",
+      "names" : ["Cherries", "Strawberries", "Oranges", "Apples", "Magic Fruit", "Bananas", "Peaches"],
+      "recLeft" : {
+        "base" :  551,
+        "increase" : 0
+      },
+      "recTop" : {
+        "base" : 4,
+        "increase" : 50
+      }
+    }
+  ]
+}
