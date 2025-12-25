@@ -18,8 +18,7 @@
 #ifndef PACMAN_SPRITELIST_H
 #define PACMAN_SPRITELIST_H
 
-#include <string>
-#include <vector>
+#include "infra/ast/view/ViewNode.h"
 
 namespace infra::ast {
     enum struct Order {

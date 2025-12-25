@@ -38,7 +38,7 @@ namespace infra::io {
         return reader->read_Sprite(conf_directory_ + filename);
     }
 
-    ast::Complex_Sprite File_Reader::read_Sprits_Group(const std::string &filename) const {
+    ast::ComplexSprite File_Reader::read_Sprits_Group(const std::string &filename) const {
         const std::shared_ptr<Reader> reader = get_Reader(filename);
         return reader->read_Sprits_Group(conf_directory_ + filename);
     }

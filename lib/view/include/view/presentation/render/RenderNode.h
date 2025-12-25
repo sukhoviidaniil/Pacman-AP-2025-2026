@@ -19,7 +19,7 @@
 #define PACMAN_RENDERNODE_H
 #include "infra/ast/view/ViewNode.h"
 #include "infra/ast/view/ViewVisitor.h"
-#include "view/presentation/external/Camera.h"
+#include "infra/presentation/external/Camera.h"
 
 namespace view::ui {
 
@@ -29,14 +29,15 @@ namespace view::ui {
     struct RI_ComplexSprite;
 
     struct RenderVisitor : infra::ast::Visitor {
-        virtual void visit(const RI_Label&, const Camera& ) {}
-        virtual void visit(const RI_Rectangle&, const Camera& ) {}
-        virtual void visit(const RI_Sprite&, const Camera& ) {}
-        virtual void visit(const RI_ComplexSprite&, const Camera& ) {}
+        virtual void visit(const RI_Label&) {}
+        virtual void visit(const RI_Rectangle&) {}
+        virtual void visit(const RI_Sprite&) {}
+        virtual void visit(const RI_ComplexSprite&) {}
     };
 
     struct RenderNode : infra::ast::Node {
 
+        virtual void accept(RenderVisitor &v) const = 0;
     };
 }
 

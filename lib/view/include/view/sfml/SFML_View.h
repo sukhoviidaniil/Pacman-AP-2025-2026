@@ -21,7 +21,7 @@
 #include <memory>
 #include <string>
 #include "SFML/Graphics.hpp"
-#include "../../../../infra/include/infra/ast/view/View.h"
+#include "infra/ast/view/View.h"
 #include "view/View.h"
 #include "view/sfml/SFML_Complex_Sprite.h"
 #include "view/sfml/ISFML_Event_Source.h"
@@ -30,21 +30,26 @@ namespace view {
     class SFML_View : public View, public ISFML_Event_Source{
     public:
         SFML_View(const infra::ast::View &info, const std::string & texture_dir_path);
-        void visit(const infra::ast::Sprite&) override;
-        void visit(const infra::ast::SpriteList&) override;
-        void visit(const infra::ast::Complex_Sprite&) override;
 
         void track_local(const std::shared_ptr<infra::event::Event_Bus>& bus) override;
         void track_global(const std::shared_ptr<infra::event::Event_Bus>& bus) override;
         bool poll_event(sf::Event& e) override;
 
-        void render(const infra::ui::RenderFrameGraph& graph) override;
+        [[nodiscard]] infra::math::Vector2 screen_size() const override;
+        void render(const view::ui::RenderFrame & graph) override;
+
+        using infra::ast::SpriteVisitor::visit;
+        void visit(const infra::ast::Sprite&) override;
+        void visit(const infra::ast::SpriteList&) override;
+        void visit(const infra::ast::ComplexSprite&) override;
+
+        using view::ui::RenderVisitor::visit;
+        void visit(const ui::RI_Label&) override;
+        void visit(const ui::RI_Rectangle&) override;
+        void visit(const ui::RI_Sprite&) override;
+        void visit(const ui::RI_ComplexSprite&) override;
 
     protected:
-
-        void render(const infra::ui::RenderFrame& frame);
-
-        void render_ComplexSprite(const infra::ui::RenderItem& item);
 
         const sf::Texture &get_Texture(const std::string &using_texture, const std::string &by_who);
 

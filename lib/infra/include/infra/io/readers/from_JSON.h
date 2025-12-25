@@ -23,12 +23,13 @@
 #include "infra/math/Point2.h"
 #include "infra/math/Vector2.h"
 #include "infra/ast/model/Model.h"
-#include "../../ast/sprites/Complex_Sprite.h"
-#include "infra/ast/view/Sprite.h"
-#include "../../ast/view/external/Sprite_Direction.h"
-#include "../../ast/view/external/Sprite_Rec.h"
-#include "../../ast/view/external/Sprite_Status.h"
-#include "../../ast/view/View.h"
+
+#include "infra/ast/view/View.h"
+#include "infra/ast/view/external/Sprite_Direction.h"
+#include "infra/ast/view/external/Sprite_Rec.h"
+#include "infra/ast/view/external/SpriteStatus.h"
+#include "infra/ast/view/sprites/ComplexSprite.h"
+#include "infra/ast/view/sprites/Sprite.h"
 
 namespace infra::math {
     inline void from_json(const nlohmann::json& j, Point2& v) {
@@ -150,7 +151,7 @@ namespace infra::ast {
         s.increase = io::get_checked<int>(j, "increase", s.increase);
     }
 
-    inline void from_json(const nlohmann::json& j, Sprite_Status& s) {
+    inline void from_json(const nlohmann::json& j, SpriteStatus& s) {
         s.sprite_directions = io::get_checked<std::vector<Sprite_Direction>>(j, "Directions", s.sprite_directions);
         s.sprites_per_direction = io::get_checked<unsigned int>(j, "NSprites_per_direction", s.sprites_per_direction);
         s.recLeft = io::get_checked<Sprite_Rec>(j, "recLeft", s.recLeft);
@@ -167,7 +168,7 @@ namespace infra::ast {
         throw std::runtime_error("Unknown Status");
     }
 
-    inline void from_json(const nlohmann::json& j, Complex_Sprite& s) {
+    inline void from_json(const nlohmann::json& j, ComplexSprite& s) {
         s.using_texture = io::get_checked<std::string>(j, "using_texture", s.using_texture);
         s.sprits_width = io::get_checked<unsigned int>(j,"sprits_width",  s.sprits_width);
         s.sprits_height = io::get_checked<unsigned int>(j, "sprits_height", s.sprits_height);
@@ -175,7 +176,7 @@ namespace infra::ast {
         if (j.contains("statuses") && j["statuses"].is_array()) {
             for (const auto& status : j["statuses"]) {
                 std::string status_name = status["Status"];
-                s.groups_[parse_Status(status_name)] = io::get_checked<Sprite_Status>(status);
+                s.groups_[parse_Status(status_name)] = io::get_checked<SpriteStatus>(status);
             }
         }
     }

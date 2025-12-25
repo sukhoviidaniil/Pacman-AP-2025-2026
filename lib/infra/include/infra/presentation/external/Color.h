@@ -19,11 +19,11 @@
 #define PACMAN_COLOR_H
 
 #include <cstdint>
-
-namespace view::ui {
+namespace infra::ui {
 
     struct Color {
         std::uint8_t r, g, b;
+        std::uint8_t a = 255;
     };
 }
 

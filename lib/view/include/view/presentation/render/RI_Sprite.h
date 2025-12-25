@@ -17,15 +17,17 @@
 ***************************************************************/
 #ifndef PACMAN_AST_RI_SPRITE_H
 #define PACMAN_AST_RI_SPRITE_H
-#include "RenderNode.h"
-
+#include "view/presentation/render/RenderItem.h"
 namespace view::ui {
-    struct RI_Sprite : RenderNode {
+    struct RI_Sprite : RenderItem {
         /**
          * @brief Name or ID of the sprite resource.
          */
         std::string sprite;
 
+        void accept(RenderVisitor &v) const override {
+            v.visit(*this);
+        }
     };
 }
 #endif //PACMAN_AST_RI_SPRITE_H

@@ -18,7 +18,7 @@
 #ifndef PACMAN_AST_RI_TEXT_H
 #define PACMAN_AST_RI_TEXT_H
 #include "RenderItem.h"
-#include "view/presentation/external/Color.h"
+#include "infra/presentation/external/Color.h"
 
 namespace view::ui {
     struct RI_Label : RenderItem {
@@ -26,8 +26,11 @@ namespace view::ui {
          * @brief Any text
          */
         std::string text;
-        Color color;
+        infra::ui::Color color;
 
+        void accept(RenderVisitor &v) const override {
+            v.visit(*this);
+        }
     };
 }
 #endif //PACMAN_AST_RI_TEXT_H

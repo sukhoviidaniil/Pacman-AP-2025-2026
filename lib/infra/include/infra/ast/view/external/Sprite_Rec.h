@@ -15,8 +15,9 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_REC_H
-#define PACMAN_REC_H
+#ifndef PACMAN_AST_REC_H
+#define PACMAN_AST_REC_H
+
 #include "infra/ast/Node.h"
 
 namespace infra::ast {
@@ -26,4 +27,4 @@ namespace infra::ast {
     };
 }
 
-#endif //PACMAN_REC_H
+#endif //PACMAN_AST_REC_H

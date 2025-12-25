@@ -18,7 +18,7 @@
 #ifndef PACMAN_RECT_H
 #define PACMAN_RECT_H
 
-namespace view::ui {
+namespace infra::ui {
     /**
      * @brief Axis-aligned rectangle in layout coordinates.
      *

@@ -20,7 +20,8 @@
 
 #include "core/event_collector/Event_Collector.h"
 #include "view/View.h"
-#include "../../../infra/include/infra/ast/event/Event_Collector.h"
+#include "infra/ast/event/Event_Collector.h"
+#include "infra/ast/view/View.h"
 
 namespace core {
     class View_Collector_Factory{

@@ -150,7 +150,7 @@ namespace model::collision {
                 if (tile->walkable()) {
                     continue; // walkable cell — skip
                 }
-                if (control_->collision(entity, tile->get_hitboxe())) {
+                if (control_->collision(entity, tile->hitboxe())) {
                     return true;
                 }
             }

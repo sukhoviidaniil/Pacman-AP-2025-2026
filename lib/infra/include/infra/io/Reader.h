@@ -19,7 +19,7 @@
 #define PACMAN_READER_H
 #include <memory>
 
-#include "../ast/view/View.h"
+#include "infra/ast/view/View.h"
 #include "infra/ast/Application.h"
 
 namespace infra::io {
@@ -30,7 +30,7 @@ namespace infra::io {
         public:
         virtual ~Reader() = default;
         [[nodiscard]] virtual ast::Sprite read_Sprite(const std::string& path) const = 0;
-        [[nodiscard]] virtual ast::Complex_Sprite read_Sprits_Group(const std::string& path) const = 0;
+        [[nodiscard]] virtual ast::ComplexSprite read_Sprits_Group(const std::string& path) const = 0;
         [[nodiscard]] virtual ast::View read_View(const std::string& path, const std::shared_ptr<const File_Reader>& fr) const = 0;
         [[nodiscard]] virtual ast::Model read_Model(const std::string& path) const = 0;
         [[nodiscard]] virtual ast::Application read_Application(const std::string& path, const std::shared_ptr<const File_Reader>& fr) const = 0;

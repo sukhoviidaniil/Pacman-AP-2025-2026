@@ -18,9 +18,9 @@
 #ifndef PACMAN_SPRITE_H
 #define PACMAN_SPRITE_H
 
-
-#include "external/Sprite_Rec.h"
+#include "infra/ast/view/external/Sprite_Rec.h"
 #include "infra/ast/view/ViewNode.h"
+#include "infra/ast/view/ViewVisitor.h"
 
 namespace infra::ast {
     struct Sprite : SpriteNode{

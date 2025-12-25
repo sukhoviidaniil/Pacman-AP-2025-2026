@@ -26,7 +26,7 @@
 #include <memory>
 #include <optional>
 
-#include "../../../infra/include/infra/ast/view/external/Camera.h"
+/*
 
 namespace view {
     class Camera{
@@ -75,5 +75,5 @@ namespace view {
         virtual void render(sf::RenderWindow &window, const std::shared_ptr<View> &view) const;
     };
 }
-
+*/
 #endif //PACMAN_CAMERA_H

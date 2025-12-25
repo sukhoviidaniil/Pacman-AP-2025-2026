@@ -33,9 +33,9 @@ namespace infra::io {
         return sprite;
     }
 
-    ast::Complex_Sprite Reader_JSON::read_Sprits_Group(const std::string &filename) const {
+    ast::ComplexSprite Reader_JSON::read_Sprits_Group(const std::string &filename) const {
         nlohmann::json data = get_json_data(filename);
-        auto sg = get_checked<ast::Complex_Sprite>(data);
+        auto sg = get_checked<ast::ComplexSprite>(data);
         return sg;
     }
 
@@ -70,7 +70,7 @@ namespace infra::io {
                     continue;
                 }
                 if (sprite.is_structured()) {
-                    vs.complex_sprites.push_back(get_checked<ast::Complex_Sprite>(sprite, "sprite_groups"));
+                    vs.complex_sprites.push_back(get_checked<ast::ComplexSprite>(sprite, "sprite_groups"));
                     continue;
                 }
                 throw std::invalid_argument("View_Sprites one of the parameters in the “sprite_groups” list is neither a file name nor an object.");

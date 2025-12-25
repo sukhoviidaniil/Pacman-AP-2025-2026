@@ -54,4 +54,7 @@ namespace view {
         return window_.pollEvent(e);
     }
 
+    infra::math::Vector2 SFML_View::screen_size() const {
+        return {static_cast<float>(window_.getSize().x), static_cast<float>(window_.getSize().y)};
+    }
 }

@@ -20,6 +20,7 @@
 
 #include <cstdint>
 #include <typeindex>
+#include <utility>
 
 namespace infra::event {
     enum class EventMask : std::uint32_t {

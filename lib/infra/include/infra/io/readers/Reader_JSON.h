@@ -29,7 +29,7 @@ namespace infra::io {
         ~Reader_JSON() override;
 
         [[nodiscard]] ast::Sprite read_Sprite(const std::string& filename) const override;
-        [[nodiscard]] ast::Complex_Sprite read_Sprits_Group(const std::string& filename) const override;
+        [[nodiscard]] ast::ComplexSprite read_Sprits_Group(const std::string& filename) const override;
 
         static ast::View read_View(
             nlohmann::json data,

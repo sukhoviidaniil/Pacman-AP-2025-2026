@@ -18,7 +18,7 @@
 #ifndef PACMAN_LAYOUTRESULT_H
 #define PACMAN_LAYOUTRESULT_H
 
-#include "view/presentation/external/Rect.h"
+#include "infra/presentation/external/Rect.h"
 
 namespace view::ui {
     /**
@@ -28,7 +28,7 @@ namespace view::ui {
      * after the layout engine finishes its calculations.
      */
     struct LayoutResult {
-        Rect rect; ///< Final computed rectangle
+        infra::ui::Rect rect; ///< Final computed rectangle
     };
 }
 

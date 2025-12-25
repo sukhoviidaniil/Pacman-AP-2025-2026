@@ -19,13 +19,11 @@
 #define PACMAN_AST_RENDERFRAME_H
 
 #include "view/presentation/render/RenderItem.h"
-#include "view/presentation/external/Camera.h"
 
 namespace view::ui {
-    struct RenderFrame : RenderNode {
-        Camera camera;
-        std::vector<RenderItem> constant_items;
-        std::vector<RenderItem> temp_items;
+    struct RenderFrame : infra::ast::Node {
+        std::vector<std::unique_ptr<RenderItem>> constant_items;
+        std::vector<std::unique_ptr<RenderItem>> temp_items;
     };
 }
 

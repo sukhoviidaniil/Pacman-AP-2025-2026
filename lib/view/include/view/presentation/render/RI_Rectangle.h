@@ -18,11 +18,14 @@
 #ifndef PACMAN_AST_RI_RECTANGLE_H
 #define PACMAN_AST_RI_RECTANGLE_H
 #include "RenderItem.h"
-#include "view/presentation/external/Color.h"
+#include "infra/presentation/external/Color.h"
 
 namespace view::ui {
     struct RI_Rectangle : RenderItem {
-        Color color;
+        infra::ui::Color color;
+        void accept(RenderVisitor &v) const override {
+            v.visit(*this);
+        }
     };
 }
 

@@ -29,6 +29,10 @@ namespace model {
 
     }
 
+    float Tile_Grid::tile_size() const {
+        return tile_size_;
+    }
+
     Tile_Grid::~Tile_Grid() = default;
 
     Tile_Grid::Tile_Grid(const infra::ast::Grid &grid_info) {
@@ -82,12 +86,12 @@ namespace model {
         return columns_;
     }
 
-    unsigned int Tile_Grid::get_width() const {
-        return static_cast<unsigned int>(static_cast<float>(rows_) * tile_size_);
+    float Tile_Grid::get_width() const {
+        return static_cast<float>(columns_) * tile_size_;
     }
 
-    unsigned int Tile_Grid::get_height() const {
-        return static_cast<unsigned int>(static_cast<float>(columns_) * tile_size_);
+    float Tile_Grid::get_height() const {
+        return static_cast<float>(rows_) * tile_size_;
     }
 
     std::shared_ptr<const entity::Tile> Tile_Grid::get_tile( const size_t &y, const size_t &x) const {
@@ -181,8 +185,8 @@ namespace model {
     void Tile_Grid::update_Entity_Tile(const std::shared_ptr<Entity> &entity) {
         if (!entity) return;
         // 1. Calculate which cell the entity falls into
-        const float x = entity->get_position().x;
-        const float y = entity->get_position().y;
+        const float x = entity->position().x;
+        const float y = entity->position().y;
         const int col = static_cast<int>(std::floor(x / tile_size_));
         const int row = static_cast<int>(std::floor(y / tile_size_));
         // Checking for going beyond the world

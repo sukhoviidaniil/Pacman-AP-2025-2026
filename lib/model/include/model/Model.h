@@ -20,7 +20,7 @@
 #include <future>
 
 #include "infra/ast/model/Model.h"
-#include "infra/presentation/RenderFrame.h"
+
 #include "infra/event/Event_Store.h"
 
 #include "entity/Coin.h"
@@ -35,9 +35,11 @@ namespace model {
         explicit Model(const infra::ast::Model& m, const unsigned int& level);
         explicit Model(const infra::ast::Model& m, const unsigned int& level, const std::vector<std::shared_ptr<entity::Coin>>& coins);
 
-        bool all_coins_eaten() const;
+        [[nodiscard]] bool all_coins_eaten() const;
 
         void run(float delta);
+
+        std::shared_ptr<entity::Pacman> get_pacman() const;
 
 
         infra::event::Event_Store event_store_;

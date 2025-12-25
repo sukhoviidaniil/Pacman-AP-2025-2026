@@ -86,7 +86,8 @@ namespace core {
             float delta = dt.tick();
             std::shared_ptr<Stage> current_stage = stage_manager_.get_top();
             current_stage->run(delta);
-            infra::ui::RenderFrameGraph v = current_stage->get_Scene_Graph();
+            infra::math::Vector2 screen_size = view_->screen_size();
+            view::ui::RenderFrame v  = current_stage->get_RenderFrame(screen_size, true);
             view_->render(v);
             dispatch_events();
         }

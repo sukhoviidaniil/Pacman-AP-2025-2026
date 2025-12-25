@@ -24,14 +24,15 @@
 
 #include "infra/event/Observer.h"
 #include "infra/ast/view/ViewVisitor.h"
-#include "infra/presentation/render/RenderFrame.h"
+#include "view/presentation/render/RenderFrame.h"
 
 namespace view {
-    class View : public infra::event::Observer, public infra::ast::SpriteVisitor, public infra::ui::RenderVisitor{
+    class View : public infra::event::Observer, public infra::ast::SpriteVisitor, public view::ui::RenderVisitor{
     public:
         explicit View(std::string name);
         ~View() override;
-        virtual void render(const infra::ui::RenderFrame& graph) = 0;
+        [[nodiscard]] virtual infra::math::Vector2 screen_size() const = 0;
+        virtual void render(const view::ui::RenderFrame& graph) = 0;
         virtual void track_local(const std::shared_ptr<infra::event::Event_Bus>& bus) = 0;
         virtual void track_global(const std::shared_ptr<infra::event::Event_Bus>& bus) = 0;
     protected:

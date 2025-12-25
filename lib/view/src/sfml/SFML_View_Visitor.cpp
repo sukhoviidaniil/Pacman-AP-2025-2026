@@ -16,6 +16,7 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 #include "infra/diagnostics/Logger.h"
+#include "view/presentation/render/RI_Rectangle.h"
 #include "view/sfml/SFML_View.h"
 
 namespace view {
@@ -57,9 +58,31 @@ namespace view {
 
     void SFML_View::visit(const infra::ast::SpriteList &list) {
         // TODO
+
+    /*
+        int index = 0;
+        for (const auto& name : list.names) {
+
+            infra::ast::Sprite sprite;
+            sprite.using_texture = list.using_texture;
+            sprite.sprits_width = list.sprits_width;
+            sprite.sprits_height = list.sprits_height;
+            sprite.name = name;
+
+
+
+
+            const sf::IntRect rect(recLeft, recTop, sprite_width, sprite_height);
+            sf::Sprite sprite(texture, rect);
+            sprite.setOrigin(static_cast<float>(rect.width) / 2.f, static_cast<float>(rect.height) / 2.f);
+
+            sprites_[name] = std::move(sprite);
+            index++;
+        }
+        */
     }
 
-    void SFML_View::visit(const infra::ast::Complex_Sprite &complex_sprite) {
+    void SFML_View::visit(const infra::ast::ComplexSprite &complex_sprite) {
 
         const sf::Texture& texture = get_Texture(complex_sprite.using_texture, "infra::ast::Complex_Sprite");
         int left_index = 0;
@@ -86,7 +109,7 @@ namespace view {
             for (const auto& group :  complex_sprite.groups_) {
 
                 // status = new coordinates
-                const infra::ast::Sprite_Status& status = group.second;
+                const infra::ast::SpriteStatus& status = group.second;
                 const auto directions = static_cast<unsigned int>(status.sprite_directions.size());
                 unsigned int sprites_per_direction = status.sprites_per_direction;
 
@@ -131,6 +154,27 @@ namespace view {
             complex_sprites_[name] = std::make_unique<SFML_Complex_Sprite>(std::move(data));
             left_index++;
         }
+    }
+
+    void SFML_View::visit(const ui::RI_Label &ri_label) {
+        // TODO
+
+    }
+
+    void SFML_View::visit(const ui::RI_Rectangle &ri_rectangle) {
+        sf::RectangleShape rect;
+        rect.setPosition(ri_rectangle.rect.x, ri_rectangle.rect.y);
+        rect.setSize({ ri_rectangle.rect.width, ri_rectangle.rect.height });
+        rect.setFillColor(sf::Color(ri_rectangle.color.r, ri_rectangle.color.g, ri_rectangle.color.b, ri_rectangle.color.a));
+        window_.draw(rect);
+    }
+
+    void SFML_View::visit(const ui::RI_Sprite &ri_sprite) {
+
+    }
+
+    void SFML_View::visit(const ui::RI_ComplexSprite &ri_complex_sprite) {
+
     }
 
     const sf::Texture& SFML_View::get_Texture(const std::string& using_texture, const std::string& by_who) {

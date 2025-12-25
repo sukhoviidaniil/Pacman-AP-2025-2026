@@ -21,7 +21,7 @@
 
 #include "infra/math/Vector2.h"
 
-namespace view::ui {
+namespace infra::ui {
     struct Camera {
         /// The size of the screen area in which View draws the scene. Screen pixels
         infra::math::Vector2 viewport_size;

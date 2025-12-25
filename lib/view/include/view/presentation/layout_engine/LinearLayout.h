@@ -20,8 +20,8 @@
 
 #include "view/presentation/layout_engine/UIElement.h"
 #include "infra/math/Vector2.h"
-#include "view/presentation/external/Alignment.h"
-#include "view/presentation/external/Rect.h"
+#include "infra/presentation/external/Alignment.h"
+#include "infra/presentation/external/Rect.h"
 
 namespace view::ui {
 
@@ -34,7 +34,7 @@ namespace view::ui {
     class LinearLayout : public UIElement {
     public:
         /// @brief Alignment of children along the cross axis.
-        Align align = Align::Start;
+        infra::ui::Align align = infra::ui::Align::Start;
         /// @brief Spacing between consecutive children.
         float spacing = 0.f;
 
@@ -46,7 +46,7 @@ namespace view::ui {
          *
          * @return true if horizontal, false if vertical.
          */
-        virtual bool horizontal() const = 0;
+        [[nodiscard]] virtual bool horizontal() const = 0;
 
         /**
          * @brief Measures the desired size of the layout.
@@ -59,20 +59,27 @@ namespace view::ui {
          * @return Desired size of the layout.
          */
         infra::math::Vector2 measure(const infra::math::Vector2 &available) override {
-            infra::math::Vector2 total {0, 0};
+            infra::math::Vector2 total{0.f, 0.f};
+            size_t visible_count = 0;
 
             for (auto& c : children) {
                 if (!c->visible) continue;
 
                 infra::math::Vector2 cs = c->measure(available);
+                ++visible_count;
 
                 if (horizontal()) {
-                    total.x += cs.x + spacing;
+                    total.x += cs.x;
                     total.y = std::max(total.y, cs.y);
                 } else {
-                    total.y += cs.y + spacing;
+                    total.y += cs.y;
                     total.x = std::max(total.x, cs.x);
                 }
+            }
+
+            if (visible_count > 1) {
+                if (horizontal()) total.x += spacing * static_cast<float>(visible_count - 1);
+                else              total.y += spacing * static_cast<float>(visible_count - 1);
             }
 
             return total;
@@ -86,47 +93,68 @@ namespace view::ui {
          *
          * @param r Final rectangle assigned by the parent layout.
          */
-        void layout(Rect r) override {
-            result.rect = r;
-            infra::math::Point2 p = r.p;
-            infra::math::Vector2 v = r.v;
-            float main = horizontal() ? v.x : v.y;
-            float cross = horizontal() ? v.y : v.x;
+        void layout(infra::ui::Rect r) override {
+             result.rect = r;
 
-            float fixed = 0;
-            float flex_sum = 0;
+            infra::math::Point2 p{r.x, r.y};
+            infra::math::Vector2 v{r.width, r.height};
+
+            const float main  = horizontal() ? v.x : v.y;
+            const float cross = horizontal() ? v.y : v.x;
+
+            float fixed = 0.f;
+            float flex_sum = 0.f;
+            size_t visible_count = 0;
 
             for (auto& c : children) {
                 if (!c->visible) continue;
-                if (c->flex > 0) flex_sum += c->flex;
-                else {
-                    infra::math::Vector2 s = c->measure({v.x, v.y});
+
+                ++visible_count;
+
+                if (c->flex > 0.f) {
+                    flex_sum += c->flex;
+                } else {
+                    infra::math::Vector2 s = c->measure(v);
                     fixed += horizontal() ? s.x : s.y;
                 }
             }
 
-            const float free = main - fixed - spacing * (static_cast<float>(children.size()) - 1);
+            const float free = std::max(
+                0.f,
+                main - fixed - spacing * static_cast<float>(visible_count > 0 ? visible_count - 1 : 0)
+            );
+
             float cursor = horizontal() ? p.x : p.y;
 
-            for (const auto& c : children) {
+            for (auto& c : children) {
                 if (!c->visible) continue;
 
-                infra::math::Vector2 s = c->measure({v.x, v.x});
+                infra::math::Vector2 s = c->measure(v);
 
                 float main_size =
-                    c->flex > 0 ? free * (c->flex / flex_sum)
-                                : (horizontal() ? s.x : s.y);
+                    (c->flex > 0.f && flex_sum > 0.f)
+                        ? free * (c->flex / flex_sum)
+                        : (horizontal() ? s.x : s.y);
 
                 float cross_size =
-                    align == Align::Stretch ? cross
-                    : (horizontal() ? s.y : s.x);
+                    align == infra::ui::Align::Stretch
+                        ? cross
+                        : (horizontal() ? s.y : s.x);
 
-                Rect cr;
+                float cross_pos = horizontal() ? p.y : p.x;
+
+                if (align != infra::ui::Align::Stretch) {
+                    const float extra = cross - cross_size;
+                    if (align == infra::ui::Align::Center) cross_pos += extra * 0.5f;
+                    else if (align == infra::ui::Align::End) cross_pos += extra;
+                }
+
+                infra::ui::Rect cr;
 
                 if (horizontal()) {
-                    cr = {cursor, p.y, main_size, cross_size};
+                    cr = {cursor, cross_pos, main_size, cross_size};
                 } else {
-                    cr = {p.x, cursor, cross_size, main_size};
+                    cr = {cross_pos, cursor, cross_size, main_size};
                 }
 
                 c->layout(cr);

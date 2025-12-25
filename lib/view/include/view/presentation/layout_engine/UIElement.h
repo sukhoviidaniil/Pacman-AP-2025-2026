@@ -21,12 +21,10 @@
 #include <memory>
 
 #include "infra/math/Vector2.h"
+#include "infra/presentation/external/Size.h"
 #include "view/ViewContext.h"
 #include "view/presentation/layout_engine/LayoutResult.h"
-#include "view/presentation/RenderFrame.h"
-#include "view/presentation/external/Size.h"
 #include "view/presentation/render/RenderFrame.h"
-#include "view/presentation/render/RenderItem.h"
 
 namespace view::ui {
     /**
@@ -75,20 +73,22 @@ namespace view::ui {
          *
          * @param r Final rectangle assigned by the layout engine.
          */
-        virtual void layout(const Rect r) {
+        virtual void layout(const infra::ui::Rect r) {
             result.rect = r;
             for (auto& c : children)
                 c->layout(r);
         }
 
         virtual void append_render_items(RenderFrame& frame, const ViewContext& ctx) const {
-
+            for (const auto& c : children) {
+                c->append_render_items(frame, ctx);
+            }
         }
 
 
         // ===== Configuration =====
-        Size width  = Size::auto_(); ///< Width specification
-        Size height = Size::auto_(); ///< Height specification
+        infra::ui::Size width  = infra::ui::Size::auto_(); ///< Width specification
+        infra::ui::Size height = infra::ui::Size::auto_(); ///< Height specification
 
         infra::math::Vector2 min_size {0, 0};         ///< Minimum allowed size
         infra::math::Vector2 max_size {1e9f, 1e9f};   ///< Maximum allowed size
@@ -115,12 +115,12 @@ namespace view::ui {
          * @param available Available space from the parent.
          * @return Resolved size.
          */
-        infra::math::Vector2 resolve_size(const infra::math::Vector2 &available) const {
+        [[nodiscard]] infra::math::Vector2 resolve_size(const infra::math::Vector2 &available) const {
             infra::math::Vector2 out;
 
-            auto resolve = [&](Size s, float avail) {
-                if (s.type == Size::Type::Pixel)   return s.value;
-                if (s.type == Size::Type::Percent) return avail * s.value;
+            auto resolve = [&](infra::ui::Size s, float avail) {
+                if (s.type == infra::ui::Size::Type::Pixel)   return s.value;
+                if (s.type == infra::ui::Size::Type::Percent) return avail * s.value;
                 return avail; // Auto
             };
 

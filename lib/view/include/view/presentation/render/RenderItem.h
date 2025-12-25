@@ -17,7 +17,7 @@
 ***************************************************************/
 #ifndef PACMAN_AST_RENDERITEM_H
 #define PACMAN_AST_RENDERITEM_H
-#include "view/presentation/external/Rect.h"
+#include "infra/presentation/external/Rect.h"
 #include "view/presentation/render/RenderNode.h"
 
 namespace view::ui {
@@ -26,10 +26,8 @@ namespace view::ui {
         World     // game logic
     };
     struct RenderItem : RenderNode {
-        /// What coordinate system is used?
-        Space space;
         /// Element dimensions
-        Rect rect;
+        infra::ui::Rect rect;
     };
 }
 

@@ -74,7 +74,7 @@ namespace model::entity{
             if (t == nullptr) {
                 throw std::invalid_argument("Not a valid tile for Actor - Actor out bounds;");
             }
-            const infra::math::Point2& next_tile_center = t->get_position();
+            const infra::math::Point2& next_tile_center = t->position();
 
             // 2. Calculate the maximum possible displacement to this coordinate
             auto to_cell = infra::math::Vector2(next_tile_center - position_);

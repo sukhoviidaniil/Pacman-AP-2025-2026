@@ -18,7 +18,7 @@
 #ifndef PACMAN_SIZE_H
 #define PACMAN_SIZE_H
 
-namespace view::ui {
+namespace infra::ui {
     /**
      * @brief Size specification used by the layout engine.
      *

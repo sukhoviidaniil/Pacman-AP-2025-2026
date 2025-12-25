@@ -18,19 +18,17 @@
 #ifndef PACMAN_SPRITEGROUP_H
 #define PACMAN_SPRITEGROUP_H
 
-#include <string>
-#include <vector>
-
+#include <unordered_map>
 #include "infra/Status.h"
+#include "infra/ast/view/external/SpriteStatus.h"
 #include "infra/ast/view/ViewNode.h"
-#include "infra/ast/view/external/Sprite_Status.h"
 
 namespace infra::ast {
     struct ComplexSprite : SpriteNode {
         std::vector<std::string> groups_names;
         std::unordered_map<
             Status,
-            Sprite_Status
+            SpriteStatus
         > groups_;
 
         void accept(SpriteVisitor &v) const override {

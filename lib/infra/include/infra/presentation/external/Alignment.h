@@ -18,7 +18,7 @@
 #ifndef PACMAN_ALIGNMENT_H
 #define PACMAN_ALIGNMENT_H
 
-namespace view::ui {
+namespace infra::ui {
 
     /**
      * @brief Alignment policy used by the layout engine.

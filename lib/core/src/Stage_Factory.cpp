@@ -85,7 +85,7 @@ namespace core {
             if (current_model_->all_coins_eaten()) {
                 current_model_ = std::make_shared<model::Model>(model_variant, score_->level);
             }else {
-                current_model_ = std::make_shared<model::Model>(model_variant, score_->level, current_model_->get_coins());
+                current_model_ = std::make_shared<model::Model>(model_variant, score_->level, current_model_->coins);
             }
         }else {
             // Current model dont exist

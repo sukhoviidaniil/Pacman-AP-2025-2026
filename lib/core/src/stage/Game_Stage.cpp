@@ -29,41 +29,38 @@ namespace core {
         const std::shared_ptr<infra::event::Event_Bus> &eventbus,
         const std::shared_ptr<model::Model> &model) :
     Stage(eventbus), model_(model){
-
         //1 Create a root horizontal container
-        ui_root_ = std::make_shared<view::ui::HBox>();
-        auto left_col   = std::make_shared<view::ui::UIElement>();
-        auto middle_col = std::make_shared<view::ui::UIElement>();
-        auto right_col  = std::make_shared<view::ui::UIElement>();
+        ui_root_ = std::make_shared<view::ui::VBox>();
+        const auto left_col   = std::make_shared<view::ui::UIElement>();
+        const auto middle_col = std::make_shared<view::ui::UIElement>();
+        const auto right_col  = std::make_shared<view::ui::UIElement>();
 
-        //2 Add three columns
-        // Make all columns the same width
+        // 2 Add three columns
         left_col->flex   = 1.f;
-        middle_col->flex = 3.f;
+        middle_col->flex = 10.f;
         right_col->flex  = 1.f;
-        //
         ui_root_->add(left_col);
         ui_root_->add(middle_col);
         ui_root_->add(right_col);
 
-
         //3 Create a UIElement for the model
-        auto model_view_ui = std::make_shared<view::ui::Map>();
+        const auto model_view_ui = std::make_shared<view::ui::Map>();
         middle_col->add(model_view_ui);
     }
 
     void Game_Stage::run(float tick) {
-
+        model_->run(tick);
     }
 
-    view::ui::RenderFrame Game_Stage::get_RenderFrame(const infra::math::Vector2 &screen_size, bool redraw) const {
+    view::ui::RenderFrame Game_Stage::get_RenderFrame(const infra::math::Vector2 &screen_size, const bool redraw) const {
         //4 Measurement and layout of the entire tree
         ui_root_->measure(screen_size);
         //5 Preparing RenderFrame and context
         ui_root_->layout({0, 0, screen_size.x, screen_size.y});
         view::ui::RenderFrame frame;
         //6 Collecting RenderItems
-        view::ViewContext ctx( TODO, redraw);
+        const model::ui::ModelView mv(*model_);
+        const view::ViewContext ctx(mv, redraw);
         ui_root_->append_render_items(frame, ctx);
         return frame;
     }

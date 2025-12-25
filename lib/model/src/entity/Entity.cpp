@@ -32,20 +32,20 @@ namespace model {
 
     Entity::~Entity() = default;
 
-    std::string Entity::get_name() const {
+    std::string Entity::name() const {
         return name_;
     }
 
-    infra::math::Point2 Entity::get_position() const {
+    infra::math::Point2 Entity::position() const {
         return position_;
     }
 
-    const collision::HitBox& Entity::get_hitboxe() const {
+    const collision::HitBox& Entity::hitboxe() const {
         return *hitbox_;
     }
 
-    infra::ui::Rect Entity::get_rect() const {
-        collision::AABB aabb = get_hitboxe().get_aabb();
-        return {{aabb.center.x, aabb.center.y}, {aabb.extend.x, aabb.extend.y}};
+    infra::ui::Rect Entity::rect() const {
+        collision::AABB aabb = hitboxe().get_aabb();
+        return {aabb.center.x, aabb.center.y, aabb.extend.x, aabb.extend.y};
     }
 }

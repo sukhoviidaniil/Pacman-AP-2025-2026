@@ -32,10 +32,10 @@ namespace model {
         );
 
         // ===== Getters =====
-        [[nodiscard]] std::string get_name() const;
-        [[nodiscard]] infra::math::Point2 get_position() const;
-        [[nodiscard]] const collision::HitBox& get_hitboxe() const;
-        [[nodiscard]] infra::ui::Rect get_rect() const;
+        [[nodiscard]] std::string name() const;
+        [[nodiscard]] infra::math::Point2 position() const;
+        [[nodiscard]] const collision::HitBox& hitboxe() const;
+        [[nodiscard]] infra::ui::Rect rect() const;
 
 
         // Position in world coordinates
