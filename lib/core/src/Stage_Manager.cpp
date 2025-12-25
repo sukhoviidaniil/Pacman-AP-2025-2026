@@ -56,7 +56,6 @@ namespace core  {
 
     Stage_Manager::~Stage_Manager() = default;
 
-    Stage_Manager::Stage_Manager() = default;
 
     void Stage_Manager::set_stage_factory(core::Stage_Factory stage_factory) {
         stage_factory_ = std::move(stage_factory);
@@ -68,7 +67,7 @@ namespace core  {
         }
     }
 
-    void Stage_Manager::track_local(const std::shared_ptr<infra::event::Event_Bus> &bus) {
+    void Stage_Manager::track_global(const std::shared_ptr<infra::event::Event_Bus> &bus) {
         track = true;
     }
 
@@ -79,7 +78,6 @@ namespace core  {
 
     void Stage_Manager::push_stage(const std::shared_ptr<core::Stage> &stage) {
         current_stages_.push(stage);
-        un_track_all();
     }
 
     std::shared_ptr<core::Stage> Stage_Manager::get_top() {

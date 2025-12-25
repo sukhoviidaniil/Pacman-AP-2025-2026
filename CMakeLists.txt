@@ -62,6 +62,7 @@ set(FUNC_INCLUDE_DIRS
 add_subdirectory(lib/infra)
 add_subdirectory(lib/model)
 add_subdirectory(lib/view)
+add_subdirectory(lib/control)
 add_subdirectory(lib/core)
 
 # -----------------------------------------

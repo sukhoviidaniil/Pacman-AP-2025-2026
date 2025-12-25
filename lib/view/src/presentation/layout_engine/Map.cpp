@@ -32,6 +32,11 @@ namespace view::ui {
 
     void Map::append_render_items(RenderFrame &frame, const ViewContext &ctx) const {
 
+        if (!ctx.model.has_value()) {
+            return;
+        }
+        const model::ui::ModelView& model = ctx.model.value();
+
         auto r = std::make_unique<view::ui::RI_Rectangle>();
         r->color = infra::ui::Color(100,100,100);
 
@@ -39,7 +44,7 @@ namespace view::ui {
 
         frame.constant_items.push_back(std::move(r));
 
-        const model::Tile_Grid &grid = ctx.model.grid();
+        const model::Tile_Grid &grid = model.grid();
         const float ts = grid.tile_size();
 
         // Map size in world coordinates (taking into account the full size of the tiles)

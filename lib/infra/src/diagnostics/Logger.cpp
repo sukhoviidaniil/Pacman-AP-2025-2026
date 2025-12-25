@@ -57,5 +57,4 @@ namespace infra::diag {
         if (!result.empty() && result.back() == '\n') result.pop_back();
         return result;
     }
-
 }

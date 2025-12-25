@@ -19,7 +19,8 @@
 #define PACMAN_INPUT_H
 #include <cstdint>
 
-#include "infra/event/Event_Bus.h"
+
+#include "infra/event/Event.h"
 
 namespace infra::event::input {
     enum class Key : std::uint16_t {

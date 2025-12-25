@@ -9,4 +9,5 @@ target_link_libraries(core_lib PUBLIC
         infra_lib
         model_lib
         view_lib
+        control_lib
 )

@@ -18,6 +18,8 @@
 #ifndef PACMAN_PRESENTATIONMODEL_H
 #define PACMAN_PRESENTATIONMODEL_H
 
+#include "model/Model.h"
+
 namespace model::ui {
     class ModelView {
     public:

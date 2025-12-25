@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Controller.h
+ * File:          C_Game.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-17
+ * Created:       2025-12-25
  * Modified:      []
  *
  * Description:   []
@@ -15,13 +15,21 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_CONTROLLER_H
-#define PACMAN_CONTROLLER_H
+#ifndef PACMAN_C_GAME_H
+#define PACMAN_C_GAME_H
 
-namespace core {
-    class Controller {
+#include "control/Controller.h"
 
+namespace control {
+    class C_Game : public Controller {
+    public:
+
+        C_Game(const std::shared_ptr<model::entity::Pacman>& pacman);
+
+    private:
+
+        std::shared_ptr<model::entity::Pacman> pacman_;
     };
 }
 
-#endif //PACMAN_CONTROLLER_H
+#endif //PACMAN_C_GAME_H

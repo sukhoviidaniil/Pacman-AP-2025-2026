@@ -21,7 +21,6 @@
 #include "infra/Score.h"
 #include "infra/ast/Application.h"
 #include "view/View.h"
-#include "core/Controller.h"
 #include "core/event_collector/Event_Collector.h"
 #include "core/Stage_Manager.h"
 #include "core/Stage_Factory.h"
@@ -35,23 +34,21 @@ namespace core {
             const std::string &path,
             const std::shared_ptr<infra::event::Event_Bus>& eventbus
             );
+
         void set_global(const std::shared_ptr<infra::event::Event_Bus>& eventbus);
         void dispatch_events() const;
-        void track_global(const std::shared_ptr<infra::event::Event_Bus>& bus);
         void run();
-        std::shared_ptr<infra::event::Event_Bus> eventbus_l_; // LOCAL
+
     private:
         bool running_ = true;
+        std::shared_ptr<view::View> view_; // CAN be used in Event_Collector
+        std::unique_ptr<core::Event_Collector> event_collector_; // NOT event a Translator/Respondent
 
-        std::unique_ptr<core::Controller> controller_;
-        std::shared_ptr<view::View> view_; // Can be used in Event_Collector
-        std::unique_ptr<core::Event_Collector> event_collector_;
-
-        std::shared_ptr<infra::Score> score_;
+        std::shared_ptr<infra::Score> score_; // Go to Stage_Factory -> Stage || Saves to file
         std::shared_ptr<core::Stage_Factory> stage_factory_;
         core::Stage_Manager stage_manager_;
 
-        std::shared_ptr<infra::event::Event_Bus> eventbus_g_ = nullptr; // GLOBAL
+        std::shared_ptr<infra::event::Event_Bus> g_eventbus_ = nullptr; /// GLOBAL || NOT OWNER
     };
 }
 

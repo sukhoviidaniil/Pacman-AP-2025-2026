@@ -39,7 +39,7 @@ namespace infra::event {
         [[nodiscard]] virtual infra::event::EventMask mask() const = 0;
         [[nodiscard]] virtual std::type_index type() const = 0;
         [[nodiscard]] virtual const void* data() const = 0;
-        //virtual void emit(Event_Bus& bus) const = 0;
+        [[nodiscard]] virtual std::unique_ptr<EventConcept> clone() = 0;
     };
 
     template<typename Event>
@@ -57,6 +57,10 @@ namespace infra::event {
         }
 
         [[nodiscard]] const void* data() const override { return &value; }
+
+        [[nodiscard]] std::unique_ptr<infra::event::EventConcept> clone() override {
+            return std::make_unique<EventInstance<Event>>(value);
+        }
     };
 }
 

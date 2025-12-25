@@ -21,14 +21,13 @@
 #include "core/Stage.h"
 #include "infra/Score.h"
 #include "model/Model.h"
-#include "view/View.h"
+
 
 namespace core {
     class Stage_Factory {
         public:
-        Stage_Factory();
         explicit Stage_Factory(
-            const std::shared_ptr<infra::event::Event_Bus>& eventbus,
+            const std::shared_ptr<infra::event::Event_Bus>& g_eventbus,
             const std::shared_ptr<infra::Score>& score,
             const std::vector<infra::ast::Model> &models
             );
@@ -46,12 +45,12 @@ namespace core {
 
         private:
 
-        std::shared_ptr<infra::event::Event_Bus> eventbus_; // LOCAL
         std::shared_ptr<infra::Score> score_;
         std::shared_ptr<model::Model> current_model_ = nullptr;
         bool random_model_order_ = false;
         size_t selected_model_;
         std::vector<infra::ast::Model> models_variants_;
+        std::shared_ptr<infra::event::Event_Bus> g_eventbus_ = nullptr; /// GLOBAL || NOT OWNER
     };
 }
 

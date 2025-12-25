@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Stage.cpp
+ * File:          C_Menu.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-11-19
+ * Created:       2025-12-25
  * Modified:      []
  *
  * Description:   []
@@ -15,12 +15,22 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
+#ifndef PACMAN_C_MENU_H
+#define PACMAN_C_MENU_H
+#include "Controller.h"
+#include "menu/Menu.h"
 
-#include "core/Stage.h"
+namespace control {
+    class C_Menu : public Controller {
+    public:
+        explicit C_Menu(std::shared_ptr<Menu> menu);
 
-namespace core {
-    Stage::Stage(const std::shared_ptr<infra::event::Event_Bus> &globalBus) : g_eventbus(globalBus){
-        l_eventbus = std::make_unique<infra::event::Event_Bus>();
-    }
+        void push_current_button_event();
+
+    private:
+        std::shared_ptr<Menu> menu_;
+    };
 
 }
+
+#endif //PACMAN_C_MENU_H

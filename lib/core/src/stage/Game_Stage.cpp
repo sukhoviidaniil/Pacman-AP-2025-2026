@@ -26,9 +26,9 @@ namespace core {
     Game_Stage::~Game_Stage() = default;
 
     Game_Stage::Game_Stage(
-        const std::shared_ptr<infra::event::Event_Bus> &eventbus,
+        const std::shared_ptr<infra::event::Event_Bus> &global_eventbus,
         const std::shared_ptr<model::Model> &model) :
-    Stage(eventbus), model_(model){
+        Stage(global_eventbus), model_(model){
         //1 Create a root horizontal container
         ui_root_ = std::make_shared<view::ui::VBox>();
         const auto left_col   = std::make_shared<view::ui::UIElement>();
@@ -60,7 +60,7 @@ namespace core {
         view::ui::RenderFrame frame;
         //6 Collecting RenderItems
         const model::ui::ModelView mv(*model_);
-        const view::ViewContext ctx(mv, redraw);
+        const view::ViewContext ctx(redraw, nullptr, &mv);
         ui_root_->append_render_items(frame, ctx);
         return frame;
     }

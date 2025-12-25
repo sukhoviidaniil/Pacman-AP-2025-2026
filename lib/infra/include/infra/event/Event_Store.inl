@@ -33,7 +33,6 @@ namespace infra::event {
         );
     }
 
-
     template<typename Event>
     Event Event_Store::pop() {
         auto& e = *events_.back();

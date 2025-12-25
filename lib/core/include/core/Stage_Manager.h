@@ -32,10 +32,12 @@ namespace core {
         explicit Stage_Manager();
 
         void set_stage_factory(core::Stage_Factory stage_factory);
-        virtual void track_local(const std::shared_ptr<infra::event::Event_Bus>& bus);
+        virtual void track_global(const std::shared_ptr<infra::event::Event_Bus>& bus);
+
+        std::shared_ptr<core::Stage> get_top();
+    protected:
         void pop_stage();
         void push_stage(const std::shared_ptr<core::Stage> &stage);
-        std::shared_ptr<core::Stage> get_top();
     private:
 
         bool track = false;

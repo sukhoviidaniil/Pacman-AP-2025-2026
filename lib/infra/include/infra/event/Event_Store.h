@@ -36,6 +36,8 @@ namespace infra::event {
         template<typename Event>
         void push(Event e);
 
+        void push_concept(EventConcept &e);
+
         template<class Event>
         Event pop();
 

@@ -22,16 +22,13 @@
 #include "core/stage/Game_Stage.h"
 
 namespace core {
-    Stage_Factory::Stage_Factory() = default;
 
     Stage_Factory::Stage_Factory(
-        const std::shared_ptr<infra::event::Event_Bus> &eventbus,
+        const std::shared_ptr<infra::event::Event_Bus>& g_eventbus,
         const std::shared_ptr<infra::Score> &score,
         const std::vector<infra::ast::Model> &models
-        ) : eventbus_(eventbus), score_(score), selected_model_(0), models_variants_(models) {
-        if (eventbus_ == nullptr) {
-            throw std::invalid_argument("Eventbus is nullptr");
-        }
+        ) :  score_(score), selected_model_(0), models_variants_(models) {
+        g_eventbus_ = g_eventbus;
         if (models_variants_.empty()) {
             throw std::invalid_argument("No model specified");
         }
@@ -54,7 +51,7 @@ namespace core {
             return make_death_stage();
         }
         std::shared_ptr<model::Model> current_model = get_model();
-        auto s = std::make_shared<core::Game_Stage>(eventbus_, current_model);
+        auto s = std::make_shared<core::Game_Stage>(g_eventbus_, current_model);
         return s;
     }
 
@@ -85,7 +82,7 @@ namespace core {
             if (current_model_->all_coins_eaten()) {
                 current_model_ = std::make_shared<model::Model>(model_variant, score_->level);
             }else {
-                current_model_ = std::make_shared<model::Model>(model_variant, score_->level, current_model_->coins);
+                current_model_ = std::make_shared<model::Model>(model_variant, score_->level, current_model_->coins_);
             }
         }else {
             // Current model dont exist

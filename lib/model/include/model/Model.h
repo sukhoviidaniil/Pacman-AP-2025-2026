@@ -26,32 +26,39 @@
 #include "entity/Coin.h"
 #include "entity/Pacman.h"
 #include "entity/Ghost.h"
-#include "infra/Score.h"
+
 
 namespace model {
     class Model {
         public:
 
         explicit Model(const infra::ast::Model& m, const unsigned int& level);
-        explicit Model(const infra::ast::Model& m, const unsigned int& level, const std::vector<std::shared_ptr<entity::Coin>>& coins);
+
+        Model(const infra::ast::Model &m, const unsigned int &level, std::vector<std::shared_ptr<entity::Coin>> coins);
 
         [[nodiscard]] bool all_coins_eaten() const;
 
         void run(float delta);
 
-        std::shared_ptr<entity::Pacman> get_pacman() const;
+        [[nodiscard]] std::shared_ptr<entity::Pacman> get_pacman() const;
 
 
         infra::event::Event_Store event_store_;
-        std::vector<std::shared_ptr<entity::Coin>> coins;
-        std::vector<std::shared_ptr<entity::Ghost>> ghosts;
-        std::shared_ptr<entity::Pacman> pacman;
-        std::shared_ptr<Tile_Grid> grid;
+        std::vector<std::shared_ptr<entity::Coin>> coins_;
+        std::vector<std::shared_ptr<entity::Ghost>> ghosts_;
+        std::shared_ptr<entity::Pacman> pacman_;
+        std::shared_ptr<Tile_Grid> grid_;
+        private:
+
         collision::World_Collision_Manager wcm_;
 
-        private:
-        void create_model(const infra::ast::Model& m, const unsigned int& level);
-        void create_model(const infra::ast::Model& m, const unsigned int& level, std::vector<std::shared_ptr<entity::Coin>>);
+        bool process_tile(const infra::ast::Model &m, const unsigned int &level,
+                            const infra::ast::Tile &in_cell,
+                            const infra::math::Point2 &position);
+
+        void process_tile_without_coins(const infra::ast::Model &m, const unsigned int &level,
+                                        const infra::ast::Tile &in_cell,
+                                        const infra::math::Point2 &position);
     };
 }
 

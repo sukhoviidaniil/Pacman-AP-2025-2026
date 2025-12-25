@@ -27,6 +27,10 @@ namespace infra::event {
         return events_.empty();
     }
 
+    void Event_Store::push_concept(EventConcept& e) {
+        events_.push_back(e.clone());
+    }
+
     std::unique_ptr<EventConcept> Event_Store::pop_concept() {
         if (events_.empty()) {
             // return nullptr;

@@ -18,6 +18,7 @@
 #ifndef PACMAN_GAME_STAGE_H
 #define PACMAN_GAME_STAGE_H
 #include "core/Stage.h"
+#include "infra/Score.h"
 #include "model/Model.h"
 #include "view/presentation/layout_engine/UIElement.h"
 #include "view/presentation/render/RenderFrame.h"
@@ -29,7 +30,7 @@ namespace core{
         ~Game_Stage() override;
 
         Game_Stage(
-            const std::shared_ptr<infra::event::Event_Bus>& eventbus,
+            const std::shared_ptr<infra::event::Event_Bus> &global_eventbus,
             const std::shared_ptr<model::Model>& model
         );
 
@@ -38,9 +39,8 @@ namespace core{
         [[nodiscard]] view::ui::RenderFrame get_RenderFrame(const infra::math::Vector2& screen_size, bool redraw) const override;
         private:
 
-        std::shared_ptr<model::Model> model_;
-
-        std::shared_ptr<view::ui::UIElement> ui_root_;
+        std::shared_ptr<model::Model> model_; /// Model of this stage (Controller can have ptr)
+        std::shared_ptr<infra::Score> score_; /// Model MUST have this || Stage can have this for UI
     };
 }
 
