@@ -18,7 +18,7 @@
 
 #include "core/Stage_Factory.h"
 
-#include "../../infra/include/infra/Score.h"
+#include "../../infra/include/infra/internal/Score.h"
 #include "core/stage/Game_Stage.h"
 
 namespace core {

@@ -29,7 +29,7 @@
 namespace view {
     class SFML_View : public View, public ISFML_Event_Source{
     public:
-        SFML_View(const infra::ast::View &info, const std::string & texture_dir_path);
+        SFML_View(const infra::ast::View &info, const std::string & dir_path);
 
         void track_local(const std::shared_ptr<infra::event::Event_Bus>& bus) override;
         void track_global(const std::shared_ptr<infra::event::Event_Bus>& bus) override;
@@ -40,8 +40,9 @@ namespace view {
 
         using infra::ast::SpriteVisitor::visit;
         void visit(const infra::ast::Sprite&) override;
-        void visit(const infra::ast::SpriteList&) override;
         void visit(const infra::ast::ComplexSprite&) override;
+
+        void render_warning(const infra::ui::Rect &rect);
 
         using view::ui::RenderVisitor::visit;
         void visit(const ui::RI_Label&) override;
@@ -55,11 +56,17 @@ namespace view {
 
     private:
 
-        // key - name of file
+        // key - name
         std::map<
             std::string,
             sf::Texture
         > textures_;
+
+        // key - name
+        std::map<
+            std::string,
+            sf::Font
+        > fonts_;
 
         // key - construct name
         std::map<

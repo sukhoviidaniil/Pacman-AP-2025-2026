@@ -17,6 +17,7 @@
 ***************************************************************/
 
 #include "model/Model.h"
+#include "model/collision/HitBox_Rectangle.h"
 #include "model/collision/Separating_Axis_Theorem.h"
 
 namespace model {

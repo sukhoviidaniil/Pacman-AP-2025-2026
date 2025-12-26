@@ -1,5 +1,5 @@
 {
-  "using_texture" : "textures/sprite.png",
+  "using_texture" : "Gen",
   "sprite_width": 35,
   "sprite_height": 35,
   "groups_names" : ["Mr. Pacman", "Mr. Gray"],

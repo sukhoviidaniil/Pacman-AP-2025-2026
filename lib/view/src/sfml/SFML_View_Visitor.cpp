@@ -15,8 +15,11 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
+
 #include "infra/diagnostics/Logger.h"
+#include "view/presentation/render/RI_Label.h"
 #include "view/presentation/render/RI_Rectangle.h"
+#include "view/presentation/render/RI_Sprite.h"
 #include "view/sfml/SFML_View.h"
 
 namespace view {
@@ -33,8 +36,8 @@ namespace view {
         const sf::Texture& texture = get_Texture(i_sprite.using_texture, "infra::ast::Sprite " + name);
         const int sprite_width = static_cast<int>(i_sprite.sprits_width);
         const int sprite_height = static_cast<int>(i_sprite.sprits_height);
-        int recLeft = i_sprite.recLeft.base;
-        int recTop = i_sprite.recTop.base;
+        int recLeft = i_sprite.recLeft;
+        int recTop = i_sprite.recTop;
 
         if (recLeft < 0) {
             // A minor error.
@@ -54,32 +57,6 @@ namespace view {
         sprite.setOrigin(static_cast<float>(rect.width) / 2.f, static_cast<float>(rect.height) / 2.f);
 
         sprites_[name] = std::move(sprite);
-    }
-
-    void SFML_View::visit(const infra::ast::SpriteList &list) {
-        // TODO
-
-    /*
-        int index = 0;
-        for (const auto& name : list.names) {
-
-            infra::ast::Sprite sprite;
-            sprite.using_texture = list.using_texture;
-            sprite.sprits_width = list.sprits_width;
-            sprite.sprits_height = list.sprits_height;
-            sprite.name = name;
-
-
-
-
-            const sf::IntRect rect(recLeft, recTop, sprite_width, sprite_height);
-            sf::Sprite sprite(texture, rect);
-            sprite.setOrigin(static_cast<float>(rect.width) / 2.f, static_cast<float>(rect.height) / 2.f);
-
-            sprites_[name] = std::move(sprite);
-            index++;
-        }
-        */
     }
 
     void SFML_View::visit(const infra::ast::ComplexSprite &complex_sprite) {
@@ -156,9 +133,65 @@ namespace view {
         }
     }
 
-    void SFML_View::visit(const ui::RI_Label &ri_label) {
-        // TODO
+    void SFML_View::render_warning(const infra::ui::Rect& rect) {
+        auto it = sprites_.find("Warning");
+        if (it == sprites_.end()) {
+            ui::RI_Rectangle w;
+            w.color = infra::ui::Color{
+                .r = 0,
+                .g = 120,
+                .b = 255,
+                .a = 100
+            };
+            w.rect = rect;
+            w.accept(*this);
+        }else {
+            ui::RI_Sprite s;
+            s.sprite = "Warning";
+            s.rect = rect;
+            s.accept(*this);
+        }
+    }
 
+    void SFML_View::visit(const ui::RI_Label &ri) {
+        auto it = fonts_.find(ri.font);
+        if (it == fonts_.end()) {
+            render_warning(ri.rect);
+            return;
+        }
+
+        sf::Text text;
+        text.setFont(it->second);
+        text.setString(ri.text);
+        text.setFillColor(sf::Color(
+            ri.color.r,
+            ri.color.g,
+            ri.color.b,
+            ri.color.a
+        ));
+        const auto& r = ri.rect;
+
+        if (ri.size > 0) {
+            // Fixed size
+            text.setCharacterSize(static_cast<unsigned>(ri.size));
+            text.setPosition(r.x, r.y);
+        } else {
+            // Stretch the text across the entire Rect
+            text.setCharacterSize(30); // base size for calculation
+
+            sf::FloatRect bounds = text.getLocalBounds();
+
+            // origin for correct scaling
+            text.setOrigin(bounds.left, bounds.top);
+
+            float scaleX = r.width / bounds.width;
+            float scaleY = r.height / bounds.height;
+
+            text.setScale(scaleX, scaleY);
+            text.setPosition(r.x, r.y);
+        }
+
+        window_.draw(text);
     }
 
     void SFML_View::visit(const ui::RI_Rectangle &ri_rectangle) {
@@ -170,7 +203,22 @@ namespace view {
     }
 
     void SFML_View::visit(const ui::RI_Sprite &ri_sprite) {
+        auto it = sprites_.find(ri_sprite.sprite);
+        if (it == sprites_.end()) {
+            render_warning(ri_sprite.rect);
+            return;
+        }
 
+        sf::Sprite sprite = it->second;
+
+        const auto& r = ri_sprite.rect;
+        sprite.setPosition(r.x, r.y);
+        sf::FloatRect bounds = sprite.getLocalBounds();
+        sprite.setScale(
+            r.width / bounds.width,
+            r.height / bounds.height
+        );
+        window_.draw(sprite);
     }
 
     void SFML_View::visit(const ui::RI_ComplexSprite &ri_complex_sprite) {
@@ -178,7 +226,7 @@ namespace view {
     }
 
     const sf::Texture& SFML_View::get_Texture(const std::string& using_texture, const std::string& by_who) {
-        if (using_texture == "") {
+        if (using_texture.empty()) {
             const std::string err = "The " + by_who +  " texture not specified.";
             LOG(err);
             throw std::invalid_argument(err);

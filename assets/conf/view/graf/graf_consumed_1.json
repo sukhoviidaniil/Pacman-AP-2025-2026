@@ -1,0 +1,14 @@
+{
+  "using_texture" : "Gen",
+  "sprits_width": 35,
+  "sprits_height": 35,
+  "names" : ["Lobster", "Fly", "Hamburger", "Egg dish", "Candy"],
+  "recLeft" : {
+    "base" : 501,
+    "increase" : 0
+  },
+  "recTop" : {
+    "base" : 4,
+    "increase" : 50
+  }
+}

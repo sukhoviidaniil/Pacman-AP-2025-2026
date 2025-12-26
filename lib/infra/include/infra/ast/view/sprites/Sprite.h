@@ -18,15 +18,15 @@
 #ifndef PACMAN_SPRITE_H
 #define PACMAN_SPRITE_H
 
-#include "infra/ast/view/external/Sprite_Rec.h"
+#include "infra/ast/view/internal/Sprite_Rec.h"
 #include "infra/ast/view/ViewNode.h"
 #include "infra/ast/view/ViewVisitor.h"
 
 namespace infra::ast {
     struct Sprite : SpriteNode{
         std::string name;
-        Sprite_Rec recLeft;
-        Sprite_Rec recTop;
+        int recLeft;
+        int recTop;
         void accept(SpriteVisitor &v) const override {
             v.visit(*this);
         }

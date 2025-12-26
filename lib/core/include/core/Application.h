@@ -18,7 +18,7 @@
 #ifndef PACMAN_APPLICATION_H
 #define PACMAN_APPLICATION_H
 
-#include "infra/Score.h"
+#include "../../../infra/include/infra/internal/Score.h"
 #include "infra/ast/Application.h"
 #include "view/View.h"
 #include "core/event_collector/Event_Collector.h"

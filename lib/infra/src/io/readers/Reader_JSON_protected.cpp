@@ -16,206 +16,97 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
+#include "infra/io/File_Reader.h"
+#include "infra/io/readers/from_JSON.h"
+#include "infra/io/readers/Reader_JSON.h"
 
 namespace infra::io {
 
-    /*
+    std::vector<ast::Sprite> sprite_list_to_sprites(const ast::SpriteList& list) {
+        std::vector<ast::Sprite> result;
+        result.reserve(list.names.size());
 
-    std::shared_ptr<logic::model::Entity> Reader_JSON::load_Actor(Stage_Info_JSON& conf, const std::shared_ptr<logic::Tile_Grid> &grid) const{
-        const nlohmann::json &data = conf.data_;
-
-        if (!data.contains("Type")) {
-            throw std::runtime_error("Entity.Type missing or invalid");
+        unsigned int index = 0;
+        for (const auto &name : list.names) {
+            ast::Sprite s;
+            s.using_texture = list.using_texture;
+            s.sprits_width = list.sprits_width;
+            s.sprits_height = list.sprits_height;
+            s.name = name;
+            s.recLeft = list.recLeft.base + static_cast<int>(index)*list.recLeft.increase;
+            s.recTop = list.recTop.base + static_cast<int>(index)*list.recTop.increase;
+            result.push_back(s);
+            ++index;
         }
-        if (!data.contains("Model")) {
-            throw std::runtime_error("Entity.Model missing or invalid");
-        }
+        return result;
+    }
 
-        const auto type = data["Type"].get<std::string>();
-        std::shared_ptr<logic::model::Entity> model;
 
-        if (data["Model"].is_object()) {
-            nlohmann::json model_data = data["Model"];
-            logic::model::Actor_Info actor_info;
+    ast::View Reader_JSON::read_View(
+    nlohmann::json data,
+    const std::shared_ptr<const File_Reader> &fr
+    ){
+        auto vs = get_checked<ast::View>(data);
 
-            actor_info.name = model_data.value("name", actor_info.name);
-
-            if (model_data.contains("speed") && model_data["speed"].is_number()) {
-                actor_info.speed = model_data["speed"].get<float>();
-            }else {
-                throw std::runtime_error("Entity.Model.speed missing or invalid");
+        std::string block_name = "Sprites";
+        if (data.contains(block_name) && data[block_name].is_array()) {
+            for (const auto &sprite : data[block_name]) {
+                if (sprite.is_string()) {
+                    ast::Sprite s = fr->read_Sprite(vs.view_directory + sprite.get<std::string>());
+                    vs.sprites.push_back(s);
+                    continue;
+                }
+                if (sprite.is_structured()) {
+                    auto s = get_checked<ast::Sprite>(sprite);
+                    vs.sprites.push_back(s);
+                    continue;
+                }
+                std::string err = "View, one of the parameters in the “" + block_name + "” list is neither a file name nor an object.";
+                LOG(err);
+                throw std::invalid_argument(err);
             }
+        }
 
-            if (model_data.contains("position") && model_data["position"].is_object()) {
-                actor_info.position = grid->get_nearest_tile_center(from_json(model_data["position"]));
-            }else {
-                throw std::runtime_error("Entity.Model.position missing or invalid");
+        block_name = "SpriteLists";
+        if (data.contains(block_name) && data[block_name].is_array()) {
+            for (const auto &spritelist : data[block_name]) {
+                if (spritelist.is_string()) {
+                    ast::SpriteList s = fr->read_SpriteList(vs.view_directory + spritelist.get<std::string>());
+                    std::vector<ast::Sprite> sp = sprite_list_to_sprites(s);
+                    vs.sprites.insert(vs.sprites.end(), sp.begin(), sp.end());
+                    continue;
+                }
+                if (spritelist.is_structured()) {
+                    auto s = get_checked<ast::SpriteList>(spritelist);
+                    std::vector<ast::Sprite> sp = sprite_list_to_sprites(s);
+                    vs.sprites.insert(vs.sprites.end(), sp.begin(), sp.end());
+                    continue;
+                }
+                std::string err = "View, one of the parameters in the “" + block_name + "” list is neither a file name nor an object.";
+                LOG(err);
+                throw std::invalid_argument(err);
             }
+        }
 
-            if (model_data.contains("max_status") && model_data["max_status"].is_number()) {
-                actor_info.max_status = model_data["max_status"].get<int>();
-            }else {
-                throw std::runtime_error("Entity.Model.max_status missing or invalid");
+        block_name = "ComplexSprites";
+        if (data.contains(block_name) && data[block_name].is_array()) {
+            for (const auto &sprite : data[block_name]) {
+                if (sprite.is_string()) {
+                    ast::ComplexSprite c = fr->read_Sprits_Group(vs.view_directory + sprite.get<std::string>());
+                    vs.complex_sprites.push_back(c);
+
+                    continue;
+                }
+                if (sprite.is_structured()) {
+                    auto c = get_checked<ast::ComplexSprite>(sprite);
+                    vs.complex_sprites.push_back(c);
+                    continue;
+                }
+                std::string err = "View, one of the parameters in the “" + block_name + "” list is neither a file name nor an object.";
+                LOG(err);
+                throw std::invalid_argument(err);
             }
-
-            if (model_data.contains("hitbox") && model_data["hitbox"].is_string()) {
-                const auto hitbox = model_data["hitbox"].get<std::string>();
-                actor_info.hitbox = conf.fr_->make_HitBoxe(hitbox);
-            }else {
-                throw std::runtime_error("Entity.Model.hitbox missing or invalid");
-            }
-
-            model = logic::Logic_Factory::make_Actor(actor_info);
-            conf.stage_->add_model(type, model);
         }
-
-        if (data["Model"].is_string()){
-            const auto actor_name = data["Model"].get<std::string>();
-            model = conf.stage_->get_model(type, actor_name);
-        }else {
-            throw std::runtime_error("Entity.Model missing or invalid");
-        }
-
-        if (model == nullptr) throw std::runtime_error("Actor model not added");
-        return model;
+        return vs;
     }
-
-    void Reader_JSON::Entity_Register(std::unordered_map<std::string, std::shared_ptr<logic::model::Entity>(Reader_JSON::*)(Stage_Info_JSON &conf, const std::shared_ptr<logic::Tile_Grid> &grid) const> &outMap) const {
-        outMap["Actor"] = &Reader_JSON::load_Actor;
-    }
-
-    void Reader_JSON::load_Entity(Stage_Info_JSON &conf, const std::shared_ptr<logic::Tile_Grid> &grid) const {
-        const nlohmann::json &data = conf.data_;
-        if (!data.contains("Type")) {
-            throw std::runtime_error("Entity dont have Type");
-        }
-        const std::string entity_type = data["Type"].get<std::string>();
-
-        std::unordered_map<
-            std::string,
-            std::shared_ptr<logic::model::Entity>(Reader_JSON::*)(Stage_Info_JSON &conf, const std::shared_ptr<logic::Tile_Grid> &grid) const> functionMap;
-        Entity_Register(functionMap);
-        auto it = functionMap.find(entity_type);
-        if (it == functionMap.end()) {
-            throw std::runtime_error("Entity type " + entity_type + " not found");
-        }
-
-        auto memberFn = it->second;
-        const std::shared_ptr<logic::model::Entity> model = (this->*memberFn)(conf, grid);
-
-        if (data.contains("View")) {
-            auto sfml_manager = conf.fr_->get_SFML_Manager();
-            if (sfml_manager == nullptr) {
-                throw std::runtime_error("Can't find sfml_manager");
-            }
-
-            nlohmann::json view = data["View"];
-            graphics::view::Actor_View_Info avi;
-            if (view.contains("Sprite_Group")) {
-                avi.sprite_group_name = view["Sprite_Group"].get<std::string>();
-            }
-            if (!view.contains("name")) {
-                throw std::runtime_error("View dont have name");
-            }
-            avi.name = view["name"].get<std::string>();
-
-            graphics::Actor_Pair ap = graphics::Graphics_Factory::make_Actor(sfml_manager, avi, model);
-            conf.stage_->add_View(entity_type, ap.actor_view_);
-        }
-    }
-
-    void Reader_JSON::Entity_Register(
-        std::unordered_map<std::string, std::shared_ptr<logic::model::Entity>(Reader_JSON::*)(Stage_Info_JSON &conf)
-        const> &outMap) const {
-        throw std::runtime_error("Entity_Register: OLD");
-    }
-
-    std::shared_ptr<Stage> Reader_JSON::load_Game_Stage(const Reader_Base_Info_JSON &conf) const
-    {
-        nlohmann::json data = conf.data_;
-        if (!data.contains("Type")) {
-            throw std::runtime_error("Stage dont have Type");
-        }
-        const auto entity_type = data["Type"].get<std::string>();
-        if (entity_type != "Game_Stage") {
-            throw std::runtime_error("The load_Game_Stage method was called for a configuration other than Game_Stage.");
-        }
-
-        if (!data.contains("tile_grid")) {
-            throw std::runtime_error("Stage dont have tile_grid");
-        }
-        if (!data.contains("camera_game")) {
-            throw std::runtime_error("Stage dont have camera_game");
-        }
-        if (!data.contains("entities")) {
-            throw std::runtime_error("Stage dont have entities");
-        }
-
-        const auto tile_grid = data["tile_grid"].get<std::string>();
-        const auto camera_game = data["camera_game"].get<std::string>();
-        const auto entities = data["entities"].get<std::string>();
-
-        graphics::Tile_Grid_Pair tgp = conf.fr_->load_Tile_Grid(tile_grid);
-        std::shared_ptr<graphics::Camera> game_camera = conf.fr_->load_Camera(camera_game);
-        std::shared_ptr<logic::collision::World_Collision_Manager> wcm = std::make_shared<logic::collision::World_Collision_Manager>(
-            std::make_shared<logic::collision::Separating_Axis_Theorem>(),
-            tgp.tile_grid_model_
-            );
-        auto world = std::make_shared<core::World>(tgp.tile_grid_model_, wcm, game_camera);
-        for (const auto& view : tgp.terrain_views_) {
-            world->add_View("Terrain", view);
-        }
-
-        conf.fr_->load_Entities(entities, world, tgp.tile_grid_model_);
-
-        auto stage = std::make_shared<core::Stage_Game>(world);
-
-        return stage;
-    }
-
-    void Reader_JSON::Stage_Register(std::unordered_map<std::string, std::shared_ptr<Stage>(Reader_JSON::*)(const Reader_Base_Info_JSON &conf) const> &outMap) {
-        outMap["Game_Stage"] = &Reader_JSON::load_Game_Stage;
-    }
-
-    std::shared_ptr<logic::collision::HitBoxe> Reader_JSON::load_HitBox_Rectangle(const nlohmann::json &data) const {
-
-        auto type = get_checked<std::string>(data, TODO, "Type", "Root");
-        if (type != "HitBox_Rectangle") {
-            throw std::runtime_error("The load_HitBox_Rectangle method was called for a configuration other than HitBox_Rectangle.");
-        }
-
-        int layer = get_checked<std::string>(data, TODO, "Type", "Root");;
-        int strength = 0;
-        if (!info.contains("position")) {
-            throw std::runtime_error("HitBox_Rectangle dont have position");
-        }
-        if (!info.contains("width")) {
-            throw std::runtime_error("HitBox_Rectangle dont have width");
-        }
-        if (!info.contains("height")) {
-            throw std::runtime_error("HitBox_Rectangle dont have height");
-        }
-        if (info.contains("layer")) {
-            layer= info["layer"].get<int>();
-        }
-        if (info.contains("strength")) {
-            strength = info["strength"].get<int>();
-        }
-        math::Vector2 position = get_checked<std::string>(data, TODO, "Type", "Root");
-
-        math::Vector2 position = from_json(info["position"]);
-        auto width = info["width"].get<float>();
-        auto height = info["height"].get<float>();
-
-        return std::make_shared<logic::collision::HitBox_Rectangle>(position, width, height, layer, strength);
-    }
-
-    void Reader_JSON::HitBoxe_Register(
-        std::unordered_map<
-            std::string,
-            std::shared_ptr<logic::collision::HitBoxe>(Reader_JSON::*)(const nlohmann::json& info) const
-            > &outMap) const {
-        outMap["HitBox_Rectangle"] = &Reader_JSON::load_HitBox_Rectangle;
-    }
-    */
 }

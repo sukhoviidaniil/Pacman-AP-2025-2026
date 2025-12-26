@@ -18,7 +18,7 @@
 #ifndef PACMAN_AST_RI_COMPLEXSPRITE_H
 #define PACMAN_AST_RI_COMPLEXSPRITE_H
 #include "view/presentation/render/RI_Sprite.h"
-#include "infra/Status.h"
+#include "../../../../../infra/include/infra/internal/Status.h"
 #include "infra/math/Direction.h"
 
 namespace view::ui {

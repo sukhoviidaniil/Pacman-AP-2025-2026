@@ -18,18 +18,18 @@
 #ifndef PACMAN_SPRITELIST_H
 #define PACMAN_SPRITELIST_H
 
+#include <vector>
+
+#include "json.hpp"
 #include "infra/ast/view/ViewNode.h"
+#include "infra/ast/view/internal/Sprite_Rec.h"
 
 namespace infra::ast {
-    enum struct Order {
-        Vertically,
-        Horizontally
-    };
     struct SpriteList : SpriteNode{
-        Order order = Order::Vertically;
         std::vector<std::string> names;
         Sprite_Rec recLeft;
         Sprite_Rec recTop;
+        SpriteList() = default;
     };
 }
 

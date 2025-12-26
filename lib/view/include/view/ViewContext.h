@@ -18,21 +18,24 @@
 #ifndef PACMAN_VIEWCONTEXT_H
 #define PACMAN_VIEWCONTEXT_H
 
-#include "infra/ScoreView.h"
+#include "infra/internal/Const_Score.h"
 #include "model/ModelView.h"
 
 namespace view {
     struct ViewContext {
         const bool redrawing;
-        const std::optional<std::reference_wrapper<const infra::ScoreView>> score;
+        const std::optional<std::reference_wrapper<const infra::Const_Score>> score;
+        const std::optional<std::reference_wrapper<const infra::Const_ScoreBord>> score_bord;
         const std::optional<std::reference_wrapper<const model::ui::ModelView>> model;
         explicit ViewContext(
             const bool redraw,
-            const infra::ScoreView* s = nullptr,
+            const infra::Const_Score* s = nullptr,
+            const infra::Const_ScoreBord* sb = nullptr,
             const model::ui::ModelView* m = nullptr
          )
-         : redrawing(redraw),
+         :  redrawing(redraw),
             score(s ? std::optional(std::cref(*s)) : std::nullopt),
+            score_bord(sb ? std::optional(std::cref(*sb)) : std::nullopt),
             model(m ? std::optional(std::cref(*m)) : std::nullopt)
         {}
     };

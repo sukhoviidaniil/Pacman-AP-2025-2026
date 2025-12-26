@@ -19,21 +19,21 @@
 #define PACMAN_AST_VIEW_H
 
 
-#include <string>
-#include <vector>
-
+#include "infra/ast/view/Font.h"
+#include "infra/ast/view/Texture.h"
 #include "infra/ast/view/sprites/Sprite.h"
 #include "infra/ast/view/sprites/ComplexSprite.h"
-#include "infra/ast/view/sprites/SpriteList.h"
+
 
 namespace infra::ast {
     struct View : Node{
         std::string type = "None";
         unsigned int window_width = 0;
         unsigned int window_height = 0;
-        std::vector<std::string> textures;
+        std::string view_directory;
+        std::vector<Texture> textures;
+        std::vector<Font> fonts;
         std::vector<Sprite> sprites;
-        std::vector<SpriteList> sprite_lists;
         std::vector<ComplexSprite> complex_sprites;
     };
 }

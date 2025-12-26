@@ -26,7 +26,12 @@ namespace view::ui {
          * @brief Any text
          */
         std::string text;
+        /**
+         * @brief Any Font of text
+         */
+        std::string font;
         infra::ui::Color color;
+        int size = 0;
 
         void accept(RenderVisitor &v) const override {
             v.visit(*this);

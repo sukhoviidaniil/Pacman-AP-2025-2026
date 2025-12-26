@@ -20,6 +20,8 @@
 
 #include "infra/io/File_Reader.h"
 
+#include "infra/ast/model/Model.h"
+
 namespace infra::io {
 
     File_Reader::File_Reader(std::string conf_directory) : conf_directory_(std::move(conf_directory)) {
@@ -38,6 +40,11 @@ namespace infra::io {
         return reader->read_Sprite(conf_directory_ + filename);
     }
 
+    ast::SpriteList File_Reader::read_SpriteList(const std::string &filename) const {
+        const std::shared_ptr<Reader> reader = get_Reader(filename);
+        return reader->read_SpriteList(conf_directory_ + filename);
+    }
+
     ast::ComplexSprite File_Reader::read_Sprits_Group(const std::string &filename) const {
         const std::shared_ptr<Reader> reader = get_Reader(filename);
         return reader->read_Sprits_Group(conf_directory_ + filename);
@@ -53,9 +60,24 @@ namespace infra::io {
         return reader->read_Model(conf_directory_ + filename);
     }
 
+    ast::ScoreSetup File_Reader::read_ScoreSetup(const std::string &filename) const {
+        const std::shared_ptr<Reader> reader = get_Reader(filename);
+        return reader->read_ScoreSetup(conf_directory_ + filename);
+    }
+
+    ast::ScoreBord File_Reader::read_ScoreBord(const std::string &filename) const {
+        const std::shared_ptr<Reader> reader = get_Reader(filename);
+        return reader->read_ScoreBord(conf_directory_ + filename);
+    }
+
     ast::Application File_Reader::read_Application(const std::string &filename) const {
         const std::shared_ptr<Reader> reader = get_Reader(filename);
         return reader->read_Application(conf_directory_ + filename, shared_from_this());
+    }
+
+    void File_Reader::save_ScoreBord(const ast::ScoreBord &info) const {
+        const std::shared_ptr<Reader> reader = get_Reader(info.file);
+        reader->save_ScoreBord(info);
     }
 
     std::shared_ptr<Reader> File_Reader::get_Reader(const std::string &path) const {

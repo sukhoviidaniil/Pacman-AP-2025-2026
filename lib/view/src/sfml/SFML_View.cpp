@@ -21,7 +21,7 @@
 #include "infra/diagnostics/Logger.h"
 
 namespace view {
-    SFML_View::SFML_View(const infra::ast::View &info, const std::string &texture_dir_path
+    SFML_View::SFML_View(const infra::ast::View &info, const std::string &dir_path
         ) :
         View(info.type),
         window_(sf::VideoMode(info.window_width, info.window_height), "Pacman")
@@ -30,16 +30,29 @@ namespace view {
         window_.setView(view);
         window_.setFramerateLimit(30);
 
-        for (const auto& texture_name : info.textures) {
+        std::string fullpath = dir_path + info.view_directory;
+
+        for (const auto& tx : info.textures) {
             sf::Texture texture;
-            const std::string path = texture_dir_path + texture_name;
+            const std::string path = fullpath + tx.file;
             if (!texture.loadFromFile(path)) {
                 const std::string err = "Unable to load textures;\n";
                 LOG(err);
                 throw std::runtime_error(err);
             }
-            textures_[texture_name] = std::move(texture);
+            textures_[tx.name] = texture;
         }
+        for (const auto& f : info.fonts) {
+            sf::Font font;
+            const std::string path = fullpath + f.file;
+            if (!font.loadFromFile(path)) {
+                const std::string err = "Unable to load font;\n";
+                LOG(err);
+                throw std::runtime_error(err);
+            }
+            fonts_[f.font] = font;
+        }
+
         for (const auto& sprite : info.sprites) {
             sprite.accept(*this);
         }

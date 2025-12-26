@@ -1,0 +1,37 @@
+{
+  "type" : "SFML",
+  "window_width" : 800,
+  "window_height" : 600,
+  "view_directory" : "view/",
+  "Textures" : [
+    {
+      "name" : "Gen",
+      "file" : "textures/sprite.png"
+    }
+  ],
+  "Fonts":[
+    {
+      "font" : "Arial",
+      "file" : "font/arial/ARIAL.TTF"
+    }
+  ],
+  "Sprites":[
+    {
+      "using_texture" : "Gen",
+      "sprits_width": 35,
+      "sprits_height": 35,
+      "name" : "Warning",
+      "recLeft" : 451,
+      "recTop" : 454
+    }
+  ],
+  "SpriteLists":[
+    "graf/graf_coins.json",
+    "graf/graf_consumed_1.json",
+    "graf/graf_consumed_2.json"
+  ],
+  "ComplexSprites" : [
+    "graf/graf_pacman.json",
+    "graf/graf_ghosts.json"
+  ]
+}

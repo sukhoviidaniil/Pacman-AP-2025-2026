@@ -17,9 +17,9 @@
 ***************************************************************/
 #ifndef PACMAN_RENDERNODE_H
 #define PACMAN_RENDERNODE_H
+
 #include "infra/ast/view/ViewNode.h"
 #include "infra/ast/view/ViewVisitor.h"
-#include "infra/presentation/external/Camera.h"
 
 namespace view::ui {
 
@@ -36,7 +36,6 @@ namespace view::ui {
     };
 
     struct RenderNode : infra::ast::Node {
-
         virtual void accept(RenderVisitor &v) const = 0;
     };
 }

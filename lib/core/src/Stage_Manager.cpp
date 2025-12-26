@@ -56,19 +56,15 @@ namespace core  {
 
     Stage_Manager::~Stage_Manager() = default;
 
+    Stage_Manager::Stage_Manager() = default;
 
-    void Stage_Manager::set_stage_factory(core::Stage_Factory stage_factory) {
+    void Stage_Manager::set_stage_factory(std::unique_ptr<core::Stage_Factory> stage_factory) {
         stage_factory_ = std::move(stage_factory);
-        complete = track;
-
-        if (complete) {
-            // TODO Add START stage
-            push_stage(stage_factory_.make_game_stage());
-        }
     }
 
     void Stage_Manager::track_global(const std::shared_ptr<infra::event::Event_Bus> &bus) {
         track = true;
+        // TODO
     }
 
     void Stage_Manager::pop_stage() {

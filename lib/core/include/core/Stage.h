@@ -34,7 +34,7 @@ namespace core {
 
         [[nodiscard]] virtual view::ui::RenderFrame get_RenderFrame(const infra::math::Vector2& screen_size, bool redraw) const = 0;
 
-        std::unique_ptr<core::Controller> controller; /// Controller of this stage
+        std::unique_ptr<control::Controller> controller; /// Controller of this stage
         std::unique_ptr<infra::event::Event_Bus> l_eventbus; /// Local Event Bus (for local events)
     protected:
         std::shared_ptr<view::ui::UIElement> ui_root_; /// Stage UI

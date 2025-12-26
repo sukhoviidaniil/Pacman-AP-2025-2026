@@ -18,7 +18,7 @@
 #ifndef PACMAN_GAME_STAGE_H
 #define PACMAN_GAME_STAGE_H
 #include "core/Stage.h"
-#include "infra/Score.h"
+#include "../../../../infra/include/infra/internal/Score.h"
 #include "model/Model.h"
 #include "view/presentation/layout_engine/UIElement.h"
 #include "view/presentation/render/RenderFrame.h"

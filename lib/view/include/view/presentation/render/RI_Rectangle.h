@@ -22,6 +22,8 @@
 
 namespace view::ui {
     struct RI_Rectangle : RenderItem {
+        int border_width;
+        infra::ui::Color border_color;
         infra::ui::Color color;
         void accept(RenderVisitor &v) const override {
             v.visit(*this);

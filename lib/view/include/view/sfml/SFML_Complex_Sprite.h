@@ -21,7 +21,7 @@
 #include <unordered_map>
 
 #include "SFML_Sprite.h"
-#include "infra/Status.h"
+#include "../../../../infra/include/infra/internal/Status.h"
 #include "infra/math/Direction.h"
 #include "SFML/Graphics/Sprite.hpp"
 

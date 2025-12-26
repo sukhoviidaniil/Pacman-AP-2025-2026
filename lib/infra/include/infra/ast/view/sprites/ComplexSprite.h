@@ -19,8 +19,8 @@
 #define PACMAN_SPRITEGROUP_H
 
 #include <unordered_map>
-#include "infra/Status.h"
-#include "infra/ast/view/external/SpriteStatus.h"
+#include "../../../internal/Status.h"
+#include "infra/ast/view/internal/SpriteStatus.h"
 #include "infra/ast/view/ViewNode.h"
 
 namespace infra::ast {

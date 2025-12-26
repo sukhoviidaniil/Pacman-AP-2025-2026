@@ -1,5 +1,5 @@
 {
-  "using_texture" : "textures/sprite.png",
+  "using_texture" : "Gen",
   "sprits_width": 35,
   "sprits_height": 35,
   "Complex_Sprite" : [

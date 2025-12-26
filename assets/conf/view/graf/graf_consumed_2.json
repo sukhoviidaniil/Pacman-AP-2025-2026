@@ -1,0 +1,14 @@
+{
+  "using_texture" : "Gen",
+  "sprits_width": 35,
+  "sprits_height": 35,
+  "names" : ["Cherries", "Strawberries", "Oranges", "Apples", "Magic Fruit", "Bananas", "Peaches"],
+  "recLeft" : {
+    "base" :  551,
+    "increase" : 0
+  },
+  "recTop" : {
+    "base" : 4,
+    "increase" : 50
+  }
+}

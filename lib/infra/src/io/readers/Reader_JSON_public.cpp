@@ -28,9 +28,15 @@ namespace infra::io {
     Reader_JSON::~Reader_JSON() = default;
 
     ast::Sprite Reader_JSON::read_Sprite(const std::string &filename) const {
-        ast::Sprite sprite;
-        // TODO
+        nlohmann::json data = get_json_data(filename);
+        auto sprite = get_checked<ast::Sprite>(data);
         return sprite;
+    }
+
+    ast::SpriteList Reader_JSON::read_SpriteList(const std::string &filename) const {
+        nlohmann::json data = get_json_data(filename);
+        auto sg = get_checked<ast::SpriteList>(data);
+        return sg;
     }
 
     ast::ComplexSprite Reader_JSON::read_Sprits_Group(const std::string &filename) const {
@@ -40,55 +46,27 @@ namespace infra::io {
     }
 
     ast::View Reader_JSON::read_View(
-        nlohmann::json data,
-        const std::shared_ptr<const File_Reader> &fr,
-        const std::string &filename,
-        const std::string &object
-        ){
-
-        auto vs = get_checked<ast::View>(data);
-        if (data.contains("sprites") && data["sprites"].is_array()) {
-            for (const auto &sprite : data["sprites"]) {
-                if (sprite.is_string()) {
-                    ast::Sprite s = fr->read_Sprite(sprite.get<std::string>());
-                    vs.sprites.push_back(s);
-                    continue;
-                }
-                if (sprite.is_structured()) {
-                    auto s = get_checked<ast::Sprite>(sprite, "sprites");
-                    vs.sprites.push_back(s);
-                    continue;
-                }
-                throw std::invalid_argument("View_Sprites one of the parameters in the “sprites” list is neither a file name nor an object.");
-            }
-        }
-
-        if (data.contains("sprite_groups") && data["sprite_groups"].is_array()) {
-            for (const auto &sprite : data["sprite_groups"]) {
-                if (sprite.is_string()) {
-                    vs.complex_sprites.push_back(fr->read_Sprits_Group(sprite.get<std::string>()));
-                    continue;
-                }
-                if (sprite.is_structured()) {
-                    vs.complex_sprites.push_back(get_checked<ast::ComplexSprite>(sprite, "sprite_groups"));
-                    continue;
-                }
-                throw std::invalid_argument("View_Sprites one of the parameters in the “sprite_groups” list is neither a file name nor an object.");
-            }
-        }
-        return vs;
-    }
-
-    ast::View Reader_JSON::read_View(
         const std::string &filename,
         const std::shared_ptr<const File_Reader> &fr) const {
         const nlohmann::json data = get_json_data(filename);
-        return read_View(data, fr, filename, "ROOT");
+        return read_View(data, fr);
     }
 
     ast::Model Reader_JSON::read_Model(const std::string& path) const {
-        nlohmann::json data = get_json_data(path);
+        const nlohmann::json data = get_json_data(path);
         return get_checked<ast::Model>(data);
+    }
+
+    ast::ScoreSetup Reader_JSON::read_ScoreSetup(const std::string &filename) const {
+        nlohmann::json j = get_json_data(filename);
+        return get_checked<ast::ScoreSetup>(j);
+    }
+
+    ast::ScoreBord Reader_JSON::read_ScoreBord(const std::string &filename) const {
+        nlohmann::json j = get_json_data(filename);
+        auto bord = io::get_checked<ast::ScoreBord>(j);
+        bord.file = filename;
+        return bord;
     }
 
     ast::Application Reader_JSON::read_Application(
@@ -97,19 +75,21 @@ namespace infra::io {
         ) const {
         nlohmann::json data = get_json_data(path);
         ast::Application app;
-        const std::string view_name = "view";
+        const std::string view_name = "View";
         if (data.contains(view_name)) {
             if (data[view_name].is_string()) {
                 const auto view = get_checked<std::string>(data, view_name);
                 app.view = fr->read_View(view);
             }else if (data[view_name].is_structured()) {
-                app.view = read_View(data[view_name], fr, path, view_name);
+                app.view = read_View(data[view_name], fr);
             }else {
-                throw std::invalid_argument("The view is neither a string nor an structured, configuration reading error.");
+                std::string err = "The view is neither a string nor an structured, configuration reading error.";
+                LOG(err);
+                throw std::invalid_argument(err);
             }
         }
 
-        std::string m = "models";
+        std::string m = "Models";
         if (data.contains(m) && data[m].is_array()) {
             for (const auto& model_data: data[m]) {
                 if (model_data.is_object()) {
@@ -126,239 +106,49 @@ namespace infra::io {
                 throw std::invalid_argument("The model is neither a string nor an object, configuration reading error");
             }
         }
+
+        std::string bors = "ScoreBord";
+        if (data.contains(bors)) {
+            if (data[bors].is_string()) {
+                auto file = get_checked<std::string>(bors);
+                app.score_bord = fr->read_ScoreBord(file);
+
+            }
+            if (data[bors].is_structured()) {
+                app.score_bord = get_checked<ast::ScoreBord>(data[bors]);
+            }
+        }
+
+        std::string score_setup = "ScoreSetup";
+        if (data.contains(score_setup)) {
+            if (data[score_setup].is_string()) {
+                auto file = get_checked<std::string>(score_setup);
+                app.score_setup = fr->read_ScoreSetup(file);
+
+            }
+            if (data[score_setup].is_structured()) {
+                app.score_setup = get_checked<ast::ScoreSetup>(data[score_setup]);
+            }
+        }
+
         return app;
     }
 
-    /*
-    void Reader_JSON::load_SFML_Sprite(
-        const std::shared_ptr<graphics::SFML_Manager>& sfml_manager, const std::string &filename
-        ) const {
-        nlohmann::json data = get_json_data(filename);
-        auto using_texture = data["using_texture"].get<std::string>();
-        const auto texOpt = sfml_manager->get_Texture(using_texture);
-        if (!texOpt) {
-            throw std::invalid_argument("Missing texture");
+    void Reader_JSON::save_ScoreBord(const ast::ScoreBord &bord) const {
+        nlohmann::json j;
+
+        j["bord_size"] = bord.bord_size;
+        j["scores"] = nlohmann::json::array();
+
+        for (const auto& s : bord.scores) {
+            j["scores"].push_back({
+                {"lives_remaining", s.lives_remaining},
+                {"level", s.level},
+                {"points_score", s.points_score}
+            });
         }
-        const sf::Texture& texture = texOpt->get();
-        const auto sprite = std::make_shared<sf::Sprite>(texture);
-        const auto name = data["name"].get<std::string>();
-        sfml_manager->add_Sprite(name, sprite);
-        throw;
+
+        std::ofstream out(bord.file);
+        out << j.dump(4); // pretty-print
     }
-
-    void Reader_JSON::load_SFML_Sprite_Group(
-        const std::shared_ptr<graphics::SFML_Manager>& sfml_manager, const std::string &filename
-        ) const {
-
-        nlohmann::json data = get_json_data(filename);
-
-        auto using_texture = data["using_texture"].get<std::string>();
-
-        const auto texOpt = sfml_manager->get_Texture(using_texture);
-        if (!texOpt) {
-            throw std::invalid_argument("Missing texture");
-        }
-        const sf::Texture& texture = texOpt->get();
-
-        auto names = data["names"].get<std::vector<std::string>>();
-        int left_index = 0;
-        for (const std::string& name : names) {
-            // key - status of Sprite;
-            std::vector<
-                std::unordered_map<
-                    // key - direction of Sprite;
-                    math::Vector2,
-                    // animation
-                    std::vector<
-                        sf::Sprite
-                    >,
-                    // custom hash function
-                    math::Vector2Hash
-                >
-            > entity_sprites;
-
-            const int sprite_width = data["sprite_width"].get<int>();
-            const int sprite_height = data["sprite_height"].get<int>();
-            const auto number_of_statuses = data["number_of_statuses"].get<unsigned int>();
-            entity_sprites.resize(number_of_statuses);
-
-            for (unsigned int i = 0; i < number_of_statuses; i++) {
-                nlohmann::json status = data["statuses"][i];
-                // status = new coordinates
-
-                const auto s = data["statuses"][i].get<Status_Info>();
-
-                for (unsigned int top_index = 0; top_index < s.facial_expressions.size(); ++top_index) {
-                    const Expression_Info& expression = s.facial_expressions[top_index];
-                    const math::Vector2 direction = expression.direction;
-                    int recLeft = expression.recLeft;
-                    int recTop = expression.recTop;
-
-                    // If it is negative, it means that such a parameter was not found.
-                    if (recLeft < 0) {
-                        // left_index = move left
-                        const int base = static_cast<int>(s.recLeft.base);
-                        const  int increase = static_cast<int>(s.recLeft.increase);
-                        recLeft = base + increase * left_index;
-                    }
-                    // If it is negative, it means that such a parameter was not found.
-                    if (recTop < 0) {
-                        // facial_expression = move down
-                        const int base = static_cast<int>(s.recTop.base);
-                        const int increase = static_cast<int>(s.recTop.increase);
-                        recTop = base + increase * static_cast<int>(top_index);
-                    }
-
-                    const sf::IntRect rect(recLeft, recTop, sprite_width, sprite_height);
-                    sf::Sprite sprite(texture, rect);
-                    sprite.setOrigin(static_cast<float>(rect.width) / 2.f, static_cast<float>(rect.height) / 2.f);
-
-                    entity_sprites[i][direction].push_back(sprite);
-                }
-            }
-
-            sfml_manager->add_Sprite_Group(name, std::make_shared<graphics::Sprite_Group>(entity_sprites));
-            left_index++;
-        }
-    }
-
-    std::shared_ptr<graphics::SFML_Manager> Reader_JSON::load_SFML_Manager(
-        const std::shared_ptr<const File_Reader> &fr, const std::string &filename
-        ) const {
-        nlohmann::json data = get_json_data(filename);
-        auto sfml_manager = std::make_shared<graphics::SFML_Manager>();
-        if (!data.contains("textures")) {
-            throw std::invalid_argument("Missing textures");
-        }
-        for (const auto& texture : data["textures"]) {
-            std::string texture_name = texture.get<std::string>();
-            sf::Texture t = fr->load_SFML_texture(sfml_manager, texture_name);
-        }
-
-        if (data.contains("sprites")) {
-            for (const auto& sprite : data["sprites"]) {
-                std::string sprite_name = sprite.get<std::string>();
-                fr->load_SFML_Sprite(sfml_manager, sprite_name);
-            }
-        }
-
-        if (data.contains("sprite_groups")) {
-            for (const auto& sprite : data["sprite_groups"]) {
-                std::string sprite_name = sprite.get<std::string>();
-                fr->load_SFML_Sprite_Group(sfml_manager, sprite_name);
-            }
-        }
-
-        return sfml_manager;
-    }
-
-    logic::collision::HitBoxe_Info Reader_JSON::load_HitBoxe(const std::string &path) const {
-        nlohmann::json data = get_json_data(path);
-
-        logic::collision::HitBoxe_Info hbi;
-        hbi.tipe_ = get_checked<std::string>(hbi.tipe_, data, "tipe_", path);
-        hbi.layer_ = get_checked<int>(hbi.layer_, data, "layer_", path);
-        hbi.strength_ = get_checked<int>(hbi.strength_, data, "strength_", path);
-        hbi.width_ = get_checked<int>(hbi.width_, data, "width_", path);
-        hbi.height_ = get_checked<int>(hbi.height_, data, "height_", path);
-        hbi.radius_ = get_checked<int>(hbi.radius_, data, "radius_", path);
-        hbi.center_ = get_checked<math::Vector2>(hbi.center_, data, "center_", path);
-        hbi.points_ = get_checked<std::vector<math::Vector2>>(hbi.points_, data, "points_", path);
-        return hbi;
-    }
-
-    graphics::Camera_Info Reader_JSON::load_Camera(const std::string &path) const {
-        nlohmann::json data = get_json_data(path);
-
-        graphics::Camera_Info ci;
-        ci.window_width = get_checked<unsigned int>(ci.window_width, data, "window_width", path);
-        ci.window_height = get_checked<unsigned int>(ci.window_height, data, "window_height", path);
-        ci.window_center = get_checked<math::Vector2>(ci.window_center, data, "window_center", path);
-        ci.camera_width = get_checked<unsigned int>(ci.camera_width, data, "camera_width", path);
-        ci.camera_height = get_checked<unsigned int>(ci.camera_height, data, "camera_height", path);
-        ci.camera_center = get_checked<math::Vector2>(ci.camera_center, data, "camera_center", path);
-
-        return ci;
-    }
-
-    void Reader_JSON::load_Entities(
-        const std::shared_ptr<const File_Reader> &fr,
-        const std::shared_ptr<Stage> &stage,
-        const std::shared_ptr<logic::Tile_Grid> &grid,
-        const std::string &filename) const {
-
-        nlohmann::json data = get_json_data(filename);
-        if (!data.contains("entities")) {
-            throw std::invalid_argument("File does not contain entities");
-        }
-
-        for (const auto& entity : data["entities"]) {
-            Stage_Info_JSON conf(fr, stage, entity);
-            load_Entity(conf, grid);
-        }
-
-    }
-
-    graphics::Tile_Grid_Pair Reader_JSON::load_Tile_Grid(
-        std::shared_ptr<graphics::SFML_Manager> sfml_manager,
-        const std::string &path
-        ) const {
-
-        const nlohmann::json data = get_json_data(path);
-        logic::Tile_Grid_Info info;
-        info.rows = get_checked<unsigned int>(data, "rows", path);
-        info.columns = get_checked<unsigned int>(data, "columns", path);
-        info.tile_size = get_checked<float>(data, "tile_size", path);
-        info.logic_grid = get_checked<std::vector<std::vector<int>>>(data, "grid", path);
-        return graphics::Graphics_Factory::make_Tile_Grid(sfml_manager, info); // TODO return logic::Tile_Grid_Info
-    }
-
-    std::shared_ptr<Stage> Reader_JSON::load_Stage(
-        const std::shared_ptr<const File_Reader> &fr,
-        const std::string &path
-        ) const {
-        nlohmann::json data = get_json_data(path);
-
-        const auto entity_type = get_checked<std::string>(data, "Type", path);
-
-        std::unordered_map<std::string, std::shared_ptr<Stage>(Reader_JSON::*)(const Reader_Base_Info_JSON &conf) const> functionMap;
-        Stage_Register(functionMap);
-        auto it = functionMap.find(entity_type);
-        if (it != functionMap.end()) {
-            Reader_Base_Info_JSON conf(fr, data);
-            auto memberFn = it->second;
-            return (this->*memberFn)(conf);
-        }
-        throw std::runtime_error("Stage type " + entity_type + " not found");
-    }
-
-    Stage_Manager Reader_JSON::load_Stage_Manager(
-        const std::shared_ptr<const File_Reader> &fr,
-        const std::string &path
-        ) const {
-        nlohmann::json data = get_json_data(path);
-        auto sm = Stage_Manager(fr);
-
-        for (const auto& stage : data["stages"]) {
-            auto info = std::make_unique<Stage_Info>();
-            info->name = get_checked<std::string>(info->name, stage, "name", path, "stages");
-            info->configuration = get_checked<std::string>(info->configuration, stage, "name", path, "stages");
-            sm.add_Stage_Info(std::move(info));
-        }
-        const auto start_stage = get_checked<std::string>(data, "start_stage", path);
-        sm.push_stage(start_stage);
-        return sm;
-    }
-
-    Game_Info Reader_JSON::get_Game_Info(const std::string& path) {
-        const nlohmann::json data = get_json_data(path);
-        Game_Info info;
-        info.graphics = get_checked<std::string>(info.graphics, data, "graphics", path);
-        info.window_width = get_checked<int>(info.window_width, data, "window_width", path);
-        info.window_height = get_checked<int>(info.window_height, data, "window_height", path);
-        info.graphics_conf = get_checked<std::string>(info.graphics, data, "graphics_conf", path);
-        info.stage_mng = get_checked<std::string>(info.graphics, data, "stage_mng", path);
-        return info;
-    }
-    */
 }

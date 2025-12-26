@@ -18,17 +18,19 @@
 #ifndef PACMAN_AST_APPLICATION_H
 #define PACMAN_AST_APPLICATION_H
 
-#include "event/Event_Collector.h"
+
+#include "infra/ast/event/Event_Collector.h"
 #include "infra/ast/Node.h"
-#include "model/Model.h"
-#include "view/View.h"
+#include "infra/ast/view/View.h"
+#include "infra/ast/Score.h"
 
 namespace infra::ast {
     struct Application : Application_Node{
         infra::ast::View view;
         infra::ast::Event_Collector event_collector;
         std::vector<infra::ast::Model> models;
-
+        ScoreSetup score_setup;
+        ScoreBord score_bord;
     };
 }
 

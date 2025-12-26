@@ -20,8 +20,8 @@
 #include <vector>
 
 #include "infra/ast/Node.h"
-#include "infra/ast/view/external/Sprite_Direction.h"
-#include "infra/ast/view/external/Sprite_Rec.h"
+#include "infra/ast/view/internal/Sprite_Direction.h"
+#include "infra/ast/view/internal/Sprite_Rec.h"
 
 namespace infra::ast {
     struct SpriteStatus : Node{

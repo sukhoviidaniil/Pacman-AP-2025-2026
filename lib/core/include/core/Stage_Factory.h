@@ -19,7 +19,7 @@
 #define PACMAN_STAGE_FACTORY_H
 
 #include "core/Stage.h"
-#include "infra/Score.h"
+#include "../../../infra/include/infra/internal/Score.h"
 #include "model/Model.h"
 
 

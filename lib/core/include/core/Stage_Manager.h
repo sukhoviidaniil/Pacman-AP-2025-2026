@@ -29,10 +29,10 @@ namespace core {
 
     public:
         ~Stage_Manager() override;
-        explicit Stage_Manager();
+        Stage_Manager();
+        void set_stage_factory(std::unique_ptr<core::Stage_Factory> stage_factory);
 
-        void set_stage_factory(core::Stage_Factory stage_factory);
-        virtual void track_global(const std::shared_ptr<infra::event::Event_Bus>& bus);
+        void track_global(const std::shared_ptr<infra::event::Event_Bus>& bus);
 
         std::shared_ptr<core::Stage> get_top();
     protected:
@@ -42,7 +42,7 @@ namespace core {
 
         bool track = false;
         bool complete = false;
-        core::Stage_Factory stage_factory_;
+        std::unique_ptr<core::Stage_Factory> stage_factory_;
         std::stack<std::shared_ptr<core::Stage>> current_stages_;
     };
 }

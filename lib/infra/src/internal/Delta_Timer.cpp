@@ -16,7 +16,7 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "infra/Delta_Timer.h"
+#include "../../include/infra/internal/Delta_Timer.h"
 
 namespace infra {
     Delta_Timer::Delta_Timer() {

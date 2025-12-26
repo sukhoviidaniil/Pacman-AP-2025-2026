@@ -19,7 +19,7 @@
 #define PACMAN_ACTOR_H
 
 #include "Entity.h"
-#include "infra/Status.h"
+#include "../../../../infra/include/infra/internal/Status.h"
 #include "model/collision/World_Collision_Manager.h"
 #include "infra/math/Direction.h"
 

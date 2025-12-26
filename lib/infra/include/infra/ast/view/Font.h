@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Score.cpp
+ * File:          Font.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-21
+ * Created:       2025-12-26
  * Modified:      []
  *
  * Description:   []
@@ -15,14 +15,14 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
+#ifndef PACMAN_AST_FONT_H
+#define PACMAN_AST_FONT_H
+#include "ViewNode.h"
 
-#include "infra/Score.h"
-namespace infra {
-    Score::Score() = default;
-
-    Score::~Score() = default;
-
-    void Score::track_local(const std::shared_ptr<infra::event::Event_Bus> &bus) {
-
-    }
+namespace infra::ast {
+    struct Font : Node{
+        std::string font;
+        std::string file;
+    };
 }
+#endif //PACMAN_AST_FONT_H

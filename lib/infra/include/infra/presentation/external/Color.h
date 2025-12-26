@@ -22,8 +22,10 @@
 namespace infra::ui {
 
     struct Color {
-        std::uint8_t r, g, b;
+        std::uint8_t r = 255, g = 255, b = 255;
         std::uint8_t a = 255;
+        Color() = default;
+        Color(const std::uint8_t red, const  std::uint8_t green, const std::uint8_t blue, const std::uint8_t alpha = 255) : r(red), g(green), b(blue), a(alpha) {}
     };
 }
 

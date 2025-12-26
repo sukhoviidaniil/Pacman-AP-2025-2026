@@ -29,18 +29,22 @@ namespace infra::io {
         ~Reader_JSON() override;
 
         [[nodiscard]] ast::Sprite read_Sprite(const std::string& filename) const override;
+
+        [[nodiscard]] ast::SpriteList read_SpriteList(const std::string &filename) const override;
         [[nodiscard]] ast::ComplexSprite read_Sprits_Group(const std::string& filename) const override;
-
-        static ast::View read_View(
-            nlohmann::json data,
-            const std::shared_ptr<const File_Reader> &fr,
-            const std::string &filename,
-            const std::string &object
-            );
-
         [[nodiscard]] ast::View read_View(const std::string &filename, const std::shared_ptr<const File_Reader>& fr) const override;
         [[nodiscard]] ast::Model read_Model(const std::string& path) const override;
+        [[nodiscard]] ast::ScoreSetup read_ScoreSetup(const std::string &filename) const override;
+        [[nodiscard]] ast::ScoreBord read_ScoreBord(const std::string &filename) const override;
         [[nodiscard]] ast::Application read_Application(const std::string& path, const std::shared_ptr<const File_Reader>& fr) const override;
+
+
+        void save_ScoreBord(const ast::ScoreBord & bord) const override;
+    protected:
+        static ast::View read_View(
+            nlohmann::json data,
+            const std::shared_ptr<const File_Reader> &fr
+            );
     };
 }
 

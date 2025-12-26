@@ -24,6 +24,7 @@
 
 #include "infra/event/Observer.h"
 #include "infra/ast/view/ViewVisitor.h"
+#include "infra/math/Vector2.h"
 #include "view/presentation/render/RenderFrame.h"
 
 namespace view {

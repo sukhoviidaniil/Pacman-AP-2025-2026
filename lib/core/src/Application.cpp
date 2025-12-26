@@ -19,7 +19,7 @@
 #include "core/Application.h"
 
 #include "core/View_Collector_Factory.h"
-#include "infra/Delta_Timer.h"
+#include "../../infra/include/infra/internal/Delta_Timer.h"
 #include "infra/diagnostics/Logger.h"
 #include "infra/event/events/window.hpp"
 
@@ -30,19 +30,12 @@ namespace core {
         const infra::ast::Application &a,
         const std::string &path,
         const std::shared_ptr<infra::event::Event_Bus>& eventbus
-        ) {
+        )
+    {
+
         set_global(eventbus);
-
-
-
-        // Make Score
         score_ = std::make_shared<infra::Score>();
-
-
-
-        // Make Stage_Factory and Stage_Manager
-        core::Stage_Factory sf = core::Stage_Factory(g_eventbus_, score_, a.models);
-        stage_manager_.set_stage_factory(sf);
+        stage_manager_.set_stage_factory(std::make_unique<core::Stage_Factory>(g_eventbus_, score_, a.models));
 
         // Make View and Event_Collector
         core::View_Collector_Factory vcf;
@@ -52,9 +45,9 @@ namespace core {
     }
 
     void Application::set_global(const std::shared_ptr<infra::event::Event_Bus>& eventbus) {
+        un_track_all();
         g_eventbus_ = eventbus;
         // TODO subs
-        un_track_all();
         track(
             eventbus->subscribe<infra::event::window::Closed>(
                 [this](const infra::event::window::Closed&) {
@@ -65,8 +58,6 @@ namespace core {
     }
 
     void Application::dispatch_events() const {
-
-
 
     }
 
@@ -96,10 +87,8 @@ namespace core {
                 }
                 current_stage
                         ->controller
-                        ->handle(ev);
+                        ->handle(*ev);
             }
-
-            dispatch_events();
         }
     }
 }

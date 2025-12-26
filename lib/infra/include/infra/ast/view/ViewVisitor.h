@@ -25,7 +25,6 @@ namespace infra::ast {
 
     // View
     struct Sprite;
-    struct SpriteList;
     struct ComplexSprite;
 
     // ----------------------------
@@ -33,7 +32,6 @@ namespace infra::ast {
     // ----------------------------
     struct SpriteVisitor : Visitor {
         virtual void visit(const Sprite&) {}
-        virtual void visit(const SpriteList&) {}
         virtual void visit(const ComplexSprite&) {}
     };
 }

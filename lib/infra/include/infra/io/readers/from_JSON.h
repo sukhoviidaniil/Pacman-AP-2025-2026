@@ -25,11 +25,12 @@
 #include "infra/ast/model/Model.h"
 
 #include "infra/ast/view/View.h"
-#include "infra/ast/view/external/Sprite_Direction.h"
-#include "infra/ast/view/external/Sprite_Rec.h"
-#include "infra/ast/view/external/SpriteStatus.h"
+#include "infra/ast/view/internal/Sprite_Direction.h"
+#include "infra/ast/view/internal/Sprite_Rec.h"
+#include "infra/ast/view/internal/SpriteStatus.h"
 #include "infra/ast/view/sprites/ComplexSprite.h"
 #include "infra/ast/view/sprites/Sprite.h"
+#include "infra/ast/view/sprites/SpriteList.h"
 
 namespace infra::math {
     inline void from_json(const nlohmann::json& j, Point2& v) {
@@ -69,8 +70,8 @@ namespace infra::io {
         return data;
     }
 
-    inline void invalid_parameter(const std::string &path, const std::string &name, const std::string &object) {
-        const std::string error = "File " + path + " parameter " + name + " in " + object + " missing or invalid;";
+    inline void invalid_parameter(const std::string &path, const std::string &object, const std::string &name) {
+        const std::string error = "File: " + path+ ", in " + object +  ", parameter " + name + " missing or invalid;";
         LOG(error);
         throw std::runtime_error(error);
     }
@@ -135,8 +136,73 @@ namespace infra::io {
 
 namespace infra::ast {
 
+    // ---------------- ScoreSetup ----------------
+    inline void from_json(const nlohmann::json& j, ScoreSetup& s) {
+        s.lives_remaining = io::get_checked(j, "lives_remaining", s.lives_remaining);
+        s.level = io::get_checked(j, "level", s.level);
+        s.points_score = io::get_checked(j, "points_score", s.points_score);
+        s.time_since_the_last_coin_collection = io::get_checked(j, "time_since_the_last_coin_collection", s.time_since_the_last_coin_collection);
+
+        s.award_amount = io::get_checked(j, "award_amount", s.award_amount);
+        s.max_award_level  = io::get_checked(j, "max_award_level", s.max_award_level);
+        s.award_level = io::get_checked(j, "award_level", s.award_level);
+
+        s.RR_Time_until_reduction = io::get_checked(j, "RR_Time_until_reduction", s.RR_Time_until_reduction);
+        s.RR_Time_between_reductions = io::get_checked(j, "RR_Time_between_reductions", s.RR_Time_between_reductions);
+    }
+
+    // ---------------- ScoreInfo ----------------
+    inline void from_json(const nlohmann::json& j, ScoreInfo& s) {
+        s.lives_remaining = io::get_checked<unsigned int>(j, "lives_remaining", s.lives_remaining);
+        s.level           = io::get_checked<unsigned int>(j, "level", s.lives_remaining);
+        s.points_score    = io::get_checked<unsigned int>(j, "points_score", s.lives_remaining);
+    }
+
+    // ---------------- ScoreBord ----------------
+    inline void from_json(const nlohmann::json& j, ScoreBord& bord) {
+        bord.bord_size = io::get_checked<size_t>(j, "bord_size", bord.bord_size);
+        bord.scores.clear();
+
+        if (j.contains("scores") && j["scores"].is_array()) {
+            for (const auto& item : j["scores"]) {
+                auto s = io::get_checked<ScoreInfo>(item);
+                bord.scores.push_back(s);
+            }
+        }
+        bord.file = j.value("file", std::string{});
+    }
+
+
+    inline void from_json(const nlohmann::json& j, Texture& s) {
+        s.name = io::get_checked<std::string>(j, "name");
+        s.file = io::get_checked<std::string>(j, "file");
+    }
+
+    inline void from_json(const nlohmann::json& j, Font& s) {
+        s.font = io::get_checked<std::string>(j, "font");
+        s.file = io::get_checked<std::string>(j, "file");
+    }
+
     inline void from_json(const nlohmann::json& j, Sprite& s) {
-        // TODO IF NEEDED
+        // SpriteNode
+        s.using_texture = io::get_checked<std::string>(j, "using_texture");
+        s.sprits_width = io::get_checked<unsigned int>(j, "sprits_width");
+        s.sprits_height = io::get_checked<unsigned int>(j, "sprits_height");
+        // Sprite
+        s.name = io::get_checked<std::string>(j, "name");
+        s.recLeft = io::get_checked<int>(j, "recLeft");
+        s.recTop = io::get_checked<int>(j, "recTop");
+    }
+
+    inline void from_json(const nlohmann::json& j, SpriteList& s) {
+        // SpriteNode
+        s.using_texture = io::get_checked<std::string>(j, "using_texture");
+        s.sprits_width = io::get_checked<unsigned int>(j, "sprits_width");
+        s.sprits_height = io::get_checked<unsigned int>(j, "sprits_height");
+        // Sprite
+        s.names = io::get_checked<std::vector<std::string>>(j, "names");
+        s.recLeft = io::get_checked<ast::Sprite_Rec>(j, "recLeft");
+        s.recTop = io::get_checked<ast::Sprite_Rec>(j, "recTop");
     }
 
     inline void from_json(const nlohmann::json& j, Sprite_Direction& s) {
@@ -185,7 +251,9 @@ namespace infra::ast {
         s.type = io::get_checked<std::string>(j,"type", s.type);
         s.window_width = io::get_checked<unsigned int>(j, "window_width", s.window_width );
         s.window_height = io::get_checked<unsigned int>(j, "window_height", s.window_height);
-        s.textures = io::get_checked<std::vector<std::string>>(j, "textures", s.textures);
+        s.view_directory = io::get_checked<std::string>(j, "view_directory", s.view_directory);
+        s.textures = io::get_checked<std::vector<Texture>>(j, "Textures");
+        s.fonts = io::get_checked<std::vector<Font>>(j, "Fonts");
     }
 
     inline Tile parse_tile(const std::string& s) {
@@ -233,5 +301,6 @@ namespace infra::ast {
 
     }
 }
+
 
 #endif //PACMAN_FROM_JSON_H

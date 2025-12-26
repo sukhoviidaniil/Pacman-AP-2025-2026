@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          ScoreView.h
+ * File:          Texture.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-25
+ * Created:       2025-12-26
  * Modified:      []
  *
  * Description:   []
@@ -15,18 +15,17 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_SCOREVIEW_H
-#define PACMAN_SCOREVIEW_H
-#include "infra/Score.h"
+#ifndef PACMAN_AST_TEXTURE_H
+#define PACMAN_AST_TEXTURE_H
+#include <string>
 
-namespace infra {
-    class ScoreView {
-    public:
-        explicit ScoreView(const infra::Score& s) : score_(s) {}
+#include "infra/ast/Node.h"
 
-    private:
-        const Score& score_;
+namespace infra::ast {
+    struct Texture : Node{
+        std::string name;
+        std::string file;
     };
 }
 
-#endif //PACMAN_SCOREVIEW_H
+#endif //PACMAN_AST_TEXTURE_H

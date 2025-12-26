@@ -32,11 +32,15 @@ namespace infra::io {
         void add_Reader(const std::string& extension, const std::shared_ptr<Reader> &reader);
 
         [[nodiscard]] ast::Sprite read_Sprite(const std::string& filename) const;
+        [[nodiscard]] ast::SpriteList read_SpriteList(const std::string& filename) const;
         [[nodiscard]] ast::ComplexSprite read_Sprits_Group(const std::string& filename) const;
         [[nodiscard]] ast::View read_View(const std::string &filename) const;
         [[nodiscard]] ast::Model read_Model(const std::string &filename) const;
-
+        [[nodiscard]] ast::ScoreSetup read_ScoreSetup(const std::string &filename) const;
+        [[nodiscard]] ast::ScoreBord read_ScoreBord(const std::string &filename) const;
         [[nodiscard]] ast::Application read_Application(const std::string &filename) const;
+
+        void save_ScoreBord(const ast::ScoreBord & info) const;
     protected:
         std::shared_ptr<Reader> get_Reader(const std::string& path) const;
         static std::string get_extension(const std::string& path);
