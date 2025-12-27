@@ -19,10 +19,10 @@
 #include "control/C_Menu.h"
 
 #include "infra/event/events/input_Keyboard.h"
-#include "menu/Menu.h"
+#include "infra/menu/Menu.h"
 
 namespace control {
-    C_Menu::C_Menu(std::shared_ptr<Menu> menu)
+    C_Menu::C_Menu(std::shared_ptr<infra::menu::Menu> menu)
     : menu_(std::move(menu))
     {
         using namespace infra::event::input;

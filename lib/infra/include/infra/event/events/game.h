@@ -21,11 +21,38 @@
 
 namespace infra::event::game {
 
-    struct RequestPause {
+    struct Request_StartStage {
         static constexpr infra::event::EventMask mask = infra::event::EventMask::Game;
 
-        RequestPause() = default;
+        Request_StartStage() = default;
     };
+
+    struct Request_NextLevelStage {
+        static constexpr infra::event::EventMask mask = infra::event::EventMask::Game;
+
+        Request_NextLevelStage() = default;
+    };
+
+    struct Request_EnterPause {
+        static constexpr infra::event::EventMask mask = infra::event::EventMask::Game;
+
+        Request_EnterPause() = default;
+    };
+
+    struct Request_ExitPause {
+        static constexpr infra::event::EventMask mask = infra::event::EventMask::Game;
+
+        Request_ExitPause() = default;
+    };
+
+    struct Request_DeathStage {
+        static constexpr infra::event::EventMask mask = infra::event::EventMask::Game;
+
+        Request_DeathStage() = default;
+    };
+
+
+
     struct ButtonPressed {
         static constexpr infra::event::EventMask mask = infra::event::EventMask::Game;
         std::size_t index;

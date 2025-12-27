@@ -23,7 +23,7 @@
 #include "view/presentation/layout_engine/UIElement.h"
 #include "view/presentation/render/RenderFrame.h"
 
-namespace core {
+namespace core::stg {
     class Stage {
     public:
         virtual ~Stage() = default;
@@ -34,10 +34,11 @@ namespace core {
 
         [[nodiscard]] virtual view::ui::RenderFrame get_RenderFrame(const infra::math::Vector2& screen_size, bool redraw) const = 0;
 
-        std::unique_ptr<control::Controller> controller; /// Controller of this stage
+        std::unique_ptr<control::Controller> controller = nullptr; /// Controller of this stage
         std::unique_ptr<infra::event::Event_Bus> l_eventbus; /// Local Event Bus (for local events)
     protected:
-        std::shared_ptr<view::ui::UIElement> ui_root_; /// Stage UI
+        virtual void dispatch(const infra::event::Event_Store &event_store);
+        std::unique_ptr<view::ui::UIElement> ui_root_ = nullptr; /// Stage UI
         std::shared_ptr<infra::event::Event_Bus> g_eventbus;/// Global Event Bus (for stage change)
     };
 }

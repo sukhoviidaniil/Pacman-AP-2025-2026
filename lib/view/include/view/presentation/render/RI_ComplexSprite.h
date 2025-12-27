@@ -32,6 +32,7 @@ namespace view::ui {
          * @brief Status (e.g., "idle", "walking", "attacking").
          */
         infra::Status status;
+
         void accept(RenderVisitor &v) const override {
             v.visit(*this);
         }

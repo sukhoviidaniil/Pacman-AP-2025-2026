@@ -5,10 +5,6 @@
 
 namespace infra::math {
 
-
-
-
-
     Point2 Vector2::to_Point2() const {
         return {x, y};
     }

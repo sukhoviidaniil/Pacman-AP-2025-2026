@@ -20,6 +20,8 @@
 
 #include "core/Stage_Manager.h"
 
+#include "infra/event/events/game.h"
+
 
 namespace core  {
     /*
@@ -63,7 +65,22 @@ namespace core  {
     }
 
     void Stage_Manager::track_global(const std::shared_ptr<infra::event::Event_Bus> &bus) {
-        track = true;
+
+
+        track(
+            bus->subscribe<infra::event::game::Request_EnterPause>(
+                [this](const infra::event::game::Request_EnterPause&) {
+                    push_stage(stage_factory_->make_pause_stage());
+                }
+            )
+        );
+        track(
+            bus->subscribe<infra::event::game::Request_ExitPause>(
+                [this](const infra::event::game::Request_ExitPause&) {
+                    pop_stage();
+                }
+            )
+        );
         // TODO
     }
 

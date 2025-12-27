@@ -1,6 +1,6 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Game_Stage.h
+ * File:          Level_Stage.h
  *
  * Author:        Sukhovii Daniil
  * Created:       2025-12-23
@@ -18,20 +18,20 @@
 #ifndef PACMAN_GAME_STAGE_H
 #define PACMAN_GAME_STAGE_H
 #include "core/Stage.h"
-#include "../../../../infra/include/infra/internal/Score.h"
 #include "model/Model.h"
 #include "view/presentation/layout_engine/UIElement.h"
 #include "view/presentation/render/RenderFrame.h"
 
-namespace core{
-    class Game_Stage : public Stage {
+namespace core::stg{
+    class Level_Stage : public Stage {
 
         public:
-        ~Game_Stage() override;
+        ~Level_Stage() override;
 
-        Game_Stage(
+        Level_Stage(
             const std::shared_ptr<infra::event::Event_Bus> &global_eventbus,
-            const std::shared_ptr<model::Model>& model
+            const std::shared_ptr<model::Model>& model,
+            infra::Const_Score score
         );
 
         void run(float tick) override;
@@ -40,7 +40,7 @@ namespace core{
         private:
 
         std::shared_ptr<model::Model> model_; /// Model of this stage (Controller can have ptr)
-        std::shared_ptr<infra::Score> score_; /// Model MUST have this || Stage can have this for UI
+        infra::Const_Score score_;
     };
 }
 

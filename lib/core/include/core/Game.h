@@ -1,6 +1,6 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Application.h
+ * File:          Game.h
  *
  * Author:        Sukhovii Daniil
  * Created:       2025-12-15
@@ -18,19 +18,19 @@
 #ifndef PACMAN_APPLICATION_H
 #define PACMAN_APPLICATION_H
 
-#include "../../../infra/include/infra/internal/Score.h"
-#include "infra/ast/Application.h"
+#include "infra/internal/Score.h"
+#include "infra/ast/Game.h"
 #include "view/View.h"
 #include "core/event_collector/Event_Collector.h"
 #include "core/Stage_Manager.h"
 #include "core/Stage_Factory.h"
 
 namespace core {
-    class Application : public infra::event::Observer{
+    class Game : public infra::event::Observer{
     public:
-        ~Application() override;
-        Application(
-            const infra::ast::Application &a,
+        ~Game() override;
+        Game(
+            const infra::ast::Game &a,
             const std::string &path,
             const std::shared_ptr<infra::event::Event_Bus>& eventbus
             );
@@ -49,6 +49,7 @@ namespace core {
         core::Stage_Manager stage_manager_;
 
         std::shared_ptr<infra::event::Event_Bus> g_eventbus_ = nullptr; /// GLOBAL || NOT OWNER
+
     };
 }
 

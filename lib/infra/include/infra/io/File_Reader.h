@@ -20,7 +20,7 @@
 
 #include <memory>
 #include <unordered_map>
-#include "infra/ast/Application.h"
+#include "infra/ast/Game.h"
 #include "../ast/view/View.h"
 #include "infra/io/Reader.h"
 
@@ -38,7 +38,7 @@ namespace infra::io {
         [[nodiscard]] ast::Model read_Model(const std::string &filename) const;
         [[nodiscard]] ast::ScoreSetup read_ScoreSetup(const std::string &filename) const;
         [[nodiscard]] ast::ScoreBord read_ScoreBord(const std::string &filename) const;
-        [[nodiscard]] ast::Application read_Application(const std::string &filename) const;
+        [[nodiscard]] ast::Game read_Game(const std::string &filename) const;
 
         void save_ScoreBord(const ast::ScoreBord & info) const;
     protected:

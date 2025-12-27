@@ -39,7 +39,8 @@ namespace view::ui {
          *
          * @param text Text content of the label.
          */
-        explicit Label(std::string text = "") : text(std::move(text)) {}
+        explicit Label(std::string text = "") : Text(), text(std::move(text)) {
+        }
 
         /**
          * @brief Measures the desired size of the label.

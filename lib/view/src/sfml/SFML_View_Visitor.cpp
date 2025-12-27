@@ -17,6 +17,7 @@
 ***************************************************************/
 
 #include "infra/diagnostics/Logger.h"
+#include "view/presentation/render/RI_ComplexSprite.h"
 #include "view/presentation/render/RI_Label.h"
 #include "view/presentation/render/RI_Rectangle.h"
 #include "view/presentation/render/RI_Sprite.h"
@@ -138,10 +139,10 @@ namespace view {
         if (it == sprites_.end()) {
             ui::RI_Rectangle w;
             w.color = infra::ui::Color{
-                .r = 0,
-                .g = 120,
-                .b = 255,
-                .a = 100
+                0,
+                120,
+                255,
+                255
             };
             w.rect = rect;
             w.accept(*this);
@@ -194,11 +195,29 @@ namespace view {
         window_.draw(text);
     }
 
-    void SFML_View::visit(const ui::RI_Rectangle &ri_rectangle) {
+    void SFML_View::visit(const ui::RI_Rectangle &ri) {
         sf::RectangleShape rect;
-        rect.setPosition(ri_rectangle.rect.x, ri_rectangle.rect.y);
-        rect.setSize({ ri_rectangle.rect.width, ri_rectangle.rect.height });
-        rect.setFillColor(sf::Color(ri_rectangle.color.r, ri_rectangle.color.g, ri_rectangle.color.b, ri_rectangle.color.a));
+
+        rect.setPosition(ri.rect.x, ri.rect.y);
+        rect.setSize({ ri.rect.width, ri.rect.height });
+
+        rect.setFillColor(
+            sf::Color(ri.color.r, ri.color.g, ri.color.b, ri.color.a)
+        );
+
+        if (ri.border_width > 0) {
+            rect.setOutlineThickness(static_cast<float>(ri.border_width));
+            rect.setOutlineColor(
+                sf::Color(
+                    ri.border_color.r,
+                    ri.border_color.g,
+                    ri.border_color.b,
+                    ri.border_color.a
+                )
+            );
+        } else {
+            rect.setOutlineThickness(0.f);
+        }
         window_.draw(rect);
     }
 
@@ -221,8 +240,24 @@ namespace view {
         window_.draw(sprite);
     }
 
-    void SFML_View::visit(const ui::RI_ComplexSprite &ri_complex_sprite) {
+    void SFML_View::visit(const ui::RI_ComplexSprite &ri) {
 
+        auto it = complex_sprites_.find(ri.sprite);
+        if (it == complex_sprites_.end()) {
+            render_warning(ri.rect);
+            return;
+        }
+
+        sf::Sprite sprite = it->second->sprite(ri.status, ri.direction);
+
+        const auto& r = ri.rect;
+        sprite.setPosition(r.x, r.y);
+        sf::FloatRect bounds = sprite.getLocalBounds();
+        sprite.setScale(
+            r.width / bounds.width,
+            r.height / bounds.height
+        );
+        window_.draw(sprite);
     }
 
     const sf::Texture& SFML_View::get_Texture(const std::string& using_texture, const std::string& by_who) {

@@ -20,16 +20,14 @@
 #include <memory>
 #include <unordered_map>
 
-#include "SFML_Sprite.h"
-#include "../../../../infra/include/infra/internal/Status.h"
-#include "infra/math/Direction.h"
 #include "SFML/Graphics/Sprite.hpp"
+#include "infra/math/Direction.h"
+#include "infra/internal/Status.h"
+#include "view/sfml/SFML_Sprite.h"
 
 namespace view {
 
-
     class SFML_Complex_Sprite {
-
     public:
         explicit SFML_Complex_Sprite(
             std::unordered_map<

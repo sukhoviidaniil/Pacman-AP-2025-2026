@@ -31,7 +31,6 @@ namespace view::ui {
         /// @brief Virtual destructor.
         ~Text() override = default;
 
-
         /**
          * @brief Measures the desired size of the text.
          *

@@ -69,12 +69,12 @@ namespace infra::io {
         return bord;
     }
 
-    ast::Application Reader_JSON::read_Application(
+    ast::Game Reader_JSON::read_Game(
         const std::string &path,
         const std::shared_ptr<const File_Reader> &fr
         ) const {
         nlohmann::json data = get_json_data(path);
-        ast::Application app;
+        ast::Game app;
         const std::string view_name = "View";
         if (data.contains(view_name)) {
             if (data[view_name].is_string()) {

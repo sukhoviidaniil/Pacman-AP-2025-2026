@@ -20,9 +20,9 @@
 #include <cstddef>
 #include <vector>
 
-#include "MenuButton.h"
+#include "infra/menu/MenuButton.h"
 
-namespace control {
+namespace infra::menu {
     class Menu {
     public:
         enum class NavigationMode {
@@ -32,14 +32,14 @@ namespace control {
 
         explicit Menu(const std::vector<MenuButton>& buttons, NavigationMode mode = NavigationMode::Loop);
 
-        std::size_t current_index() const;
-        std::size_t size() const;
+        [[nodiscard]] std::size_t current_index() const;
+        [[nodiscard]] std::size_t size() const;
 
         void move(int delta);
 
-        const MenuButton& get_current_button() const;
+        [[nodiscard]] const MenuButton& get_current_button() const;
 
-        const std::vector<MenuButton>& get_buttons() const;
+        [[nodiscard]] const std::vector<MenuButton>& get_buttons() const;
 
     private:
         std::vector<MenuButton> buttons_;

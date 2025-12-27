@@ -19,11 +19,13 @@
 #define PACMAN_VIEWCONTEXT_H
 
 #include "infra/internal/Const_Score.h"
+#include "infra/menu/MenuView.h"
 #include "model/ModelView.h"
 
 namespace view {
     struct ViewContext {
         const bool redrawing;
+        const std::optional<std::reference_wrapper<const infra::menu::MenuView>> menu;
         const std::optional<std::reference_wrapper<const infra::Const_Score>> score;
         const std::optional<std::reference_wrapper<const infra::Const_ScoreBord>> score_bord;
         const std::optional<std::reference_wrapper<const model::ui::ModelView>> model;

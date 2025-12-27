@@ -22,7 +22,7 @@
 
 #include "infra/event/Event.h"
 
-namespace control {
+namespace infra::menu {
     struct MenuButton {
         std::string name;
         std::unique_ptr<infra::event::EventConcept> event; // Event that should occur when clicked

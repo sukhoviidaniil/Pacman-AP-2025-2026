@@ -23,8 +23,7 @@
 namespace control {
     class C_Game : public Controller {
     public:
-
-        C_Game(const std::shared_ptr<model::entity::Pacman>& pacman);
+        explicit C_Game(const std::shared_ptr<model::entity::Pacman>& pacman);
 
     private:
 

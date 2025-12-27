@@ -24,7 +24,7 @@ namespace infra::ast {
     struct Model;
 
     // Gen
-    struct Application;
+    struct Game;
     struct Node;
 
     // ----------------------------
@@ -38,8 +38,8 @@ namespace infra::ast {
         virtual void visit(const Model&) {}
     };
 
-    struct Application_Visitor : Visitor {
-        virtual void visit(const Application&) {}
+    struct Game_Visitor : Visitor {
+        virtual void visit(const Game&) {}
         virtual void visit(const Node&) {}
     };
 }

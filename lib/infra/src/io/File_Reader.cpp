@@ -70,9 +70,9 @@ namespace infra::io {
         return reader->read_ScoreBord(conf_directory_ + filename);
     }
 
-    ast::Application File_Reader::read_Application(const std::string &filename) const {
+    ast::Game File_Reader::read_Game(const std::string &filename) const {
         const std::shared_ptr<Reader> reader = get_Reader(filename);
-        return reader->read_Application(conf_directory_ + filename, shared_from_this());
+        return reader->read_Game(conf_directory_ + filename, shared_from_this());
     }
 
     void File_Reader::save_ScoreBord(const ast::ScoreBord &info) const {

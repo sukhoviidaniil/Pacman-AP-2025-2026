@@ -26,30 +26,41 @@
 namespace core {
     class Stage_Factory {
         public:
+
         explicit Stage_Factory(
-            const std::shared_ptr<infra::event::Event_Bus>& g_eventbus,
-            const std::shared_ptr<infra::Score>& score,
-            const std::vector<infra::ast::Model> &models
+            infra::ast::ScoreSetup score_setup,
+            const infra::ast::ScoreBord& bord,
+            std::vector<infra::ast::Model> models,
+            const std::shared_ptr<infra::event::Event_Bus>& g_eventbus
             );
 
-        std::shared_ptr<core::Stage> make_start_stage();
-        std::shared_ptr<core::Stage> make_pause_stage();
-        std::shared_ptr<core::Stage> make_game_stage();
-        std::shared_ptr<core::Stage> make_win_stage();
-        std::shared_ptr<core::Stage> make_death_stage();
+        std::shared_ptr<core::stg::Stage> make_Start_Stage();
+        std::shared_ptr<core::stg::Stage> make_pause_stage();
+        std::shared_ptr<core::stg::Stage> make_new_Game_Stage();
 
-        protected:
+        std::shared_ptr<core::stg::Stage> make_next_Game_Stage();
 
-        [[nodiscard]] std::shared_ptr<model::Model> get_model();
-        void make_new_model();
+        std::shared_ptr<core::stg::Stage> make_continuing_Game_Stage();
+        std::shared_ptr<core::stg::Stage> make_win_stage();
+        std::shared_ptr<core::stg::Stage> make_death_stage();
 
-        private:
+    protected:
 
-        std::shared_ptr<infra::Score> score_;
-        std::shared_ptr<model::Model> current_model_ = nullptr;
+        void make_new_score();
+        void select_new_model();
+
+    private:
+
+        // Score
+        infra::ast::ScoreSetup score_setup_; /// OWNER
+        std::shared_ptr<infra::ScoreBord> score_bord_ = nullptr; /// OWNER || GIVER
+        std::shared_ptr<infra::Score> score_ = nullptr; /// OWNER || GIVER
+        // Model
+        std::shared_ptr<model::Model> current_model_ = nullptr; /// OWNER || GIVER
         bool random_model_order_ = false;
-        size_t selected_model_;
-        std::vector<infra::ast::Model> models_variants_;
+        size_t selected_model_ = 0;
+        std::vector<infra::ast::Model> models_variants_; /// OWNER
+        // Event Bus
         std::shared_ptr<infra::event::Event_Bus> g_eventbus_ = nullptr; /// GLOBAL || NOT OWNER
     };
 }

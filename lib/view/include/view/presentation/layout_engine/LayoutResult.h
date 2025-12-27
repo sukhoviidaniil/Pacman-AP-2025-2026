@@ -28,7 +28,8 @@ namespace view::ui {
      * after the layout engine finishes its calculations.
      */
     struct LayoutResult {
-        infra::ui::Rect rect; ///< Final computed rectangle
+        infra::ui::Rect rect = {0,0,0,0}; ///< Final computed rectangle
+        LayoutResult() = default;
     };
 }
 

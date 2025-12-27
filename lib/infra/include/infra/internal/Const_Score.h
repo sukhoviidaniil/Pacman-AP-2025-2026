@@ -23,26 +23,26 @@ namespace infra {
     class Const_Score {
     public:
         explicit Const_Score(const Score& score) noexcept
-            : score_(&score) {}
+            : score_(score) {}
 
         [[nodiscard]] ast::ScoreInfo get_score_info() const {
-            return score_->get_score_info();
+            return score_.get_score_info();
         }
 
         [[nodiscard]] unsigned int lives_remaining() const {
-            return score_->lives_remaining();
+            return score_.lives_remaining();
         }
 
         [[nodiscard]] unsigned int level() const {
-            return score_->level();
+            return score_.level();
         }
 
         [[nodiscard]] unsigned int points_score() const {
-            return score_->points_score();
+            return score_.points_score();
         }
 
     private:
-        const Score* score_;
+        const Score& score_;
     };
 
     // --------------------------------------
@@ -50,22 +50,22 @@ namespace infra {
     class Const_ScoreBord {
     public:
         explicit Const_ScoreBord(const ScoreBord& bord) noexcept
-            : bord_(&bord) {}
+            : bord_(bord) {}
 
         [[nodiscard]] const std::vector<ast::ScoreInfo>& all_scores() const {
-            return bord_->all_scores();
+            return bord_.all_scores();
         }
 
         [[nodiscard]] size_t size() const {
-            return bord_->all_scores().size();
+            return bord_.all_scores().size();
         }
 
         [[nodiscard]] std::string file() const {
-            return bord_->file();
+            return bord_.file();
         }
 
     private:
-        const ScoreBord* bord_;
+        const ScoreBord& bord_;
     };
 }
 

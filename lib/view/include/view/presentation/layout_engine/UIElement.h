@@ -100,7 +100,7 @@ namespace view::ui {
 
         bool visible = true; ///< Visibility flag
 
-        LayoutResult result; ///< Result of the layout pass
+        LayoutResult result{}; ///< Result of the layout pass
 
         /// @brief Child elements in the layout tree.
         std::vector<std::shared_ptr<UIElement>> children;

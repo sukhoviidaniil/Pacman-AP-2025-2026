@@ -20,7 +20,7 @@
 #include "../Node.h"
 
 namespace infra::ast {
-    class Event_Collector : Application_Node {
+    class Event_Collector : Game_Node {
 
     };
 }

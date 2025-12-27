@@ -1,6 +1,6 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Application.h
+ * File:          Game.h
  *
  * Author:        Sukhovii Daniil
  * Created:       2025-12-02
@@ -25,7 +25,7 @@
 #include "infra/ast/Score.h"
 
 namespace infra::ast {
-    struct Application : Application_Node{
+    struct Game : Game_Node{
         infra::ast::View view;
         infra::ast::Event_Collector event_collector;
         std::vector<infra::ast::Model> models;

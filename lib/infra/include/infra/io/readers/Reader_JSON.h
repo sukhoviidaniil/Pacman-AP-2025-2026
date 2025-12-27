@@ -36,7 +36,7 @@ namespace infra::io {
         [[nodiscard]] ast::Model read_Model(const std::string& path) const override;
         [[nodiscard]] ast::ScoreSetup read_ScoreSetup(const std::string &filename) const override;
         [[nodiscard]] ast::ScoreBord read_ScoreBord(const std::string &filename) const override;
-        [[nodiscard]] ast::Application read_Application(const std::string& path, const std::shared_ptr<const File_Reader>& fr) const override;
+        [[nodiscard]] ast::Game read_Game(const std::string& path, const std::shared_ptr<const File_Reader>& fr) const override;
 
 
         void save_ScoreBord(const ast::ScoreBord & bord) const override;

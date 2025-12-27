@@ -27,7 +27,7 @@ namespace view::ui {
     };
     struct RenderItem : RenderNode {
         /// Element dimensions
-        infra::ui::Rect rect;
+        infra::ui::Rect rect{};
     };
 }
 

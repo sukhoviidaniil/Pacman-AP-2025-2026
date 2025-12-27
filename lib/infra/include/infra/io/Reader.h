@@ -20,7 +20,7 @@
 #include <memory>
 
 #include "infra/ast/view/View.h"
-#include "infra/ast/Application.h"
+#include "infra/ast/Game.h"
 #include "infra/ast/view/sprites/SpriteList.h"
 
 namespace infra::io {
@@ -37,7 +37,7 @@ namespace infra::io {
         [[nodiscard]] virtual ast::Model read_Model(const std::string& path) const = 0;
         [[nodiscard]] virtual ast::ScoreSetup read_ScoreSetup(const std::string &filename) const = 0;
         [[nodiscard]] virtual ast::ScoreBord read_ScoreBord(const std::string &filename) const = 0;
-        [[nodiscard]] virtual ast::Application read_Application(const std::string& path, const std::shared_ptr<const File_Reader>& fr) const = 0;
+        [[nodiscard]] virtual ast::Game read_Game(const std::string& path, const std::shared_ptr<const File_Reader>& fr) const = 0;
 
         virtual void save_ScoreBord(const ast::ScoreBord & info) const = 0;
     };

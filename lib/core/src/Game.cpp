@@ -1,6 +1,6 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Application.cpp
+ * File:          Game.cpp
  *
  * Author:        Sukhovii Daniil
  * Created:       2025-12-15
@@ -16,7 +16,7 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "core/Application.h"
+#include "core/Game.h"
 
 #include "core/View_Collector_Factory.h"
 #include "../../infra/include/infra/internal/Delta_Timer.h"
@@ -24,10 +24,10 @@
 #include "infra/event/events/window.hpp"
 
 namespace core {
-    Application::~Application() = default;
+    Game::~Game() = default;
 
-    Application::Application(
-        const infra::ast::Application &a,
+    Game::Game(
+        const infra::ast::Game &a,
         const std::string &path,
         const std::shared_ptr<infra::event::Event_Bus>& eventbus
         )
@@ -44,7 +44,7 @@ namespace core {
         event_collector_ = vcf.make_Event_Collector(a.event_collector);
     }
 
-    void Application::set_global(const std::shared_ptr<infra::event::Event_Bus>& eventbus) {
+    void Game::set_global(const std::shared_ptr<infra::event::Event_Bus>& eventbus) {
         un_track_all();
         g_eventbus_ = eventbus;
         // TODO subs
@@ -57,11 +57,11 @@ namespace core {
         );
     }
 
-    void Application::dispatch_events() const {
+    void Game::dispatch_events() const {
 
     }
 
-    void Application::run() {
+    void Game::run() {
         if (event_collector_ == nullptr) {
             std::string err = "The program does not have a collection of events from the environment.";
             LOG(err);

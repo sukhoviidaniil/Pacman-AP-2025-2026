@@ -40,9 +40,7 @@ namespace core {
         void push_stage(const std::shared_ptr<core::Stage> &stage);
     private:
 
-        bool track = false;
-        bool complete = false;
-        std::unique_ptr<core::Stage_Factory> stage_factory_;
+        std::unique_ptr<core::Stage_Factory> stage_factory_ = nullptr;
         std::stack<std::shared_ptr<core::Stage>> current_stages_;
     };
 }

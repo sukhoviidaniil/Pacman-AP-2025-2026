@@ -29,10 +29,20 @@ namespace infra::event {
         Input  = 1 << 0,   // 0001
         Window = 1 << 1,   // 0010
         Game   = 1 << 2,   // 0100
+        Level  = 1 << 3,   // 1000
     };
+
 
     inline EventMask operator&(infra::event::EventMask a, infra::event::EventMask b) {
         return static_cast<EventMask>(static_cast<uint32_t>(a) & static_cast<uint32_t>(b));
+    }
+    inline EventMask operator|(EventMask a, EventMask b) {
+        return static_cast<EventMask>(
+            static_cast<uint32_t>(a) | static_cast<uint32_t>(b)
+        );
+    }
+    inline bool has(EventMask value, EventMask flag) {
+        return (value & flag) != EventMask::None;
     }
 
     struct EventConcept {

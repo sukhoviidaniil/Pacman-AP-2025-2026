@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          C_Menu.h
+ * File:          MenuView.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-25
+ * Created:       2025-12-27
  * Modified:      []
  *
  * Description:   []
@@ -15,21 +15,25 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_C_MENU_H
-#define PACMAN_C_MENU_H
-#include "Controller.h"
+#ifndef PACMAN_MENUVIEW_H
+#define PACMAN_MENUVIEW_H
+
 #include "infra/menu/Menu.h"
+namespace infra::menu {
 
-namespace control {
-    class C_Menu : public Controller {
+    class MenuView {
     public:
-        explicit C_Menu(std::shared_ptr<infra::menu::Menu> menu);
+        explicit MenuView(const Menu& menu)
+            : menu_(menu) {}
 
-        void push_current_button_event();
+        [[nodiscard]] const std::string& current_button_name() const {
+            return menu_.get_current_button().name;
+        }
 
     private:
-        std::shared_ptr<infra::menu::Menu> menu_;
+        const Menu& menu_;
     };
+
 }
 
-#endif //PACMAN_C_MENU_H
+#endif //PACMAN_MENUVIEW_H

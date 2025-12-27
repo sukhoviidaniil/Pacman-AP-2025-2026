@@ -21,7 +21,7 @@
 namespace infra::ast {
 
     struct Model_Visitor;
-    struct Application_Visitor;
+    struct Game_Visitor;
 
     struct Node {
         virtual ~Node() = default;
@@ -33,9 +33,9 @@ namespace infra::ast {
 
         }
     };
-    struct Application_Node : Node {
-        ~Application_Node() override = default;
-        virtual void accept(Application_Visitor &v) const {
+    struct Game_Node : Node {
+        ~Game_Node() override = default;
+        virtual void accept(Game_Visitor &v) const {
 
         }
     };

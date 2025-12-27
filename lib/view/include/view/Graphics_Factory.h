@@ -20,7 +20,7 @@
 #include <memory>
 
 #include "View.h"
-#include "infra/ast/Application.h"
+#include "infra/ast/Game.h"
 
 namespace view {
     class Graphics_Factory{
