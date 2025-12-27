@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Rectangle.h
+ * File:          SpriteElement.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-26
+ * Created:       2025-12-27
  * Modified:      []
  *
  * Description:   []
@@ -15,26 +15,20 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_RECTANGLE_H
-#define PACMAN_RECTANGLE_H
-#include "view/presentation/layout_engine/UIElement.h"
-#include "view/presentation/render/RI_Rectangle.h"
-#include "infra/presentation/external/Color.h"
+#ifndef PACMAN_UI_SPRITEELEMENT_H
+#define PACMAN_UI_SPRITEELEMENT_H
+#include "UIElement.h"
+#include "view/presentation/render/RI_Sprite.h"
 
 namespace view::ui {
 
-    class Rectangle : public UIElement {
+    class SpriteElement : public UIElement {
     public:
-        explicit Rectangle(
-            const infra::ui::Color fill,
-            const infra::ui::Color border = {},
-            const int border_w = 0
-        )
-            : fill_color(fill)
-            , border_color(border)
-            , border_width(border_w)
+        explicit SpriteElement(const std::string& sprite, float sprite_width, float sprite_height)
+            : sprite_(sprite), sprite_width_(sprite_width), sprite_height_(sprite_height)
         {}
 
+        // Измеряем размер спрайта
         infra::math::Vector2 measure(const infra::math::Vector2& available) override {
             infra::math::Vector2 size{
                 std::max(0.f, available.x),
@@ -43,13 +37,13 @@ namespace view::ui {
 
             if (width.type != infra::ui::Size::Type::Auto)
                 size.x = resolve(width, available.x);
+            else
+                size.x = sprite_width_;
 
             if (height.type != infra::ui::Size::Type::Auto)
                 size.y = resolve(height, available.y);
-
-            const float bw = float(border_width) * 2.f;
-            size.x += bw;
-            size.y += bw;
+            else
+                size.y = sprite_height_;
 
             size.x = std::clamp(size.x, min_size.x, max_size.x);
             size.y = std::clamp(size.y, min_size.y, max_size.y);
@@ -57,30 +51,28 @@ namespace view::ui {
             return size;
         }
 
-        void append_render_items(RenderFrame& frame, const ViewContext& ctx) const override {
+        void append_render_items(RenderFrame& frame, const ViewContext& /*ctx*/) const override {
             if (!visible) return;
 
-            auto item = std::make_unique<RI_Rectangle>();
+            auto item = std::make_unique<RI_Sprite>();
+            item->sprite = sprite_;
             item->rect = result.rect;
-            item->color = fill_color;
-            item->border_color = border_color;
-            item->border_width = border_width;
-
             frame.constant_items.push_back(std::move(item));
         }
 
-        infra::ui::Color fill_color;
-        infra::ui::Color border_color;
-        int border_width = 0;
-
     private:
         static float resolve(const infra::ui::Size& s, float avail) {
-            if (s.type == infra::ui::Size::Type::Pixel)   return s.value;
-            if (s.type == infra::ui::Size::Type::Percent) return avail * s.value;
-            return avail;
+            switch (s.type) {
+                case infra::ui::Size::Type::Pixel:   return s.value;
+                case infra::ui::Size::Type::Percent: return avail * s.value;
+                default:                             return avail;
+            }
         }
+
+    std::string sprite_;
+    float sprite_width_;
+    float sprite_height_;
     };
 }
 
-
-#endif //PACMAN_RECTANGLE_H
+#endif //PACMAN_UI_SPRITEELEMENT_H

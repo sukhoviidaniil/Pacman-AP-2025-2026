@@ -16,9 +16,9 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "menu/Menu.h"
+#include "infra/menu/Menu.h"
 
-namespace control {
+namespace infra::menu {
     Menu::Menu(const std::vector<MenuButton> &buttons, const NavigationMode mode)
         : nav_mode_(mode), current_index_(0) {
 

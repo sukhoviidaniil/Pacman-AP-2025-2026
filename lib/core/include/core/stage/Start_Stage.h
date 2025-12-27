@@ -22,19 +22,19 @@
 namespace core::stg {
     class Start_Stage : public Stage {
     public:
-        ~Start_Stage();
+        ~Start_Stage() override;
         Start_Stage(
             const std::shared_ptr<infra::event::Event_Bus> &globalBus,
             infra::Const_ScoreBord sb
             );
 
-        void run(float delta);
+        void run(float delta) override;
 
-        view::ui::RenderFrame get_RenderFrame(const infra::math::Vector2 &screen_size, bool redraw) const;
+        [[nodiscard]] view::ui::RenderFrame get_RenderFrame(const infra::math::Vector2 &screen_size, bool redraw) const override;
 
     private:
+        std::shared_ptr<infra::menu::Menu> menu_;
         infra::Const_ScoreBord sb_;
-
     };
 }
 

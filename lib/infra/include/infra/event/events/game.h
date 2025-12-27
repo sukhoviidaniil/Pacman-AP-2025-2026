@@ -27,6 +27,11 @@ namespace infra::event::game {
         Request_StartStage() = default;
     };
 
+    struct Request_NewLevelStage {
+        static constexpr infra::event::EventMask mask = infra::event::EventMask::Game;
+
+        Request_NewLevelStage() = default;
+    };
     struct Request_NextLevelStage {
         static constexpr infra::event::EventMask mask = infra::event::EventMask::Game;
 
@@ -51,13 +56,6 @@ namespace infra::event::game {
         Request_DeathStage() = default;
     };
 
-
-
-    struct ButtonPressed {
-        static constexpr infra::event::EventMask mask = infra::event::EventMask::Game;
-        std::size_t index;
-        explicit ButtonPressed(const std::size_t index) : index(index) {}
-    };
 }
 
 #endif //PACMAN_EVENTS_GAME_H

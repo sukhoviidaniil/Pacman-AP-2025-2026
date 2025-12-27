@@ -39,7 +39,10 @@ namespace view::ui {
          *
          * @param text Text content of the label.
          */
-        explicit Label(std::string text = "") : Text(), text(std::move(text)) {
+        explicit Label(std::string text = "") : text(std::move(text)) {
+        }
+
+        explicit Label(std::string text = "", const int fontSize = 24) : Text(fontSize), text(std::move(text)) {
         }
 
         /**
@@ -69,7 +72,7 @@ namespace view::ui {
         void append_render_items(RenderFrame& frame, const ViewContext& ctx) const override {
             if (!visible) return; // skip invisible elements
 
-            std::unique_ptr<RI_Label> item;
+            std::unique_ptr<RI_Label> item = std::make_unique<RI_Label>();
             item->text = text;
             item->font = font;
             item->color = color;

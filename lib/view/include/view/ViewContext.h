@@ -31,11 +31,13 @@ namespace view {
         const std::optional<std::reference_wrapper<const model::ui::ModelView>> model;
         explicit ViewContext(
             const bool redraw,
+            const infra::menu::MenuView* mn = nullptr,
             const infra::Const_Score* s = nullptr,
             const infra::Const_ScoreBord* sb = nullptr,
             const model::ui::ModelView* m = nullptr
          )
          :  redrawing(redraw),
+            menu(mn ? std::optional(std::cref(*mn)) : std::nullopt),
             score(s ? std::optional(std::cref(*s)) : std::nullopt),
             score_bord(sb ? std::optional(std::cref(*sb)) : std::nullopt),
             model(m ? std::optional(std::cref(*m)) : std::nullopt)

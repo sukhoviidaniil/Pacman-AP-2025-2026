@@ -30,6 +30,9 @@ namespace view::ui {
     public:
         /// @brief Virtual destructor.
         ~Text() override = default;
+        Text() = default;
+        explicit Text(const int fontSize) : fontSize(fontSize){}
+
 
         /**
          * @brief Measures the desired size of the text.

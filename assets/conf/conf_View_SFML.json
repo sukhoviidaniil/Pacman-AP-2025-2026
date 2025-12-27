@@ -7,6 +7,10 @@
     {
       "name" : "Gen",
       "file" : "textures/sprite.png"
+    },
+    {
+      "name" : "Logo",
+      "file" : "textures/logo.png"
     }
   ],
   "Fonts":[
@@ -23,6 +27,14 @@
       "name" : "Warning",
       "recLeft" : 451,
       "recTop" : 454
+    },
+    {
+      "using_texture" : "Logo",
+      "sprits_width": 840,
+      "sprits_height": 259,
+      "name" : "Pacman Logo",
+      "recLeft" : 0,
+      "recTop" : 0
     }
   ],
   "SpriteLists":[

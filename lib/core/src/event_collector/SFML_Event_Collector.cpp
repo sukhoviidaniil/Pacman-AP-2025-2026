@@ -31,6 +31,26 @@ namespace core {
         }
     }
 
+    static infra::event::input::Key to_key(sf::Keyboard::Key k) {
+        using K = sf::Keyboard::Key;
+        using I = infra::event::input::Key;
+
+        switch (k) {
+            case K::W:      return I::W;
+            case K::A:      return I::A;
+            case K::S:      return I::S;
+            case K::D:      return I::D;
+            case K::Escape: return I::Escape;
+            case K::Enter:  return I::Enter;
+            case K::Space:  return I::Space;
+            case K::Left:   return I::Left;
+            case K::Right:  return I::Right;
+            case K::Up:     return I::Up;
+            case K::Down:   return I::Down;
+            default:        return I::Unknown;
+        }
+    }
+
     void SFML_Event_Collector::dispatch(const sf::Event &e)  {
         using namespace infra::event;
         switch (e.type) {
@@ -58,7 +78,7 @@ namespace core {
                 // ---------- Keyboard ----------
             case sf::Event::KeyPressed:
                 event_store_.push(input::KeyPressed{
-                    static_cast<input::Key>(e.key.code),
+                    to_key(e.key.code),
                     e.key.alt,
                     e.key.control,
                     e.key.shift,

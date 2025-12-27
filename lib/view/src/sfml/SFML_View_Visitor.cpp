@@ -55,7 +55,7 @@ namespace view {
 
         const sf::IntRect rect(recLeft, recTop, sprite_width, sprite_height);
         sf::Sprite sprite(texture, rect);
-        sprite.setOrigin(static_cast<float>(rect.width) / 2.f, static_cast<float>(rect.height) / 2.f);
+        //sprite.setOrigin(static_cast<float>(rect.width) / 2.f, static_cast<float>(rect.height) / 2.f);
 
         sprites_[name] = std::move(sprite);
     }

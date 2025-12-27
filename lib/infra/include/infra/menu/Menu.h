@@ -29,7 +29,7 @@ namespace infra::menu {
             Loop,
             NoLoop
         };
-
+        Menu();
         explicit Menu(const std::vector<MenuButton>& buttons, NavigationMode mode = NavigationMode::Loop);
 
         [[nodiscard]] std::size_t current_index() const;

@@ -72,7 +72,7 @@ namespace core::stg {
         //6 Collecting RenderItems
         view::ui::RenderFrame frame;
         const model::ui::ModelView mv(*model_);
-        const view::ViewContext ctx(redraw, &score_, nullptr, &mv);
+        const view::ViewContext ctx(redraw, nullptr, &score_, nullptr, &mv);
         ui_root_->append_render_items(frame, ctx);
         return frame;
     }

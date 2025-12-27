@@ -1,0 +1,35 @@
+{
+  "bord_size": 6,
+  "scores": [
+    {
+      "lives_remaining": 3,
+      "level": 12,
+      "points_score": 15400
+    },
+    {
+      "lives_remaining": 2,
+      "level": 11,
+      "points_score": 13850
+    },
+    {
+      "lives_remaining": 1,
+      "level": 10,
+      "points_score": 12100
+    },
+    {
+      "lives_remaining": 4,
+      "level": 9,
+      "points_score": 9800
+    },
+    {
+      "lives_remaining": 2,
+      "level": 8,
+      "points_score": 8600
+    },
+    {
+      "lives_remaining": 0,
+      "level": 7,
+      "points_score": 7400
+    }
+  ]
+}

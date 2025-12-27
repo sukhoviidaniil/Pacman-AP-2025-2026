@@ -54,7 +54,7 @@ namespace control {
 
                     case Key::Escape:
                         // Add a "RequestPause" event to the controller's local event_store_
-                        event_store_.push(infra::event::game::RequestPause());
+                        event_store_.push(infra::event::game::Request_EnterPause());
                         break;
                     default:
                         break; // ignore other keys

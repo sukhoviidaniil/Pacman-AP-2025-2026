@@ -35,7 +35,7 @@ namespace view::ui {
 
             float line_height = static_cast<float>(fontSize) * 1.2f;
             float max_height = result.rect.height;
-            std::size_t max_lines = static_cast<std::size_t>(max_height / line_height);
+            auto max_lines = static_cast<std::size_t>(max_height / line_height);
 
             infra::ui::Rect line_rect = result.rect;
             line_rect.height = line_height;
@@ -45,7 +45,7 @@ namespace view::ui {
             for (std::size_t i = 0; i < lines; ++i) {
                 const auto& s = scores[i];
 
-                std::unique_ptr<RI_Label> item;
+                std::unique_ptr<RI_Label> item = std::make_unique<RI_Label>();
                 item->text =
                     std::to_string(i + 1) + ". " +
                     std::to_string(s.points_score) +

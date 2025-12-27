@@ -110,7 +110,7 @@ namespace infra::io {
         std::string bors = "ScoreBord";
         if (data.contains(bors)) {
             if (data[bors].is_string()) {
-                auto file = get_checked<std::string>(bors);
+                auto file = get_checked<std::string>(data[bors]);
                 app.score_bord = fr->read_ScoreBord(file);
 
             }

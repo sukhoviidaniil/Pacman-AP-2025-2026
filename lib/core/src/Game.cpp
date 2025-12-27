@@ -21,6 +21,7 @@
 #include "core/View_Collector_Factory.h"
 #include "../../infra/include/infra/internal/Delta_Timer.h"
 #include "infra/diagnostics/Logger.h"
+#include "infra/event/events/game.h"
 #include "infra/event/events/window.hpp"
 
 namespace core {
@@ -34,14 +35,19 @@ namespace core {
     {
 
         set_global(eventbus);
-        score_ = std::make_shared<infra::Score>();
-        stage_manager_.set_stage_factory(std::make_unique<core::Stage_Factory>(g_eventbus_, score_, a.models));
+        stage_manager_.set_stage_factory(std::make_unique<core::Stage_Factory>(a.score_setup, a.score_bord, a.models, g_eventbus_));
+        stage_manager_.track_global(g_eventbus_);
 
         // Make View and Event_Collector
         core::View_Collector_Factory vcf;
         view_ = vcf.make_View(a.view, path);
         view_->track_global(g_eventbus_);
+
         event_collector_ = vcf.make_Event_Collector(a.event_collector);
+        std::unique_ptr<infra::event::EventConcept> ev = std::make_unique<
+            infra::event::EventInstance<infra::event::game::Request_StartStage>
+        >(infra::event::game::Request_StartStage());
+        g_eventbus_->emit(*ev);
     }
 
     void Game::set_global(const std::shared_ptr<infra::event::Event_Bus>& eventbus) {
@@ -71,7 +77,7 @@ namespace core {
         infra::Delta_Timer dt;
         while (running_) {
             float delta = dt.tick();
-            const std::shared_ptr<Stage> current_stage = stage_manager_.get_top();
+            const std::shared_ptr<stg::Stage> current_stage = stage_manager_.get_top();
             current_stage->run(delta);
             infra::math::Vector2 screen_size = view_->screen_size();
             view::ui::RenderFrame v  = current_stage->get_RenderFrame(screen_size, true);

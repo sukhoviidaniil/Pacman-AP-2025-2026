@@ -65,8 +65,30 @@ namespace core  {
     }
 
     void Stage_Manager::track_global(const std::shared_ptr<infra::event::Event_Bus> &bus) {
-
-
+        track(
+            bus->subscribe<infra::event::game::Request_StartStage>(
+                [this](const infra::event::game::Request_StartStage&) {
+                    current_stages_ = {};
+                    push_stage(stage_factory_->make_Start_Stage());
+                }
+            )
+        );
+        track(
+            bus->subscribe<infra::event::game::Request_NewLevelStage>(
+                [this](const infra::event::game::Request_NewLevelStage&) {
+                    pop_stage();
+                    push_stage(stage_factory_->make_new_Game_Stage());
+                }
+            )
+        );
+        track(
+            bus->subscribe<infra::event::game::Request_NextLevelStage>(
+                [this](const infra::event::game::Request_NextLevelStage&) {
+                    pop_stage();
+                    push_stage(stage_factory_->make_next_Game_Stage());
+                }
+            )
+        );
         track(
             bus->subscribe<infra::event::game::Request_EnterPause>(
                 [this](const infra::event::game::Request_EnterPause&) {
@@ -81,7 +103,14 @@ namespace core  {
                 }
             )
         );
-        // TODO
+        track(
+            bus->subscribe<infra::event::game::Request_DeathStage>(
+                [this](const infra::event::game::Request_DeathStage&) {
+                    pop_stage();
+                    push_stage(stage_factory_->make_death_stage());
+                }
+            )
+        );
     }
 
     void Stage_Manager::pop_stage() {
@@ -89,11 +118,11 @@ namespace core  {
         current_stages_.pop();
     }
 
-    void Stage_Manager::push_stage(const std::shared_ptr<core::Stage> &stage) {
+    void Stage_Manager::push_stage(const std::shared_ptr<core::stg::Stage> &stage) {
         current_stages_.push(stage);
     }
 
-    std::shared_ptr<core::Stage> Stage_Manager::get_top() {
+    std::shared_ptr<core::stg::Stage> Stage_Manager::get_top() {
         if (current_stages_.empty()) return nullptr;
         return current_stages_.top();
     }

@@ -34,14 +34,14 @@ namespace core {
 
         void track_global(const std::shared_ptr<infra::event::Event_Bus>& bus);
 
-        std::shared_ptr<core::Stage> get_top();
+        std::shared_ptr<core::stg::Stage> get_top();
     protected:
         void pop_stage();
-        void push_stage(const std::shared_ptr<core::Stage> &stage);
+        void push_stage(const std::shared_ptr<core::stg::Stage> &stage);
     private:
 
         std::unique_ptr<core::Stage_Factory> stage_factory_ = nullptr;
-        std::stack<std::shared_ptr<core::Stage>> current_stages_;
+        std::stack<std::shared_ptr<core::stg::Stage>> current_stages_;
     };
 }
 
