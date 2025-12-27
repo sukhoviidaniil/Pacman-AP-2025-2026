@@ -18,6 +18,7 @@
 
 #include "core/stage/Level_Stage.h"
 
+#include "control/C_Game.h"
 #include "view/presentation/layout_engine/LivesLabel.h"
 #include "view/presentation/layout_engine/Map.h"
 #include "view/presentation/layout_engine/ScoreLabel.h"
@@ -36,7 +37,7 @@ namespace core::stg {
         //1 Create a root container
         ui_root_ = std::make_unique<view::ui::VBox>();
         const auto top   = std::make_shared<view::ui::UIElement>();
-        const auto middle = std::make_shared<view::ui::UIElement>();
+        const auto middle = std::make_shared<view::ui::Map>();
         const auto bottom  = std::make_shared<view::ui::HBox>();
 
         // 2 Add three columns
@@ -48,13 +49,12 @@ namespace core::stg {
         ui_root_->add(bottom);
 
         //3 Create a UIElement for the model
-        const auto model_view_ui = std::make_shared<view::ui::Map>();
-        middle->add(model_view_ui);
         const auto score_view = std::make_shared<view::ui::ScoreLabel>();
         const auto lives_view = std::make_shared<view::ui::LivesLabel>();
-
         bottom->add(score_view);
         bottom->add(lives_view);
+
+        controller = std::make_unique<control::C_Game>(model_->get_pacman());
     }
 
     void Level_Stage::run(const float tick) {

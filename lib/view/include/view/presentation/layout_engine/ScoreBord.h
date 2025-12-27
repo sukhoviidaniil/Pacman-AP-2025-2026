@@ -24,7 +24,11 @@
 namespace view::ui {
     class ScoreBord : public Text {
         public:
+        ScoreBord() = default;
 
+        explicit ScoreBord(const int fontSize) : Text(fontSize) {
+
+        }
 
         void append_render_items(RenderFrame& frame, const ViewContext& ctx) const override {
             if (!visible) return;

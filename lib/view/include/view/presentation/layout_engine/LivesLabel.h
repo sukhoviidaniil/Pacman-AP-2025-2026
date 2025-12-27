@@ -35,7 +35,7 @@ namespace view::ui {
                 render_size = static_cast<int>(result.rect.height);
             }
 
-            std::unique_ptr<RI_Label> item;
+            std::unique_ptr<RI_Label> item = std::make_unique<RI_Label>();
             item->text  = "Lives: " + std::to_string(score.lives_remaining());
             item->font  = font;
             item->color = color;

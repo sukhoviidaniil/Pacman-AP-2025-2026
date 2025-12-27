@@ -74,10 +74,12 @@ namespace core::stg {
 
         const auto m_left = std::make_shared<view::ui::UIElement>();
         const auto m_middle = std::make_shared<view::ui::VBox>();
-        const auto m_right = std::make_shared<view::ui::ScoreBord>();
-        m_left->flex   = 0.1f;
-        m_middle->flex = 0.5f;
-        m_right->flex  = 0.4f;
+        const auto m_right = std::make_shared<view::ui::ScoreBord>(32);
+        m_left->flex   = 1.f;
+        m_middle->flex = 3.f;
+        m_middle->margin = {100,100};
+        m_middle->padding = {100,100};
+        m_right->flex  = 4.f;
         middle->add(m_left);
         middle->add(m_middle);
         middle->add(m_right);

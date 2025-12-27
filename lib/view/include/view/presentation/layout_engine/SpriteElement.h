@@ -17,6 +17,8 @@
 ***************************************************************/
 #ifndef PACMAN_UI_SPRITEELEMENT_H
 #define PACMAN_UI_SPRITEELEMENT_H
+#include <utility>
+
 #include "UIElement.h"
 #include "view/presentation/render/RI_Sprite.h"
 
@@ -24,26 +26,21 @@ namespace view::ui {
 
     class SpriteElement : public UIElement {
     public:
-        explicit SpriteElement(const std::string& sprite, float sprite_width, float sprite_height)
-            : sprite_(sprite), sprite_width_(sprite_width), sprite_height_(sprite_height)
-        {}
+        explicit SpriteElement(std::string  sprite, float sprite_width, float sprite_height)
+            : sprite_(std::move(sprite)) {
+            width.value = sprite_width;
+            height.value = sprite_height;
+        }
 
-        // Измеряем размер спрайта
+
         infra::math::Vector2 measure(const infra::math::Vector2& available) override {
             infra::math::Vector2 size{
                 std::max(0.f, available.x),
                 std::max(0.f, available.y)
             };
 
-            if (width.type != infra::ui::Size::Type::Auto)
-                size.x = resolve(width, available.x);
-            else
-                size.x = sprite_width_;
-
-            if (height.type != infra::ui::Size::Type::Auto)
-                size.y = resolve(height, available.y);
-            else
-                size.y = sprite_height_;
+            size.x = resolve(width, available.x);
+            size.y = resolve(height, available.y);
 
             size.x = std::clamp(size.x, min_size.x, max_size.x);
             size.y = std::clamp(size.y, min_size.y, max_size.y);
@@ -70,8 +67,6 @@ namespace view::ui {
         }
 
     std::string sprite_;
-    float sprite_width_;
-    float sprite_height_;
     };
 }
 

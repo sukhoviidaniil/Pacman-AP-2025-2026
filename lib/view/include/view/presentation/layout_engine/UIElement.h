@@ -62,7 +62,21 @@ namespace view::ui {
          * @return Desired size of the element.
          */
         virtual infra::math::Vector2 measure(const infra::math::Vector2& available) {
-            return resolve_size(available);
+            infra::math::Vector2 total_size {0, 0};
+
+            for (auto& child : children) {
+                auto child_size = child->measure(available);
+                total_size.y += child_size.y + child->margin.y;
+                total_size.x = std::max(total_size.x, child_size.x + child->margin.x);
+            }
+
+            total_size.x += padding.x * 2;
+            total_size.y += padding.y * 2;
+
+            total_size.x = std::clamp(total_size.x, min_size.x, max_size.x);
+            total_size.y = std::clamp(total_size.y, min_size.y, max_size.y);
+
+            return total_size;
         }
 
         /**
@@ -75,8 +89,23 @@ namespace view::ui {
          */
         virtual void layout(const infra::ui::Rect r) {
             result.rect = r;
-            for (auto& c : children)
-                c->layout(r);
+
+            float y_offset = r.y + padding.y;
+
+            for (auto& child : children) {
+                infra::math::Vector2 child_size = child->resolve_size({r.width - padding.x*2, r.height - padding.y*2});
+
+                infra::ui::Rect child_rect {
+                    r.x + padding.x + child->margin.x,
+                    y_offset + child->margin.y,
+                    child_size.x,
+                    child_size.y
+                };
+
+                child->layout(child_rect);
+
+                y_offset += child_size.y + child->margin.y;
+            }
         }
 
         virtual void append_render_items(RenderFrame& frame, const ViewContext& ctx) const {

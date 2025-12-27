@@ -50,7 +50,7 @@ namespace core {
     }
 
     std::shared_ptr<core::stg::Stage> Stage_Factory::make_new_Game_Stage() {
-        if (current_model_ == nullptr) {
+        if (current_model_ != nullptr) {
             const std::string err = "";
             LOG(err);
             return make_continuing_Game_Stage();
@@ -95,8 +95,7 @@ namespace core {
     }
 
     void Stage_Factory::make_new_score() {
-
-
+        score_ = std::make_shared<infra::Score>(score_setup_);
     }
 
 

@@ -17,7 +17,22 @@
 ***************************************************************/
 
 #include "view/presentation/layout_engine/Map.h"
+#include "view/presentation/render/RI_ComplexSprite.h"
+#include "view/presentation/render/RI_Rectangle.h"
 namespace view::ui {
+
+    void Map::layout(const infra::ui::Rect r){
+        result.rect = r;  // completely fill in the parent
+        for (auto& child : children) {
+            // if there are nested ones, we also take up all available space
+            child->layout({r.x + padding.x, r.y + padding.y,
+                           r.width - padding.x*2, r.height - padding.y*2});
+        }
+    }
+
+    infra::math::Vector2 Map::measure(const infra::math::Vector2& available){
+        return available;
+    }
 
     infra::math::Point2 world_to_ui(const infra::math::Point2& top_left, const infra::math::Vector2& offset, const float scale) {
         return {
@@ -26,9 +41,6 @@ namespace view::ui {
         };
     }
 
-    bool inside_world_bounds () {
-
-    }
 
     void Map::append_render_items(RenderFrame &frame, const ViewContext &ctx) const {
 
@@ -108,9 +120,5 @@ namespace view::ui {
                 }
             }
         }
-
     }
-
-
-
 }

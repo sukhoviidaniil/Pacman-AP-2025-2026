@@ -18,12 +18,14 @@
 #ifndef PACMAN_MAP_H
 #define PACMAN_MAP_H
 #include "view/presentation/layout_engine/UIElement.h"
-#include "view/presentation/render/RI_ComplexSprite.h"
-#include "view/presentation/render/RI_Rectangle.h"
+
 
 namespace view::ui {
     class Map : public UIElement {
     public:
+        void layout(infra::ui::Rect r) override;
+
+        infra::math::Vector2 measure(const infra::math::Vector2 &available) override;
 
         void append_render_items(RenderFrame& frame, const ViewContext& ctx) const override;
 

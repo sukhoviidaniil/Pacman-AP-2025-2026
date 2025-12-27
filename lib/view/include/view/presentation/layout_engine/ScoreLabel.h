@@ -18,6 +18,8 @@
 #ifndef PACMAN_SCORELABEL_H
 #define PACMAN_SCORELABEL_H
 
+#include <iostream>
+
 #include "view/presentation/render/RI_Label.h"
 #include "view/presentation/layout_engine/Text.h"
 
@@ -35,7 +37,7 @@ namespace view::ui {
                 render_size = static_cast<int>(result.rect.height);
             }
 
-            std::unique_ptr<RI_Label> item;
+            std::unique_ptr<RI_Label> item = std::make_unique<RI_Label>();
             item->text  = "Score: " + std::to_string(score.points_score());
             item->font  = font;
             item->color = color;
