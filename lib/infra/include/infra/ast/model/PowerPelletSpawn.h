@@ -21,6 +21,7 @@
 
 namespace infra::ast {
     struct PowerPelletSpawn : Entity_Node {
+        std::string name = "PowerPelletSpawn";
         float buff_duration = 0.f;
     };
 }

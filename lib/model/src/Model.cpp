@@ -26,8 +26,8 @@ namespace model {
     }
 
 
-    void Model::run(const float delta) {
-
+    void Model::run(const float delta) const {
+        pacman_->act(delta, wcm_);
     }
 
     std::shared_ptr<entity::Pacman> Model::get_pacman() const {

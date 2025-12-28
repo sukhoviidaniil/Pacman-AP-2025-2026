@@ -21,7 +21,7 @@
 
 namespace infra::ast {
     struct Entity_Node : Model_Node {
-        float size = 39;
+        float size = 40;
     };
 }
 

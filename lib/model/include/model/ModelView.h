@@ -30,13 +30,24 @@ namespace model::ui {
         [[nodiscard]] const std::vector<std::shared_ptr<entity::Coin>>& coins() const {
             return model_.coins_;
         }
+        [[nodiscard]] const std::vector<std::shared_ptr<entity::PowerPellet>>& power_pellets() const {
+            return model_.power_pellets_;
+        }
 
         [[nodiscard]] const std::vector<std::shared_ptr<entity::Ghost>>& ghosts() const {
             return model_.ghosts_;
         }
 
+        [[nodiscard]] const infra::Status& ghosts_status() const {
+            return model_.ghosts_status;
+        }
+
         [[nodiscard]] const std::shared_ptr<entity::Pacman>& pacman() const {
             return model_.pacman_;
+        }
+
+        [[nodiscard]] const infra::Status& pacman_status() const {
+            return model_.pacman_status;
         }
 
         [[nodiscard]] const Tile_Grid& grid() const {

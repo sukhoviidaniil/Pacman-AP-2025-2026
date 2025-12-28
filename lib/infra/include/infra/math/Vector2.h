@@ -56,6 +56,7 @@ namespace infra::math {
 
         // ========== Vector Operations ==========
         void normalize();
+        Vector2 normalized() const;
         [[nodiscard]] float length() const;
         [[nodiscard]] float dot(const Vector2& other) const;
         [[nodiscard]] float cross(const Vector2& other) const;

@@ -22,11 +22,12 @@
 #include "infra/ast/Node.h"
 #include "infra/ast/view/internal/Sprite_Direction.h"
 #include "infra/ast/view/internal/Sprite_Rec.h"
+#include "infra/ast/view/sprites/Animation.h"
 
 namespace infra::ast {
     struct SpriteStatus : Node{
         std::vector<Sprite_Direction> sprite_directions;
-        unsigned int sprites_per_direction = 1;
+        Animation animation;
         Sprite_Rec recLeft;
         Sprite_Rec recTop;
     };

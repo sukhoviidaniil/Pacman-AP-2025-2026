@@ -217,9 +217,16 @@ namespace infra::ast {
         s.increase = io::get_checked<int>(j, "increase", s.increase);
     }
 
+    inline void from_json(const nlohmann::json& j, Animation& s) {
+        s.size = io::get_checked<size_t>(j, "size", s.size);
+        s.frame_duration = io::get_checked<float>(j, "frame_duration", s.frame_duration);
+        s.recLeft_increase = io::get_checked<int>(j, "recLeft_increase", s.recLeft_increase);
+        s.recTop_increase = io::get_checked<int>(j, "recTop_increase", s.recTop_increase);
+    }
+
     inline void from_json(const nlohmann::json& j, SpriteStatus& s) {
         s.sprite_directions = io::get_checked<std::vector<Sprite_Direction>>(j, "Directions", s.sprite_directions);
-        s.sprites_per_direction = io::get_checked<unsigned int>(j, "NSprites_per_direction", s.sprites_per_direction);
+        s.animation = io::get_checked<Animation>(j, "Animation", s.animation);
         s.recLeft = io::get_checked<Sprite_Rec>(j, "recLeft", s.recLeft);
         s.recTop = io::get_checked<Sprite_Rec>(j, "recTop", s.recLeft);
     }
@@ -251,25 +258,26 @@ namespace infra::ast {
         s.type = io::get_checked<std::string>(j,"type", s.type);
         s.window_width = io::get_checked<unsigned int>(j, "window_width", s.window_width );
         s.window_height = io::get_checked<unsigned int>(j, "window_height", s.window_height);
+        s.fps = io::get_checked<int>(j,"fps", s.fps);
         s.view_directory = io::get_checked<std::string>(j, "view_directory", s.view_directory);
         s.textures = io::get_checked<std::vector<Texture>>(j, "Textures");
         s.fonts = io::get_checked<std::vector<Font>>(j, "Fonts");
     }
 
     inline Tile parse_tile(const std::string& s) {
-        if (s == "Wall")  return Tile::Wall;
-        if (s == "PacmanSpawn")  return Tile::PacmanSpawn;
-        if (s == "GhostSpawn")  return Tile::GhostSpawn;
-        if (s == "PowerPelletSpawn")  return Tile::PowerPelletSpawn;
-        if (s == "CoinSpawn")  return Tile::CoinSpawn;
-        if (s == "Empty") return Tile::Empty;
+        if (s == "W")  return Tile::Wall;
+        if (s == "M")  return Tile::PacmanSpawn;
+        if (s == "G")  return Tile::GhostSpawn;
+        if (s == "P")  return Tile::PowerPelletSpawn;
+        if (s == "C")  return Tile::CoinSpawn;
+        if (s == "F")  return Tile::Empty;
         throw std::runtime_error("Unknown tile");
     }
 
     inline void from_json(const nlohmann::json& json, Grid& s) {
         // rows x columns
-        s.rows = io::get_checked<unsigned int>(json, "rows", s.rows);
-        s.columns = io::get_checked<unsigned int>(json, "columns", s.columns);
+        s.rows = io::get_checked<size_t>(json, "rows", s.rows);
+        s.columns = io::get_checked<size_t>(json, "columns", s.columns);
         s.tile_size = io::get_checked<float>(json, "tile_size", s.tile_size);
         const auto grid = io::get_checked<std::vector<std::vector<std::string>>>(json, "grid");
         if (grid.size() != s.rows) {
@@ -294,11 +302,20 @@ namespace infra::ast {
         s.size = io::get_checked<float>(json, "size", s.size);
         s.speed = io::get_checked<float>(json,"speed",  s.size);
     }
+    inline void from_json(const nlohmann::json& json, CoinSpawn& s) {
+        s.size = io::get_checked<float>(json, "size", s.size);
+    }
+    inline void from_json(const nlohmann::json& json, PowerPelletSpawn& s) {\
+        s.name = io::get_checked<std::string>(json, "name", s.name);
+        s.buff_duration = io::get_checked<float>(json, "buff_duration", s.buff_duration);
+        s.size = io::get_checked<float>(json, "size", s.size);
+    }
 
     inline void from_json(const nlohmann::json& j, Model& s) {
         s.grid = io::get_checked<Grid>(j, "Grid", s.grid);
         s.pacman_spawn = io::get_checked<PacmanSpawn>(j, "PacmanSpawn", s.pacman_spawn);
-
+        s.coin_spawn = io::get_checked<CoinSpawn>(j, "CoinSpawn", s.coin_spawn);
+        s.power_pellet_spawn = io::get_checked<PowerPelletSpawn>(j, "PowerPelletSpawn", s.power_pellet_spawn);
     }
 }
 

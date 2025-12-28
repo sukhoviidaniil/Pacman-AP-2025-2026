@@ -19,6 +19,7 @@
 #include "model/Model.h"
 #include "model/collision/HitBox_Rectangle.h"
 #include "model/collision/Separating_Axis_Theorem.h"
+#include "model/entity/PowerPellet.h"
 
 namespace model {
 
@@ -28,15 +29,17 @@ namespace model {
         wcm_ = collision::World_Collision_Manager(std::move(sat), grid_);
 
         const std::vector<std::vector<infra::ast::Tile>>& s_grid = m.grid.grid;
-        const unsigned int rows = m.grid.rows;
-        const unsigned int columns = m.grid.columns;
+        const size_t rows = m.grid.rows;
+        const size_t columns = m.grid.columns;
 
-        for (unsigned int y = 0; y < rows; ++y) {
-            for (unsigned int x = 0; x < columns; ++x) {
+        for (size_t y = 0; y < rows; ++y) {
+            for (size_t x = 0; x < columns; ++x) {
                 const infra::ast::Tile& in_cell = s_grid[y][x];
-                std::shared_ptr<const entity::Tile> tile = grid_->get_tile(y, x);
-                if (tile == nullptr) continue;
-                infra::math::Point2 position = tile->position();
+                std::optional<infra::math::Point2> center = grid_->get_center(Tile_Grid::TilePos(y,x));
+                if (!center.has_value()) {
+                    continue;
+                }
+                infra::math::Point2 position = center.value();
                 process_tile(m, level, in_cell, position);
             }
         }
@@ -51,15 +54,17 @@ namespace model {
         wcm_ = collision::World_Collision_Manager(std::move(sat), grid_);
 
         const std::vector<std::vector<infra::ast::Tile>>& s_grid = m.grid.grid;
-        const unsigned int rows = m.grid.rows;
-        const unsigned int columns = m.grid.columns;
+        const size_t rows = m.grid.rows;
+        const size_t columns = m.grid.columns;
 
-        for (unsigned int y = 0; y < rows; ++y) {
-            for (unsigned int x = 0; x < columns; ++x) {
+        for (size_t y = 0; y < rows; ++y) {
+            for (size_t x = 0; x < columns; ++x) {
                 const infra::ast::Tile& in_cell = s_grid[y][x];
-                std::shared_ptr<const entity::Tile> tile = grid_->get_tile(y, x);
-                if (tile == nullptr) continue;
-                infra::math::Point2 position = tile->position();
+                std::optional<infra::math::Point2> center = grid_->get_center(Tile_Grid::TilePos(y,x));
+                if (!center.has_value()) {
+                    continue;
+                }
+                infra::math::Point2 position = center.value();
                 process_tile_without_coins(m, level, in_cell, position);
             }
         }
@@ -75,10 +80,26 @@ namespace model {
     ) {
         switch (in_cell) {
             case infra::ast::Tile::PacmanSpawn: {
-                float size = m.pacman_spawn.size;
+                float size = m.grid.tile_size;
                 float speed = m.pacman_spawn.speed;
                 auto h = std::make_unique<collision::HitBox_Rectangle>(position, size, size, 0);
-                pacman_ = std::make_shared<entity::Pacman>(position, std::move(h), speed);
+                pacman_ = std::make_shared<entity::Pacman>(size, position, std::move(h), speed);
+                return true;
+            }
+            case infra::ast::Tile::CoinSpawn: {
+                float size = m.coin_spawn.size;
+                auto h = std::make_unique<collision::HitBox_Rectangle>(position, size, size, 0);
+                coins_.push_back(std::make_shared<entity::Coin>(size, position, std::move(h)));
+                return true;
+            }
+            case infra::ast::Tile::PowerPelletSpawn: {
+                std::string name = m.power_pellet_spawn.name;
+                float size = m.power_pellet_spawn.size;
+                float buff_duration = m.power_pellet_spawn.buff_duration;
+                auto h = std::make_unique<collision::HitBox_Rectangle>(position, size, size, 0);
+                power_pellets_.push_back(
+                    std::make_shared<entity::PowerPellet>(name, size, position, std::move(h), buff_duration)
+                    );
                 return true;
             }
             default:

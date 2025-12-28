@@ -22,6 +22,8 @@
 namespace model::entity {
     class Coin : public Entity{
     public:
+
+        Coin(float size, const infra::math::Point2 &position, std::unique_ptr<collision::HitBox> hitbox);
         ~Coin() override;
     };
 }

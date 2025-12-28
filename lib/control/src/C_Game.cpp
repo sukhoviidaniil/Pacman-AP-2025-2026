@@ -18,6 +18,8 @@
 
 #include "control/C_Game.h"
 
+#include <iostream>
+
 #include "infra/event/events/game.h"
 #include "infra/event/events/input_Keyboard.h"
 
@@ -34,21 +36,25 @@ namespace control {
                 switch (e.key) {
                     case Key::W:
                     case Key::Up:
+                        std::cout << "UP" << std::endl;
                         pacman_->to_up();
                         break;
 
                     case Key::A:
                     case Key::Left:
+                        std::cout << "LEFT" << std::endl;
                         pacman_->to_left();
                         break;
 
                     case Key::S:
                     case Key::Down:
+                        std::cout << "DOWN" << std::endl;
                         pacman_->to_down();
                         break;
 
                     case Key::D:
                     case Key::Right:
+                        std::cout << "Right" << std::endl;
                         pacman_->to_right();
                         break;
 

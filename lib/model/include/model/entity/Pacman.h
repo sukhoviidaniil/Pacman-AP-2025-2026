@@ -24,11 +24,8 @@ namespace model::entity {
     public:
         ~Pacman() override;
 
-        Pacman(
-            const infra::math::Point2 &position,
-            std::unique_ptr<collision::HitBox> hitbox,
-            float speed
-            );
+        Pacman(float size, const infra::math::Point2 &position, std::unique_ptr<collision::HitBox> hitbox, float speed);
+        
     };
 }
 

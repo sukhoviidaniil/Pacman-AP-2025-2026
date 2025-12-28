@@ -36,21 +36,25 @@ namespace core::stg {
 
         //1 Create a root container
         ui_root_ = std::make_unique<view::ui::VBox>();
-        const auto top   = std::make_shared<view::ui::UIElement>();
+
         const auto middle = std::make_shared<view::ui::Map>();
         const auto bottom  = std::make_shared<view::ui::HBox>();
 
         // 2 Add three columns
-        top->flex   = 1.f;
+
         middle->flex = 10.f;
         bottom->flex  = 1.f;
-        ui_root_->add(top);
+        bottom->align = infra::ui::Align::Center;
         ui_root_->add(middle);
         ui_root_->add(bottom);
 
         //3 Create a UIElement for the model
         const auto score_view = std::make_shared<view::ui::ScoreLabel>();
         const auto lives_view = std::make_shared<view::ui::LivesLabel>();
+        score_view->flex = 1.f;
+        score_view->fontSize = 24;
+        lives_view->flex  = 1.f;
+        lives_view->fontSize = 24;
         bottom->add(score_view);
         bottom->add(lives_view);
 

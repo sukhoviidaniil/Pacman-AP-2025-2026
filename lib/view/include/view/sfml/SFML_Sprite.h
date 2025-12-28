@@ -45,33 +45,7 @@ namespace view {
         }
 
     };
-    struct  SFML_Animation : ISFML_Sprite {
-        int frames_size_ = 1;
-        float frame_duration_ = 0.0f;
-        float elapsed_ = 0.f;
-        std::vector<
-            sf::Sprite
-        > animation_; // 1 element if Animation is of
 
-        SFML_Animation();
-
-        void elapsed(const float delta) override{
-            elapsed_+=delta;
-        }
-
-        [[nodiscard]] size_t index() const {
-            return static_cast<size_t>(static_cast<int>(elapsed_ / frame_duration_) % frames_size_);
-        }
-
-        [[nodiscard]] sf::Sprite &sprite() override {
-            return animation_[index()];
-
-        }
-
-        [[nodiscard]] const sf::Sprite &sprite() const override {
-            return animation_[index()];
-        }
-    };
 
 }
 

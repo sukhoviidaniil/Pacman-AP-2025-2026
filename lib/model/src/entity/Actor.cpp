@@ -20,21 +20,26 @@
 #include "infra/math/to_Vector2.h"
 #include "model/entity/Actor.h"
 
+#include <iostream>
+
+#include "infra/diagnostics/Logger.h"
+
 namespace model::entity{
     Actor::~Actor() = default;
 
     Actor::Actor(
-        const std::string &name, const infra::math::Point2 &position,
+        const std::string &name, const float size, const infra::math::Point2 &position,
         std::unique_ptr<collision::HitBox> hitbox, const infra::math::Direction &current_direction, float speed
         )
-        : Entity(name, position, std::move(hitbox)), current_direction_(current_direction), speed_(speed){
+        : Entity(name, size, position, std::move(hitbox)), current_direction_(current_direction), speed_(speed){
         next_direction_ = current_direction_;
     }
-
 
     infra::math::Direction Actor::get_direction() const {
         return current_direction_;
     }
+
+
 
     void Actor::set_direction(const infra::math::Direction &direction) {
         next_direction_ = direction;
@@ -56,64 +61,71 @@ namespace model::entity{
         set_direction(infra::math::Direction::Down);
     }
 
+
+
+
     void Actor::move(
         const float deltaTime,
-        const std::shared_ptr<collision::World_Collision_Manager> &collision_control
+        const collision::World_Collision_Manager &collision_control
         ) {
 
-        const std::shared_ptr<const Tile_Grid> grid = collision_control->get_grid();
+        if (speed_ <= 0.f) return;
 
-        if (speed_ == 0.0f) return;
-
+        const auto grid = collision_control.get_grid();
         float remaining_time = deltaTime;
 
         while (remaining_time > 0.0f) {
-            infra::math::Vector2 direction = to_vec(current_direction_);
-            // 1. Calculate the next tile coordinate on the path current_dir
-            std::shared_ptr<const Tile> t = grid->get_next_tile(position_, direction);
-            if (t == nullptr) {
-                throw std::invalid_argument("Not a valid tile for Actor - Actor out bounds;");
-            }
-            const infra::math::Point2& next_tile_center = t->position();
 
-            // 2. Calculate the maximum possible displacement to this coordinate
-            auto to_cell = infra::math::Vector2(next_tile_center - position_);
-            float dist_to_cell = to_cell.length();
-            float max_move = speed_ * remaining_time;
+            const auto nt = grid->get_next_TilePos(position_, current_direction_);
+            if (!nt.has_value()) return;
+            const auto nc = grid->get_center(nt.value());
+            if (!nc.has_value()) return;
+            infra::math::Point2 next_center = nc.value();
+
+            auto to_cell = infra::math::Vector2(next_center - position_);
+            infra::math::Vector2 direction = to_cell.normalized();
+            float dist_to_cell = to_cell.length(); // The distance that must be traveled to reach the center of the cell.
+            float max_move = speed_ * remaining_time; // This is how far could go in this tick.
             const float move_dist = std::min(dist_to_cell, max_move);
             const infra::math::Vector2 displacement = direction * move_dist;
 
-            // 3. Move HitBox
-            hitbox_->move_to(position_ + displacement.to_Point2());
-
-            // 4. Checking for collisions
-            if (collision_control->collision_world(*hitbox_)) {
-                // Abort move
-                hitbox_->move_to(position_ );
-                break;
+            infra::math::Vector2 allowed_move = displacement;
+            auto mtv_opt = collision_control.collision_mtv_world(*hitbox_, displacement);
+            if (mtv_opt.has_value()) {
+                if (mtv_opt->length() < displacement.length()) {
+                    allowed_move = mtv_opt.value();
+                }
             }
 
-            // 5 Update position
-            position_ += displacement.to_Point2();
-
-            infra::math::Vector2 n_direction = to_vec(next_direction_);
+            position_ += allowed_move.to_Point2();
+            hitbox_->move_to(position_);
 
             // 7. If have reached the center of the cell and there is a new direction
-            const bool at_cell = std::abs(move_dist - dist_to_cell) < 1e-6f;
-            const bool reached_exact = (next_tile_center.x - position_.x) < 1e-4f && (next_tile_center.y - position_.y) < 1e-4f;
-            const bool need_turn = at_cell ? reached_exact : n_direction.has_same_direction(direction);
 
-            if (need_turn) {
-                current_direction_ = next_direction_;
-                if (at_cell) position_ = next_tile_center;
-            }
+            change_direction(grid);
 
-            // 8. Subtract the time used
-            remaining_time -= move_dist / speed_;
+            remaining_time -= allowed_move.length() / speed_;
         }
     }
 
-    void Actor::act(float deltaTime, const std::shared_ptr<collision::World_Collision_Manager> &collision_control) {
+    void Actor::act(float deltaTime, const collision::World_Collision_Manager &collision_control) {
         move(deltaTime, collision_control);
+    }
+
+
+    void Actor::change_direction(const std::shared_ptr<Tile_Grid> &grid) {
+        const auto ct = grid->get_nearest_TilePos(position_);
+        if (!ct.has_value()) return;
+        const auto cc = grid->get_center(ct.value());
+        if (!ct.has_value()) return;
+        infra::math::Point2 current_center = cc.value();
+        if (
+            std::abs(current_center.x - position_.x) < 1e-4f &&
+            std::abs(current_center.y - position_.y) < 1e-4f &&
+            current_direction_ != next_direction_
+        ) {
+            current_direction_ = next_direction_;
+            position_ = current_center;
+        }
     }
 }

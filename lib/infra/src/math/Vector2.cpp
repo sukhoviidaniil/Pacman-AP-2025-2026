@@ -120,10 +120,28 @@ namespace infra::math {
 
     void Vector2::normalize() {
         float len = length();
-        if (len != 0.0) {
+        constexpr float EPS = 1e-8f;
+        if (len > EPS) {
             x /= len;
             y /= len;
+        } else {
+            x = 0.0f;
+            y = 0.0f;
         }
+    }
+
+    Vector2 Vector2::normalized() const {
+        const float len = length();
+        constexpr float EPS = 1e-8f;
+        float cx = x, cy = y;
+        if (len > EPS) {
+            cx /= len;
+            cy /= len;
+        } else {
+            cx = 0.0f;
+            cy = 0.0f;
+        }
+        return {cx, cy};
     }
 
     float Vector2::length() const {

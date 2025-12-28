@@ -19,7 +19,7 @@
 #define PACMAN_SPRITEGROUP_H
 
 #include <unordered_map>
-#include "../../../internal/Status.h"
+#include "infra/internal/Status.h"
 #include "infra/ast/view/internal/SpriteStatus.h"
 #include "infra/ast/view/ViewNode.h"
 

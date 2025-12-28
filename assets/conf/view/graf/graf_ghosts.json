@@ -28,7 +28,6 @@
               "recTop" : 254
             }
           ],
-          "NSprites_per_direction" : 1,
           "recLeft" : {
             "base" : 1,
             "increase" : 50
@@ -59,7 +58,6 @@
               "recTop" : 254
             }
           ],
-          "NSprites_per_direction" : 1,
           "recLeft" : {
             "base" : 301,
             "increase" : 0

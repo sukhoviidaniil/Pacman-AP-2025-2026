@@ -28,7 +28,7 @@ namespace view {
     {
         sf::View view(sf::FloatRect(0, 0, static_cast<float>(info.window_width), static_cast<float>(info.window_height)));
         window_.setView(view);
-        window_.setFramerateLimit(30);
+        window_.setFramerateLimit(info.fps);
 
         std::string fullpath = dir_path + info.view_directory;
 

@@ -55,8 +55,10 @@ namespace model::collision {
             const float second_max = s.back();
 
             // === CONDITION FOR DIVISION ===
-            if (first_max <= second_min || second_max <= first_min) {
-                // Found the dividing axis → no collision
+            constexpr float EPS = 1e-4f;
+            if (
+                first_max - second_min <= EPS ||
+                second_max - first_min <= EPS) {
                 return false;
             }
         }
@@ -90,7 +92,7 @@ namespace model::collision {
             const float second_max = s.back();
 
             // Checking the dividing axis
-            if (first_max < second_min || second_max < first_min) {
+            if (first_max <= second_min || second_max <= first_min) {
                 // The figures do not intersect
                 return std::nullopt;
             }
@@ -104,12 +106,11 @@ namespace model::collision {
                 min_overlap = overlap;
                 // Choosing the right direction for MTV
                 mtv_axis = axis;
-                if (overlap == overlap2) mtv_axis = mtv_axis * -1; // направление
+                if (overlap == overlap2) mtv_axis = mtv_axis * -1;
             }
         }
 
         // Minimum displacement vector
         return mtv_axis * min_overlap;
     }
-
 }

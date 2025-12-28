@@ -33,6 +33,7 @@ namespace view {
         explicit View(std::string name);
         ~View() override;
         [[nodiscard]] virtual infra::math::Vector2 screen_size() const = 0;
+        virtual void elapsed(float delta) = 0;
         virtual void render(const view::ui::RenderFrame& graph) = 0;
         virtual void track_local(const std::shared_ptr<infra::event::Event_Bus>& bus) = 0;
         virtual void track_global(const std::shared_ptr<infra::event::Event_Bus>& bus) = 0;

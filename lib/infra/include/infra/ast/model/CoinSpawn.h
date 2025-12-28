@@ -21,7 +21,7 @@
 
 namespace infra::ast {
     struct CoinSpawn : Entity_Node {
-        int price = 100;
+
     };
 }
 

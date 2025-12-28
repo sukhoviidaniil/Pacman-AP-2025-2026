@@ -21,6 +21,7 @@
 #include "view/presentation/render/RI_Label.h"
 #include "view/presentation/render/RI_Rectangle.h"
 #include "view/presentation/render/RI_Sprite.h"
+#include "view/sfml/SFML_Animation.h"
 #include "view/sfml/SFML_View.h"
 
 namespace view {
@@ -89,12 +90,6 @@ namespace view {
                 // status = new coordinates
                 const infra::ast::SpriteStatus& status = group.second;
                 const auto directions = static_cast<unsigned int>(status.sprite_directions.size());
-                unsigned int sprites_per_direction = status.sprites_per_direction;
-
-                if (sprites_per_direction <= 0) {
-                    return;
-                }
-
 
                 for (unsigned int top_index = 0; top_index < directions; ++top_index) {
                     const infra::ast::Sprite_Direction& sprite_direction = status.sprite_directions[top_index];
@@ -117,16 +112,29 @@ namespace view {
                         recTop = base + increase * static_cast<int>(top_index);
                     }
 
-                    const sf::IntRect rect(recLeft, recTop, sprite_width, sprite_height);
-                    sf::Sprite sprite(texture, rect);
-                    sprite.setOrigin(static_cast<float>(rect.width) / 2.f, static_cast<float>(rect.height) / 2.f);
 
-                    if (sprites_per_direction == 1) {
-                        data[group.first][direction] = std::make_unique<SFML_Sprite>(std::move(sprite));
+                    std::unique_ptr<ISFML_Sprite> isprite;
+                    if (status.animation.size == 0) {
+                        const sf::IntRect rect(recLeft, recTop, sprite_width, sprite_height);
+                        sf::Sprite sprite(texture, rect);
+                        sprite.setOrigin(static_cast<float>(rect.width) / 2.f, static_cast<float>(rect.height) / 2.f);
+                        isprite = std::make_unique<SFML_Sprite>(std::move(sprite));
                     }else {
-                        // TODO
+                        int frame_size = static_cast<int>(status.animation.size);
+                        std::vector<sf::Sprite> animations_sprites;
+                        for (int index = 0; index < frame_size; ++index) {
+                            int left = recLeft;
+                            int top = recTop;
+                            left +=  index * status.animation.recLeft_increase;
+                            top +=  index * status.animation.recTop_increase;
+                            const sf::IntRect rect(left, top, sprite_width, sprite_height);
+                            sf::Sprite sprite(texture, rect);
+                            animations_sprites.push_back(std::move(sprite));
+                        }
+                        isprite = std::make_unique<SFML_Animation>(frame_size, status.animation.frame_duration, std::move(animations_sprites));
                     }
 
+                    data[group.first][direction] = std::move(isprite);
                 }
             }
             complex_sprites_[name] = std::make_unique<SFML_Complex_Sprite>(std::move(data));
@@ -241,7 +249,6 @@ namespace view {
     }
 
     void SFML_View::visit(const ui::RI_ComplexSprite &ri) {
-
         auto it = complex_sprites_.find(ri.sprite);
         if (it == complex_sprites_.end()) {
             render_warning(ri.rect);
@@ -258,6 +265,12 @@ namespace view {
             r.height / bounds.height
         );
         window_.draw(sprite);
+    }
+
+    void SFML_View::elapsed(float delta) {
+        for (auto& it : complex_sprites_) {
+            it.second->elapsed(delta);
+        }
     }
 
     const sf::Texture& SFML_View::get_Texture(const std::string& using_texture, const std::string& by_who) {

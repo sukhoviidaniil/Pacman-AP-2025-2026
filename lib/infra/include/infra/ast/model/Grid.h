@@ -34,8 +34,8 @@ namespace infra::ast {
     };
 
     struct Grid : Model_Node {
-        unsigned int rows;
-        unsigned int columns;
+        size_t rows;
+        size_t columns;
         float tile_size;
         std::vector<std::vector<Tile>> grid;
     };

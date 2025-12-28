@@ -30,6 +30,7 @@ namespace infra::ast {
         std::string type = "None";
         unsigned int window_width = 0;
         unsigned int window_height = 0;
+        int fps = 30;
         std::string view_directory;
         std::vector<Texture> textures;
         std::vector<Font> fonts;

@@ -1,27 +1,38 @@
 {
   "Grid" : {
-    "rows": 3,
-    "columns": 6,
-    "tile_size" : 40,
+    "rows": 11,
+    "columns": 21,
+    "tile_size" : 1,
     "grid" : [
-      ["Wall", "Wall", "Wall", "Wall", "Wall", "Wall"],
-      ["Wall", "PacmanSpawn", "Empty", "Empty", "Empty", "Wall"],
-      ["Wall", "Wall", "Wall", "Wall", "Wall", "Wall"]
+      ["W", "W", "W", "W", "W", "W",   "W", "W", "W", "W", "W", "W", "W", "W", "W",   "W", "W", "W", "W", "W", "W"],
+
+      ["W", "P", "C", "C", "C", "W",   "C", "C", "C", "C", "C", "C", "C", "C", "C",   "W", "C", "C", "C", "C", "W"],
+      ["W", "C", "W", "W", "C", "W",   "C", "W", "W", "W", "W", "W", "W", "W", "C",   "W", "C", "W", "W", "C", "W"],
+      ["W", "C", "W", "C", "C", "C",   "C", "C", "C", "C", "C", "C", "C", "C", "C",   "C", "C", "C", "W", "C", "W"],
+
+      ["W", "C", "W", "C", "W", "W",   "C", "W", "W", "F", "F", "F", "W", "W", "C",   "W", "W", "C", "W", "C", "W"],
+      ["W", "C", "C", "C", "C", "C",   "C", "W", "F", "F", "G", "F", "F", "W", "C",   "C", "C", "C", "C", "C", "W"],
+      ["W", "C", "W", "C", "W", "W",   "C", "W", "W", "W", "W", "W", "W", "W", "C",   "W", "W", "C", "W", "C", "W"],
+
+      ["W", "C", "W", "C", "C", "C",   "C", "C", "C", "C", "C", "C", "C", "C", "C",   "C", "C", "C", "W", "C", "W"],
+      ["W", "C", "W", "W", "C", "W",   "C", "W", "W", "W", "W", "W", "W", "W", "C",   "W", "C", "W", "W", "C", "W"],
+      ["W", "P", "C", "C", "C", "W",   "C", "C", "C", "C", "M", "C", "C", "C", "C",   "W", "C", "C", "C", "P", "W"],
+
+      ["W", "W", "W", "W", "W", "W",   "W", "W", "W", "W", "W", "W", "W", "W", "W",   "W", "W", "W", "W", "W", "W"]
     ]
   },
   "PacmanSpawn" : {
-    "size" : 39,
-    "speed" : 0.1
+    "speed" : 0.5
   },
   "GhostSpawn" : {
 
   },
   "CoinSpawn" : {
-    "size" : 10,
-    "price" : 100
+    "size" : 0.2
   },
   "PowerPelletSpawn" : {
-    "size" : 10,
+    "name" : "Candy",
+    "size" : 0.6,
     "buff_duration" : 5.0
   }
 }

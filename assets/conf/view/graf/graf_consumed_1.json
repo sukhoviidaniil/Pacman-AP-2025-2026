@@ -4,7 +4,7 @@
   "sprits_height": 35,
   "names" : ["Lobster", "Fly", "Hamburger", "Egg dish", "Candy"],
   "recLeft" : {
-    "base" : 501,
+    "base" : 551,
     "increase" : 0
   },
   "recTop" : {

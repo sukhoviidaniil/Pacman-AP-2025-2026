@@ -1,0 +1,71 @@
+/***************************************************************
+ * Project:       Pacman
+ * File:          TileGrid.h
+ *
+ * Author:        Sukhovii Daniil
+ * Created:       2025-11-04
+ * Modified:      []
+ *
+ * Description:   []
+ *
+ * Contact:
+ *   Email:       sukhovii.daniil@gmail.com
+ *
+ * Disclaimer:
+ *   This file is part of Pacman.
+ *   Unauthorized use, reproduction, or distribution is prohibited.
+***************************************************************/
+#ifndef PACMAN_TILE_GRID_H
+#define PACMAN_TILE_GRID_H
+
+#include <optional>
+#include "infra/ast/model/Grid.h"
+#include "infra/math/Direction.h"
+#include "infra/math/Point2.h"
+#include "model/grid/Tile.h"
+#include "model/collision/HitBox.h"
+
+namespace model {
+    class Tile_Grid {
+    public:
+        struct TilePos {
+            size_t y, x; /// y - row, x - colum
+            TilePos(const size_t y, const size_t x) : y(y), x(x) {}
+        };
+        ~Tile_Grid();
+
+
+        explicit Tile_Grid(const infra::ast::Grid &grid_info);
+
+        [[nodiscard]] float tile_size() const;
+        [[nodiscard]] size_t rows() const;
+        [[nodiscard]] size_t columns() const;
+        [[nodiscard]] float width() const;
+        [[nodiscard]] float height() const;
+
+
+        [[nodiscard]] std::optional<TilePos> get_nearest_TilePos(const infra::math::Point2 &pos) const;
+        [[nodiscard]] std::optional<TilePos> get_next_TilePos(const infra::math::Point2& pos, const infra::math::Direction& dir) const;
+        [[nodiscard]] Tile get_tile_exact(const TilePos& pos) const;
+        [[nodiscard]] std::optional<Tile> get_tile(const TilePos& pos) const;
+        [[nodiscard]] infra::math::Point2 get_center_exact(const TilePos& pos) const;
+        [[nodiscard]] std::optional<infra::math::Point2> get_center(const TilePos& pos) const;
+        [[nodiscard]] std::unique_ptr<collision::HitBox> get_hitbox(const TilePos& pos) const;
+
+        void out_of_bounds(const TilePos &pos, const std::string &who) const;
+
+    private:
+
+        size_t rows_, columns_;
+        float tile_size_;
+
+        std::vector<
+            std::vector<
+                Tile
+            >
+        > tiles_;
+    };
+}
+
+
+#endif //PACMAN_TILE_GRID_H

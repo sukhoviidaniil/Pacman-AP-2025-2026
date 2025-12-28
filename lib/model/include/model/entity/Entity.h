@@ -28,20 +28,22 @@ namespace model {
     public:
         virtual ~Entity();
         Entity(
-            std::string   name, const infra::math::Point2 &position, std::unique_ptr<collision::HitBox> hitbox
+            std::string name, float size, const infra::math::Point2 &position, std::unique_ptr<collision::HitBox> hitbox
         );
 
         // ===== Getters =====
         [[nodiscard]] std::string name() const;
+        [[nodiscard]] float size() const;
         [[nodiscard]] infra::math::Point2 position() const;
         [[nodiscard]] const collision::HitBox& hitboxe() const;
         [[nodiscard]] infra::ui::Rect rect() const;
 
-
+    protected:
         // Position in world coordinates
         infra::math::Point2 position_;
         // All Entities have some hitbox
         std::unique_ptr<collision::HitBox> hitbox_;
+        float size_;
 
         // Name for identification purposes
         std::string name_;

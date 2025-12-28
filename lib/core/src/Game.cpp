@@ -81,6 +81,7 @@ namespace core {
             current_stage->run(delta);
             infra::math::Vector2 screen_size = view_->screen_size();
             view::ui::RenderFrame v  = current_stage->get_RenderFrame(screen_size, true);
+            view_->elapsed(delta);
             view_->render(v);
 
             event_collector_->collect();

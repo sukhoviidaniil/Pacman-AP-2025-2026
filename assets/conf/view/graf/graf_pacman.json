@@ -2,7 +2,7 @@
   "using_texture" : "Gen",
   "sprite_width": 35,
   "sprite_height": 35,
-  "groups_names" : ["Mr. Pacman", "Mr. Gray"],
+  "groups_names" : ["Pacman"],
   "number_of_statuses" : 2,
   "statuses" : [
     {
@@ -21,14 +21,18 @@
           "direction" : "Up"
         }
       ],
-      "NSprites_per_direction" : 3,
+      "Animation" : {
+        "size" : 3,
+        "recTop_increase" : 50
+      },
       "recLeft" : {
         "base" : 851,
-        "increase" : 50
+        "increase" : 0
       },
       "recTop" : {
+        "frame_duration": 0.25,
         "base" : 4,
-        "increase" : 50
+        "increase" : 150
       }
     },
     {
@@ -38,14 +42,16 @@
           "direction" : "Any"
         }
       ],
-      "NSprites_per_direction" : 11,
+      "Animation" : {
+        "frame_duration": 0.25,
+        "size" : 11,
+        "recTop_increase" : 50
+      },
       "recLeft" : {
-        "base" : 351,
-        "increase" : 50
+        "base" : 351
       },
       "recTop" : {
-        "base" : 4,
-        "increase" : 50
+        "base" : 4
       }
     }
   ]

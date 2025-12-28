@@ -20,7 +20,6 @@
 #include "view/presentation/render/RI_ComplexSprite.h"
 #include "view/presentation/render/RI_Rectangle.h"
 namespace view::ui {
-
     void Map::layout(const infra::ui::Rect r){
         result.rect = r;  // completely fill in the parent
         for (auto& child : children) {
@@ -60,11 +59,10 @@ namespace view::ui {
         const float ts = grid.tile_size();
 
         // Map size in world coordinates (taking into account the full size of the tiles)
-        const float width  = grid.get_width();
-        const float height = grid.get_height();
+        const float width  = grid.width();
+        const float height = grid.height();
         infra::ui::Rect world_bounds{ 0.f, 0.f, width, height};
 
-        const auto& tiles = grid.get_tiles();
 
         // Scaling and centering the map (letterbox)
         const infra::ui::Rect& ui = result.rect;
@@ -81,44 +79,127 @@ namespace view::ui {
             ui.y + (ui.height - map_height) * 0.5f
         };
 
-
         if (ctx.redrawing) {
-            for (size_t y = 0; y < tiles.size(); ++y) {
-                for (size_t x = 0; x < tiles[y].size(); ++x) {
-                    auto tile = tiles[y][x];
-                    if (!tile) continue;
+            const float scale_tile_size = ts * scale;
+            const float half_tile_size = ts * 0.5f;
 
-                    infra::math::Point2 tp = tile->position();
+            for (size_t y = 0; y < grid.rows(); ++y) {
+                for (size_t x = 0; x < grid.columns(); ++x) {
+                    auto pos = model::Tile_Grid::TilePos(y, x);
+                    auto c = grid.get_center(pos);
+                    if (!c.has_value()) {
+                        continue;
+                    }
+                    auto t = grid.get_tile(pos);
+                    if (!t.has_value()) {
+                        continue;
+                    }
+                    model::Tile tile = t.value();
+
+                    infra::math::Point2 center = c.value();
 
                     // Position conversion: tile center -> top left
                     infra::math::Point2 top_left{
-                        tp.x - ts * 0.5f,
-                        tp.y - ts * 0.5f
+                        center.x - half_tile_size,
+                        center.y - half_tile_size
                     };
 
-                    /*
-                    // Check that the tile is inside world_bounds
-                    float left   = tp.x - ts * 0.5f;
-                    float right  = tp.x + ts * 0.5f;
-                    float top    = tp.y - ts * 0.5f;
-                    float bottom = tp.y + ts * 0.5f;
-
-                    if (right < world_bounds.x || left > world_bounds.x + world_bounds.width ||
-                        bottom < world_bounds.y || top > world_bounds.y + world_bounds.height) {
-                        continue;
-                        }
-                        */
 
                     // Convert to UI coordinates
                     const infra::math::Point2 ui_pos = world_to_ui(top_left, offset, scale);
 
                     auto rectangle = std::make_unique<view::ui::RI_Rectangle>();
-                    rectangle->color = tile->walkable() ? infra::ui::Color(0,0,0) : infra::ui::Color(0,0,255);
-                    rectangle->rect = { ui_pos.x, ui_pos.y, ts * scale, ts * scale };
 
+                    switch (tile) {
+                        case model::Tile::Wall: {
+                            rectangle->color = infra::ui::Color(0,0,255);
+                            break;
+                        }
+                        default: {
+                            rectangle->color = infra::ui::Color(0,0,0);
+                            break;
+                        }
+                    }
+                    rectangle->rect = { ui_pos.x, ui_pos.y, scale_tile_size, scale_tile_size};
                     frame.constant_items.push_back(std::move(rectangle));
                 }
             }
+        }
+
+        for (const auto& entity : model.coins()) {
+            const float half_size = entity->size() * 0.5f;
+            const float scale_size = entity->size() * scale;
+
+            infra::math::Point2 center = entity->position();
+            // Position conversion: center -> top left
+            infra::math::Point2 top_left{
+                center.x - half_size,
+                center.y - half_size
+            };
+
+            const infra::math::Point2 ui_pos = world_to_ui(top_left, offset, scale);
+
+            auto sprite = std::make_unique<view::ui::RI_Sprite>();
+            sprite->sprite = entity->name();
+            sprite->rect = { ui_pos.x, ui_pos.y, scale_size, scale_size};
+            frame.temp_items.push_back(std::move(sprite));
+        }
+        for (const auto& entity : model.power_pellets()) {
+            const float half_size = entity->size() * 0.5f;
+            const float scale_size = entity->size() * scale;
+
+            infra::math::Point2 center = entity->position();
+            // Position conversion: center -> top left
+            infra::math::Point2 top_left{
+                center.x - half_size,
+                center.y - half_size
+            };
+
+            const infra::math::Point2 ui_pos = world_to_ui(top_left, offset, scale);
+
+            auto sprite = std::make_unique<view::ui::RI_Sprite>();
+            sprite->sprite = entity->name();
+            sprite->rect = { ui_pos.x, ui_pos.y, scale_size, scale_size};
+            frame.temp_items.push_back(std::move(sprite));
+        }
+
+        for (const auto& entity : model.ghosts()) {
+            const float half_size = entity->size() * 0.5f;
+            const float scale_size = entity->size() * scale;
+
+            infra::math::Point2 center = entity->position();
+            // Position conversion: center -> top left
+            infra::math::Point2 top_left{
+                center.x - half_size,
+                center.y - half_size
+            };
+
+            const infra::math::Point2 ui_pos = world_to_ui(top_left, offset, scale);
+            /* TODO
+            auto sprite = std::make_unique<view::ui::RI_Sprite>();
+            sprite->sprite = entity->name();
+            sprite->rect = { ui_pos.x, ui_pos.y, scale_size, scale_size};
+            frame.temp_items.push_back(std::move(sprite));
+            */
+        }
+        {
+            const auto& entity = model.pacman();
+            const float half_size = entity->size() * 0.5f;
+            const float scale_size = entity->size() * scale;
+
+            infra::math::Point2 center = entity->position();
+            // Position conversion: center -> top left
+            infra::math::Point2 top_left{
+                center.x - half_size,
+                center.y - half_size
+            };
+            const infra::math::Point2 ui_pos = world_to_ui(top_left, offset, scale);
+            auto sprite = std::make_unique<view::ui::RI_ComplexSprite>();
+            sprite->sprite = entity->name();
+            sprite->direction = entity->get_direction();
+            sprite->status = model.pacman_status();
+            sprite->rect = { ui_pos.x, ui_pos.y, scale_size, scale_size};
+            frame.temp_items.push_back(std::move(sprite));
         }
     }
 }

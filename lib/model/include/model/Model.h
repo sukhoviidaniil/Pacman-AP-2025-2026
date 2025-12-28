@@ -26,6 +26,7 @@
 #include "entity/Coin.h"
 #include "entity/Pacman.h"
 #include "entity/Ghost.h"
+#include "entity/PowerPellet.h"
 
 
 namespace model {
@@ -38,13 +39,17 @@ namespace model {
 
         [[nodiscard]] bool all_coins_eaten() const;
 
-        void run(float delta);
+        void run(float delta) const;
 
         [[nodiscard]] std::shared_ptr<entity::Pacman> get_pacman() const;
 
 
+
+        infra::Status pacman_status = infra::Status::Alive;
+        infra::Status ghosts_status = infra::Status::Alive;
         infra::event::Event_Store event_store_;
         std::vector<std::shared_ptr<entity::Coin>> coins_;
+        std::vector<std::shared_ptr<entity::PowerPellet>> power_pellets_;
         std::vector<std::shared_ptr<entity::Ghost>> ghosts_;
         std::shared_ptr<entity::Pacman> pacman_;
         std::shared_ptr<Tile_Grid> grid_;

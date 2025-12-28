@@ -27,13 +27,10 @@ namespace model::entity {
     class Actor : public Entity {
     public:
         ~Actor() override;
-        Actor(
-            const std::string &name,
-            const infra::math::Point2 &position,
-            std::unique_ptr<collision::HitBox> hitbox,
-            const infra::math::Direction &current_direction,
-            float speed
-            );
+
+        Actor(const std::string &name, float size, const infra::math::Point2 &position,
+              std::unique_ptr<collision::HitBox> hitbox, const infra::math::Direction &current_direction, float speed);
+
         void set_direction(const infra::math::Direction &direction);
         void to_left();
         void to_right();
@@ -42,9 +39,10 @@ namespace model::entity {
 
         [[nodiscard]] infra::math::Direction get_direction() const;
 
-        void move(float deltaTime, const std::shared_ptr<collision::World_Collision_Manager> &collision_control);
 
-        void virtual act(float deltaTime, const std::shared_ptr<collision::World_Collision_Manager> &collision_control);
+        void move(float deltaTime, const collision::World_Collision_Manager &collision_control);
+
+        void virtual act(float deltaTime, const collision::World_Collision_Manager &collision_control);
 
         infra::Status status_ = infra::Status::Alive;
         private:
@@ -52,6 +50,11 @@ namespace model::entity {
         infra::math::Direction next_direction_;
         // m/s
         float speed_;
+
+    private:
+
+        void change_direction(const std::shared_ptr<Tile_Grid>& grid);
+
 
     };
 }

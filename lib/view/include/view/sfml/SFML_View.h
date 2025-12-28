@@ -50,6 +50,7 @@ namespace view {
         void visit(const ui::RI_Sprite&) override;
         void visit(const ui::RI_ComplexSprite&) override;
 
+        void elapsed(float delta) override;
     protected:
 
         const sf::Texture &get_Texture(const std::string &using_texture, const std::string &by_who);

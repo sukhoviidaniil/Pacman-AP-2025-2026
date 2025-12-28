@@ -2,6 +2,7 @@
   "type" : "SFML",
   "window_width" : 800,
   "window_height" : 600,
+  "fps" : 60,
   "view_directory" : "view/",
   "Textures" : [
     {
@@ -22,11 +23,19 @@
   "Sprites":[
     {
       "using_texture" : "Gen",
+      "sprits_width": 17,
+      "sprits_height": 17,
+      "name" : "Coin",
+      "recLeft" : 410,
+      "recTop" : 462
+    },
+    {
+      "using_texture" : "Gen",
       "sprits_width": 35,
       "sprits_height": 35,
       "name" : "Warning",
-      "recLeft" : 451,
-      "recTop" : 454
+      "recLeft" : 491,
+      "recTop" : 452
     },
     {
       "using_texture" : "Logo",
@@ -43,7 +52,6 @@
     "graf/graf_consumed_2.json"
   ],
   "ComplexSprites" : [
-    "graf/graf_pacman.json",
-    "graf/graf_ghosts.json"
+    "graf/graf_pacman.json"
   ]
 }

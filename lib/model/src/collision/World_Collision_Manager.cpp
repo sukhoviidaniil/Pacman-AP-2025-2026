@@ -22,6 +22,7 @@
 #include <unordered_set>
 
 #include "../../include/model/entity/Entity.h"
+#include "infra/diagnostics/Logger.h"
 
 
 namespace model::collision {
@@ -59,103 +60,82 @@ namespace model::collision {
         }
     };
 
-    /*
-    void World_Collision_Manager::calculate_collision() const {
-        if (!grid_ || !control_) return;
-
-        const size_t columns = grid_->get_columns();
-        const size_t rows = grid_->get_rows();
-
-        std::unordered_set<EntityPair, EntityPairHash> checked_pairs;
-        checked_pairs.reserve(1024);
-
-        for (size_t c = 0; c < columns; ++c) {
-            for (size_t r = 0; r < rows; ++r) {
-                const std::shared_ptr<const entity::Tile> tile = grid_->get_tile(r, c);
-                if (!tile) continue;
-
-                const auto& entities = tile->get_entities();
-
-                if (entities.empty()) {
-                    continue;
-                }
-
-                for (int dr = -1; dr <= 1; ++dr) {
-                    for (int dc = -1; dc <= 1; ++dc) {
-
-                        const int nr = static_cast<int>(r) + dr;
-                        const int nc = static_cast<int>(c) + dc;
-
-                        // Border check
-                        if (nr < 0 || nc < 0 ||
-                            nr >= static_cast<int>(rows) ||
-                            nc >= static_cast<int>(columns))
-                        {
-                            continue;
-                        }
-
-                        std::shared_ptr<const entity::Tile> neighbor = grid_->get_tile(static_cast<size_t>(nr), static_cast<size_t>(nc));
-                        if (!neighbor) continue;
-
-                        const auto& neighbor_entities = neighbor->get_entities();
-                        if (neighbor_entities.empty()) continue;
-
-                        for (const auto& e1 : entities) {
-                            auto hb1 = e1->get_hitboxe();
-                            if (!hb1) continue;
-
-                            for (const auto& e2 : neighbor_entities) {
-                                // To avoid double checks
-                                if (e1.get() == e2.get()) continue;
-                                auto hb2 = e2->get_hitboxe();
-                                if (!hb2) continue;
-
-                                EntityPair pair{e1, e2};
-
-                                // Check for duplicates
-                                if (checked_pairs.contains(pair)) continue;
-
-                                // Add so as not to count again
-                                checked_pairs.insert(pair);
-
-                                if (control_->collision(hb1, hb2)) {
-                                    resolve_сollision(e1, e2);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    void outside_the_borders() {
+        std::string warn = "Collision with the World - going beyond boundaries. ";
+        LOG(warn);
     }
-    */
 
     bool World_Collision_Manager::collision_world(const HitBox& entity) const {
         const AABB aabb = entity.get_aabb();
-
-        const std::optional<std::pair<size_t, size_t>> temp = grid_->get_nearest_tile_size_t(aabb.center);
-        if (!temp) {
+        const auto temp = grid_->get_nearest_TilePos(aabb.center);
+        if (!temp.has_value()) {
             return false;
         }
-        std::pair<size_t, size_t> adjusted_tile = temp.value();
-        size_t minTileX = adjusted_tile.first - 1;
-        size_t maxTileX = adjusted_tile.first + 1;
-        size_t minTileY = adjusted_tile.second - 1;
-        size_t maxTileY = adjusted_tile.second + 1;
+        const Tile_Grid::TilePos adjusted_tile = temp.value();
+        const size_t minTileX = adjusted_tile.x - 1;
+        const size_t maxTileX = adjusted_tile.x + 1;
+        const size_t minTileY = adjusted_tile.y - 1;
+        const size_t maxTileY = adjusted_tile.y + 1;
 
         for (size_t y = minTileY; y <= maxTileY; ++y){
             for (size_t x = minTileX; x <= maxTileX; ++x){
-                const std::shared_ptr<const entity::Tile> tile = grid_->get_tile(x, y);
-                if (tile == nullptr) continue;
-                if (tile->walkable()) {
+                auto pos = Tile_Grid::TilePos(y,x);
+                std::optional<Tile> t = grid_->get_tile(pos);
+                if (!t.has_value()) {
+                    outside_the_borders();
+                    continue;
+                }
+                if (walkable(t.value())) {
                     continue; // walkable cell — skip
                 }
-                if (control_->collision(entity, tile->hitboxe())) {
+                std::unique_ptr<collision::HitBox> hitbox = grid_->get_hitbox(pos);
+                if (hitbox == nullptr) {
+                    outside_the_borders();
+                    return true;
+                }
+                if (control_->collision(entity, *hitbox)) {
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    std::optional<infra::math::Vector2> World_Collision_Manager::collision_mtv_world(const HitBox& entity, const infra::math::Vector2& displacement) const {
+
+        const AABB aabb = entity.get_aabb();
+        const auto temp = grid_->get_nearest_TilePos(aabb.center);
+        if (!temp.has_value()) return std::nullopt;
+
+        const Tile_Grid::TilePos adjusted_tile = temp.value();
+        const size_t minTileX = adjusted_tile.x - 1;
+        const size_t maxTileX = adjusted_tile.x + 1;
+        const size_t minTileY = adjusted_tile.y - 1;
+        const size_t maxTileY = adjusted_tile.y + 1;
+
+        std::optional<infra::math::Vector2> final_mtv;
+        infra::math::Vector2 move_dir = displacement;
+        if (move_dir.length() > 0.f) move_dir.normalize();
+
+        for (size_t y = minTileY; y <= maxTileY; ++y){
+            for (size_t x = minTileX; x <= maxTileX; ++x){
+                auto pos = Tile_Grid::TilePos(y, x);
+                auto t = grid_->get_tile(pos);
+                if (!t.has_value() || walkable(t.value())) continue;
+
+                auto hitbox = grid_->get_hitbox(pos);
+                if (hitbox == nullptr) continue;
+
+                auto mtv = control_->collision_mtv(entity, *hitbox);
+                if (mtv.has_value()) {
+                    const float proj = mtv->dot(move_dir);
+                    if (!final_mtv.has_value() || std::abs(proj) < displacement.length()) {
+                        final_mtv = mtv.value();
+                    }
+                }
+            }
+        }
+        return final_mtv;
     }
 
     std::shared_ptr<Tile_Grid> World_Collision_Manager::get_grid() const {
