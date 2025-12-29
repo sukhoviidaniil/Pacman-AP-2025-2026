@@ -53,7 +53,6 @@ namespace model::entity {
 
     private:
 
-        void change_direction(const std::shared_ptr<Tile_Grid>& grid);
 
 
     };
