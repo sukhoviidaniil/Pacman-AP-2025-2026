@@ -67,7 +67,7 @@ namespace model::collision {
 
     bool World_Collision_Manager::collision_world(const HitBox& entity) const {
         const AABB aabb = entity.get_aabb();
-        const auto temp = grid_->get_nearest_TilePos(aabb.center);
+        const auto temp = grid_->get_TilePos(aabb.center);
         if (!temp.has_value()) {
             return false;
         }
@@ -104,7 +104,7 @@ namespace model::collision {
     std::optional<infra::math::Vector2> World_Collision_Manager::collision_mtv_world(const HitBox& entity, const infra::math::Vector2& displacement) const {
 
         const AABB aabb = entity.get_aabb();
-        const auto temp = grid_->get_nearest_TilePos(aabb.center);
+        const auto temp = grid_->get_TilePos(aabb.center);
         if (!temp.has_value()) return std::nullopt;
 
         const Tile_Grid::TilePos adjusted_tile = temp.value();
@@ -121,7 +121,7 @@ namespace model::collision {
             for (size_t x = minTileX; x <= maxTileX; ++x){
                 auto pos = Tile_Grid::TilePos(y, x);
                 auto t = grid_->get_tile(pos);
-                if (!t.has_value() || walkable(t.value())) continue;
+                if (walkable(t)) continue;
 
                 auto hitbox = grid_->get_hitbox(pos);
                 if (hitbox == nullptr) continue;

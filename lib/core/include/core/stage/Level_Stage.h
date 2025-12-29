@@ -41,6 +41,8 @@ namespace core::stg{
 
         std::shared_ptr<model::Model> model_; /// Model of this stage (Controller can have ptr)
         infra::Const_Score score_;
+
+        float p = 3.f;
     };
 }
 

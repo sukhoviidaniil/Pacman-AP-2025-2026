@@ -106,7 +106,9 @@ namespace model::collision {
                 min_overlap = overlap;
                 // Choosing the right direction for MTV
                 mtv_axis = axis;
-                if (overlap == overlap2) mtv_axis = mtv_axis * -1;
+                if (overlap == overlap2) {
+                    mtv_axis = mtv_axis * -1;
+                }
             }
         }
 

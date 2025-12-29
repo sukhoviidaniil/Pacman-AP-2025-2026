@@ -44,12 +44,12 @@ namespace model {
         [[nodiscard]] float height() const;
 
 
-        [[nodiscard]] std::optional<TilePos> get_nearest_TilePos(const infra::math::Point2 &pos) const;
-        [[nodiscard]] std::optional<TilePos> get_next_TilePos(const infra::math::Point2& pos, const infra::math::Direction& dir) const;
-        [[nodiscard]] Tile get_tile_exact(const TilePos& pos) const;
-        [[nodiscard]] std::optional<Tile> get_tile(const TilePos& pos) const;
-        [[nodiscard]] infra::math::Point2 get_center_exact(const TilePos& pos) const;
-        [[nodiscard]] std::optional<infra::math::Point2> get_center(const TilePos& pos) const;
+        [[nodiscard]] std::optional<TilePos> get_TilePos(const infra::math::Point2 &pos) const;
+        [[nodiscard]] std::optional<TilePos> get_next_TilePos(const infra::math::Point2 &pos, const infra::math::Direction& dir) const;
+        [[nodiscard]] infra::math::Point2 get_next_center(const infra::math::Point2& pos, const infra::math::Direction& dir) const;
+
+        [[nodiscard]] Tile get_tile(const TilePos& pos) const;
+        [[nodiscard]] infra::math::Point2 get_center(const TilePos& pos) const;
         [[nodiscard]] std::unique_ptr<collision::HitBox> get_hitbox(const TilePos& pos) const;
 
         void out_of_bounds(const TilePos &pos, const std::string &who) const;

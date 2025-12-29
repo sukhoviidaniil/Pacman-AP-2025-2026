@@ -86,17 +86,9 @@ namespace view::ui {
             for (size_t y = 0; y < grid.rows(); ++y) {
                 for (size_t x = 0; x < grid.columns(); ++x) {
                     auto pos = model::Tile_Grid::TilePos(y, x);
-                    auto c = grid.get_center(pos);
-                    if (!c.has_value()) {
-                        continue;
-                    }
-                    auto t = grid.get_tile(pos);
-                    if (!t.has_value()) {
-                        continue;
-                    }
-                    model::Tile tile = t.value();
+                    auto center = grid.get_center(pos);
+                    auto tile = grid.get_tile(pos);
 
-                    infra::math::Point2 center = c.value();
 
                     // Position conversion: tile center -> top left
                     infra::math::Point2 top_left{

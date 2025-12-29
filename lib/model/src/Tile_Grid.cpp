@@ -18,8 +18,10 @@
 
 #include "model/grid/Tile_Grid.h"
 
+#include <cmath>
 #include <complex>
 #include "infra/diagnostics/Logger.h"
+#include "infra/math/to_Vector2.h"
 #include "model/collision/HitBox_Rectangle.h"
 
 namespace model {
@@ -77,99 +79,87 @@ namespace model {
         return tile_size_ * static_cast<float>(rows_);
     }
 
-    std::optional<Tile_Grid::TilePos> Tile_Grid::get_nearest_TilePos(const infra::math::Point2 &pos) const {
-        const float half_ts = tile_size_ * 0.5f;
-
-        // const float W = static_cast<float>(columns_) * tile_size_;
-        // const float H = static_cast<float>(rows_)    * tile_size_;
-
-        const float start_x_center = half_ts;
-        const float start_y_center = half_ts;
-
-        const int cx = static_cast<int>(std::floor((pos.x - start_x_center) / tile_size_));
-        const int cy = static_cast<int>(std::floor((pos.y - start_y_center) / tile_size_));
-
-        // If outside the limits — do not return anything
+    std::optional<Tile_Grid::TilePos> Tile_Grid::get_TilePos(const infra::math::Point2 &pos) const {
+        const int cx = static_cast<int>(pos.x / tile_size_);
+        const int cy = static_cast<int>(pos.y  / tile_size_);
         if (cx < 0 || cy < 0 ||
-            cx >= static_cast<int>(columns_) ||
-            cy >= static_cast<int>(rows_))
+        cx >= static_cast<int>(columns_) ||
+        cy >= static_cast<int>(rows_))
         {
             return std::nullopt;
         }
-
         return TilePos(static_cast<size_t>(cy), static_cast<size_t>(cx));
     }
 
     std::optional<Tile_Grid::TilePos> Tile_Grid::get_next_TilePos(
         const infra::math::Point2 &pos,
         const infra::math::Direction &dir) const {
+        using namespace infra::math;
 
-        auto cur = get_nearest_TilePos(pos);
-        if (!cur.has_value()) {
-            return std::nullopt;
-        }
+        int col = static_cast<int>(pos.x / tile_size());
+        int row =  static_cast<int>(pos.y/ tile_size());
+        //const float cx = (col + 0.5f) * tile_size();
+        //const float cy = (row + 0.5f) * tile_size();
 
-        auto [y, x] = cur.value();
-
-
-        int dx = 0;
-        int dy = 0;
         switch (dir) {
-            case infra::math::Direction::Left: dx = -1; break;
-            case infra::math::Direction::Up: dy = -1; break;
-            case infra::math::Direction::Down: dy = 1; break;
-            case infra::math::Direction::Right: dx = 1; break;
+            case Direction::Right:
+                col++;
+                break;
+            case Direction::Left:
+                col--;
+                break;
+            case Direction::Down:
+                row++;
+                break;
+            case Direction::Up:
+                row--;
+                break;
             default:
                 return std::nullopt;
         }
 
-        const int nx = static_cast<int>(x) + dx;
-        const int ny = static_cast<int>(y) + dy;
-        if (nx < 0 || ny < 0 || nx >= static_cast<int>(columns_) || ny >= static_cast<int>(rows_)) {
-            return std::nullopt;
+        return TilePos(row, col);
+    }
+
+
+    infra::math::Point2 Tile_Grid::get_next_center(
+        const infra::math::Point2 &pos,
+        const infra::math::Direction &dir) const {
+
+        const int col = static_cast<int>(pos.x / tile_size_);
+        const int row =  static_cast<int>(pos.y/ tile_size_);
+
+        infra::math::Point2 center = {
+            (col + 0.5f)  * tile_size_, (row + 0.5f) * tile_size_
+        };
+
+        const infra::math::Vector2 v = infra::math::to_vec(dir);
+        const auto to_center = infra::math::Vector2(center - pos);
+        if (to_center.dot(v) <= 0){
+            center += (v * tile_size_).to_Point2();
         }
-        return TilePos(static_cast<size_t>(ny), static_cast<size_t>(nx));
-    }
 
-    Tile Tile_Grid::get_tile_exact(const TilePos &pos) const {
-        out_of_bounds(pos, "get_tile_exact");
-        return tiles_[pos.y][pos.x];
+        return center;
     }
 
 
-    std::optional<Tile> Tile_Grid::get_tile(const TilePos &pos) const {
+    Tile Tile_Grid::get_tile(const TilePos &pos) const {
         if (pos.x >= columns_ || pos.y >= rows_)
         {
-            return std::nullopt;
+            return Tile::Wall;
         }
         return tiles_[pos.y][pos.x];
     }
 
-    infra::math::Point2 Tile_Grid::get_center_exact(const TilePos &pos) const {
-        out_of_bounds(pos, "get_center_exact");
-        const float half_ts = tile_size_ * 0.5f;
-        const float x = static_cast<float>(pos.x)*tile_size_ + half_ts;
-        const float y = static_cast<float>(pos.y)*tile_size_ + half_ts;
+    infra::math::Point2 Tile_Grid::get_center(const TilePos &pos) const {
+        const float x = (static_cast<float>(pos.x) + 0.5f)*tile_size_;
+        const float y = (static_cast<float>(pos.y) + 0.5f)*tile_size_;
         return {x, y};
-    }
-
-    std::optional<infra::math::Point2> Tile_Grid::get_center(const TilePos &pos) const {
-        if (pos.x >= columns_ || pos.y >= rows_)
-        {
-            return std::nullopt;
-        }
-        const float half_ts = tile_size_ * 0.5f;
-        const float x = static_cast<float>(pos.x)*tile_size_ + half_ts;
-        const float y = static_cast<float>(pos.y)*tile_size_ + half_ts;
-        return infra::math::Point2(x, y);
     }
 
     std::unique_ptr<collision::HitBox> Tile_Grid::get_hitbox(const TilePos &pos) const {
         auto center = get_center(pos);
-        if (!center.has_value()) {
-            return nullptr;
-        }
-        return std::make_unique<collision::HitBox_Rectangle>(center.value(), tile_size_, tile_size_, 0);
+        return std::make_unique<collision::HitBox_Rectangle>(center, tile_size_, tile_size_, 0);
     }
 
     void Tile_Grid::out_of_bounds(const TilePos &pos, const std::string &who)const {

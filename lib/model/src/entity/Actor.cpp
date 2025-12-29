@@ -61,50 +61,95 @@ namespace model::entity{
         set_direction(infra::math::Direction::Down);
     }
 
-
-
-
     void Actor::move(
         const float deltaTime,
         const collision::World_Collision_Manager &collision_control
         ) {
 
         if (speed_ <= 0.f) return;
-
         const auto grid = collision_control.get_grid();
-        float remaining_time = deltaTime;
+        float remaining_dist = speed_ * deltaTime;
+        const float EPS = grid->tile_size() * 0.001f;
 
-        while (remaining_time > 0.0f) {
 
-            const auto nt = grid->get_next_TilePos(position_, current_direction_);
-            if (!nt.has_value()) return;
-            const auto nc = grid->get_center(nt.value());
-            if (!nc.has_value()) return;
-            infra::math::Point2 next_center = nc.value();
+        while (remaining_dist > EPS) {
+            // 1. Current cell
+            auto cur_tilepos = grid->get_TilePos(position());
+            if (!cur_tilepos.has_value()) {
+                break;
+            }
+            infra::math::Point2 center = grid->get_center(cur_tilepos.value());
 
-            auto to_cell = infra::math::Vector2(next_center - position_);
-            infra::math::Vector2 direction = to_cell.normalized();
-            float dist_to_cell = to_cell.length(); // The distance that must be traveled to reach the center of the cell.
-            float max_move = speed_ * remaining_time; // This is how far could go in this tick.
-            const float move_dist = std::min(dist_to_cell, max_move);
-            const infra::math::Vector2 displacement = direction * move_dist;
+            // vector and distance to center
+            infra::math::Vector2 to_center = infra::math::Vector2(center - position_);
+            float dist_to_center = to_center.length();
 
-            infra::math::Vector2 allowed_move = displacement;
-            auto mtv_opt = collision_control.collision_mtv_world(*hitbox_, displacement);
-            if (mtv_opt.has_value()) {
-                if (mtv_opt->length() < displacement.length()) {
-                    allowed_move = mtv_opt.value();
+
+            // SNAP to center if almost in it
+            if (dist_to_center <= EPS) {
+                position_ = center;
+                hitbox_->move_to(position_);
+                dist_to_center = 0.0f;
+            }
+
+            // Attempt to move towards the center only if it is in the direction of current_direction_
+            if (dist_to_center > 0.0f) {
+                const infra::math::Vector2 move_dir = infra::math::to_vec(current_direction_);
+                if (to_center.dot(move_dir) < 0.0f) {
+
+                } else {
+                    float step = std::min(dist_to_center, remaining_dist);
+                    infra::math::Vector2 dir = to_center / dist_to_center;
+                    position_ += (dir * step).to_Point2();
+                    hitbox_->move_to(position_);
+                    remaining_dist -= step;
+                    continue;
                 }
             }
 
-            position_ += allowed_move.to_Point2();
+
+
+            // 4. Next cell in the current direction.
+            infra::math::Point2 src_for_next = (dist_to_center == 0.0f) ? center : position_;
+            auto next_tilepos = grid->get_next_TilePos(src_for_next, current_direction_);
+            if (!next_tilepos.has_value()) {
+                break;
+            }
+
+            // 3. In the center — you can change the direction
+            if (current_direction_ != next_direction_) {
+                auto cand = grid->get_next_TilePos(src_for_next, next_direction_);
+                if (cand.has_value()) {
+                    Tile cand_tile = grid->get_tile(cand.value());
+                    if (walkable(cand_tile)) {
+                        current_direction_ = next_direction_;
+                        position_ = center;
+                        hitbox_->move_to(position_);
+                        next_tilepos = cand;
+                    }
+                }
+            }
+
+            /// Collision check
+
+            infra::math::Point2 next_center = grid->get_center(next_tilepos.value());
+            Tile nex_tile = grid->get_tile(next_tilepos.value());
+            if (!walkable(nex_tile)) {
+                position_ = center;
+                hitbox_->move_to(position_);
+                return;
+            }
+
+            // 5. Move to the center of the next cell
+            auto to_next = infra::math::Vector2(next_center - position_);
+            float dist = to_next.length();
+            if (dist < EPS) break;
+            const float step = std::min(dist, remaining_dist);
+            infra::math::Vector2 dir = to_next / dist;
+            position_ += (dir * step).to_Point2();
             hitbox_->move_to(position_);
 
-            // 7. If have reached the center of the cell and there is a new direction
-
-            change_direction(grid);
-
-            remaining_time -= allowed_move.length() / speed_;
+            remaining_dist -= step;
         }
     }
 
@@ -114,18 +159,6 @@ namespace model::entity{
 
 
     void Actor::change_direction(const std::shared_ptr<Tile_Grid> &grid) {
-        const auto ct = grid->get_nearest_TilePos(position_);
-        if (!ct.has_value()) return;
-        const auto cc = grid->get_center(ct.value());
-        if (!ct.has_value()) return;
-        infra::math::Point2 current_center = cc.value();
-        if (
-            std::abs(current_center.x - position_.x) < 1e-4f &&
-            std::abs(current_center.y - position_.y) < 1e-4f &&
-            current_direction_ != next_direction_
-        ) {
-            current_direction_ = next_direction_;
-            position_ = current_center;
-        }
+
     }
 }
