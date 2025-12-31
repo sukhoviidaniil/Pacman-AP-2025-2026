@@ -35,6 +35,7 @@ namespace core::stg{
         );
 
         void run(float tick) override;
+        void checkIn() override;
 
         [[nodiscard]] view::ui::RenderFrame get_RenderFrame(const infra::math::Vector2& screen_size, bool redraw) const override;
         private:

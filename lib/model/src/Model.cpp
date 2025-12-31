@@ -18,6 +18,8 @@
 
 #include "model/Model.h"
 
+#include <iostream>
+
 #include "infra/diagnostics/Logger.h"
 #include "infra/event/events/game.h"
 
@@ -31,9 +33,16 @@ namespace model {
 
     void Model::run(const float delta) {
         // 0.
-        if (wait_ > 0) {
-            wait_ -= delta;
+        if (start_wait_ > 0) {
+            start_wait_ -= delta;
             return;
+        }
+        if (powered_) {
+            if (buff_wait_ > 0) {
+                buff_wait_ -= delta;
+            }else {
+                powered_ = false;
+            }
         }
         if (pacman_status_ == infra::Status::Dead) {
             if (death_wait_ > 0) {
@@ -86,7 +95,10 @@ namespace model {
             std::vector<std::shared_ptr<entity::PowerPellet>> to_remove;
             for (const auto& pp : near) {
                 if (collision_control_->collision(pacman_->hitboxe(), pp->hitboxe())) {
-                    // TODO
+                    powered_ = true;
+                    buff_wait_ += pp->buff_duration();
+                    to_remove.push_back(pp);
+                    std::cout << "ok" ;
                 }
             }
             for (const auto& pp : to_remove) {
@@ -146,7 +158,7 @@ namespace model {
         std::vector<std::shared_ptr<entity::PowerPellet>> result;
         for (const auto& pp : power_pellets_) {
             std::optional<TilePos> t = grid_.get_TilePos(pp->position());
-            if (t.has_value()) continue;
+            if (!t.has_value()) continue;
             TilePos pp_pos = t.value();
             if (are_close(pos, pp_pos)) {
                 result.push_back(pp);

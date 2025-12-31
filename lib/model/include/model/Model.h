@@ -65,6 +65,7 @@ namespace model {
         infra::Status pacman_status_ = infra::Status::Alive;
 
 
+
         [[nodiscard]] std::vector<std::shared_ptr<entity::Coin>> get_coins_near(const TilePos& pos) const;
         [[nodiscard]] std::vector<std::shared_ptr<entity::PowerPellet>> get_power_pellets_near(const TilePos& pos) const;
         [[nodiscard]] std::vector<std::shared_ptr<entity::Ghost>> get_ghosts_near(const TilePos& pos) const;
@@ -87,8 +88,10 @@ namespace model {
         std::unique_ptr<collision::Collision_Control> collision_control_;
         std::shared_ptr<infra::Score> score_;
 
-        float wait_ = 1;
+        float start_wait_ = 1;
         float death_wait_ = 2;
+        bool powered_ = false;
+        float buff_wait_ = 1;
     };
 }
 

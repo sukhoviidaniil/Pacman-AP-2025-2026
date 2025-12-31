@@ -58,7 +58,7 @@ namespace model {
     }
 
     void Model::add_wait() {
-        wait_ += 1.f;
+        start_wait_ += 1.f;
     }
 
 

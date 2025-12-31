@@ -20,6 +20,7 @@
 
 #include <iostream>
 
+#include "infra/diagnostics/Logger.h"
 #include "infra/event/events/game.h"
 #include "infra/event/events/input_Keyboard.h"
 
@@ -36,25 +37,25 @@ namespace control {
                 switch (e.key) {
                     case Key::W:
                     case Key::Up:
-                        std::cout << "UP" << std::endl;
+                        LOG("Pacman::To_Up");
                         pacman_->to_up();
                         break;
 
                     case Key::A:
                     case Key::Left:
-                        std::cout << "LEFT" << std::endl;
+                        LOG("Pacman::To_Left");
                         pacman_->to_left();
                         break;
 
                     case Key::S:
                     case Key::Down:
-                        std::cout << "DOWN" << std::endl;
+                        LOG("Pacman::To_Down");
                         pacman_->to_down();
                         break;
 
                     case Key::D:
                     case Key::Right:
-                        std::cout << "Right" << std::endl;
+                        LOG("Pacman::To_Right");
                         pacman_->to_right();
                         break;
 

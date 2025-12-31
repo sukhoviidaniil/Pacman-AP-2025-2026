@@ -67,6 +67,10 @@ namespace core::stg {
         dispatch(model_->event_store_);
     }
 
+    void Level_Stage::checkIn() {
+        model_->add_wait();
+    }
+
     view::ui::RenderFrame Level_Stage::get_RenderFrame(const infra::math::Vector2 &screen_size, const bool redraw) const {
         //4 Measurement and layout of the entire tree
         ui_root_->measure(screen_size);
