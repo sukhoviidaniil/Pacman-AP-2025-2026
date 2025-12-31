@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          C_Menu.cpp
+ * File:          C_Pause.cpp
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-25
+ * Created:       2025-12-31
  * Modified:      []
  *
  * Description:   []
@@ -16,17 +16,14 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "control/C_Menu.h"
+#include "control/C_Pause.h"
 
+#include "infra/event/events/game.h"
 #include "infra/event/events/input_Keyboard.h"
-#include "infra/menu/Menu.h"
 
 namespace control {
-    C_Menu::C_Menu() = default;
-
-    C_Menu::C_Menu(std::shared_ptr<infra::menu::Menu> menu)
-    : menu_(std::move(menu))
-    {
+    C_Pause::C_Pause(const std::shared_ptr<infra::menu::Menu>& menu) {
+        menu_ = menu;
         using namespace infra::event::input;
 
         bind<KeyPressed>([this](const KeyPressed& e)
@@ -51,18 +48,13 @@ namespace control {
                     push_current_button_event();
                     break;
 
+                case Key::Escape:
+                    event_store_.push(infra::event::game::Request_ExitPause());
+                    break;
+
                 default: break;
             }
         }
         );
-    }
-
-    void C_Menu::push_current_button_event() {
-        if (!menu_) return;
-        const auto& btn = menu_->get_current_button();
-        if (btn.event) {
-            // Copy the button event to the controller's event_store_
-            event_store_.push_concept(*btn.event);
-        }
     }
 }

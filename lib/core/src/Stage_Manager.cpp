@@ -95,7 +95,7 @@ namespace core  {
         track(
             bus->subscribe<infra::event::game::Request_EnterPause>(
                 [this](const infra::event::game::Request_EnterPause&) {
-                    // TODO
+                    push_stage(stage_factory_->make_Pause_Stage());
                 }
             )
         );
@@ -103,6 +103,7 @@ namespace core  {
             bus->subscribe<infra::event::game::Request_ExitPause>(
                 [this](const infra::event::game::Request_ExitPause&) {
                     pop_stage();
+                    current_stages_.top()->checkIn();
                 }
             )
         );

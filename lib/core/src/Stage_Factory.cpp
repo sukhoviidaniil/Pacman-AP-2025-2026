@@ -20,6 +20,7 @@
 
 #include "infra/internal/Score.h"
 #include "core/stage/Level_Stage.h"
+#include "core/stage/Pause_Stage.h"
 #include "core/stage/Start_Stage.h"
 #include "infra/diagnostics/Logger.h"
 #include "model/collision/Separating_Axis_Theorem.h"
@@ -47,7 +48,9 @@ namespace core {
         return std::make_shared<core::stg::Start_Stage>(g_eventbus_, sb);
     }
 
-    std::shared_ptr<core::stg::Stage> Stage_Factory::make_Pause_stage() {
+    std::shared_ptr<core::stg::Stage> Stage_Factory::make_Pause_Stage() {
+        infra::Const_Score s(*score_);
+        return std::make_shared<core::stg::Pause_Stage>(g_eventbus_, s);
     }
 
     std::shared_ptr<core::stg::Stage> Stage_Factory::make_Level_Stage() {

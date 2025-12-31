@@ -35,14 +35,13 @@ namespace core {
             );
 
         std::shared_ptr<core::stg::Stage> make_Start_Stage();
-        std::shared_ptr<core::stg::Stage> make_Pause_stage();
+        std::shared_ptr<core::stg::Stage> make_Pause_Stage();
 
         std::shared_ptr<core::stg::Stage> make_Level_Stage();
 
 
         void make_new_Model();
         void make_new_Score();
-
 
 
     private:

@@ -23,11 +23,10 @@
 namespace control {
     class C_Menu : public Controller {
     public:
+        C_Menu();
         explicit C_Menu(std::shared_ptr<infra::menu::Menu> menu);
-
+    protected:
         void push_current_button_event();
-
-    private:
         std::shared_ptr<infra::menu::Menu> menu_;
     };
 }

@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          C_Game.h
+ * File:          C_Pause.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-25
+ * Created:       2025-12-31
  * Modified:      []
  *
  * Description:   []
@@ -15,20 +15,15 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_C_GAME_H
-#define PACMAN_C_GAME_H
-
-#include "control/Controller.h"
+#ifndef PACMAN_C_PAUSE_H
+#define PACMAN_C_PAUSE_H
+#include "control/C_Menu.h"
 
 namespace control {
-    class C_Game : public Controller {
+    class C_Pause : public C_Menu {
     public:
-        explicit C_Game(const std::shared_ptr<model::entity::Pacman>& pacman);
-
-    protected:
-
-        std::shared_ptr<model::entity::Pacman> pacman_;
+        explicit C_Pause(const std::shared_ptr<infra::menu::Menu>& menu);
     };
 }
 
-#endif //PACMAN_C_GAME_H
+#endif //PACMAN_C_PAUSE_H
