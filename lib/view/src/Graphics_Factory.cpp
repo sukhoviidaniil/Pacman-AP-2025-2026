@@ -78,11 +78,11 @@ namespace graphics {
         return Actor_Pair(actor_model, actor_view);
     }
 
-    Tile_Grid_Pair Graphics_Factory::make_Tile_Grid(
+    TileGrid_Pair Graphics_Factory::make_TileGrid(
         const std::shared_ptr<SFML_Manager> &manager,
-        const logic::Tile_Grid_Info &tile_grid_info
+        const logic::TileGrid_Info &tile_grid_info
         ) {
-        Tile_Grid_Pair p;
+        TileGrid_Pair p;
         p.tile_grid_model_ = logic::Logic_Factory::make_grid(tile_grid_info);
         if (p.tile_grid_model_ == nullptr) {
             throw std::runtime_error("Failed to create tile grid!");

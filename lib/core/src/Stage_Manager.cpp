@@ -74,25 +74,28 @@ namespace core  {
             )
         );
         track(
-            bus->subscribe<infra::event::game::Request_NewLevelStage>(
-                [this](const infra::event::game::Request_NewLevelStage&) {
+            bus->subscribe<infra::event::game::Request_New_LevelStage>(
+                [this](const infra::event::game::Request_New_LevelStage&) {
                     pop_stage();
-                    push_stage(stage_factory_->make_new_Game_Stage());
+                    stage_factory_->make_new_Score();
+                    stage_factory_->make_new_Model();
+                    push_stage(stage_factory_->make_Level_Stage());
                 }
             )
         );
         track(
-            bus->subscribe<infra::event::game::Request_NextLevelStage>(
-                [this](const infra::event::game::Request_NextLevelStage&) {
+            bus->subscribe<infra::event::game::All_Coins_Collected>(
+                [this](const infra::event::game::All_Coins_Collected&) {
                     pop_stage();
-                    push_stage(stage_factory_->make_next_Game_Stage());
+                    stage_factory_->make_new_Model();
+                    push_stage(stage_factory_->make_Level_Stage());
                 }
             )
         );
         track(
             bus->subscribe<infra::event::game::Request_EnterPause>(
                 [this](const infra::event::game::Request_EnterPause&) {
-                    push_stage(stage_factory_->make_pause_stage());
+                    // TODO
                 }
             )
         );
@@ -104,10 +107,10 @@ namespace core  {
             )
         );
         track(
-            bus->subscribe<infra::event::game::Request_DeathStage>(
-                [this](const infra::event::game::Request_DeathStage&) {
+            bus->subscribe<infra::event::game::PacMan_Died>(
+                [this](const infra::event::game::PacMan_Died&) {
                     pop_stage();
-                    push_stage(stage_factory_->make_death_stage());
+                    // push_stage(stage_factory_->); TODO
                 }
             )
         );

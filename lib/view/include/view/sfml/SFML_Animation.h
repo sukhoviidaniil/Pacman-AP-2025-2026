@@ -30,9 +30,8 @@ namespace view {
 
         [[nodiscard]] size_t index() const;
 
-        [[nodiscard]] sf::Sprite &sprite() override;
+        [[nodiscard]] sf::Sprite sprite() override;
 
-        [[nodiscard]] const sf::Sprite &sprite() const override;
     private:
         int frames_size_ = 1;
         float frame_duration_ = 0.0f;

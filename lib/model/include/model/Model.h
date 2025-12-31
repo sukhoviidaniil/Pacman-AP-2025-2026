@@ -17,53 +17,78 @@
 ***************************************************************/
 #ifndef PACMAN_MODEL_H
 #define PACMAN_MODEL_H
-#include <future>
 
+
+#include "collision/Collision_Control.h"
+#include "entity/Coin.h"
+#include "entity/Ghost.h"
 #include "infra/ast/model/Model.h"
 
 #include "infra/event/Event_Store.h"
 
-#include "entity/Coin.h"
+
 #include "entity/Pacman.h"
-#include "entity/Ghost.h"
 #include "entity/PowerPellet.h"
+
+#include "infra/internal/Score.h"
 
 
 namespace model {
     class Model {
         public:
 
-        explicit Model(const infra::ast::Model& m, const unsigned int& level);
+        explicit Model(
+            const infra::ast::Model& m,
+            const std::shared_ptr<infra::Score>& score,
+            std::unique_ptr<collision::Collision_Control> cc,
+            std::vector<std::shared_ptr<entity::Coin>> coins,
+            std::vector<std::shared_ptr<entity::PowerPellet>> power_pellets
+            );
 
-        Model(const infra::ast::Model &m, const unsigned int &level, std::vector<std::shared_ptr<entity::Coin>> coins);
+        void add_wait();
 
-        [[nodiscard]] bool all_coins_eaten() const;
+        [[nodiscard]] bool all_coins_collected() const;
 
-        void run(float delta) const;
+        void run(float delta);
 
         [[nodiscard]] std::shared_ptr<entity::Pacman> get_pacman() const;
+        [[nodiscard]] infra::Status pacman_status() const;
 
 
-
-        infra::Status pacman_status = infra::Status::Alive;
-        infra::Status ghosts_status = infra::Status::Alive;
-        infra::event::Event_Store event_store_;
         std::vector<std::shared_ptr<entity::Coin>> coins_;
         std::vector<std::shared_ptr<entity::PowerPellet>> power_pellets_;
         std::vector<std::shared_ptr<entity::Ghost>> ghosts_;
         std::shared_ptr<entity::Pacman> pacman_;
-        std::shared_ptr<Tile_Grid> grid_;
-        private:
+        TileGrid grid_;
+        infra::event::Event_Store event_store_;
+    protected:
+        infra::Status pacman_status_ = infra::Status::Alive;
 
-        collision::World_Collision_Manager wcm_;
 
-        bool process_tile(const infra::ast::Model &m, const unsigned int &level,
+        [[nodiscard]] std::vector<std::shared_ptr<entity::Coin>> get_coins_near(const TilePos& pos) const;
+        [[nodiscard]] std::vector<std::shared_ptr<entity::PowerPellet>> get_power_pellets_near(const TilePos& pos) const;
+        [[nodiscard]] std::vector<std::shared_ptr<entity::Ghost>> get_ghosts_near(const TilePos& pos) const;
+
+
+    private:
+
+        void remove_coin(const std::shared_ptr<entity::Coin>& coin_to_remove);
+        void remove_power_pellet(const std::shared_ptr<entity::PowerPellet>& pp_to_remove);
+
+        void process_tile(const infra::ast::Model &m, const unsigned int &level,
                             const infra::ast::Tile &in_cell,
                             const infra::math::Point2 &position);
 
-        void process_tile_without_coins(const infra::ast::Model &m, const unsigned int &level,
+        bool process_tile_without_consumables(const infra::ast::Model &m, const unsigned int &level,
                                         const infra::ast::Tile &in_cell,
                                         const infra::math::Point2 &position);
+
+        std::vector<std::shared_ptr<entity::Ghost>> blinkys_;
+        std::unique_ptr<collision::Collision_Control> collision_control_;
+        std::shared_ptr<infra::Score> score_;
+
+        float wait_ = 1;
+        float death_wait_ = 2;
     };
 }
 

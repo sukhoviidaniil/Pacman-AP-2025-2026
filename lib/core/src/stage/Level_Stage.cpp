@@ -62,12 +62,11 @@ namespace core::stg {
     }
 
     void Level_Stage::run(const float tick) {
-        if (p > 0) {
-            p -= tick;
-        }else {
-            model_->run(tick);
-            dispatch(controller->event_store_);
-        }
+
+        model_->run(tick);
+        dispatch(controller->event_store_);
+        dispatch(model_->event_store_);
+
     }
 
     view::ui::RenderFrame Level_Stage::get_RenderFrame(const infra::math::Vector2 &screen_size, const bool redraw) const {

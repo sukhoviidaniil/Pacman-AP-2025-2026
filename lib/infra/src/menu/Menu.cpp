@@ -19,6 +19,8 @@
 #include "infra/menu/Menu.h"
 
 namespace infra::menu {
+    Menu::Menu() =default;
+
     Menu::Menu(const std::vector<MenuButton> &buttons, const NavigationMode mode)
         : nav_mode_(mode), current_index_(0) {
 

@@ -21,21 +21,22 @@
 
 namespace infra::event::game {
 
+    struct ButtonPressed {
+        static constexpr infra::event::EventMask mask = infra::event::EventMask::Game;
+        std::size_t index;
+        explicit ButtonPressed(const std::size_t index) : index(index) {}
+    };
+
     struct Request_StartStage {
         static constexpr infra::event::EventMask mask = infra::event::EventMask::Game;
 
         Request_StartStage() = default;
     };
 
-    struct Request_NewLevelStage {
+    struct Request_New_LevelStage {
         static constexpr infra::event::EventMask mask = infra::event::EventMask::Game;
 
-        Request_NewLevelStage() = default;
-    };
-    struct Request_NextLevelStage {
-        static constexpr infra::event::EventMask mask = infra::event::EventMask::Game;
-
-        Request_NextLevelStage() = default;
+        Request_New_LevelStage() = default;
     };
 
     struct Request_EnterPause {
@@ -50,10 +51,16 @@ namespace infra::event::game {
         Request_ExitPause() = default;
     };
 
-    struct Request_DeathStage {
+    struct All_Coins_Collected {
         static constexpr infra::event::EventMask mask = infra::event::EventMask::Game;
 
-        Request_DeathStage() = default;
+        All_Coins_Collected() = default;
+    };
+
+    struct PacMan_Died {
+        static constexpr infra::event::EventMask mask = infra::event::EventMask::Game;
+
+        PacMan_Died() = default;
     };
 
 }

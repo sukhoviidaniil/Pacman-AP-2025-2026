@@ -19,25 +19,25 @@
 #define PACMAN_WORLD_COLLISION_MANAGER_H
 
 #include "model/collision/Collision_Control.h"
-#include "model/grid/Tile_Grid.h"
+#include "model/grid/TileGrid.h"
 
 namespace model::collision {
     class World_Collision_Manager{
     public:
         World_Collision_Manager();
 
-        World_Collision_Manager(std::unique_ptr<Collision_Control> control, const std::shared_ptr<Tile_Grid> &world);
+        World_Collision_Manager(std::unique_ptr<Collision_Control> control, const std::shared_ptr<TileGrid> &world);
 
         [[nodiscard]] bool collision_world(const HitBox& entity) const;
 
         std::optional<infra::math::Vector2> collision_mtv_world(const HitBox &entity,
                                                                 const infra::math::Vector2 &displacement) const;
 
-        [[nodiscard]] std::shared_ptr<Tile_Grid> get_grid() const;
+        [[nodiscard]] std::shared_ptr<TileGrid> get_grid() const;
 
     private:
         std::unique_ptr<Collision_Control> control_;
-        std::shared_ptr<Tile_Grid> grid_;
+        std::shared_ptr<TileGrid> grid_;
     };
 }
 

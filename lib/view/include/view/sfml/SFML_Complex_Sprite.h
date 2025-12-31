@@ -41,8 +41,7 @@ namespace view {
             );
 
         void elapsed(float delta) const;
-        [[nodiscard]] sf::Sprite &sprite(infra::Status status, infra::math::Direction dir);
-        [[nodiscard]] const sf::Sprite &sprite(infra::Status status, infra::math::Direction dir) const;
+        [[nodiscard]] sf::Sprite sprite(infra::Status status, infra::math::Direction dir);
 
     private:
         std::unordered_map<

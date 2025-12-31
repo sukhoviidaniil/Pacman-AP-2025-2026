@@ -32,11 +32,10 @@ namespace view {
         return static_cast<size_t>(static_cast<int>(elapsed_ / frame_duration_) % frames_size_);
     }
 
-    sf::Sprite & SFML_Animation::sprite() {
-        return animation_[index()];
-    }
-
-    const sf::Sprite & SFML_Animation::sprite() const  {
-        return animation_[index()];
+    sf::Sprite SFML_Animation::sprite() {
+        sf::Sprite s = animation_[index()];
+        s.setPosition(0.f, 0.f);
+        s.setScale(1.f, 1.f);
+        return s;
     }
 }

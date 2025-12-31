@@ -16,7 +16,7 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "model/grid/Tile_Grid.h"
+#include "model/grid/TileGrid.h"
 
 #include <cmath>
 #include <complex>
@@ -26,13 +26,13 @@
 
 namespace model {
 
-    float Tile_Grid::tile_size() const {
+    float TileGrid::tile_size() const {
         return tile_size_;
     }
 
-    Tile_Grid::~Tile_Grid() = default;
+    TileGrid::~TileGrid() = default;
 
-    Tile_Grid::Tile_Grid(const infra::ast::Grid &grid_info) :
+    TileGrid::TileGrid(const infra::ast::Grid &grid_info) :
         rows_(grid_info.rows), columns_(grid_info.columns), tile_size_(grid_info.tile_size)
     {
         const std::vector<std::vector<infra::ast::Tile>> & grid = grid_info.grid;
@@ -63,23 +63,23 @@ namespace model {
         }
     }
 
-    size_t Tile_Grid::rows() const {
+    size_t TileGrid::rows() const {
         return rows_;
     }
 
-    size_t Tile_Grid::columns() const {
+    size_t TileGrid::columns() const {
         return columns_;
     }
 
-    float Tile_Grid::width() const {
+    float TileGrid::width() const {
         return tile_size_ * static_cast<float>(columns_);
     }
 
-    float Tile_Grid::height() const {
+    float TileGrid::height() const {
         return tile_size_ * static_cast<float>(rows_);
     }
 
-    std::optional<Tile_Grid::TilePos> Tile_Grid::get_TilePos(const infra::math::Point2 &pos) const {
+    std::optional<TilePos> TileGrid::get_TilePos(const infra::math::Point2 &pos) const {
         const int cx = static_cast<int>(pos.x / tile_size_);
         const int cy = static_cast<int>(pos.y  / tile_size_);
         if (cx < 0 || cy < 0 ||
@@ -91,7 +91,7 @@ namespace model {
         return TilePos(static_cast<size_t>(cy), static_cast<size_t>(cx));
     }
 
-    std::optional<Tile_Grid::TilePos> Tile_Grid::get_next_TilePos(
+    std::optional<TilePos> TileGrid::get_next_TilePos(
         const infra::math::Point2 &pos,
         const infra::math::Direction &dir) const {
         using namespace infra::math;
@@ -122,7 +122,7 @@ namespace model {
     }
 
 
-    infra::math::Point2 Tile_Grid::get_next_center(
+    infra::math::Point2 TileGrid::get_next_center(
         const infra::math::Point2 &pos,
         const infra::math::Direction &dir) const {
 
@@ -143,30 +143,31 @@ namespace model {
     }
 
 
-    Tile Tile_Grid::get_tile(const TilePos &pos) const {
+    Tile TileGrid::get_tile(const TilePos &pos) const {
         if (pos.x >= columns_ || pos.y >= rows_)
         {
-            return Tile::Wall;
+            return Tile(Tile::Wall);
         }
         return tiles_[pos.y][pos.x];
     }
 
-    infra::math::Point2 Tile_Grid::get_center(const TilePos &pos) const {
+    infra::math::Point2 TileGrid::get_center(const TilePos &pos) const {
         const float x = (static_cast<float>(pos.x) + 0.5f)*tile_size_;
         const float y = (static_cast<float>(pos.y) + 0.5f)*tile_size_;
         return {x, y};
     }
 
-    std::unique_ptr<collision::HitBox> Tile_Grid::get_hitbox(const TilePos &pos) const {
+    std::unique_ptr<collision::HitBox> TileGrid::get_hitbox(const TilePos &pos) const {
         auto center = get_center(pos);
         return std::make_unique<collision::HitBox_Rectangle>(center, tile_size_, tile_size_, 0);
     }
 
-    void Tile_Grid::out_of_bounds(const TilePos &pos, const std::string &who)const {
+    void TileGrid::out_of_bounds(const TilePos &pos, const std::string &who)const {
         if (pos.x >= columns_ || pos.y >= rows_){
-            throw std::out_of_range("Tile_Grid::"+who+" - position is out of bounds.");
+            throw std::out_of_range("TileGrid::"+who+" - position is out of bounds.");
         }
     }
+
 }
 
 

@@ -29,7 +29,6 @@ namespace infra::event {
         Input  = 1 << 0,   // 0001
         Window = 1 << 1,   // 0010
         Game   = 1 << 2,   // 0100
-        Level  = 1 << 3,   // 1000
     };
 
 

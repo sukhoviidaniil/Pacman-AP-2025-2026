@@ -22,9 +22,10 @@
 
 namespace model::ai {
     struct PinkyTarget : TargetStrategy {
-        infra::math::Vector2 target(const GhostContext& ctx) const override {
-            // цель: клетка на 4 шага впереди по направлению pacman_dir
-            Vec2 t = ctx.pacman_tile;
+        TilePos target(const GhostContext& ctx) const override {
+            using infra::math::Direction;
+            // goal: cell 4 steps ahead in the direction pacman_dir
+            TilePos t = ctx.pacman_pos;
             switch (ctx.pacman_dir) {
                 case Direction::Up: t.y -= 4; break;
                 case Direction::Down: t.y += 4; break;

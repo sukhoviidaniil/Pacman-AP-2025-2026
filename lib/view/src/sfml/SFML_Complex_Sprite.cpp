@@ -34,18 +34,10 @@ namespace view {
     }
 
 
-    sf::Sprite& SFML_Complex_Sprite::sprite(
+    sf::Sprite SFML_Complex_Sprite::sprite(
         infra::Status status,
         infra::math::Direction dir
     ) {
-        return sprites_.at(status).at(dir)->sprite();
-    }
-
-
-    const sf::Sprite& SFML_Complex_Sprite::sprite(
-        infra::Status status,
-        infra::math::Direction dir
-    ) const {
         return sprites_.at(status).at(dir)->sprite();
     }
 }

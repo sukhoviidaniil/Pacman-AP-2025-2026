@@ -41,8 +41,8 @@ namespace core::stg {
         buttons.push_back(infra::menu::MenuButton(
             play_b_text,
             std::make_unique<
-                infra::event::EventInstance<infra::event::game::Request_NewLevelStage>
-            >(infra::event::game::Request_NewLevelStage())
+                infra::event::EventInstance<infra::event::game::Request_New_LevelStage>
+            >(infra::event::game::Request_New_LevelStage())
             )
         );
         buttons.push_back(infra::menu::MenuButton(

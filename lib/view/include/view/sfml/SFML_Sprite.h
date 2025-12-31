@@ -29,23 +29,21 @@ namespace view {
         virtual void elapsed(const float delta) {
 
         }
-        [[nodiscard]] virtual sf::Sprite &sprite() = 0;
-        [[nodiscard]] virtual const sf::Sprite &sprite() const = 0;
+        [[nodiscard]] virtual sf::Sprite sprite() = 0;
 
     };
     struct SFML_Sprite : ISFML_Sprite{
         sf::Sprite sprite_;
         explicit SFML_Sprite(sf::Sprite sprite) : sprite_(std::move(sprite)) {}
 
-        [[nodiscard]] sf::Sprite &sprite() override {
-            return sprite_;
-        }
-        [[nodiscard]]const sf::Sprite &sprite() const override {
-            return sprite_;
+        [[nodiscard]] sf::Sprite sprite() override {
+            sf::Sprite s = sprite_;
+            s.setPosition(0.f, 0.f);
+            s.setScale(1.f, 1.f);
+            return s;
         }
 
     };
-
 
 }
 

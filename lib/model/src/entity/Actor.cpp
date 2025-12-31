@@ -39,46 +39,20 @@ namespace model::entity{
         return current_direction_;
     }
 
-
-
-    void Actor::set_direction(const infra::math::Direction &direction) {
-        next_direction_ = direction;
-    }
-
-    void Actor::to_left() {
-        set_direction(infra::math::Direction::Left);
-    }
-
-    void Actor::to_right() {
-        set_direction(infra::math::Direction::Right);
-    }
-
-    void Actor::to_up() {
-        set_direction(infra::math::Direction::Up);
-    }
-
-    void Actor::to_down() {
-        set_direction(infra::math::Direction::Down);
-    }
-
-    void Actor::move(
-        const float deltaTime,
-        const collision::World_Collision_Manager &collision_control
-        ) {
+    void Actor::move(float deltaTime, const model::TileGrid &grid) {
 
         if (speed_ <= 0.f) return;
-        const auto grid = collision_control.get_grid();
         float remaining_dist = speed_ * deltaTime;
-        const float EPS = grid->tile_size() * 0.001f;
+        const float EPS = grid.tile_size() * 0.001f;
 
 
         while (remaining_dist > EPS) {
             // 1. Current cell
-            auto cur_tilepos = grid->get_TilePos(position());
+            auto cur_tilepos = grid.get_TilePos(position());
             if (!cur_tilepos.has_value()) {
                 break;
             }
-            infra::math::Point2 center = grid->get_center(cur_tilepos.value());
+            infra::math::Point2 center = grid.get_center(cur_tilepos.value());
 
             // vector and distance to center
             infra::math::Vector2 to_center = infra::math::Vector2(center - position_);
@@ -118,8 +92,8 @@ namespace model::entity{
 
             // 3. In the center — you can change the direction
             if (current_direction_ != next_direction_) {
-                if (const auto cand = grid->get_next_TilePos(src_for_next, next_direction_)) {
-                    const Tile cand_tile = grid->get_tile(*cand);
+                if (const auto cand = grid.get_next_TilePos(src_for_next, next_direction_)) {
+                    const Tile cand_tile = grid.get_tile(*cand);
                     if (walkable(cand_tile)) {
                         current_direction_ = next_direction_;
                         position_ = center; // when changing direction, the position is centered
@@ -129,10 +103,10 @@ namespace model::entity{
             }
 
             //
-            const auto next_tilepos = grid->get_next_TilePos(position_, current_direction_);
+            const auto next_tilepos = grid.get_next_TilePos(position_, current_direction_);
             if (!next_tilepos) break;
-            const infra::math::Point2 next_center = grid->get_center(*next_tilepos);
-            const Tile next_tile = grid->get_tile(*next_tilepos);
+            const infra::math::Point2 next_center = grid.get_center(*next_tilepos);
+            const Tile next_tile = grid.get_tile(*next_tilepos);
 
             // If the next tile is impassable, stay in the center of the current tile and exit.
             if (!walkable(next_tile)) {
@@ -158,8 +132,26 @@ namespace model::entity{
         }
     }
 
-    void Actor::act(float deltaTime, const collision::World_Collision_Manager &collision_control) {
-        move(deltaTime, collision_control);
+
+    void Actor::set_direction(const infra::math::Direction &direction) {
+        next_direction_ = direction;
     }
+
+    void Actor::to_left() {
+        set_direction(infra::math::Direction::Left);
+    }
+
+    void Actor::to_right() {
+        set_direction(infra::math::Direction::Right);
+    }
+
+    void Actor::to_up() {
+        set_direction(infra::math::Direction::Up);
+    }
+
+    void Actor::to_down() {
+        set_direction(infra::math::Direction::Down);
+    }
+
 
 }

@@ -23,35 +23,20 @@
 
 namespace model {
 
-    Model::Model(const infra::ast::Model &m, const unsigned int& level) {
-        grid_ = std::make_shared<Tile_Grid>(m.grid);
-        auto sat = std::make_unique<collision::Separating_Axis_Theorem>();
-        wcm_ = collision::World_Collision_Manager(std::move(sat), grid_);
-
-        const std::vector<std::vector<infra::ast::Tile>>& s_grid = m.grid.grid;
-        const size_t rows = m.grid.rows;
-        const size_t columns = m.grid.columns;
-
-        for (size_t y = 0; y < rows; ++y) {
-            for (size_t x = 0; x < columns; ++x) {
-                const infra::ast::Tile& in_cell = s_grid[y][x];
-                std::optional<infra::math::Point2> center = grid_->get_center(Tile_Grid::TilePos(y,x));
-                if (!center.has_value()) {
-                    continue;
-                }
-                infra::math::Point2 position = center.value();
-                process_tile(m, level, in_cell, position);
-            }
-        }
-    }
-
     Model::Model(
-        const infra::ast::Model &m, const unsigned int &level,
-        std::vector<std::shared_ptr<entity::Coin>> coins
-    ) {
-        grid_ = std::make_shared<Tile_Grid>(m.grid);
-        auto sat = std::make_unique<collision::Separating_Axis_Theorem>();
-        wcm_ = collision::World_Collision_Manager(std::move(sat), grid_);
+        const infra::ast::Model &m,
+        const std::shared_ptr<infra::Score> &score,
+        std::unique_ptr<collision::Collision_Control> cc,
+        std::vector<std::shared_ptr<entity::Coin>> coins,
+        std::vector<std::shared_ptr<entity::PowerPellet>> power_pellets
+        ) :  grid_(m.grid), collision_control_(std::move(cc)), score_(score)  {
+
+        bool consumables_emty = coins.empty() && power_pellets.empty();
+
+        if (!consumables_emty) {
+            power_pellets_ = std::move(power_pellets);
+            coins_ = std::move(coins);
+        }
 
         const std::vector<std::vector<infra::ast::Tile>>& s_grid = m.grid.grid;
         const size_t rows = m.grid.rows;
@@ -60,37 +45,39 @@ namespace model {
         for (size_t y = 0; y < rows; ++y) {
             for (size_t x = 0; x < columns; ++x) {
                 const infra::ast::Tile& in_cell = s_grid[y][x];
-                std::optional<infra::math::Point2> center = grid_->get_center(Tile_Grid::TilePos(y,x));
-                if (!center.has_value()) {
-                    continue;
+                infra::math::Point2 center = grid_.get_center(TilePos(y,x));
+
+                if (consumables_emty) {
+                    process_tile(m, score_->level(), in_cell, center);
+                }else {
+                    process_tile_without_consumables(m, score_->level(), in_cell, center);
                 }
-                infra::math::Point2 position = center.value();
-                process_tile_without_coins(m, level, in_cell, position);
             }
         }
 
-        coins_ = std::move(coins);
     }
 
-    bool Model::process_tile(
+    void Model::add_wait() {
+        wait_ += 1.f;
+    }
+
+
+    void Model::process_tile(
         const infra::ast::Model &m,
         const unsigned int &level,
         const infra::ast::Tile &in_cell,
         const infra::math::Point2 &position
     ) {
+
+        if (process_tile_without_consumables(m, level, in_cell, position)) {
+            return;
+        }
         switch (in_cell) {
-            case infra::ast::Tile::PacmanSpawn: {
-                float size = m.grid.tile_size;
-                float speed = m.pacman_spawn.speed;
-                auto h = std::make_unique<collision::HitBox_Rectangle>(position, size, size, 0);
-                pacman_ = std::make_shared<entity::Pacman>(size, position, std::move(h), speed);
-                return true;
-            }
             case infra::ast::Tile::CoinSpawn: {
                 float size = m.coin_spawn.size;
                 auto h = std::make_unique<collision::HitBox_Rectangle>(position, size, size, 0);
                 coins_.push_back(std::make_shared<entity::Coin>(size, position, std::move(h)));
-                return true;
+                break;
             }
             case infra::ast::Tile::PowerPelletSpawn: {
                 std::string name = m.power_pellet_spawn.name;
@@ -100,23 +87,32 @@ namespace model {
                 power_pellets_.push_back(
                     std::make_shared<entity::PowerPellet>(name, size, position, std::move(h), buff_duration)
                     );
-                return true;
+                break;
             }
-            default:
-                return false;
+            default: break;
         }
     }
 
-    void Model::process_tile_without_coins(
+    bool Model::process_tile_without_consumables(
         const infra::ast::Model &m,
         const unsigned int &level,
-        const infra::ast::Tile& in_cell,
-        const infra::math::Point2& position
-        ) {
+        const infra::ast::Tile &in_cell,
+        const infra::math::Point2 &position
+    ) {
 
-        if (process_tile(m, level, in_cell, position)) {
-            return;
+        switch (in_cell) {
+            case infra::ast::Tile::PacmanSpawn: {
+                float size = m.grid.tile_size;
+                float speed = m.pacman_spawn.speed;
+                auto h = std::make_unique<collision::HitBox_Rectangle>(position, size, size, 0);
+                pacman_ = std::make_shared<entity::Pacman>(size, position, std::move(h), speed);
+                return true;
+            }
+
+            default:
+                return false;
         }
+
         // TODO
     }
 }

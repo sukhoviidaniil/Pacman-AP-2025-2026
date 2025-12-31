@@ -43,7 +43,7 @@ namespace model::ui {
             return model_.pacman;
         }
 
-        const Tile_Grid& grid() const {
+        const TileGrid& grid() const {
             return *model_.grid;
         }
 

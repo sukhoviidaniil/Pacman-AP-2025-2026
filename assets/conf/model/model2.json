@@ -1,0 +1,28 @@
+{
+  "Grid" : {
+    "rows": 3,
+    "columns": 21,
+    "tile_size" : 1,
+    "grid" : [
+      ["W", "W", "W", "W", "W", "W",   "W", "W", "W", "W", "W", "W", "W", "W", "W",   "W", "W", "W", "W", "W", "W"],
+
+      ["W", "M", "C", "C", "C", "C",   "C", "C", "C", "C", "C", "C", "C", "C", "C",   "C", "C", "C", "C", "C", "W"],
+
+      ["W", "W", "W", "W", "W", "W",   "W", "W", "W", "W", "W", "W", "W", "W", "W",   "W", "W", "W", "W", "W", "W"]
+    ]
+  },
+  "PacmanSpawn" : {
+    "speed" : 4
+  },
+  "GhostSpawn" : {
+
+  },
+  "CoinSpawn" : {
+    "size" : 0.2
+  },
+  "PowerPelletSpawn" : {
+    "name" : "Candy",
+    "size" : 0.4,
+    "buff_duration" : 5.0
+  }
+}

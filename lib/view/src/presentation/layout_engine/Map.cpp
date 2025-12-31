@@ -17,6 +17,11 @@
 ***************************************************************/
 
 #include "view/presentation/layout_engine/Map.h"
+
+#include <iostream>
+
+#include "infra/diagnostics/Logger.h"
+#include "infra/diagnostics/LogScope.h"
 #include "view/presentation/render/RI_ComplexSprite.h"
 #include "view/presentation/render/RI_Rectangle.h"
 namespace view::ui {
@@ -43,6 +48,8 @@ namespace view::ui {
 
     void Map::append_render_items(RenderFrame &frame, const ViewContext &ctx) const {
 
+        LOG_SCOPE();
+
         if (!ctx.model.has_value()) {
             return;
         }
@@ -55,7 +62,7 @@ namespace view::ui {
 
         frame.constant_items.push_back(std::move(r));
 
-        const model::Tile_Grid &grid = model.grid();
+        const model::TileGrid &grid = model.grid();
         const float ts = grid.tile_size();
 
         // Map size in world coordinates (taking into account the full size of the tiles)
@@ -85,7 +92,7 @@ namespace view::ui {
 
             for (size_t y = 0; y < grid.rows(); ++y) {
                 for (size_t x = 0; x < grid.columns(); ++x) {
-                    auto pos = model::Tile_Grid::TilePos(y, x);
+                    auto pos = model::TilePos(y, x);
                     auto center = grid.get_center(pos);
                     auto tile = grid.get_tile(pos);
 
@@ -118,6 +125,12 @@ namespace view::ui {
             }
         }
 
+
+        LOG("\n");
+        std::string msg = "temp_items size 1 : " + std::to_string(frame.temp_items.size());
+        LOG(msg);
+        msg = "constant_items size 1 : " + std::to_string(frame.constant_items.size());
+        // LOG(msg);
         for (const auto& entity : model.coins()) {
             const float half_size = entity->size() * 0.5f;
             const float scale_size = entity->size() * scale;
@@ -130,13 +143,17 @@ namespace view::ui {
             };
 
             const infra::math::Point2 ui_pos = world_to_ui(top_left, offset, scale);
-
             auto sprite = std::make_unique<view::ui::RI_Sprite>();
             sprite->sprite = entity->name();
             sprite->rect = { ui_pos.x, ui_pos.y, scale_size, scale_size};
             frame.temp_items.push_back(std::move(sprite));
         }
+        msg = "temp_items size 2 : " + std::to_string(frame.temp_items.size());
+        LOG(msg);
+        msg = "constant_items size 2 : " + std::to_string(frame.constant_items.size());
+        // LOG(msg);
         for (const auto& entity : model.power_pellets()) {
+
             const float half_size = entity->size() * 0.5f;
             const float scale_size = entity->size() * scale;
 
@@ -153,27 +170,9 @@ namespace view::ui {
             sprite->sprite = entity->name();
             sprite->rect = { ui_pos.x, ui_pos.y, scale_size, scale_size};
             frame.temp_items.push_back(std::move(sprite));
+
         }
 
-        for (const auto& entity : model.ghosts()) {
-            const float half_size = entity->size() * 0.5f;
-            const float scale_size = entity->size() * scale;
-
-            infra::math::Point2 center = entity->position();
-            // Position conversion: center -> top left
-            infra::math::Point2 top_left{
-                center.x - half_size,
-                center.y - half_size
-            };
-
-            const infra::math::Point2 ui_pos = world_to_ui(top_left, offset, scale);
-            /* TODO
-            auto sprite = std::make_unique<view::ui::RI_Sprite>();
-            sprite->sprite = entity->name();
-            sprite->rect = { ui_pos.x, ui_pos.y, scale_size, scale_size};
-            frame.temp_items.push_back(std::move(sprite));
-            */
-        }
         {
             const auto& entity = model.pacman();
             const float half_size = entity->size() * 0.5f;

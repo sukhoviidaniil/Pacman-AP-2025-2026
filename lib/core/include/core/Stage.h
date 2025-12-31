@@ -29,6 +29,7 @@ namespace core::stg {
         virtual ~Stage() = default;
 
         explicit Stage(const std::shared_ptr<infra::event::Event_Bus> &globalBus);
+        virtual void checkIn();
 
         virtual void run(float delta) = 0;
 
@@ -37,7 +38,7 @@ namespace core::stg {
         std::unique_ptr<control::Controller> controller = nullptr; /// Controller of this stage
         std::unique_ptr<infra::event::Event_Bus> l_eventbus; /// Local Event Bus (for local events)
     protected:
-        virtual void dispatch(const infra::event::Event_Store &event_store);
+        virtual void dispatch(infra::event::Event_Store &event_store);
         std::unique_ptr<view::ui::UIElement> ui_root_ = nullptr; /// Stage UI
         std::shared_ptr<infra::event::Event_Bus> g_eventbus;/// Global Event Bus (for stage change)
     };

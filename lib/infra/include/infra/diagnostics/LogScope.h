@@ -19,7 +19,7 @@
 #define PACMAN_LOGSCOPE_H
 
 #ifdef _DEBUG
-#define LOG_SCOPE() LogScope UNIQUE_NAME(__scope){}
+#define LOG_SCOPE() ::infra::diag::LogScope UNIQUE_NAME(__scope){}
 #define UNIQUE_NAME(base) CONCAT(base, __COUNTER__)
 #define CONCAT(a, b) CONCAT_INNER(a, b)
 #define CONCAT_INNER(a, b) a##b

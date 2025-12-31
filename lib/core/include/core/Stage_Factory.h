@@ -35,19 +35,15 @@ namespace core {
             );
 
         std::shared_ptr<core::stg::Stage> make_Start_Stage();
-        std::shared_ptr<core::stg::Stage> make_pause_stage();
-        std::shared_ptr<core::stg::Stage> make_new_Game_Stage();
+        std::shared_ptr<core::stg::Stage> make_Pause_stage();
 
-        std::shared_ptr<core::stg::Stage> make_next_Game_Stage();
+        std::shared_ptr<core::stg::Stage> make_Level_Stage();
 
-        std::shared_ptr<core::stg::Stage> make_continuing_Game_Stage();
-        std::shared_ptr<core::stg::Stage> make_win_stage();
-        std::shared_ptr<core::stg::Stage> make_death_stage();
 
-    protected:
+        void make_new_Model();
+        void make_new_Score();
 
-        void make_new_score();
-        void select_new_model();
+
 
     private:
 

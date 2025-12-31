@@ -38,20 +38,17 @@ namespace model::ui {
             return model_.ghosts_;
         }
 
-        [[nodiscard]] const infra::Status& ghosts_status() const {
-            return model_.ghosts_status;
-        }
 
         [[nodiscard]] const std::shared_ptr<entity::Pacman>& pacman() const {
             return model_.pacman_;
         }
 
-        [[nodiscard]] const infra::Status& pacman_status() const {
-            return model_.pacman_status;
+        [[nodiscard]] infra::Status pacman_status() const {
+            return model_.pacman_status();
         }
 
-        [[nodiscard]] const Tile_Grid& grid() const {
-            return *model_.grid_;
+        [[nodiscard]] const TileGrid& grid() const {
+            return model_.grid_;
         }
 
     private:

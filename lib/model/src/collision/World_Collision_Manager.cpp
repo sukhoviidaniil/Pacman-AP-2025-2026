@@ -36,7 +36,7 @@ namespace model::collision {
 
     World_Collision_Manager::World_Collision_Manager(
         std::unique_ptr<Collision_Control> control,
-        const std::shared_ptr<Tile_Grid> &world
+        const std::shared_ptr<TileGrid> &world
         ):
         control_(std::move(control)), grid_(world)
     {
@@ -71,7 +71,7 @@ namespace model::collision {
         if (!temp.has_value()) {
             return false;
         }
-        const Tile_Grid::TilePos adjusted_tile = temp.value();
+        const TilePos adjusted_tile = temp.value();
         const size_t minTileX = adjusted_tile.x - 1;
         const size_t maxTileX = adjusted_tile.x + 1;
         const size_t minTileY = adjusted_tile.y - 1;
@@ -79,7 +79,7 @@ namespace model::collision {
 
         for (size_t y = minTileY; y <= maxTileY; ++y){
             for (size_t x = minTileX; x <= maxTileX; ++x){
-                auto pos = Tile_Grid::TilePos(y,x);
+                auto pos = TilePos(y,x);
                 std::optional<Tile> t = grid_->get_tile(pos);
                 if (!t.has_value()) {
                     outside_the_borders();
@@ -107,7 +107,7 @@ namespace model::collision {
         const auto temp = grid_->get_TilePos(aabb.center);
         if (!temp.has_value()) return std::nullopt;
 
-        const Tile_Grid::TilePos adjusted_tile = temp.value();
+        const TilePos adjusted_tile = temp.value();
         const size_t minTileX = adjusted_tile.x - 1;
         const size_t maxTileX = adjusted_tile.x + 1;
         const size_t minTileY = adjusted_tile.y - 1;
@@ -119,7 +119,7 @@ namespace model::collision {
 
         for (size_t y = minTileY; y <= maxTileY; ++y){
             for (size_t x = minTileX; x <= maxTileX; ++x){
-                auto pos = Tile_Grid::TilePos(y, x);
+                auto pos = TilePos(y, x);
                 auto t = grid_->get_tile(pos);
                 if (walkable(t)) continue;
 
@@ -138,7 +138,7 @@ namespace model::collision {
         return final_mtv;
     }
 
-    std::shared_ptr<Tile_Grid> World_Collision_Manager::get_grid() const {
+    std::shared_ptr<TileGrid> World_Collision_Manager::get_grid() const {
         return grid_;
     }
 }

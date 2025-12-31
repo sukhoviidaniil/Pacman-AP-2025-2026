@@ -22,6 +22,7 @@
 #include "core/stage/Level_Stage.h"
 #include "core/stage/Start_Stage.h"
 #include "infra/diagnostics/Logger.h"
+#include "model/collision/Separating_Axis_Theorem.h"
 
 namespace core {
 
@@ -46,65 +47,37 @@ namespace core {
         return std::make_shared<core::stg::Start_Stage>(g_eventbus_, sb);
     }
 
-    std::shared_ptr<core::stg::Stage> Stage_Factory::make_pause_stage() {
+    std::shared_ptr<core::stg::Stage> Stage_Factory::make_Pause_stage() {
     }
 
-    std::shared_ptr<core::stg::Stage> Stage_Factory::make_new_Game_Stage() {
+    std::shared_ptr<core::stg::Stage> Stage_Factory::make_Level_Stage() {
+        infra::Const_Score s(*score_);
+        return std::make_shared<core::stg::Level_Stage>(g_eventbus_, current_model_, s);
+    }
+
+    void Stage_Factory::make_new_Model() {
+        const infra::ast::Model& model_variant = models_variants_[selected_model_];
+        std::unique_ptr<model::collision::Separating_Axis_Theorem> cc = std::make_unique<model::collision::Separating_Axis_Theorem>();
+
+        std::vector<std::shared_ptr<model::entity::Coin>> coins {};
+        std::vector<std::shared_ptr<model::entity::PowerPellet>> pp {};
         if (current_model_ != nullptr) {
-            const std::string err = "";
-            LOG(err);
-            return make_continuing_Game_Stage();
+            if (current_model_->all_coins_collected()) {
+                if (random_model_order_) {
+                    // make rnd index
+                }else {
+                    // Move to next index
+                    selected_model_ = (selected_model_+1) % models_variants_.size() ;
+                }
+            }else {
+                coins = current_model_->coins_;
+                pp = current_model_->power_pellets_;
+            }
         }
-        make_new_score();
-        selected_model_ = selected_model_ % models_variants_.size() ;
-        infra::ast::Model& model_variant = models_variants_[selected_model_];
-        current_model_ = std::make_shared<model::Model>(model_variant, score_->level());
-        infra::Const_Score s(*score_);
-        return std::make_shared<core::stg::Level_Stage>(g_eventbus_, current_model_, s);
+        current_model_ = std::make_shared<model::Model>(model_variant, score_, std::move(cc), coins, pp);
     }
 
-    std::shared_ptr<core::stg::Stage> Stage_Factory::make_next_Game_Stage() {
-        if (current_model_ == nullptr) {
-            const std::string err = "";
-            LOG(err);
-            return make_new_Game_Stage();
-        }
-        select_new_model();
-        infra::ast::Model& model_variant = models_variants_[selected_model_];
-        current_model_ = std::make_shared<model::Model>(model_variant, score_->level());
-        infra::Const_Score s(*score_);
-        return std::make_shared<core::stg::Level_Stage>(g_eventbus_, current_model_, s);
-    }
-
-    std::shared_ptr<core::stg::Stage> Stage_Factory::make_continuing_Game_Stage() {
-        if (current_model_ == nullptr) {
-            const std::string err = "";
-            LOG(err);
-            return make_new_Game_Stage();
-        }
-        infra::ast::Model& model_variant = models_variants_[selected_model_];
-        current_model_ = std::make_shared<model::Model>(model_variant, score_->level(), current_model_->coins_);
-        infra::Const_Score s(*score_);
-        return std::make_shared<core::stg::Level_Stage>(g_eventbus_, current_model_, s);
-    }
-
-    std::shared_ptr<core::stg::Stage> Stage_Factory::make_win_stage() {
-    }
-
-    std::shared_ptr<core::stg::Stage> Stage_Factory::make_death_stage() {
-    }
-
-    void Stage_Factory::make_new_score() {
+    void Stage_Factory::make_new_Score() {
         score_ = std::make_shared<infra::Score>(score_setup_);
-    }
-
-
-    void  Stage_Factory::select_new_model() {
-        if (random_model_order_) {
-            // make rnd index
-        }else {
-            // Move to next index
-            selected_model_ = (selected_model_+1) % models_variants_.size() ;
-        }
     }
 }

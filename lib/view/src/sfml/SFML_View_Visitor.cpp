@@ -246,6 +246,10 @@ namespace view {
             r.height / bounds.height
         );
         window_.draw(sprite);
+
+        if (ri_sprite.sprite == "Coin") {
+            c++;
+        }
     }
 
     void SFML_View::visit(const ui::RI_ComplexSprite &ri) {

@@ -19,23 +19,23 @@
 #define PACMAN_TILE_GRID_H
 
 #include <optional>
+
+#include "model/grid/TilePos.h"
 #include "infra/ast/model/Grid.h"
 #include "infra/math/Direction.h"
 #include "infra/math/Point2.h"
 #include "model/grid/Tile.h"
 #include "model/collision/HitBox.h"
 
+
 namespace model {
-    class Tile_Grid {
+    class TileGrid {
     public:
-        struct TilePos {
-            size_t y, x; /// y - row, x - colum
-            TilePos(const size_t y, const size_t x) : y(y), x(x) {}
-        };
-        ~Tile_Grid();
 
+        ~TileGrid();
 
-        explicit Tile_Grid(const infra::ast::Grid &grid_info);
+        explicit TileGrid() = default;
+        explicit TileGrid(const infra::ast::Grid &grid_info);
 
         [[nodiscard]] float tile_size() const;
         [[nodiscard]] size_t rows() const;
@@ -56,8 +56,8 @@ namespace model {
 
     private:
 
-        size_t rows_, columns_;
-        float tile_size_;
+        size_t rows_ = 0, columns_ = 0;
+        float tile_size_ = 0;
 
         std::vector<
             std::vector<
@@ -66,6 +66,7 @@ namespace model {
         > tiles_;
     };
 }
+
 
 
 #endif //PACMAN_TILE_GRID_H

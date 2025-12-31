@@ -19,12 +19,14 @@
 #define PACMAN_TILE_H
 
 namespace model {
+
     enum class Tile {
         Wall,
         Free
     };
-    inline bool walkable(const Tile tile) {
-        switch (tile) {
+
+    [[nodiscard]] inline bool walkable(const Tile t){
+        switch (t) {
             case Tile::Free:
                 return true;
             default:

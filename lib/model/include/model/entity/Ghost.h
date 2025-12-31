@@ -18,8 +18,12 @@
 #ifndef PACMAN_GHOST_H
 #define PACMAN_GHOST_H
 
+#include "model/entity/Actor.h"
+
 namespace model::entity {
     class Ghost : public Actor {
+    public:
+        ~Ghost() override;
 
     };
 }

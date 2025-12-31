@@ -18,13 +18,12 @@
 #ifndef PACMAN_TARGETSTRATEGY_H
 #define PACMAN_TARGETSTRATEGY_H
 #include "model/ai/GhostContext.h"
-#include "infra/math/Vector2.h"
 
 namespace model::ai {
     /// Calculates the target cell for Chase/Scatter mode
     struct TargetStrategy {
         virtual ~TargetStrategy() = default;
-        virtual infra::math::Vector2 target(const GhostContext&) const = 0;
+        virtual TilePos target(const GhostContext&) const = 0;
     };
 }
 

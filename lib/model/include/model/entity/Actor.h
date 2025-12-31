@@ -18,10 +18,13 @@
 #ifndef PACMAN_ACTOR_H
 #define PACMAN_ACTOR_H
 
-#include "Entity.h"
-#include "../../../../infra/include/infra/internal/Status.h"
-#include "model/collision/World_Collision_Manager.h"
 #include "infra/math/Direction.h"
+#include "infra/internal/Status.h"
+#include "model/entity/Entity.h"
+#include "model/grid/TileGrid.h"
+
+// #include "model/collision/World_Collision_Manager.h"
+
 
 namespace model::entity {
     class Actor : public Entity {
@@ -40,9 +43,9 @@ namespace model::entity {
         [[nodiscard]] infra::math::Direction get_direction() const;
 
 
-        void move(float deltaTime, const collision::World_Collision_Manager &collision_control);
+        void move(float deltaTime, const model::TileGrid &grid);
 
-        void virtual act(float deltaTime, const collision::World_Collision_Manager &collision_control);
+        // void virtual act(float deltaTime, const collision::World_Collision_Manager &collision_control);
 
         infra::Status status_ = infra::Status::Alive;
         private:

@@ -21,9 +21,9 @@
 
 namespace model::ai {
     struct ClydeTarget : TargetStrategy {
-        infra::math::Vector2 target(const GhostContext& ctx) const override {
-            // как Blinky, но поведение переключается в Move/Mode
-            return ctx.pacman_tile;
+        TilePos target(const GhostContext& ctx) const override {
+            // like Blinky, but behavior switches to Move/Mode
+            return ctx.pacman_pos;
         }
     };
 }

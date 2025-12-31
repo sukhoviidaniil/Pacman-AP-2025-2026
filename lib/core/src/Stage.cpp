@@ -23,20 +23,27 @@ namespace core::stg {
         l_eventbus = std::make_unique<infra::event::Event_Bus>();
     }
 
-    void stg::Stage::dispatch(const infra::event::Event_Store& event_store) {
+    void Stage::checkIn() {
+    }
+
+    void stg::Stage::dispatch( infra::event::Event_Store& event_store) {
         while (!event_store.empty()) {
-            std::unique_ptr<infra::event::EventConcept> e_concept = controller->event_store_.pop_concept();
+            std::unique_ptr<infra::event::EventConcept> e_concept = event_store.pop_concept();
             if (
                 has(e_concept->mask(), infra::event::EventMask::Window) ||
                 has(e_concept->mask(), infra::event::EventMask::Game)
                 ) {
                 g_eventbus->emit(*e_concept);
             }
+
+
+            /*
             if (
-                has(e_concept->mask(), infra::event::EventMask::Level)
+                has(e_concept->mask(), infra::event::EventMask::Game)
                 ) {
                 l_eventbus->emit(*e_concept);
             }
+            */
         }
     }
 }

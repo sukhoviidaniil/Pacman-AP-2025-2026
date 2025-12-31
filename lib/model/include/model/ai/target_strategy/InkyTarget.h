@@ -24,7 +24,7 @@ namespace model::ai {
     struct InkyTarget : TargetStrategy {
         std::size_t blinky_index;
 
-        infra::math::Vector2 target(const GhostContext& ctx) const override {
+        TilePos target(const GhostContext& ctx) const override {
             auto blinky = ctx.blinky_positions[blinky_index];
             infra::math::Point2 ahead = ctx.pacman_pos;
             /*

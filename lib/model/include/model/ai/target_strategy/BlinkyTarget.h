@@ -22,8 +22,8 @@
 
 namespace model::ai {
     struct BlinkyTarget : TargetStrategy {
-        infra::math::Vector2 target(const GhostContext& ctx) const override {
-            // return ctx.pacman_tile; // прямой охотник
+        TilePos target(const GhostContext& ctx) const override {
+            return ctx.pacman_pos;
         }
     };
 }
