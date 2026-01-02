@@ -19,11 +19,13 @@
 #define PACMAN_BLINKYTARGET_H
 #include "TargetStrategy.h"
 
-
 namespace model::ai {
     struct BlinkyTarget : TargetStrategy {
-        TilePos target(const GhostContext& ctx) const override {
-            return ctx.pacman_pos;
+        TilePos target(
+            const GlobalGhostContext& g_ctx,
+            const UniqGhostContext& u_ctx
+            ) const override {
+            return g_ctx.pacman_pos;
         }
     };
 }

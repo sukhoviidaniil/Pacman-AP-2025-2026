@@ -23,7 +23,10 @@ namespace model::ai {
     /// Calculates the target cell for Chase/Scatter mode
     struct TargetStrategy {
         virtual ~TargetStrategy() = default;
-        virtual TilePos target(const GhostContext&) const = 0;
+        virtual TilePos target(
+            const GlobalGhostContext& g_ctx,
+            const UniqGhostContext& u_ctx
+            ) const = 0;
     };
 }
 

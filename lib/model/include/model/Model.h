@@ -80,9 +80,12 @@ namespace model {
                             const infra::ast::Tile &in_cell,
                             const infra::math::Point2 &position);
 
+        std::vector<entity::Ghost> make_Ghosts(const std::string &name, float hb_size,
+                                               const infra::math::Point2 &position, const unsigned int &level, infra::ast::GhostInfo info);
+
         bool process_tile_without_consumables(const infra::ast::Model &m, const unsigned int &level,
-                                        const infra::ast::Tile &in_cell,
-                                        const infra::math::Point2 &position);
+                                              const infra::ast::Tile &in_cell,
+                                              const infra::math::Point2 &position);
 
         std::vector<std::shared_ptr<entity::Ghost>> blinkys_;
         std::unique_ptr<collision::Collision_Control> collision_control_;

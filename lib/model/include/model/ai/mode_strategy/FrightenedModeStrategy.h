@@ -18,17 +18,29 @@
 #ifndef PACMAN_FRIGHTENEDMODESTRATEGY_H
 #define PACMAN_FRIGHTENEDMODESTRATEGY_H
 
-#include "model/ai/internal/MovePolicy.h"
 #include "model/ai/mode_strategy/ModeStrategy.h"
 
 namespace model::ai {
 
-    struct FrightenedModeStrategy : ModeStrategy {
-        const MovePolicy& frightened_mover; // usually RandomMovePolicy
-        explicit FrightenedModeStrategy(const MovePolicy& m) : frightened_mover(m) {}
+    struct FrightenedModeStrategy : ModeStrategy{
+        explicit FrightenedModeStrategy(const IPathFinder& pf) : ModeStrategy(pf) {}
 
-        infra::math::Direction decide(const GhostContext& ctx) const override {
-            // return frightened_mover.choose_direction(ctx.map, ctx.self_tile, {0,0});
+        infra::math::Direction decide(
+            const GlobalGhostContext& g_ctx,
+            const UniqGhostContext& u_ctx
+            ) const override {
+
+            const auto d = path_finder_.next_dir(
+                u_ctx.permission,
+                g_ctx.map,
+                u_ctx.self_pos,
+                g_ctx.house_pos,
+                opposite(u_ctx.self_direction)
+                );
+            if (!d.has_value()) {
+                return u_ctx.self_direction;
+            }
+            return d.value();
         }
     };
 }

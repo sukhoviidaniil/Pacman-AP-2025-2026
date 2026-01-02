@@ -20,11 +20,18 @@
 
 
 #include "model/ai/GhostContext.h"
+#include "model/ai/path_finder/IPathFinder.h"
 
 namespace model::ai {
     // --- ModeStrategy: combination of TargetStrategy + MovePolicy (universal mode) ---
     struct ModeStrategy {
-        virtual infra::math::Direction decide(const GhostContext& ctx) const = 0;
+        const IPathFinder& path_finder_;
+        explicit ModeStrategy(const IPathFinder& pf) : path_finder_(pf) {};
+
+        virtual infra::math::Direction decide(
+            const GlobalGhostContext& g_ctx,
+            const UniqGhostContext& u_ctx
+            ) const = 0;
         virtual ~ModeStrategy() = default;
     };
 

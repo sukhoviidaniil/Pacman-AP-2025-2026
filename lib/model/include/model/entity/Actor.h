@@ -42,22 +42,20 @@ namespace model::entity {
 
         [[nodiscard]] infra::math::Direction get_direction() const;
 
-
         void move(float deltaTime, const model::TileGrid &grid);
 
-        // void virtual act(float deltaTime, const collision::World_Collision_Manager &collision_control);
-
         infra::Status status_ = infra::Status::Alive;
-        private:
+    protected:
         infra::math::Direction current_direction_;
+
+        [[nodiscard]] virtual float speed() const;
+        [[nodiscard]] virtual Permission permission() const;
+
         infra::math::Direction next_direction_;
         // m/s
         float speed_;
 
-    private:
-
-
-
+        Permission permission_ = Permission::Low;
     };
 }
 

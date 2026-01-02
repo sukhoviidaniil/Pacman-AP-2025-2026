@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          CoinSpawn.h
+ * File:          TS_Factory.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-16
+ * Created:       2026-01-02
  * Modified:      []
  *
  * Description:   []
@@ -15,14 +15,15 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_AST_COINSPAWN_H
-#define PACMAN_AST_COINSPAWN_H
-#include "Entity_Node.h"
+#ifndef PACMAN_TS_FACTORY_H
+#define PACMAN_TS_FACTORY_H
+#include "TargetStrategy.h"
+#include "model/ai/internal/GhostRole.h"
 
-namespace infra::ast {
-    struct CoinSpawn : Entity_Node {
-        float hitbox_size;
+namespace model::ai {
+    class TS_Factory {
+        static std::unique_ptr<TargetStrategy> make(const GhostRole& type);
     };
 }
 
-#endif //PACMAN_AST_COINSPAWN_H
+#endif //PACMAN_TS_FACTORY_H

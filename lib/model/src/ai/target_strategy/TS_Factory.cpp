@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          GhostRole.h
+ * File:          TS_Factory.cpp
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-28
+ * Created:       2026-01-02
  * Modified:      []
  *
  * Description:   []
@@ -15,20 +15,12 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_GHOSTROLE_H
-#define PACMAN_GHOSTROLE_H
-#include <string>
 
+#include "model/ai/target_strategy/TS_Factory.h"
 namespace model::ai {
-    enum class GhostRole {
-        Blinky,
-        Pinky,
-        Inky,
-        Clyde
-    };
-    inline std::string role_name(const GhostRole role) {
-        switch (role) {
-            case GhostRole::Blinky : return "Blinky";
+    std::unique_ptr<TargetStrategy> TS_Factory::make(const GhostRole &type) {
+        switch (type) {
+            case GhostRole::Blinky : return std::make_unique<>();
             case GhostRole::Pinky : return "Pinky";
             case GhostRole::Inky : return "Inky";
             case GhostRole::Clyde : return "Clyde";
@@ -36,5 +28,3 @@ namespace model::ai {
         }
     }
 }
-
-#endif //PACMAN_GHOSTROLE_H

@@ -18,7 +18,7 @@
 #ifndef PACMAN_CHASEMODESTRATEGY_H
 #define PACMAN_CHASEMODESTRATEGY_H
 
-#include "model/ai/internal/MovePolicy.h"
+
 
 #include "model/ai/mode_strategy/ModeStrategy.h"
 #include "model/ai/target_strategy/TargetStrategy.h"
@@ -26,12 +26,25 @@
 namespace model::ai {
     struct ChaseModeStrategy : ModeStrategy {
         const TargetStrategy& target;
-        const MovePolicy& mover;
-        ChaseModeStrategy(const TargetStrategy& t, const MovePolicy& m) : target(t), mover(m) {}
+        ChaseModeStrategy(const TargetStrategy& t, const IPathFinder& pf) : ModeStrategy (pf), target(t) {}
 
-        infra::math::Direction decide(const GhostContext& ctx) const override {
-            infra::math::Vector2 tar = target.target(ctx);
-            // return mover.choose_direction(ctx.map, ctx.self_tile, tar);
+        [[nodiscard]] infra::math::Direction decide(
+            const GlobalGhostContext& g_ctx,
+            const UniqGhostContext& u_ctx
+            ) const override {
+            TilePos tar = target.target(g_ctx, u_ctx);
+
+            const auto d = path_finder_.next_dir(
+                u_ctx.permission,
+                g_ctx.map,
+                u_ctx.self_pos,
+                tar,
+                opposite(u_ctx.self_direction)
+                );
+            if (!d.has_value()) {
+                return u_ctx.self_direction;
+            }
+            return d.value();
         }
     };
 }

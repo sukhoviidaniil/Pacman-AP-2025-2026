@@ -23,14 +23,17 @@
 
 namespace infra::ast {
 
-    enum class AIType : std::uint8_t {
-
+    enum class PathFinderType {
+        AStar,
+        BFS,
+        Greedy
     };
 
     struct GhostInfo : Entity_Node {
-        float speed = 0.1f;
+        float base_speed = 0.1f;
+        float frightened_speed = 0.1f;
         float amount_per_level = 0;
-        AIType type;
+        PathFinderType path_finder = PathFinderType::BFS;
     };
 
     struct GhostSpawn : Model_Node {
@@ -38,8 +41,6 @@ namespace infra::ast {
         GhostInfo Pinky;
         GhostInfo Inky;
         GhostInfo Clyde;
-        GhostInfo Sludgy;
-        GhostInfo Shady;
     };
 }
 

@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          CoinSpawn.h
+ * File:          PF_Factory.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-16
+ * Created:       2026-01-01
  * Modified:      []
  *
  * Description:   []
@@ -15,14 +15,17 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_AST_COINSPAWN_H
-#define PACMAN_AST_COINSPAWN_H
-#include "Entity_Node.h"
+#ifndef PACMAN_PF_FACTORY_H
+#define PACMAN_PF_FACTORY_H
+#include <memory>
 
-namespace infra::ast {
-    struct CoinSpawn : Entity_Node {
-        float hitbox_size;
+#include "IPathFinder.h"
+#include "infra/ast/model/GhostSpawn.h"
+
+namespace model::ai {
+    class PF_Factory {
+        static std::unique_ptr<IPathFinder> make(const infra::ast::PathFinderType& type);
     };
 }
 
-#endif //PACMAN_AST_COINSPAWN_H
+#endif //PACMAN_PF_FACTORY_H

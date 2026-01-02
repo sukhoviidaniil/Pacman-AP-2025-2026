@@ -17,11 +17,15 @@
 ***************************************************************/
 
 #include "model/Model.h"
+#include "model/ai/GhostAI.h"
 #include "model/collision/HitBox_Rectangle.h"
 #include "model/collision/Separating_Axis_Theorem.h"
 #include "model/entity/PowerPellet.h"
 
 namespace model {
+    namespace ai {
+        enum class GhostRole;
+    }
 
     Model::Model(
         const infra::ast::Model &m,
@@ -74,22 +78,36 @@ namespace model {
         }
         switch (in_cell) {
             case infra::ast::Tile::CoinSpawn: {
-                float size = m.coin_spawn.size;
-                auto h = std::make_unique<collision::HitBox_Rectangle>(position, size, size, 0);
-                coins_.push_back(std::make_shared<entity::Coin>(size, position, std::move(h)));
+                float hb_size = m.coin_spawn.hitbox_size;
+                float sp_size = m.coin_spawn.sprite_size;
+                auto h = std::make_unique<collision::HitBox_Rectangle>(position, hb_size, hb_size, 0);
+                coins_.push_back(std::make_shared<entity::Coin>(sp_size, position, std::move(h)));
                 break;
             }
             case infra::ast::Tile::PowerPelletSpawn: {
                 std::string name = m.power_pellet_spawn.name;
-                float size = m.power_pellet_spawn.size;
+                float hb_size = m.power_pellet_spawn.hitbox_size;
+                float sp_size = m.power_pellet_spawn.sprite_size;
                 float buff_duration = m.power_pellet_spawn.buff_duration;
-                auto h = std::make_unique<collision::HitBox_Rectangle>(position, size, size, 0);
+                auto h = std::make_unique<collision::HitBox_Rectangle>(position, hb_size, hb_size, 0);
                 power_pellets_.push_back(
-                    std::make_shared<entity::PowerPellet>(name, size, position, std::move(h), buff_duration)
+                    std::make_shared<entity::PowerPellet>(name, sp_size, position, std::move(h), buff_duration)
                     );
                 break;
             }
             default: break;
+        }
+    }
+
+    std::vector<entity::Ghost> Model::make_Ghosts(const ai::GhostRole& role, float hb_size, const infra::math::Point2 &position, const unsigned int &level, infra::ast::GhostInfo info) {
+        float sp_size = info.sprite_size;
+        float amount_per_level = info.amount_per_level;
+        int amount = static_cast<int>(amount_per_level * level);
+        float base_speed = info.base_speed;
+        float frightened_speed = info.frightened_speed;
+        for (int index = 0; index < amount; index++) {
+
+
         }
     }
 
@@ -102,13 +120,26 @@ namespace model {
 
         switch (in_cell) {
             case infra::ast::Tile::PacmanSpawn: {
-                float size = m.grid.tile_size;
+                float hb_size = m.grid.tile_size;
+                float sp_size = m.power_pellet_spawn.sprite_size;
                 float speed = m.pacman_spawn.speed;
-                auto h = std::make_unique<collision::HitBox_Rectangle>(position, size, size, 0);
-                pacman_ = std::make_shared<entity::Pacman>(size, position, std::move(h), speed);
+                auto h = std::make_unique<collision::HitBox_Rectangle>(position, hb_size, hb_size, 0);
+                pacman_ = std::make_shared<entity::Pacman>(sp_size, position, std::move(h), speed);
                 return true;
             }
+            case infra::ast::Tile::GhostSpawn: {
+                float hb_size = m.grid.tile_size;
 
+                {
+                    float sp_size = m.ghost_spawn.Blinky.sprite_size;
+                    float amount_per_level = m.ghost_spawn.Blinky.amount_per_level;
+                    int amount = static_cast<int>(amount_per_level * level);
+                    float base_speed = m.ghost_spawn.Blinky.base_speed;
+                    float frightened_speed = m.ghost_spawn.Blinky.frightened_speed;
+                }
+
+                return true;
+            }
             default:
                 return false;
         }

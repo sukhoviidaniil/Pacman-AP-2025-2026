@@ -21,20 +21,22 @@
 
 #include "internal/GhostMode_State.h"
 #include "infra/math/Direction.h"
-#include "infra/math/Point2.h"
+
 #include "model/grid/TileGrid.h"
 
 namespace model::ai {
-    struct  GhostContext {
-        // Not unique info
+    struct GlobalGhostContext {
         const TileGrid& map;
         TilePos pacman_pos;
-        infra::math::Direction pacman_dir;
-        GhostMode global_mode;
-        std::span<const infra::math::Point2> blinky_positions;
-
-        // Unique info per ghost
-        infra::math::Point2 self_pos;
+        TilePos house_pos;
+        infra::math::Direction pacman_direction;
+        std::span<const TilePos> blinky_positions;
+    };
+    struct UniqGhostContext {
+        Permission permission;
+        GhostMode mode;
+        TilePos self_pos;
+        infra::math::Direction self_direction;
         std::size_t self_index; // index among peers
     };
 }

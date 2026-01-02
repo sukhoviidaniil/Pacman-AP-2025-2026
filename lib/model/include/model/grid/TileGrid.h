@@ -53,6 +53,8 @@ namespace model {
         [[nodiscard]] std::unique_ptr<collision::HitBox> get_hitbox(const TilePos& pos) const;
 
         void out_of_bounds(const TilePos &pos, const std::string &who) const;
+        void limit(TilePos& pos) const;
+
 
     private:
 

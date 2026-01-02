@@ -56,6 +56,12 @@ namespace model {
                     case infra::ast::Tile::Wall:
                         tiles_[i][j] = Tile::Wall;
                         break;
+                    case infra::ast::Tile::Barrier:
+                        tiles_[i][j] = Tile::Barrier;
+                        break;
+                    case infra::ast::Tile::GhostSpawn:
+                        tiles_[i][j] = Tile::GhostSpawn;
+                        break;
                     default:
                         break;
                 }
@@ -168,6 +174,20 @@ namespace model {
         }
     }
 
+    void TileGrid::limit(TilePos& pos) const {
+        if (pos.x < 0) {
+            pos.x =  0;
+        }
+        if (pos.x >= columns_) {
+            pos.x =  columns_ - 1;
+        }
+        if (pos.y < 0) {
+            pos.y = 0;
+        }
+        if (pos.y >= rows_) {
+            pos.y =  rows_ - 1;
+        }
+    }
 }
 
 

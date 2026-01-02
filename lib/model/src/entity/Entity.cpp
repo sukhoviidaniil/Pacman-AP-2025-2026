@@ -25,7 +25,7 @@ namespace model {
     Entity::Entity(
         std::string name, float size, const infra::math::Point2 &position, std::unique_ptr<collision::HitBox> hitbox
         ):
-        position_(position), hitbox_(std::move(hitbox)), size_(size), name_(std::move(name))
+        position_(position), hitbox_(std::move(hitbox)), sprite_size_(size), name_(std::move(name))
     {
         hitbox_->move_to(position_);
     }
@@ -37,7 +37,7 @@ namespace model {
     }
 
     float Entity::size() const {
-        return size_;
+        return sprite_size_;
     }
 
     infra::math::Point2 Entity::position() const {

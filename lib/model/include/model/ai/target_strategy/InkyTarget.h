@@ -24,23 +24,26 @@ namespace model::ai {
     struct InkyTarget : TargetStrategy {
         std::size_t blinky_index;
 
-        TilePos target(const GhostContext& ctx) const override {
-            auto blinky = ctx.blinky_positions[blinky_index];
-            infra::math::Point2 ahead = ctx.pacman_pos;
-            /*
-            Vec2 blinky = ctx.ghost_tiles[0];
-            Vec2 ahead = ctx.pacman_tile;
-            switch (ctx.pacman_dir) {
+        TilePos target(
+            const GlobalGhostContext& g_ctx,
+            const UniqGhostContext& u_ctx
+            ) const override {
+            using infra::math::Direction;
+            const auto blinky = g_ctx.blinky_positions[blinky_index];
+            TilePos ahead = g_ctx.pacman_pos;
+
+            switch (g_ctx.pacman_direction) {
                 case Direction::Up: ahead.y -= 2; break;
                 case Direction::Down: ahead.y += 2; break;
                 case Direction::Left: ahead.x -= 2; break;
                 case Direction::Right: ahead.x += 2; break;
                 default: break;
             }
-            // целевая точка = A + (A - Blinky) == 2*A - Blinky
-            Vec2 target{ ahead.x * 2 - blinky.x, ahead.y * 2 - blinky.y };
+            // target point = A + (A - Blinky) == 2*A - Blinky
+            TilePos target{ ahead.y * 2 - blinky.y, ahead.x * 2 - blinky.x,};
+            g_ctx.map.limit(target);
             return target;
-            */
+
         }
     };
 }

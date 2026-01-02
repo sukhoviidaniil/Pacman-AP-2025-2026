@@ -18,6 +18,19 @@
 #ifndef PACMAN_RANDOM_H
 #define PACMAN_RANDOM_H
 
+
+#define RAND_INT(min, max) \
+infra::Random::instance().next_int((min), (max))
+
+#define RAND_FLOAT(min, max) \
+infra::Random::instance().next_float((min), (max))
+
+#define RAND_CHANCE(p) \
+infra::Random::instance().chance((p))
+
+#define RAND_ENGINE() \
+infra::Random::instance().engine()
+
 #include <random>
 #include <cstdint>
 namespace infra {
@@ -26,34 +39,21 @@ namespace infra {
     public:
         using Engine = std::mt19937;
 
-        static Random& instance() {
-            static Random inst;
-            return inst;
-        }
+        static Random& instance();
 
-        int next_int(int min, int max) {
-            std::uniform_int_distribution<int> dist(min, max);
-            return dist(engine_);
-        }
+        int next_int(int min, int max);
 
-        float next_float(float min = 0.f, float max = 1.f) {
-            std::uniform_real_distribution<float> dist(min, max);
-            return dist(engine_);
-        }
+        float next_float(float min = 0.f, float max = 1.f);
 
-        bool chance(float p) {
-            std::bernoulli_distribution dist(p);
-            return dist(engine_);
-        }
+        bool chance(float p);
 
-        Engine& engine() { return engine_; }
+        Engine& engine();
 
         Random(const Random&) = delete;
         Random& operator=(const Random&) = delete;
 
     private:
-        Random()
-            : engine_(std::random_device{}()) {}
+        Random();
 
         Engine engine_;
     };

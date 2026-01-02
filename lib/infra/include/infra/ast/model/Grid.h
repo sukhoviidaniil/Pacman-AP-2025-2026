@@ -30,7 +30,8 @@ namespace infra::ast {
         CoinSpawn,
         PowerPelletSpawn,
         PacmanSpawn,
-        GhostSpawn
+        GhostSpawn,
+        Barrier
     };
 
     struct Grid : Model_Node {

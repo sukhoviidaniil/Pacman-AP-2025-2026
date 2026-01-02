@@ -271,6 +271,7 @@ namespace infra::ast {
         if (s == "P")  return Tile::PowerPelletSpawn;
         if (s == "C")  return Tile::CoinSpawn;
         if (s == "F")  return Tile::Empty;
+        if (s == "B")  return Tile::Barrier;
         throw std::runtime_error("Unknown tile");
     }
 
@@ -299,21 +300,48 @@ namespace infra::ast {
     }
 
     inline void from_json(const nlohmann::json& json, PacmanSpawn& s) {
-        s.size = io::get_checked<float>(json, "size", s.size);
-        s.speed = io::get_checked<float>(json,"speed",  s.size);
+        s.sprite_size = io::get_checked<float>(json, "sprite_size", s.sprite_size);
+        s.speed = io::get_checked<float>(json,"speed",  s.speed);
+    }
+
+    inline PathFinderType parse_path_finder(const std::string& s) {
+        if (s == "AStar")  return PathFinderType::AStar;
+        if (s == "BFS")  return PathFinderType::BFS;
+        if (s == "Greedy")  return PathFinderType::Greedy;
+        throw std::runtime_error("Unknown PathFinder type");
+    }
+
+    inline void from_json(const nlohmann::json& json, GhostInfo& s) {
+        s.sprite_size = io::get_checked<float>(json, "sprite_size", s.sprite_size);
+
+        const auto path_finder = io::get_checked<std::string>(json, "path_finder", "BFS");
+        s.path_finder = parse_path_finder(path_finder);
+
+        s.base_speed= io::get_checked<float>(json,"base_speed", s.base_speed);
+        s.frightened_speed= io::get_checked<float>(json,"frightened_speed", s.frightened_speed);
+        s.amount_per_level= io::get_checked<float>(json,"amount_per_level", s.amount_per_level);
+    }
+    inline void from_json(const nlohmann::json& json, GhostSpawn& s) {
+        s.Blinky = io::get_checked<GhostInfo>(json,"Blinky",  s.Blinky);
+        s.Pinky = io::get_checked<GhostInfo>(json,"Pinky",  s.Pinky);
+        s.Inky = io::get_checked<GhostInfo>(json,"Inky",  s.Inky);
+        s.Clyde = io::get_checked<GhostInfo>(json,"Clyde",  s.Clyde);
     }
     inline void from_json(const nlohmann::json& json, CoinSpawn& s) {
-        s.size = io::get_checked<float>(json, "size", s.size);
+        s.hitbox_size = io::get_checked<float>(json, "hitbox_size", s.hitbox_size);
+        s.sprite_size = io::get_checked<float>(json, "sprite_size", s.sprite_size);
     }
-    inline void from_json(const nlohmann::json& json, PowerPelletSpawn& s) {\
+    inline void from_json(const nlohmann::json& json, PowerPelletSpawn& s) {
         s.name = io::get_checked<std::string>(json, "name", s.name);
         s.buff_duration = io::get_checked<float>(json, "buff_duration", s.buff_duration);
-        s.size = io::get_checked<float>(json, "size", s.size);
+        s.hitbox_size = io::get_checked<float>(json, "hitbox_size", s.hitbox_size);
+        s.sprite_size = io::get_checked<float>(json, "sprite_size", s.sprite_size);
     }
 
     inline void from_json(const nlohmann::json& j, Model& s) {
         s.grid = io::get_checked<Grid>(j, "Grid", s.grid);
         s.pacman_spawn = io::get_checked<PacmanSpawn>(j, "PacmanSpawn", s.pacman_spawn);
+        s.ghost_spawn = io::get_checked<GhostSpawn>(j, "GhostSpawn", s.ghost_spawn);
         s.coin_spawn = io::get_checked<CoinSpawn>(j, "CoinSpawn", s.coin_spawn);
         s.power_pellet_spawn = io::get_checked<PowerPelletSpawn>(j, "PowerPelletSpawn", s.power_pellet_spawn);
     }

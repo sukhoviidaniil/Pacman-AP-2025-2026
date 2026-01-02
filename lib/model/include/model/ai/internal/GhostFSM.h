@@ -26,14 +26,15 @@ namespace model::ai {
         const ModeStrategy* chase = nullptr; /// NOT OWNER
         const ModeStrategy* scatter = nullptr; /// NOT OWNER
         const ModeStrategy* frightened = nullptr; /// NOT OWNER
+        const ModeStrategy* dead = nullptr; /// NOT OWNER
 
 
-        const ModeStrategy* select(const GhostContext& ctx) const {
-
-            switch (ctx.global_mode) {
+        const ModeStrategy* select(const UniqGhostContext& ctx) const {
+            switch (ctx.mode) {
                 case GhostMode::Chase:return chase;
                 case GhostMode::Scatter: return scatter;
                 case GhostMode::Frightened: return frightened;
+                case GhostMode::Dead: return dead;
             }
             return chase;
 

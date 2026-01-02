@@ -34,6 +34,15 @@ namespace infra::math {
         if (second == Direction::Any) return false;
         return first == second;
     }
+    constexpr Direction opposite(const Direction d) {
+        switch (d) {
+            case Direction::Up: return Direction::Down;
+            case Direction::Down: return Direction::Up;
+            case Direction::Right: return Direction::Left;
+            case Direction::Left: return Direction::Right;
+            default: return Direction::Unknown; break;
+        }
+    }
 }
 
 #endif //PACMAN_DIRECTION_H

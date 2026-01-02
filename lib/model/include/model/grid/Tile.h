@@ -20,18 +20,43 @@
 
 namespace model {
 
-    enum class Tile {
-        Wall,
-        Free
+    enum class Permission {
+        Low,
+        High,
+        Full
     };
 
-    [[nodiscard]] inline bool walkable(const Tile t){
-        switch (t) {
-            case Tile::Free:
-                return true;
+    enum class Tile {
+        Wall,
+        GhostSpawn,
+        Barrier,
+        Free,
+    };
+
+    [[nodiscard]] inline bool walkable(const Tile t, const Permission p = Permission::Low){
+        switch (p){
+            case Permission::Low : {
+                switch (t) {
+                    case Tile::Free:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+            case Permission::High : {
+                switch (t) {
+                    case Tile::Free:
+                    case Tile::GhostSpawn:
+                    case Tile::Barrier:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
             default:
                 return false;
         }
+
     }
 }
 

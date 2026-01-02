@@ -39,12 +39,19 @@ namespace model::entity{
         return current_direction_;
     }
 
+    float Actor::speed() const {
+        return speed_;
+    }
+
+    Permission Actor::permission() const {
+        return permission_;
+    }
+
     void Actor::move(float deltaTime, const model::TileGrid &grid) {
 
-        if (speed_ <= 0.f) return;
-        float remaining_dist = speed_ * deltaTime;
+        if (speed() <= 0.f) return;
+        float remaining_dist = speed() * deltaTime;
         const float EPS = grid.tile_size() * 0.001f;
-
 
         while (remaining_dist > EPS) {
             // 1. Current cell
@@ -94,7 +101,7 @@ namespace model::entity{
             if (current_direction_ != next_direction_) {
                 if (const auto cand = grid.get_next_TilePos(src_for_next, next_direction_)) {
                     const Tile cand_tile = grid.get_tile(*cand);
-                    if (walkable(cand_tile)) {
+                    if (walkable(cand_tile, permission())) {
                         current_direction_ = next_direction_;
                         position_ = center; // when changing direction, the position is centered
                         hitbox_->move_to(position_);
@@ -109,7 +116,7 @@ namespace model::entity{
             const Tile next_tile = grid.get_tile(*next_tilepos);
 
             // If the next tile is impassable, stay in the center of the current tile and exit.
-            if (!walkable(next_tile)) {
+            if (!walkable(next_tile, permission())) {
                 position_ = center;
                 hitbox_->move_to(position_);
                 break;

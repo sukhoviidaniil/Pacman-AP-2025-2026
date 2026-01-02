@@ -43,7 +43,7 @@ namespace model {
         infra::math::Point2 position_;
         // All Entities have some hitbox
         std::unique_ptr<collision::HitBox> hitbox_;
-        float size_;
+        float sprite_size_;
 
         // Name for identification purposes
         std::string name_;

@@ -22,17 +22,21 @@
 
 namespace model::ai {
     struct PinkyTarget : TargetStrategy {
-        TilePos target(const GhostContext& ctx) const override {
+        TilePos target(
+            const GlobalGhostContext& g_ctx,
+            const UniqGhostContext& u_ctx
+            ) const override {
             using infra::math::Direction;
             // goal: cell 4 steps ahead in the direction pacman_dir
-            TilePos t = ctx.pacman_pos;
-            switch (ctx.pacman_dir) {
+            TilePos t = g_ctx.pacman_pos;
+            switch (g_ctx.pacman_direction) {
                 case Direction::Up: t.y -= 4; break;
                 case Direction::Down: t.y += 4; break;
                 case Direction::Left: t.x -= 4; break;
                 case Direction::Right: t.x += 4; break;
                 default: break;
             }
+            g_ctx.map.limit(t);
             return t;
         }
     };

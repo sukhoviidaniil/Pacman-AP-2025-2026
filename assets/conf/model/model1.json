@@ -10,7 +10,7 @@
       ["W", "C", "W", "W", "C", "W",   "C", "W", "W", "W", "W", "W", "W", "W", "C",   "W", "C", "W", "W", "C", "W"],
       ["W", "C", "W", "C", "C", "C",   "C", "C", "C", "C", "C", "C", "C", "C", "C",   "C", "C", "C", "W", "C", "W"],
 
-      ["W", "C", "W", "C", "W", "W",   "C", "W", "W", "F", "F", "F", "W", "W", "C",   "W", "W", "C", "W", "C", "W"],
+      ["W", "C", "W", "C", "W", "W",   "C", "W", "W", "B", "B", "B", "W", "W", "C",   "W", "W", "C", "W", "C", "W"],
       ["W", "C", "C", "C", "C", "C",   "C", "W", "F", "F", "G", "F", "F", "W", "C",   "C", "C", "C", "C", "C", "W"],
       ["W", "C", "W", "C", "W", "W",   "C", "W", "W", "W", "W", "W", "W", "W", "C",   "W", "W", "C", "W", "C", "W"],
 
@@ -22,17 +22,43 @@
     ]
   },
   "PacmanSpawn" : {
+    "sprite_size" : 0.2,
     "speed" : 3
   },
   "GhostSpawn" : {
-
+    "Blinky" : {
+      "sprite_size" : 0.9,
+      "base_speed" : 3,
+      "frightened_speed" : 2,
+      "path_finder" : "BFS"
+    },
+    "Pinky" : {
+      "sprite_size" : 0.9,
+      "base_speed" : 3,
+      "frightened_speed" : 2,
+      "path_finder" : "BFS"
+    },
+    "Inky" : {
+      "sprite_size" : 0.9,
+      "base_speed" : 3,
+      "frightened_speed" : 2,
+      "path_finder" : "BFS"
+    },
+    "Clyde" : {
+      "sprite_size" : 0.9,
+      "base_speed" : 3,
+      "frightened_speed" : 2,
+      "path_finder" : "BFS"
+    }
   },
   "CoinSpawn" : {
-    "size" : 0.2
+    "hitbox_size" : 0.2,
+    "sprite_size" : 0.2
   },
   "PowerPelletSpawn" : {
     "name" : "Candy",
-    "size" : 0.4,
+    "hitbox_size" : 0.4,
+    "sprite_size" : 0.6,
     "buff_duration" : 5.0
   }
 }

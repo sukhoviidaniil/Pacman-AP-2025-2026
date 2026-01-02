@@ -48,8 +48,6 @@ namespace view::ui {
 
     void Map::append_render_items(RenderFrame &frame, const ViewContext &ctx) const {
 
-        LOG_SCOPE();
-
         if (!ctx.model.has_value()) {
             return;
         }
@@ -114,6 +112,10 @@ namespace view::ui {
                             rectangle->color = infra::ui::Color(0,0,255);
                             break;
                         }
+                        case model::Tile::Barrier: {
+                            rectangle->color = infra::ui::Color(0,255,255);
+                            break;
+                        }
                         default: {
                             rectangle->color = infra::ui::Color(0,0,0);
                             break;
@@ -126,11 +128,6 @@ namespace view::ui {
         }
 
 
-        LOG("\n");
-        std::string msg = "temp_items size 1 : " + std::to_string(frame.temp_items.size());
-        LOG(msg);
-        msg = "constant_items size 1 : " + std::to_string(frame.constant_items.size());
-        // LOG(msg);
         for (const auto& entity : model.coins()) {
             const float half_size = entity->size() * 0.5f;
             const float scale_size = entity->size() * scale;
@@ -148,10 +145,8 @@ namespace view::ui {
             sprite->rect = { ui_pos.x, ui_pos.y, scale_size, scale_size};
             frame.temp_items.push_back(std::move(sprite));
         }
-        msg = "temp_items size 2 : " + std::to_string(frame.temp_items.size());
-        LOG(msg);
-        msg = "constant_items size 2 : " + std::to_string(frame.constant_items.size());
-        // LOG(msg);
+
+
         for (const auto& entity : model.power_pellets()) {
 
             const float half_size = entity->size() * 0.5f;
