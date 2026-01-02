@@ -29,7 +29,8 @@ namespace model::ai {
             const TileGrid& tiles,
             TilePos from,
             TilePos to,
-            std::optional<infra::math::Direction> forbidden_dir
+            std::optional<infra::math::Direction> forbidden_dir,
+            Optimize opt
         ) const override;
     };
 }

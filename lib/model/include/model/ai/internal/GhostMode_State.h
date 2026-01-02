@@ -25,14 +25,6 @@ namespace model::ai {
         Frightened,
         Dead
     };
-
-    /*
-    enum class GhostState {
-        Chase,
-        Scatter,
-        Frightened
-    };
-    */
 }
 
 #endif //PACMAN_GHOSTMODE_STATE_H

@@ -21,11 +21,10 @@
 #include "model/ai/mode_strategy/ModeStrategy.h"
 
 namespace model::ai {
-
     struct FrightenedModeStrategy : ModeStrategy{
         explicit FrightenedModeStrategy(const IPathFinder& pf) : ModeStrategy(pf) {}
 
-        infra::math::Direction decide(
+        [[nodiscard]] infra::math::Direction decide(
             const GlobalGhostContext& g_ctx,
             const UniqGhostContext& u_ctx
             ) const override {
@@ -34,8 +33,9 @@ namespace model::ai {
                 u_ctx.permission,
                 g_ctx.map,
                 u_ctx.self_pos,
-                g_ctx.house_pos,
-                opposite(u_ctx.self_direction)
+                g_ctx.pacman_pos,
+                opposite(u_ctx.self_direction),
+                IPathFinder::Optimize::MaxDistance
                 );
             if (!d.has_value()) {
                 return u_ctx.self_direction;

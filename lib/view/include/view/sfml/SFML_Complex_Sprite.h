@@ -35,7 +35,8 @@ namespace view {
                 std::unordered_map<
                     infra::math::Direction,
                     // animation
-                    std::unique_ptr<ISFML_Sprite>
+                    std::unique_ptr<ISFML_Sprite>,
+                    infra::math::DirectionHash
                 >
             > data
             );
@@ -49,7 +50,8 @@ namespace view {
             std::unordered_map<
                 infra::math::Direction,
                 // animation
-                std::unique_ptr<ISFML_Sprite>
+                std::unique_ptr<ISFML_Sprite>,
+                infra::math::DirectionHash
             >
         > sprites_;
     };

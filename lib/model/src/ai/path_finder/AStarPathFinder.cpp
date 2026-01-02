@@ -26,7 +26,8 @@ namespace model::ai {
         const TileGrid &tiles,
         const TilePos from,
         const TilePos to,
-        const std::optional<infra::math::Direction> forbidden_dir
+        const std::optional<infra::math::Direction> forbidden_dir,
+        IPathFinder::Optimize opt
         ) const {
         using infra::math::Direction;
 
@@ -38,9 +39,12 @@ namespace model::ai {
         };
 
         auto heuristic = [&](const TilePos& a) {
-            return
+            size_t dist =
                 (a.y > to.y ? a.y - to.y : to.y - a.y) +
                 (a.x > to.x ? a.x - to.x : to.x - a.x);
+            if (opt == IPathFinder::Optimize::MaxDistance)
+                return static_cast<size_t>(10000 - dist); // invert to maximize
+            return dist; // default minimization
         };
 
         struct Cmp {
@@ -54,8 +58,7 @@ namespace model::ai {
             tiles.rows(), std::vector<bool>(tiles.columns(), false)
         );
 
-        auto try_push = [&](const Node& cur,
-                            Direction d, int dy, int dx)
+        auto try_push = [&](const Node& cur, Direction d, int dy, int dx)
         {
             if (forbidden_dir.has_value() && infra::math::equal(forbidden_dir.value(), d))
                 return;
@@ -71,8 +74,7 @@ namespace model::ai {
 
             size_t g = cur.g + 1;
             size_t h = heuristic(next);
-            Direction first =
-                (cur.g == 0 ? d : cur.first_dir);
+            Direction first = (cur.g == 0 ? d : cur.first_dir);
 
             open.push({next, g, g + h, first});
         };
@@ -89,8 +91,10 @@ namespace model::ai {
 
             closed[cur.pos.y][cur.pos.x] = true;
 
-            if (cur.pos == to)
+            if ((opt == IPathFinder::Optimize::MinDistance && cur.pos == to) ||
+                (opt == IPathFinder::Optimize::MaxDistance && heuristic(cur.pos) == 10000 - 0)) {
                 return cur.first_dir;
+            }
 
             try_push(cur, Direction::Up,    -1,  0);
             try_push(cur, Direction::Right,  0,  1);

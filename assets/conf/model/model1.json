@@ -22,7 +22,7 @@
     ]
   },
   "PacmanSpawn" : {
-    "sprite_size" : 0.2,
+    "sprite_size" : 0.8,
     "speed" : 3
   },
   "GhostSpawn" : {
@@ -30,24 +30,28 @@
       "sprite_size" : 0.9,
       "base_speed" : 3,
       "frightened_speed" : 2,
+      "eaten_speed" : 6,
       "path_finder" : "BFS"
     },
     "Pinky" : {
       "sprite_size" : 0.9,
       "base_speed" : 3,
       "frightened_speed" : 2,
+      "eaten_speed" : 6,
       "path_finder" : "BFS"
     },
     "Inky" : {
       "sprite_size" : 0.9,
       "base_speed" : 3,
       "frightened_speed" : 2,
+      "eaten_speed" : 6,
       "path_finder" : "BFS"
     },
     "Clyde" : {
       "sprite_size" : 0.9,
       "base_speed" : 3,
       "frightened_speed" : 2,
+      "eaten_speed" : 6,
       "path_finder" : "BFS"
     }
   },

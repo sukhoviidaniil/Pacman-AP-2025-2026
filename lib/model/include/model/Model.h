@@ -19,6 +19,7 @@
 #define PACMAN_MODEL_H
 
 
+#include "ai/internal/GhostRole.h"
 #include "collision/Collision_Control.h"
 #include "entity/Coin.h"
 #include "entity/Ghost.h"
@@ -54,7 +55,6 @@ namespace model {
         [[nodiscard]] std::shared_ptr<entity::Pacman> get_pacman() const;
         [[nodiscard]] infra::Status pacman_status() const;
 
-
         std::vector<std::shared_ptr<entity::Coin>> coins_;
         std::vector<std::shared_ptr<entity::PowerPellet>> power_pellets_;
         std::vector<std::shared_ptr<entity::Ghost>> ghosts_;
@@ -80,8 +80,8 @@ namespace model {
                             const infra::ast::Tile &in_cell,
                             const infra::math::Point2 &position);
 
-        std::vector<entity::Ghost> make_Ghosts(const std::string &name, float hb_size,
-                                               const infra::math::Point2 &position, const unsigned int &level, infra::ast::GhostInfo info);
+        void make_Ghosts(const ai::GhostRole &role,
+                                               float hb_size, const infra::math::Point2 &position, const unsigned int &level, const infra::ast::GhostInfo& info);
 
         bool process_tile_without_consumables(const infra::ast::Model &m, const unsigned int &level,
                                               const infra::ast::Tile &in_cell,
@@ -93,8 +93,6 @@ namespace model {
 
         float start_wait_ = 1;
         float death_wait_ = 2;
-        bool powered_ = false;
-        float buff_wait_ = 1;
     };
 }
 

@@ -319,6 +319,8 @@ namespace infra::ast {
 
         s.base_speed= io::get_checked<float>(json,"base_speed", s.base_speed);
         s.frightened_speed= io::get_checked<float>(json,"frightened_speed", s.frightened_speed);
+        s.eaten_speed= io::get_checked<float>(json,"eaten_speed", s.eaten_speed);
+        s.start_amount= io::get_checked<int>(json,"start_amount", s.start_amount);
         s.amount_per_level= io::get_checked<float>(json,"amount_per_level", s.amount_per_level);
     }
     inline void from_json(const nlohmann::json& json, GhostSpawn& s) {

@@ -22,7 +22,9 @@
 
 namespace model::ai {
     class TS_Factory {
+    public:
         static std::unique_ptr<TargetStrategy> make(const GhostRole& type);
+        static std::unique_ptr<TargetStrategy> make_corner(const TileGrid &map, infra::math::Direction preferred_corner);
     };
 }
 

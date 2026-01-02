@@ -52,6 +52,7 @@
     "graf/graf_consumed_2.json"
   ],
   "ComplexSprites" : [
-    "graf/graf_pacman.json"
+    "graf/graf_pacman.json",
+    "graf/graf_ghosts.json"
   ]
 }

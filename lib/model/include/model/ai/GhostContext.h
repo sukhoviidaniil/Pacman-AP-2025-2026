@@ -28,7 +28,7 @@ namespace model::ai {
     struct GlobalGhostContext {
         const TileGrid& map;
         TilePos pacman_pos;
-        TilePos house_pos;
+        float buff_duration;
         infra::math::Direction pacman_direction;
         std::span<const TilePos> blinky_positions;
     };

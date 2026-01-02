@@ -38,7 +38,6 @@ namespace model::ui {
             return model_.ghosts_;
         }
 
-
         [[nodiscard]] const std::shared_ptr<entity::Pacman>& pacman() const {
             return model_.pacman_;
         }

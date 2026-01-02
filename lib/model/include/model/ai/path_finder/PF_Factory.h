@@ -24,6 +24,7 @@
 
 namespace model::ai {
     class PF_Factory {
+    public:
         static std::unique_ptr<IPathFinder> make(const infra::ast::PathFinderType& type);
     };
 }

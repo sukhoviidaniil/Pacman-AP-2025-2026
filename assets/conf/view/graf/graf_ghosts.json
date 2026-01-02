@@ -2,97 +2,94 @@
   "using_texture" : "Gen",
   "sprits_width": 35,
   "sprits_height": 35,
-  "Complex_Sprite" : [
+  "groups_names":  ["Blinky", "Pinky", "Inky", "Clyde", "Sludgy", "Shady"],
+  "number_of_statuses" : 4,
+  "statuses" : [
     {
-      "groups_names":  ["Blinky", "Pinky", "Inky", "Clyde", "Sludgy", "Shady"],
-      "number_of_statuses" : 4,
-      "statuses" : [
+      "Status" : "Alive",
+      "Directions" : [
         {
-          "Status" : "Alive",
-          "Directions" : [
-            {
-              "direction" : "Right"
-            },
-            {
-              "direction" : "Down"
-            },
-            {
-              "direction" : "Left"
-            },
-            {
-              "direction" : "Up"
-            },
-            {
-              "direction" : "Any",
-              "recLeft" : 501,
-              "recTop" : 254
-            }
-          ],
-          "recLeft" : {
-            "base" : 1,
-            "increase" : 50
-          },
-          "recTop" : {
-            "base" : 4,
-            "increase" : 100
-          }
+          "direction" : "Right"
         },
         {
-          "Status" : "Dead",
-          "Directions" : [
-            {
-              "direction" : "Right"
-            },
-            {
-              "direction" : "Down"
-            },
-            {
-              "direction" : "Left"
-            },
-            {
-              "direction" : "Up"
-            },
-            {
-              "direction" : "Any",
-              "recLeft" : 501,
-              "recTop" : 254
-            }
-          ],
-          "recLeft" : {
-            "base" : 301,
-            "increase" : 0
-          },
-          "recTop" : {
-            "base" : 254,
-            "increase" : 50
-          }
+          "direction" : "Down"
         },
         {
-          "Status" : "Weak",
-          "Directions" : [
-            {
-              "direction" : "Any",
-              "recLeft" : 1,
-              "recTop" : 554
-            }
-          ]
+          "direction" : "Left"
         },
         {
-          "Status" : "SlightlyWeak",
-          "Directions" : [
-            {
-              "direction" : "Any",
-              "recLeft" : 1,
-              "recTop" : 554
-            },
-            {
-              "direction" : "Any",
-              "recLeft" : 51,
-              "recTop" : 554
-            }
-          ]
+          "direction" : "Up"
+        },
+        {
+          "direction" : "Any",
+          "recLeft" : 501,
+          "recTop" : 254
+        }
+      ],
+      "recLeft" : {
+        "base" : 1,
+        "increase" : 50
+      },
+      "recTop" : {
+        "base" : 4,
+        "increase" : 100
+      }
+    },
+    {
+      "Status" : "Dead",
+      "Directions" : [
+        {
+          "direction" : "Right"
+        },
+        {
+          "direction" : "Down"
+        },
+        {
+          "direction" : "Left"
+        },
+        {
+          "direction" : "Up"
+        },
+        {
+          "direction" : "Any",
+          "recLeft" : 501,
+          "recTop" : 254
+        }
+      ],
+      "recLeft" : {
+        "base" : 301,
+        "increase" : 0
+      },
+      "recTop" : {
+        "base" : 254,
+        "increase" : 50
+      }
+    },
+    {
+      "Status" : "Weak",
+      "Directions" : [
+        {
+          "direction" : "Any",
+          "recLeft" : 1,
+          "recTop" : 554
+        }
+      ]
+    },
+    {
+      "Status" : "SlightlyWeak",
+      "Directions" : [
+        {
+          "direction" : "Any",
+          "recLeft" : 1,
+          "recTop" : 554
+        },
+        {
+          "direction" : "Any",
+          "recLeft" : 51,
+          "recTop" : 554
         }
       ]
     }
   ]
+
 }

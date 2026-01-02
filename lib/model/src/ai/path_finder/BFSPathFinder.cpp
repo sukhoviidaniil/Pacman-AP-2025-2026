@@ -26,10 +26,11 @@ namespace model::ai {
         const TileGrid &tiles,
         const TilePos from,
         const TilePos to,
-        const std::optional<infra::math::Direction> forbidden_dir) const
+        const std::optional<infra::math::Direction> forbidden_dir,
+        Optimize opt
+        ) const
     {
-
-        using infra::math::Direction;
+using infra::math::Direction;
 
         struct Node {
             TilePos pos;
@@ -67,18 +68,35 @@ namespace model::ai {
         try_push(from, Direction::Down,  Direction::Down,   1,  0);
         try_push(from, Direction::Left,  Direction::Left,   0, -1);
 
+        Node farthest{from, Direction::None};
+
         while (!q.empty()) {
             Node cur = q.front();
             q.pop();
 
-            if (cur.pos == to)
+            if (opt == Optimize::MinDistance && cur.pos == to)
                 return cur.first_dir;
+
+            if (opt == Optimize::MaxDistance) {
+                // update farthest for each visited position
+                const int cur_dist = (cur.pos.y > to.y ? cur.pos.y - to.y : to.y - cur.pos.y) +
+                               (cur.pos.x > to.x ? cur.pos.x - to.x : to.x - cur.pos.x);
+                const int far_dist = (farthest.pos.y > to.y ? farthest.pos.y - to.y : to.y - farthest.pos.y) +
+                               (farthest.pos.x > to.x ? farthest.pos.x - to.x : to.x - farthest.pos.x);
+                if (cur_dist > far_dist) {
+                    farthest = cur;
+                }
+            }
 
             try_push(cur.pos, cur.first_dir, Direction::Up,    -1,  0);
             try_push(cur.pos, cur.first_dir, Direction::Right,  0,  1);
             try_push(cur.pos, cur.first_dir, Direction::Down,   1,  0);
             try_push(cur.pos, cur.first_dir, Direction::Left,   0, -1);
         }
+
+        // if maximization — return the direction to the furthest cell found
+        if (opt == Optimize::MaxDistance)
+            return farthest.first_dir;
 
         return std::nullopt;
     }

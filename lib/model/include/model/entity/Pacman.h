@@ -25,7 +25,13 @@ namespace model::entity {
         ~Pacman() override;
 
         Pacman(float size, const infra::math::Point2 &position, std::unique_ptr<collision::HitBox> hitbox, float speed);
-        
+
+        void elapsed(float deltaTime);
+        void take_buff(float deltaTime);
+        [[nodiscard]] bool has_buff() const;
+        [[nodiscard]] float buff_time() const;
+    private:
+        float buff_time_ = 0;
     };
 }
 

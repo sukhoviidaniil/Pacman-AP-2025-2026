@@ -37,12 +37,8 @@ namespace model {
             start_wait_ -= delta;
             return;
         }
-        if (powered_) {
-            if (buff_wait_ > 0) {
-                buff_wait_ -= delta;
-            }else {
-                powered_ = false;
-            }
+        if (pacman_->has_buff()) {
+            pacman_->elapsed(delta);
         }
         if (pacman_status_ == infra::Status::Dead) {
             if (death_wait_ > 0) {
@@ -69,9 +65,29 @@ namespace model {
         const TilePos pacman_pos = t.value();
 
         // 4. Move all ghosts
-        for (const auto& ghost : ghosts_) {
-            // TODO
+        {
+            std::vector<TilePos> blinky_positions;
+            blinky_positions.reserve(blinkys_.size());
+            for (const auto& ghost : blinkys_) {
+                std::optional<TilePos> tt = grid_.get_TilePos(pacman_->position());
+                if (!tt.has_value()) continue;
+                blinky_positions.push_back(tt.value());
+
+            }
+
+            std::span<const TilePos> blinky_span(blinky_positions);
+            ai::GlobalGhostContext g_cts{
+                .map = grid_,
+                .pacman_pos = pacman_pos,
+                .buff_duration = pacman_->buff_time(),
+                .pacman_direction = pacman_->get_direction(),
+                .blinky_positions = blinky_span
+            };
+            for (const auto& ghost : ghosts_) {
+                ghost->act(delta, g_cts);
+            }
         }
+
         // 5.
         // search for all coins and power_pellets in the tiles nearby pacman
         // try to colect
@@ -95,10 +111,11 @@ namespace model {
             std::vector<std::shared_ptr<entity::PowerPellet>> to_remove;
             for (const auto& pp : near) {
                 if (collision_control_->collision(pacman_->hitboxe(), pp->hitboxe())) {
-                    powered_ = true;
-                    buff_wait_ += pp->buff_duration();
+                    pacman_->take_buff(pp->buff_duration());
+                    for (const auto& ghost : ghosts_) {
+                        ghost->weak();
+                    }
                     to_remove.push_back(pp);
-                    std::cout << "ok" ;
                 }
             }
             for (const auto& pp : to_remove) {
@@ -111,11 +128,11 @@ namespace model {
         // search for all ghosts in the tiles nearby pacman
         // try to collide
         {
-            // TODO
             const std::vector<std::shared_ptr<entity::Ghost>> near = get_ghosts_near(pacman_pos);
             for (const auto& ghost : near) {
                 if (collision_control_->collision(pacman_->hitboxe(), ghost->hitboxe())) {
-                    if (pacman_status_ == infra::Status::Powered) {
+                    if (pacman_->has_buff()) {
+                        // TODO
 
                     }else {
                         pacman_status_ = infra::Status::Dead;
@@ -140,6 +157,7 @@ namespace model {
     infra::Status Model::pacman_status() const {
         return pacman_status_;
     }
+
 
     std::vector<std::shared_ptr<entity::Coin>> Model::get_coins_near(const TilePos &pos) const {
         std::vector<std::shared_ptr<entity::Coin>> result;

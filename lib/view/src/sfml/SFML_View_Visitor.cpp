@@ -78,7 +78,8 @@ namespace view {
                 std::unordered_map<
                     infra::math::Direction,
                     // animation
-                    std::unique_ptr<ISFML_Sprite>
+                    std::unique_ptr<ISFML_Sprite>,
+                    infra::math::DirectionHash
                 >
             > data;
 
@@ -258,8 +259,13 @@ namespace view {
             render_warning(ri.rect);
             return;
         }
+        sf::Sprite sprite;
+        try {
+            sprite = it->second->sprite(ri.status, ri.direction);
+        } catch (...) {
+            throw;
+        }
 
-        sf::Sprite sprite = it->second->sprite(ri.status, ri.direction);
 
         const auto& r = ri.rect;
         sprite.setPosition(r.x, r.y);

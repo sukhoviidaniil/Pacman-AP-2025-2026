@@ -22,7 +22,7 @@
 
 namespace model::ai {
     struct PinkyTarget : TargetStrategy {
-        TilePos target(
+        [[nodiscard]] TilePos target(
             const GlobalGhostContext& g_ctx,
             const UniqGhostContext& u_ctx
             ) const override {

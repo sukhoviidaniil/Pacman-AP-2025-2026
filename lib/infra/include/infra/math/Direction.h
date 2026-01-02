@@ -18,6 +18,9 @@
 #ifndef PACMAN_DIRECTION_H
 #define PACMAN_DIRECTION_H
 
+#include <cstddef>
+#include <type_traits>
+
 namespace infra::math {
     enum class Direction {
         Any,
@@ -43,6 +46,14 @@ namespace infra::math {
             default: return Direction::Unknown; break;
         }
     }
+
+    struct DirectionHash {
+        size_t operator()(Direction d) const noexcept {
+            return static_cast<std::size_t>(
+                static_cast<std::underlying_type_t<Direction>>(d)
+            );
+        }
+    };
 }
 
 #endif //PACMAN_DIRECTION_H

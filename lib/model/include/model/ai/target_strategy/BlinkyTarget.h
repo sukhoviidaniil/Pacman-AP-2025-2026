@@ -21,7 +21,7 @@
 
 namespace model::ai {
     struct BlinkyTarget : TargetStrategy {
-        TilePos target(
+        [[nodiscard]] TilePos target(
             const GlobalGhostContext& g_ctx,
             const UniqGhostContext& u_ctx
             ) const override {

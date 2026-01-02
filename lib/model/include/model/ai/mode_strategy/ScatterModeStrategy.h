@@ -26,13 +26,25 @@ namespace model::ai {
         const TargetStrategy& target;
         ScatterModeStrategy(const TargetStrategy& t, const IPathFinder& pf) : ModeStrategy (pf), target(t) {}
 
-        infra::math::Direction decide(
+        [[nodiscard]] infra::math::Direction decide(
             const GlobalGhostContext& g_ctx,
             const UniqGhostContext& u_ctx
             ) const override {
 
-            // TilePos tar = target.target(ctx);
-            // return mover.choose_direction(ctx.map, ctx.self_tile, tar);
+            // Scatter: target — fixed tile (card corner)
+            TilePos tar = target.target(g_ctx, u_ctx);
+
+            const auto d = path_finder_.next_dir(
+                u_ctx.permission,
+                g_ctx.map,
+                u_ctx.self_pos,
+                tar,
+                opposite(u_ctx.self_direction), // no turning
+                IPathFinder::Optimize::MinDistance
+            );
+
+            // if the path is not found, continue moving
+            return d.value_or(u_ctx.self_direction);
         }
     };
 }

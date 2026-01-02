@@ -18,6 +18,8 @@
 
 #include "model/Model.h"
 #include "model/ai/GhostAI.h"
+#include "model/ai/path_finder/PF_Factory.h"
+#include "model/ai/target_strategy/TS_Factory.h"
 #include "model/collision/HitBox_Rectangle.h"
 #include "model/collision/Separating_Axis_Theorem.h"
 #include "model/entity/PowerPellet.h"
@@ -99,15 +101,48 @@ namespace model {
         }
     }
 
-    std::vector<entity::Ghost> Model::make_Ghosts(const ai::GhostRole& role, float hb_size, const infra::math::Point2 &position, const unsigned int &level, infra::ast::GhostInfo info) {
+    void Model::make_Ghosts(
+        const ai::GhostRole& role,
+        float hb_size,
+        const infra::math::Point2 &position,
+        const unsigned int &level,
+        const infra::ast::GhostInfo& info
+        ) {
+
         float sp_size = info.sprite_size;
-        float amount_per_level = info.amount_per_level;
-        int amount = static_cast<int>(amount_per_level * level);
+        const float amount_per_level = info.amount_per_level;
+        const int amount = info.start_amount + static_cast<int>(amount_per_level * level);
         float base_speed = info.base_speed;
         float frightened_speed = info.frightened_speed;
+        float eaten_speed = info.eaten_speed;
+
+        const std::optional<TilePos> t_pos = grid_.get_TilePos(position);
+        if (!t_pos.has_value()) return;
+        const TilePos home_pos = t_pos.value();
         for (int index = 0; index < amount; index++) {
+            std::unique_ptr<ai::TargetStrategy> chase_target = ai::TS_Factory::make(role);
+            std::unique_ptr<ai::TargetStrategy> scatter_target = ai::TS_Factory::make_corner(grid_, infra::math::Direction::Any);
 
+            std::unique_ptr<ai::IPathFinder> move_policy =ai::PF_Factory::make(info.path_finder);
 
+            ai::GhostAI ai(home_pos, std::move(chase_target), std::move(scatter_target), std::move(move_policy));
+
+            auto h = std::make_unique<collision::HitBox_Rectangle>(position, hb_size, hb_size, 0);
+            auto ghost = std::make_shared<entity::Ghost>(
+                role,
+                sp_size,
+                position,
+                std::move(h),
+                base_speed,
+                frightened_speed,
+                eaten_speed,
+                std::move(ai),
+                index);
+
+            ghosts_.push_back(ghost);
+            if (role == ai::GhostRole::Blinky) {
+                blinkys_.push_back(ghost);
+            }
         }
     }
 
@@ -121,29 +156,22 @@ namespace model {
         switch (in_cell) {
             case infra::ast::Tile::PacmanSpawn: {
                 float hb_size = m.grid.tile_size;
-                float sp_size = m.power_pellet_spawn.sprite_size;
+                float sp_size = m.pacman_spawn.sprite_size;
                 float speed = m.pacman_spawn.speed;
                 auto h = std::make_unique<collision::HitBox_Rectangle>(position, hb_size, hb_size, 0);
                 pacman_ = std::make_shared<entity::Pacman>(sp_size, position, std::move(h), speed);
                 return true;
             }
             case infra::ast::Tile::GhostSpawn: {
-                float hb_size = m.grid.tile_size;
-
-                {
-                    float sp_size = m.ghost_spawn.Blinky.sprite_size;
-                    float amount_per_level = m.ghost_spawn.Blinky.amount_per_level;
-                    int amount = static_cast<int>(amount_per_level * level);
-                    float base_speed = m.ghost_spawn.Blinky.base_speed;
-                    float frightened_speed = m.ghost_spawn.Blinky.frightened_speed;
-                }
-
+                const float hb_size = m.grid.tile_size;
+                make_Ghosts(ai::GhostRole::Blinky, hb_size, position, level, m.ghost_spawn.Blinky);
+                make_Ghosts(ai::GhostRole::Inky, hb_size, position, level, m.ghost_spawn.Inky);
+                make_Ghosts(ai::GhostRole::Clyde, hb_size, position, level, m.ghost_spawn.Clyde);
+                make_Ghosts(ai::GhostRole::Pinky, hb_size, position, level, m.ghost_spawn.Pinky);
                 return true;
             }
             default:
                 return false;
         }
-
-        // TODO
     }
 }

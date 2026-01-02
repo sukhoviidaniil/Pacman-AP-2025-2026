@@ -26,4 +26,21 @@ namespace model::entity {
     Pacman::Pacman(float size, const infra::math::Point2 &position, std::unique_ptr<collision::HitBox> hitbox, float speed)
         : Actor("Pacman", size, position, std::move(hitbox), infra::math::Direction::Right, speed){
     }
+
+    void Pacman::elapsed(const float deltaTime) {
+        buff_time_ -= deltaTime;
+        if (buff_time_<0) buff_time_=0;
+    }
+
+    void Pacman::take_buff(const float deltaTime) {
+        buff_time_ += deltaTime;
+    }
+
+    bool Pacman::has_buff() const {
+        return buff_time_>0;
+    }
+
+    float Pacman::buff_time() const {
+        return buff_time_;
+    }
 }

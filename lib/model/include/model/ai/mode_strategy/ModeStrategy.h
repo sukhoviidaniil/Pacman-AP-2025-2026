@@ -28,12 +28,12 @@ namespace model::ai {
         const IPathFinder& path_finder_;
         explicit ModeStrategy(const IPathFinder& pf) : path_finder_(pf) {};
 
-        virtual infra::math::Direction decide(
+
+        [[nodiscard]] virtual infra::math::Direction decide(
             const GlobalGhostContext& g_ctx,
             const UniqGhostContext& u_ctx
             ) const = 0;
         virtual ~ModeStrategy() = default;
     };
-
 }
 #endif //PACMAN_MODESTRATEGY_H

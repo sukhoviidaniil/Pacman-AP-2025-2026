@@ -29,7 +29,7 @@ namespace model::ai {
         const ModeStrategy* dead = nullptr; /// NOT OWNER
 
 
-        const ModeStrategy* select(const UniqGhostContext& ctx) const {
+        [[nodiscard]] const ModeStrategy* select(const UniqGhostContext& ctx) const {
             switch (ctx.mode) {
                 case GhostMode::Chase:return chase;
                 case GhostMode::Scatter: return scatter;

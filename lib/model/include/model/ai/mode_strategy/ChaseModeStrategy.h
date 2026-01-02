@@ -39,7 +39,8 @@ namespace model::ai {
                 g_ctx.map,
                 u_ctx.self_pos,
                 tar,
-                opposite(u_ctx.self_direction)
+                opposite(u_ctx.self_direction),
+                IPathFinder::Optimize::MaxDistance
                 );
             if (!d.has_value()) {
                 return u_ctx.self_direction;

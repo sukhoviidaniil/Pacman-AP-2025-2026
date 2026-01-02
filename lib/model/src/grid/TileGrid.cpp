@@ -188,6 +188,38 @@ namespace model {
             pos.y =  rows_ - 1;
         }
     }
+
+    bool TileGrid::can_choose_direction(
+        const TilePos& pos,
+        infra::math::Direction current_dir,
+        Permission permission = Permission::Low
+    ) const {
+        int exits = 0;
+
+        auto check = [&](infra::math::Direction dir) {
+            // no turning allowed
+            if (dir == infra::math::opposite(current_dir))
+                return;
+            // not the same value
+            if (dir == current_dir)
+                return;
+
+            auto next = get_next_TilePos(get_center(pos), dir);
+            if (!next.has_value())
+                return;
+
+            if (walkable(get_tile(*next), permission))
+                ++exits;
+        };
+
+        check(infra::math::Direction::Up);
+        check(infra::math::Direction::Down);
+        check(infra::math::Direction::Left);
+        check(infra::math::Direction::Right);
+
+        // if there is at least one alternative solution, you can choose
+        return exits > 0;
+    }
 }
 
 

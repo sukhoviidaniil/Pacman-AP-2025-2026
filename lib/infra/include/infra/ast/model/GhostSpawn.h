@@ -32,6 +32,8 @@ namespace infra::ast {
     struct GhostInfo : Entity_Node {
         float base_speed = 0.1f;
         float frightened_speed = 0.1f;
+        float eaten_speed = 0.1f;
+        int start_amount = 1;
         float amount_per_level = 0;
         PathFinderType path_finder = PathFinderType::BFS;
     };

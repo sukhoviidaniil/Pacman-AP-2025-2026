@@ -24,7 +24,8 @@ namespace model::ai {
         const TileGrid& tiles,
         const TilePos from,
         const TilePos to,
-        const std::optional<infra::math::Direction> forbidden_dir
+        const std::optional<infra::math::Direction> forbidden_dir,
+        Optimize opt
     )const {
         using infra::math::Direction;
 
@@ -46,9 +47,8 @@ namespace model::ai {
             if (ny >= int(tiles.rows()) || nx >= int(tiles.columns())) return;
 
             TilePos next{size_t(ny), size_t(nx)};
-            if (walkable(tiles.get_tile(next), permission)){
+            if (!walkable(tiles.get_tile(next), permission))
                 return;
-            }
 
             size_t h =
                 (next.y > to.y ? next.y - to.y : to.y - next.y) +
@@ -65,10 +65,13 @@ namespace model::ai {
         if (candidates.empty())
             return std::nullopt;
 
-        auto best = std::min_element(
+        auto best = std::max_element(
             candidates.begin(), candidates.end(),
-            [](const Candidate& a, const Candidate& b) {
-                return a.h < b.h;
+            [&](const Candidate& a, const Candidate& b) {
+                if (opt == Optimize::MinDistance)
+                    return a.h < b.h;
+                else // MaxDistance
+                    return a.h > b.h;
             }
         );
 

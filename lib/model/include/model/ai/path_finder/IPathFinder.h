@@ -27,12 +27,14 @@ namespace model::ai {
         IPathFinder() = default;
         virtual ~IPathFinder() = default;
 
+        enum class Optimize { MinDistance, MaxDistance };
         [[nodiscard]] virtual std::optional<infra::math::Direction> next_dir(
             const Permission& permission,
             const TileGrid& tiles,
             TilePos from,
             TilePos to,
-            std::optional<infra::math::Direction> forbidden_dir
+            std::optional<infra::math::Direction> forbidden_dir,
+            Optimize opt
         ) const = 0;
     };
 }

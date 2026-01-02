@@ -21,8 +21,10 @@
 #include "internal/GhostFSM.h"
 
 #include "mode_strategy/ChaseModeStrategy.h"
+#include "mode_strategy/EatenModeStrategy.h"
 #include "mode_strategy/FrightenedModeStrategy.h"
 #include "mode_strategy/ScatterModeStrategy.h"
+#include "target_strategy/CornerTargetStrategy.h"
 #include "target_strategy/TargetStrategy.h"
 
 namespace model::ai {
@@ -31,6 +33,7 @@ namespace model::ai {
     class GhostAI {
     public:
         GhostAI(
+        const TilePos& home,
         std::unique_ptr<TargetStrategy> chase_target,
         std::unique_ptr<TargetStrategy> scatter_target,
 
@@ -45,11 +48,12 @@ namespace model::ai {
             chase_mode_ = std::make_unique<ChaseModeStrategy>(*chase_target_, *move_policy_);
             scatter_mode_ = std::make_unique<ScatterModeStrategy>(*scatter_target_, *move_policy_);
             frightened_mode_ = std::make_unique<FrightenedModeStrategy>(*move_policy_);
-            // TODO death mode frightened_mode_ = std::make_unique<>(*scatter_target_, *move_policy_);
+            dead_mode_ = std::make_unique<EatenModeStrategy>(home, *move_policy_);
 
             fsm_.chase = chase_mode_.get();
             fsm_.scatter = scatter_mode_.get();
             fsm_.frightened = frightened_mode_.get();
+            fsm_.dead = dead_mode_.get();
         }
 
         [[nodiscard]] infra::math::Direction decide(const GlobalGhostContext& g_ctx, const UniqGhostContext& u_ctx) const {
@@ -61,12 +65,14 @@ namespace model::ai {
 
         std::unique_ptr<TargetStrategy> chase_target_;
         std::unique_ptr<TargetStrategy> scatter_target_;
+        std::unique_ptr<TargetStrategy> dead_target_;
 
         std::unique_ptr<IPathFinder> move_policy_;
 
         std::unique_ptr<ModeStrategy> chase_mode_;
         std::unique_ptr<ModeStrategy> scatter_mode_;
         std::unique_ptr<ModeStrategy> frightened_mode_;
+        std::unique_ptr<ModeStrategy> dead_mode_;
     };
 }
 

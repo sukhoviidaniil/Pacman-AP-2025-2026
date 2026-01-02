@@ -56,7 +56,6 @@ namespace model {
             default:
                 return false;
         }
-
     }
 }
 

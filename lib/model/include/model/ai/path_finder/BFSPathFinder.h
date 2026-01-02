@@ -24,12 +24,13 @@ namespace model::ai {
     public:
         ~BFSPathFinder() override = default;
 
-        std::optional<infra::math::Direction> next_dir(
+        [[nodiscard]] std::optional<infra::math::Direction> next_dir(
             const Permission& permission,
             const TileGrid& tiles,
             TilePos from,
             TilePos to,
-            std::optional<infra::math::Direction> forbidden_dir
+            std::optional<infra::math::Direction> forbidden_dir,
+            Optimize opt
         ) const override;
     };
 

@@ -55,6 +55,10 @@ namespace model {
         void out_of_bounds(const TilePos &pos, const std::string &who) const;
         void limit(TilePos& pos) const;
 
+        [[nodiscard]] bool can_choose_direction(
+            const TilePos &pos,
+            infra::math::Direction current_dir,
+            Permission permission) const;
 
     private:
 
