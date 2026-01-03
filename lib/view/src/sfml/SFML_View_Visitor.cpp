@@ -118,7 +118,6 @@ namespace view {
                     if (status.animation.size == 0) {
                         const sf::IntRect rect(recLeft, recTop, sprite_width, sprite_height);
                         sf::Sprite sprite(texture, rect);
-                        sprite.setOrigin(static_cast<float>(rect.width) / 2.f, static_cast<float>(rect.height) / 2.f);
                         isprite = std::make_unique<SFML_Sprite>(std::move(sprite));
                     }else {
                         int frame_size = static_cast<int>(status.animation.size);
@@ -248,9 +247,6 @@ namespace view {
         );
         window_.draw(sprite);
 
-        if (ri_sprite.sprite == "Coin") {
-            c++;
-        }
     }
 
     void SFML_View::visit(const ui::RI_ComplexSprite &ri) {

@@ -36,7 +36,6 @@ namespace model {
         const size_t dx = (a.x > b.x) ? (a.x - b.x) : (b.x - a.x);
         return dy <= 1 && dx <= 1;
     }
-
 }
 
 #endif //PACMAN_TILEPOS_H

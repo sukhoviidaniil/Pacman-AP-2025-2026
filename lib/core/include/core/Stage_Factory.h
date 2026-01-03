@@ -19,7 +19,7 @@
 #define PACMAN_STAGE_FACTORY_H
 
 #include "core/Stage.h"
-#include "../../../infra/include/infra/internal/Score.h"
+#include "infra/internal/Score.h"
 #include "model/Model.h"
 
 
@@ -31,13 +31,15 @@ namespace core {
             infra::ast::ScoreSetup score_setup,
             const infra::ast::ScoreBord& bord,
             std::vector<infra::ast::Model> models,
-            const std::shared_ptr<infra::event::Event_Bus>& g_eventbus
+            const std::shared_ptr<infra::event::Event_Bus>& g_eventbus,
+            bool random_model_order = false
             );
 
         std::shared_ptr<core::stg::Stage> make_Start_Stage();
         std::shared_ptr<core::stg::Stage> make_Pause_Stage();
-
         std::shared_ptr<core::stg::Stage> make_Level_Stage();
+        std::shared_ptr<core::stg::Stage> make_Death_Stage();
+        std::shared_ptr<core::stg::Stage> make_GameOver_Stage();
 
 
         void make_new_Model();

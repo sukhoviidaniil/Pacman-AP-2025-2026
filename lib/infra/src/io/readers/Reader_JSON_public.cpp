@@ -134,14 +134,46 @@ namespace infra::io {
         return app;
     }
 
-    void Reader_JSON::save_ScoreBord(const ast::ScoreBord &bord) const {
+    void Reader_JSON::save_ScoreBord(const ast::ScoreBord& bord) const {
         nlohmann::json j;
 
+        // --- Meta ---
+        j["file"] = bord.file;
         j["bord_size"] = bord.bord_size;
-        j["scores"] = nlohmann::json::array();
 
+        // --- Score setup ---
+        j["score_setup"] = {
+            // Base
+            {"lives_remaining", bord.score_setup.lives_remaining},
+            {"level", bord.score_setup.level},
+            {"points_score", bord.score_setup.points_score},
+
+            // Coins
+            {"time_since_the_last_coin_collection",
+                bord.score_setup.time_since_the_last_coin_collection},
+            {"coin_award_amount", bord.score_setup.coin_award_amount},
+            {"coin_max_award_level", bord.score_setup.coin_max_award_level},
+            {"coin_award_level", bord.score_setup.coin_award_level},
+            {"coin_RR_Time_until_reduction",
+                bord.score_setup.coin_RR_Time_until_reduction},
+            {"coin_RR_Time_between_reductions",
+                bord.score_setup.coin_RR_Time_between_reductions},
+
+            // Ghosts
+            {"time_since_the_last_ghost_collection",
+                bord.score_setup.time_since_the_last_ghost_collection},
+            {"ghost_award_amount", bord.score_setup.ghost_award_amount},
+            {"ghost_max_award_level", bord.score_setup.ghost_max_award_level},
+            {"ghost_award_level", bord.score_setup.ghost_award_level},
+            {"ghost_RR_Time_until_reset",
+                bord.score_setup.ghost_RR_Time_until_reset}
+        };
+
+        // --- Scores ---
+        j["scores"] = nlohmann::json::array();
         for (const auto& s : bord.scores) {
             j["scores"].push_back({
+                {"id", s.id},
                 {"lives_remaining", s.lives_remaining},
                 {"level", s.level},
                 {"points_score", s.points_score}
@@ -149,6 +181,6 @@ namespace infra::io {
         }
 
         std::ofstream out(bord.file);
-        out << j.dump(4); // pretty-print
+        out << j.dump(4);
     }
 }

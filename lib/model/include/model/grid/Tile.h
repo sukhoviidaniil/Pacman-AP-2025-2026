@@ -53,6 +53,9 @@ namespace model {
                         return false;
                 }
             }
+            case Permission::Full : {
+                return true;
+            }
             default:
                 return false;
         }

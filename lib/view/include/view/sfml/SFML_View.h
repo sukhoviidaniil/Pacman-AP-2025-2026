@@ -82,8 +82,6 @@ namespace view {
         > complex_sprites_;
 
         sf::RenderWindow window_;
-
-        unsigned int c = 0;
     };
 }
 

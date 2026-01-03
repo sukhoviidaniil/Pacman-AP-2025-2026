@@ -1,9 +1,0 @@
-{
-  "base_window_width" : 800,
-  "base_window_height" : 600,
-  "window_center" : {"x" :  400, "y" : 300},
-  "camera_width" : 400,
-  "camera_height" : 300,
-  "camera_center" : {"x" :  0, "y" : 0}
-
-}

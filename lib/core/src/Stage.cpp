@@ -26,6 +26,7 @@ namespace core::stg {
     void Stage::checkIn() {
     }
 
+
     void stg::Stage::dispatch( infra::event::Event_Store& event_store) {
         while (!event_store.empty()) {
             std::unique_ptr<infra::event::EventConcept> e_concept = event_store.pop_concept();

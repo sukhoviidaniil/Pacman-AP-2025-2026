@@ -6,12 +6,12 @@
     "grid" : [
       ["W", "W", "W", "W", "W", "W",   "W", "W", "W", "W", "W", "W", "W", "W", "W",   "W", "W", "W", "W", "W", "W"],
 
-      ["W", "P", "C", "C", "C", "W",   "C", "C", "C", "C", "C", "C", "C", "C", "C",   "W", "C", "C", "C", "C", "W"],
+      ["W", "P", "C", "C", "C", "W",   "C", "C", "C", "C", "C", "C", "C", "C", "C",   "W", "C", "C", "C", "P", "W"],
       ["W", "C", "W", "W", "C", "W",   "C", "W", "W", "W", "W", "W", "W", "W", "C",   "W", "C", "W", "W", "C", "W"],
       ["W", "C", "W", "C", "C", "C",   "C", "C", "C", "C", "C", "C", "C", "C", "C",   "C", "C", "C", "W", "C", "W"],
 
       ["W", "C", "W", "C", "W", "W",   "C", "W", "W", "B", "B", "B", "W", "W", "C",   "W", "W", "C", "W", "C", "W"],
-      ["W", "C", "C", "C", "C", "C",   "C", "W", "F", "F", "G", "F", "F", "W", "C",   "C", "C", "C", "C", "C", "W"],
+      ["W", "C", "C", "C", "C", "C",   "C", "W", "W", "F", "G", "F", "W", "W", "C",   "C", "C", "C", "C", "C", "W"],
       ["W", "C", "W", "C", "W", "W",   "C", "W", "W", "W", "W", "W", "W", "W", "C",   "W", "W", "C", "W", "C", "W"],
 
       ["W", "C", "W", "C", "C", "C",   "C", "C", "C", "C", "C", "C", "C", "C", "C",   "C", "C", "C", "W", "C", "W"],
@@ -28,26 +28,29 @@
   "GhostSpawn" : {
     "Blinky" : {
       "sprite_size" : 0.9,
-      "base_speed" : 3,
-      "frightened_speed" : 2,
+      "base_speed" : 2.5,
+      "frightened_speed" : 1.5,
       "eaten_speed" : 6,
-      "path_finder" : "BFS"
+      "path_finder" : "Greedy"
     },
     "Pinky" : {
+      "start_amount" : 0,
       "sprite_size" : 0.9,
       "base_speed" : 3,
       "frightened_speed" : 2,
       "eaten_speed" : 6,
-      "path_finder" : "BFS"
+      "path_finder" : "AStar"
     },
     "Inky" : {
+      "start_amount" : 0,
       "sprite_size" : 0.9,
       "base_speed" : 3,
       "frightened_speed" : 2,
       "eaten_speed" : 6,
-      "path_finder" : "BFS"
+      "path_finder" : "AStar"
     },
     "Clyde" : {
+      "start_amount" : 0,
       "sprite_size" : 0.9,
       "base_speed" : 3,
       "frightened_speed" : 2,

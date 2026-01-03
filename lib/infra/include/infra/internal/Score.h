@@ -24,16 +24,23 @@ namespace infra {
     class Score {
     public:
         explicit Score();
-        explicit Score(const ast::ScoreSetup& score_info);
+        explicit Score(std::uint64_t id, const ast::ScoreSetup& score_info);
+        [[nodiscard]] std::uint64_t id() const;
         [[nodiscard]] ast::ScoreInfo get_score_info() const;
         [[nodiscard]] unsigned int lives_remaining() const;
         [[nodiscard]] unsigned int level() const;
         [[nodiscard]] unsigned int points_score() const;
 
+        // --- Coins ---
         [[nodiscard]] unsigned int coin_collection();
+
+        // --- Ghosts ---
+        [[nodiscard]] unsigned int ghost_collection();
+
         void pakman_died();
         void run(float delta);
     private:
+        std::uint64_t id_;
 
         unsigned int lives_remaining_ = 3;
         unsigned int level_ = 1;
@@ -42,13 +49,22 @@ namespace infra {
         float time_since_the_last_coin_collection_ = 0;
 
         // Reward
-        unsigned int award_amount_ = 10; /// How many points will be added for each reward level
-        unsigned int max_award_level_ = 10; /// Maximum reward level (when picking up a coin, it is set to this value)
-        unsigned int award_level_ = 0; /// Current reward level (this value will decrease over time)
+        unsigned int coin_award_amount_ = 10; /// How many points will be added for each reward level
+        unsigned int coin_max_award_level_ = 10; /// Maximum reward level (when picking up a coin, it is set to this value)
+        unsigned int coin_award_level_ = 0; /// Current reward level (this value will decrease over time)
 
         // (RR - reward reduction)
-        float RR_Time_until_reduction_  = 5; /// Time until reduction for coin collection rewards
-        float RR_Time_between_reductions_ = 1; /// Time until reduction for coin collection rewards
+        float coin_RR_Time_until_reduction_  = 5; /// Time until reduction for coin collection rewards
+        float coin_RR_Time_between_reductions_ = 1; /// Time until reduction for coin collection rewards
+
+        // --- Ghosts reward ---
+        float time_since_the_last_ghost_collection_ = 0.f;
+
+        unsigned int ghost_award_amount_ = 200;
+        unsigned int ghost_max_award_level_ = 4;   // 200, 400, 800, 1600
+        unsigned int ghost_award_level_ = 0;
+
+        float ghost_RR_time_until_reset_ = 6.f;
     };
 }
 

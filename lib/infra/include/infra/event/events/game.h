@@ -38,6 +38,11 @@ namespace infra::event::game {
 
         Request_New_LevelStage() = default;
     };
+    struct Request_Continuing_LevelStage {
+        static constexpr infra::event::EventMask mask = infra::event::EventMask::Game;
+
+        Request_Continuing_LevelStage() = default;
+    };
 
     struct Request_EnterPause {
         static constexpr infra::event::EventMask mask = infra::event::EventMask::Game;

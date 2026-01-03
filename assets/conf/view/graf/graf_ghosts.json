@@ -19,11 +19,6 @@
         },
         {
           "direction" : "Up"
-        },
-        {
-          "direction" : "Any",
-          "recLeft" : 501,
-          "recTop" : 254
         }
       ],
       "recLeft" : {
@@ -49,11 +44,6 @@
         },
         {
           "direction" : "Up"
-        },
-        {
-          "direction" : "Any",
-          "recLeft" : 501,
-          "recTop" : 254
         }
       ],
       "recLeft" : {
@@ -82,13 +72,14 @@
           "direction" : "Any",
           "recLeft" : 1,
           "recTop" : 554
-        },
-        {
-          "direction" : "Any",
-          "recLeft" : 51,
-          "recTop" : 554
         }
-      ]
+      ],
+      "Animation" : {
+        "frame_duration": 0.15,
+        "size" : 2,
+        "recTop_increase" : 0,
+        "recLeft_increase" : 50
+      }
     }
   ]
 

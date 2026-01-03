@@ -20,6 +20,7 @@
 
 #include "core/Stage_Manager.h"
 
+#include "infra/diagnostics/Logger.h"
 #include "infra/event/events/game.h"
 
 
@@ -84,6 +85,15 @@ namespace core  {
             )
         );
         track(
+            bus->subscribe<infra::event::game::Request_Continuing_LevelStage>(
+                [this](const infra::event::game::Request_Continuing_LevelStage&) {
+                    pop_stage();
+                    stage_factory_->make_new_Model();
+                    push_stage(stage_factory_->make_Level_Stage());
+                }
+            )
+        );
+        track(
             bus->subscribe<infra::event::game::All_Coins_Collected>(
                 [this](const infra::event::game::All_Coins_Collected&) {
                     pop_stage();
@@ -111,7 +121,7 @@ namespace core  {
             bus->subscribe<infra::event::game::PacMan_Died>(
                 [this](const infra::event::game::PacMan_Died&) {
                     pop_stage();
-                    // push_stage(stage_factory_->); TODO
+                    push_stage(stage_factory_->make_Death_Stage());
                 }
             )
         );
@@ -127,7 +137,10 @@ namespace core  {
     }
 
     std::shared_ptr<core::stg::Stage> Stage_Manager::get_top() {
-        if (current_stages_.empty()) return nullptr;
+        if (current_stages_.empty()) {
+            LOG("Current_stages_ == empty!");
+            return nullptr;
+        }
         return current_stages_.top();
     }
 }

@@ -165,9 +165,36 @@ namespace view::ui {
             sprite->sprite = entity->name();
             sprite->rect = { ui_pos.x, ui_pos.y, scale_size, scale_size};
             frame.temp_items.push_back(std::move(sprite));
-
         }
+        for (const auto& ghost : model.ghosts()){
 
+            const auto& entity = ghost;
+            const float half_size = entity->size() * 0.5f;
+            const float scale_size = entity->size() * scale;
+
+            infra::math::Point2 center = entity->position();
+            // Position conversion: center -> top left
+            infra::math::Point2 top_left{
+                center.x - half_size,
+                center.y - half_size
+            };
+            const infra::math::Point2 ui_pos = world_to_ui(top_left, offset, scale);
+            auto sprite = std::make_unique<view::ui::RI_ComplexSprite>();
+            sprite->sprite = entity->name();
+            sprite->direction = entity->get_direction();
+
+            if (!ghost->is_weak()) {
+                sprite->status = infra::Status::Alive;
+            }else {
+                if (ghost->debuff_duration() > 2.f) {
+                    sprite->status = infra::Status::Weak;
+                }else {
+                    sprite->status = infra::Status::SlightlyWeak;
+                }
+            }
+            sprite->rect = { ui_pos.x, ui_pos.y, scale_size, scale_size};
+            frame.temp_items.push_back(std::move(sprite));
+        }
         {
             const auto& entity = model.pacman();
             const float half_size = entity->size() * 0.5f;
@@ -187,33 +214,6 @@ namespace view::ui {
             sprite->rect = { ui_pos.x, ui_pos.y, scale_size, scale_size};
             frame.temp_items.push_back(std::move(sprite));
         }
-        for (const auto& ghost : model.ghosts()){
 
-            const auto& entity = ghost;
-            const float half_size = entity->size() * 0.5f;
-            const float scale_size = entity->size() * scale;
-
-            infra::math::Point2 center = entity->position();
-            // Position conversion: center -> top left
-            infra::math::Point2 top_left{
-                center.x,
-                center.y
-            };
-            const infra::math::Point2 ui_pos = world_to_ui(top_left, offset, scale);
-            auto sprite = std::make_unique<view::ui::RI_ComplexSprite>();
-            sprite->sprite = entity->name();
-            sprite->direction = entity->get_direction();
-            if (!model.pacman()->has_buff()) {
-                sprite->status = infra::Status::Alive;
-            }else {
-                if (model.pacman()->buff_time() > 5.f) {
-                    sprite->status = infra::Status::Weak;
-                }else {
-                    sprite->status = infra::Status::SlightlyWeak;
-                }
-            }
-            sprite->rect = { ui_pos.x, ui_pos.y, scale_size, scale_size};
-            frame.temp_items.push_back(std::move(sprite));
-        }
     }
 }

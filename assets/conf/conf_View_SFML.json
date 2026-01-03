@@ -12,6 +12,10 @@
     {
       "name" : "Logo",
       "file" : "textures/logo.png"
+    },
+    {
+      "name" : "Try_Again",
+      "file" : "textures/try_again.png"
     }
   ],
   "Fonts":[
@@ -38,9 +42,17 @@
       "recTop" : 452
     },
     {
-      "using_texture" : "Logo",
+      "using_texture" : "Try_Again",
       "sprits_width": 840,
       "sprits_height": 259,
+      "name" : "Try Again!",
+      "recLeft" : 0,
+      "recTop" : 0
+    },
+    {
+      "using_texture" : "Logo",
+      "sprits_width": 666,
+      "sprits_height": 375,
       "name" : "Pacman Logo",
       "recLeft" : 0,
       "recTop" : 0

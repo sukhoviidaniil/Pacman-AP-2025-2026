@@ -63,20 +63,13 @@ namespace view {
 
 
     void SFML_View::render(const view::ui::RenderFrame &frame) {
-        c = 0;
         window_.clear(sf::Color::Black);
-
-
         for (auto& item : frame.constant_items) {
             item->accept(*this);
         }
-
         for (auto& item : frame.temp_items) {
             item->accept(*this);
         }
-        std::string msg = "Coins drawn" + std::to_string(c);
-        LOG(msg);
-
         window_.display();
     }
 }

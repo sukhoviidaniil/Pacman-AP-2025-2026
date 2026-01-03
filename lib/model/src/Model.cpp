@@ -72,7 +72,6 @@ namespace model {
                 std::optional<TilePos> tt = grid_.get_TilePos(pacman_->position());
                 if (!tt.has_value()) continue;
                 blinky_positions.push_back(tt.value());
-
             }
 
             std::span<const TilePos> blinky_span(blinky_positions);
@@ -112,8 +111,9 @@ namespace model {
             for (const auto& pp : near) {
                 if (collision_control_->collision(pacman_->hitboxe(), pp->hitboxe())) {
                     pacman_->take_buff(pp->buff_duration());
+                    const float buff_time = pacman_->buff_time();
                     for (const auto& ghost : ghosts_) {
-                        ghost->weak();
+                        ghost->be_weak(buff_time);
                     }
                     to_remove.push_back(pp);
                 }
@@ -130,12 +130,14 @@ namespace model {
         {
             const std::vector<std::shared_ptr<entity::Ghost>> near = get_ghosts_near(pacman_pos);
             for (const auto& ghost : near) {
+                if (ghost->is_dead()) continue;
                 if (collision_control_->collision(pacman_->hitboxe(), ghost->hitboxe())) {
-                    if (pacman_->has_buff()) {
-                        // TODO
-
+                    if (ghost->is_weak()) {
+                        ghost->die();
+                        unsigned int added_score = score_->ghost_collection();
                     }else {
                         pacman_status_ = infra::Status::Dead;
+                        score_->pakman_died();
                         break;
                     }
                 }
@@ -189,7 +191,7 @@ namespace model {
         std::vector<std::shared_ptr<entity::Ghost>> result;
         for (const auto& ghost : ghosts_) {
             std::optional<TilePos> t = grid_.get_TilePos(ghost->position());
-            if (t.has_value()) continue;
+            if (!t.has_value()) continue;
             TilePos ghost_pos = t.value();
             if (are_close(pos, ghost_pos)) {
                 result.push_back(ghost);

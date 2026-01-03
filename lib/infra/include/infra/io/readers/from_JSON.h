@@ -138,38 +138,75 @@ namespace infra::ast {
 
     // ---------------- ScoreSetup ----------------
     inline void from_json(const nlohmann::json& j, ScoreSetup& s) {
+        // --- Base ---
         s.lives_remaining = io::get_checked(j, "lives_remaining", s.lives_remaining);
-        s.level = io::get_checked(j, "level", s.level);
-        s.points_score = io::get_checked(j, "points_score", s.points_score);
-        s.time_since_the_last_coin_collection = io::get_checked(j, "time_since_the_last_coin_collection", s.time_since_the_last_coin_collection);
+        s.level          = io::get_checked(j, "level", s.level);
+        s.points_score   = io::get_checked(j, "points_score", s.points_score);
 
-        s.award_amount = io::get_checked(j, "award_amount", s.award_amount);
-        s.max_award_level  = io::get_checked(j, "max_award_level", s.max_award_level);
-        s.award_level = io::get_checked(j, "award_level", s.award_level);
+        // --- Coins ---
+        s.time_since_the_last_coin_collection =
+            io::get_checked(j, "time_since_the_last_coin_collection",
+                            s.time_since_the_last_coin_collection);
 
-        s.RR_Time_until_reduction = io::get_checked(j, "RR_Time_until_reduction", s.RR_Time_until_reduction);
-        s.RR_Time_between_reductions = io::get_checked(j, "RR_Time_between_reductions", s.RR_Time_between_reductions);
+        s.coin_award_amount =
+            io::get_checked(j, "coin_award_amount", s.coin_award_amount);
+        s.coin_max_award_level =
+            io::get_checked(j, "coin_max_award_level", s.coin_max_award_level);
+        s.coin_award_level =
+            io::get_checked(j, "coin_award_level", s.coin_award_level);
+
+        s.coin_RR_Time_until_reduction =
+            io::get_checked(j, "coin_RR_Time_until_reduction",
+                            s.coin_RR_Time_until_reduction);
+        s.coin_RR_Time_between_reductions =
+            io::get_checked(j, "coin_RR_Time_between_reductions",
+                            s.coin_RR_Time_between_reductions);
+
+        // --- Ghosts ---
+        s.time_since_the_last_ghost_collection =
+            io::get_checked(j, "time_since_the_last_ghost_collection",
+                            s.time_since_the_last_ghost_collection);
+
+        s.ghost_award_amount =
+            io::get_checked(j, "ghost_award_amount", s.ghost_award_amount);
+        s.ghost_max_award_level =
+            io::get_checked(j, "ghost_max_award_level", s.ghost_max_award_level);
+        s.ghost_award_level =
+            io::get_checked(j, "ghost_award_level", s.ghost_award_level);
+
+        s.ghost_RR_Time_until_reset =
+            io::get_checked(j, "ghost_RR_Time_until_reset",
+                            s.ghost_RR_Time_until_reset);
     }
 
     // ---------------- ScoreInfo ----------------
     inline void from_json(const nlohmann::json& j, ScoreInfo& s) {
-        s.lives_remaining = io::get_checked<unsigned int>(j, "lives_remaining", s.lives_remaining);
-        s.level           = io::get_checked<unsigned int>(j, "level", s.lives_remaining);
-        s.points_score    = io::get_checked<unsigned int>(j, "points_score", s.lives_remaining);
+        s.id             = io::get_checked<std::uint64_t>(j, "id", s.id);
+        s.lives_remaining =
+            io::get_checked<unsigned int>(j, "lives_remaining", s.lives_remaining);
+        s.level =
+            io::get_checked<unsigned int>(j, "level", s.level);
+        s.points_score =
+            io::get_checked<unsigned int>(j, "points_score", s.points_score);
     }
 
     // ---------------- ScoreBord ----------------
     inline void from_json(const nlohmann::json& j, ScoreBord& bord) {
+        bord.file      = io::get_checked(j, "file", bord.file);
         bord.bord_size = io::get_checked<size_t>(j, "bord_size", bord.bord_size);
-        bord.scores.clear();
 
+        // Score setup
+        if (j.contains("score_setup")) {
+            bord.score_setup = io::get_checked<ScoreSetup>(j, "score_setup");
+        }
+
+        // Scores
+        bord.scores.clear();
         if (j.contains("scores") && j["scores"].is_array()) {
             for (const auto& item : j["scores"]) {
-                auto s = io::get_checked<ScoreInfo>(item);
-                bord.scores.push_back(s);
+                bord.scores.push_back(io::get_checked<ScoreInfo>(item));
             }
         }
-        bord.file = j.value("file", std::string{});
     }
 
 

@@ -36,10 +36,21 @@ namespace infra {
     }
 
     void ScoreBord::add_to_bord(const Score &score) {
-        all_scores_.push_back(score.get_score_info());
+        const auto info = score.get_score_info();
+
+        // already exists → ignore
+        auto it = std::find_if(
+            all_scores_.begin(),
+            all_scores_.end(),
+            [&](const ast::ScoreInfo& s) { return s.id == info.id; }
+        );
+
+        if (it != all_scores_.end())
+            return;
+
+        all_scores_.push_back(info);
         sort_and_trim();
     }
-
 
     const std::vector<ast::ScoreInfo> & ScoreBord::all_scores() const {
         return all_scores_;
@@ -47,5 +58,13 @@ namespace infra {
 
     std::string ScoreBord::file() const{
         return file_;
+    }
+
+    std::unique_ptr<Score> ScoreBord::create_score()  {
+        return std::make_unique<Score>(next_id_++, score_setup_);
+    }
+    void ScoreBord::sync_next_id()  {
+        for (const auto& s : all_scores_)
+            next_id_ = std::max(next_id_, s.id + 1);
     }
 }

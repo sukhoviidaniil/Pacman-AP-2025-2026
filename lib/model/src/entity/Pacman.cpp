@@ -37,7 +37,7 @@ namespace model::entity {
     }
 
     bool Pacman::has_buff() const {
-        return buff_time_>0;
+        return buff_time_>=0;
     }
 
     float Pacman::buff_time() const {

@@ -38,7 +38,12 @@ namespace model::entity {
             std::size_t self_index
             );
 
-        void weak();
+        void be_weak(float debuff_duration);
+
+        bool is_dead() const;
+
+        [[nodiscard]] bool is_weak() const;
+        [[nodiscard]] float debuff_duration() const;
         void reset_elapsed();
         void die();
         void act(float deltaTime, const ai::GlobalGhostContext& g_ctx);
@@ -55,6 +60,7 @@ namespace model::entity {
         std::size_t self_index_;
 
         float elapsed_ = 0;
+        float debuff_duration_;
     };
 }
 

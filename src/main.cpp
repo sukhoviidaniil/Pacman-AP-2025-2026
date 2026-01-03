@@ -22,13 +22,16 @@
 #include "infra/event/Event_Bus.h"
 #include "core/Game.h"
 #include "infra/diagnostics/Logger.h"
+#include "infra/internal/Random.h"
 
 
 int main() {
-    infra::diag::Logger::instance();
-    const auto eventbus_ = std::make_shared<infra::event::Event_Bus>(); // GLOBAL
     const std::string assets_dir = ASSETS_DIR;
     const std::string conf_dir = assets_dir + "conf/";
+
+    infra::diag::Logger::instance();
+    infra::Random::instance();
+    const auto eventbus_ = std::make_shared<infra::event::Event_Bus>(); // GLOBAL
 
     const auto fr = std::make_shared<infra::io::File_Reader>(conf_dir);
     fr->add_Reader(".json", std::make_shared<infra::io::Reader_JSON>());

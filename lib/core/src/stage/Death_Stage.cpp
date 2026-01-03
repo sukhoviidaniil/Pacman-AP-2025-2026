@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Level_Stage.cpp
+ * File:          Death_Stage.cpp
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-11-24
+ * Created:       2026-01-03
  * Modified:      []
  *
  * Description:   []
@@ -16,39 +16,34 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "core/stage/Level_Stage.h"
+#include "core/stage/Death_Stage.h"
 
-#include "control/C_Game.h"
+#include "infra/event/events/game.h"
 #include "view/presentation/layout_engine/LivesLabel.h"
-#include "view/presentation/layout_engine/Map.h"
 #include "view/presentation/layout_engine/ScoreLabel.h"
+#include "view/presentation/layout_engine/SpriteElement.h"
 #include "view/presentation/layout_engine/V_HBox.h"
 
-
 namespace core::stg {
-    Level_Stage::~Level_Stage() = default;
-
-    Level_Stage::Level_Stage(
+    Death_Stage::Death_Stage(
         const std::shared_ptr<infra::event::Event_Bus> &global_eventbus,
-        const std::shared_ptr<model::Model> &model,
-        const infra::Const_Score score) :
-        Stage(global_eventbus), model_(model), score_(score){
+        const infra::Const_Score score) : Stage(global_eventbus), score_(score){
 
         //1 Create a root container
         ui_root_ = std::make_unique<view::ui::VBox>();
 
-        const auto middle = std::make_shared<view::ui::Map>();
+        const auto middle = std::make_shared<view::ui::SpriteElement>(
+            "Try Again",
+            666,
+            375
+            );
         const auto bottom  = std::make_shared<view::ui::HBox>();
-
-        // 2 Add three columns
-
-        middle->flex = 10.f;
-        bottom->flex  = 1.f;
+        middle->flex = 5.f;
+        bottom->flex  = 5.f;
         bottom->align = infra::ui::Align::Center;
         ui_root_->add(middle);
         ui_root_->add(bottom);
 
-        //3 Create a UIElement for the model
         const auto score_view = std::make_shared<view::ui::ScoreLabel>();
         const auto lives_view = std::make_shared<view::ui::LivesLabel>();
         score_view->flex = 1.f;
@@ -58,20 +53,22 @@ namespace core::stg {
         bottom->add(score_view);
         bottom->add(lives_view);
 
-        controller = std::make_unique<control::C_Game>(model_->get_pacman());
+        controller = nullptr;
     }
 
-    void Level_Stage::run(const float tick) {
-        dispatch(controller->event_store_);
-        model_->run(tick);
-        dispatch(model_->event_store_);
+    void Death_Stage::run(const float tick) {
+        dispatch(event_store_);
+        if (elapsed_ > 0) {
+            elapsed_-=tick;
+        }else {
+            std::unique_ptr<infra::event::EventInstance<infra::event::game::Request_Continuing_LevelStage>> event =
+                std::make_unique<infra::event::EventInstance<infra::event::game::Request_Continuing_LevelStage>>(infra::event::game::Request_Continuing_LevelStage());
+            event_store_.push_concept(*event);
+        }
     }
 
-    void Level_Stage::checkIn() {
-        model_->add_wait();
-    }
+    view::ui::RenderFrame Death_Stage::get_RenderFrame(const infra::math::Vector2 &screen_size, bool redraw) const {
 
-    view::ui::RenderFrame Level_Stage::get_RenderFrame(const infra::math::Vector2 &screen_size, const bool redraw) const {
         //4 Measurement and layout of the entire tree
         ui_root_->measure(screen_size);
 
@@ -80,9 +77,9 @@ namespace core::stg {
 
         //6 Collecting RenderItems
         view::ui::RenderFrame frame;
-        const model::ui::ModelView mv(*model_);
-        const view::ViewContext ctx(redraw, nullptr, &score_, nullptr, &mv);
+        const view::ViewContext ctx(redraw, nullptr, &score_, nullptr, nullptr);
         ui_root_->append_render_items(frame, ctx);
         return frame;
+
     }
 }
