@@ -112,8 +112,8 @@ namespace model {
         float sp_size = info.sprite_size;
         const float amount_per_level = info.amount_per_level;
         const int amount = info.start_amount + static_cast<int>(amount_per_level * level);
-        float base_speed = info.base_speed;
-        float frightened_speed = info.frightened_speed;
+        float base_speed = info.base_speed  + info.base_speed * level;
+        float frightened_speed = info.frightened_speed + info.frightened_speed_inc * level;
         float eaten_speed = info.eaten_speed;
 
         const std::optional<TilePos> t_pos = grid_.get_TilePos(position);

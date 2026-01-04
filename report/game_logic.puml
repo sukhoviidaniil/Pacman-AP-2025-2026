@@ -1,0 +1,58 @@
+@startuml
+
+
+package infra {
+    class Score
+    class ScoreBoard
+}
+
+package model {
+    class Model
+}
+
+package view {
+    class View_Renderer
+    class UI
+    class RenderFrame
+}
+
+package controller {
+    class Event_Collector
+    class Controller
+}
+
+package core {
+    class Game
+    class Stage
+    class Stage_Manager
+    class Stage_Factory
+}
+
+Model o-- Score: has
+
+ScoreBoard --> Score : create
+
+UI -> RenderFrame: interpreted
+
+RenderFrame -> View_Renderer: being drawn
+
+
+Event_Collector ..> View_Renderer : listen
+Event_Collector -> Controller : informs
+
+Game *-- Score: owns
+Game *-- ScoreBoard: owns
+Game *-- Stage_Manager: owns
+Game *-- Stage_Factory: owns
+Game *-- View_Renderer: owns
+
+Stage_Manager o-- Stage: has
+Stage_Manager -->Stage_Factory: asks to create
+Stage_Factory --> Stage: creates
+
+Stage *-- Controller: owns
+Stage o-- Model: owns
+Stage o-- Score: has (const)
+Stage o-- ScoreBoard: has (const)
+
+@enduml

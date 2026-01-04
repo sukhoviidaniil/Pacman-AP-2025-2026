@@ -49,6 +49,8 @@ namespace infra {
         // --- Coins ---
         [[nodiscard]] unsigned int coin_collection();
 
+        void all_coins_collected();
+
         // --- Ghosts ---
         [[nodiscard]] unsigned int ghost_collection();
 

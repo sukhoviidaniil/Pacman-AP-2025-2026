@@ -147,6 +147,7 @@ namespace model {
         // 7.
         // Check for level completion
         if (coins_.empty()) {
+            score_->all_coins_collected();
             const auto a = std::make_unique<infra::event::EventInstance<infra::event::game::All_Coins_Collected>>(infra::event::game::All_Coins_Collected());
             event_store_.push_concept(*a);
         }

@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          Start_Stage.cpp
+ * File:          End_Stage.cpp
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-27
+ * Created:       2026-01-04
  * Modified:      []
  *
  * Description:   []
@@ -16,8 +16,7 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "core/stage/Start_Stage.h"
-
+#include "core/stage/End_Stage.h"
 #include "control/controllers/C_Menu.h"
 #include "infra/event/events/game.h"
 #include "infra/event/events/window.hpp"
@@ -29,22 +28,26 @@
 #include "view/presentation/layout_engine/V_HBox.h"
 
 namespace core::stg {
-    Start_Stage::~Start_Stage() = default;
+    End_Stage::End_Stage(const std::shared_ptr<infra::event::Event_Bus> &global_eventbus, infra::Const_Score s, infra::Const_ScoreBord sb) :
+    Stage(global_eventbus), s_(s),  sb_(sb){
 
-    Start_Stage::Start_Stage(
-        const std::shared_ptr<infra::event::Event_Bus> &globalBus,
-        const infra::Const_ScoreBord sb
-        ) : Stage(globalBus), sb_(sb){
-
-        std::string play_b_text = "Play";
+        std::string to_start_b_text = "To the start menu";
+        std::string save_score_b_text = "Save score";
         std::string exit_b_text = "Exit";
 
         std::vector<infra::menu::MenuButton> buttons;
         buttons.push_back(infra::menu::MenuButton(
-            play_b_text,
+            to_start_b_text,
             std::make_unique<
-                infra::event::EventInstance<infra::event::game::Request_New_LevelStage>
-            >(infra::event::game::Request_New_LevelStage())
+                infra::event::EventInstance<infra::event::game::Request_StartStage>
+            >(infra::event::game::Request_StartStage())
+            )
+        );
+        buttons.push_back(infra::menu::MenuButton(
+            save_score_b_text,
+            std::make_unique<
+                infra::event::EventInstance<infra::event::window::Closed>
+            >(infra::event::window::Closed())
             )
         );
         buttons.push_back(infra::menu::MenuButton(
@@ -57,17 +60,14 @@ namespace core::stg {
         menu_ = std::make_shared<infra::menu::Menu>(buttons);
 
         auto root = std::make_unique<view::ui::VBox>();
-        //root->spacing = 0.5f;
-        const auto top   = std::make_shared<view::ui::UIElement>();
+
+        const auto top   = std::make_shared<view::ui::SpriteElement>("Game Over!", 600, 309);
         const auto middle = std::make_shared<view::ui::HBox>();
         const auto bottom  = std::make_shared<view::ui::UIElement>();
 
-        top->add(
-            std::make_shared<view::ui::SpriteElement>("Pacman Logo", 840, 260)
-            );
 
-        top->flex   = 8.f;
-        middle->flex = 5.f;
+        top->flex   = 10.f;
+        middle->flex = 10.f;
         bottom->flex  = 1.f;
 
         root->add(top);
@@ -76,21 +76,39 @@ namespace core::stg {
 
         const auto m_left = std::make_shared<view::ui::VBox>();
         const auto m_middle = std::make_shared<view::ui::VBox>();
-        const auto m_right = std::make_shared<view::ui::ScoreBord>(32);
-        m_left->flex   = 1.f;
-        m_middle->flex = 3.f;
-        m_middle->margin = {100,100};
-        m_middle->padding = {100,100};
-        m_right->flex  = 4.f;
+        const auto m_right = std::make_shared<view::ui::ScoreBord>(30);
+
+        m_left->flex   = 0.3f;
+        m_middle->flex = 0.3f;
+        m_right->flex  = 0.3f;
+
         middle->add(m_left);
         middle->add(m_middle);
         middle->add(m_right);
 
+        const auto score_view = std::make_shared<view::ui::ScoreLabel>();
+        const auto lives_view = std::make_shared<view::ui::LivesLabel>();
+        score_view->flex = 1.f;
+        score_view->fontSize = 12;
+        lives_view->flex  = 1.f;
+        lives_view->fontSize = 12;
+        m_left->add(score_view);
+        m_left->add(lives_view);
 
         m_middle->add(
             std::make_shared<view::ui::Button>(
-                play_b_text,
-                50,
+                to_start_b_text,
+                30,
+                infra::ui::Color(10, 55, 55),
+                infra::ui::Color(255, 255, 255),
+                1
+                )
+            );
+
+        m_middle->add(
+            std::make_shared<view::ui::Button>(
+                save_score_b_text,
+                30,
                 infra::ui::Color(10, 55, 55),
                 infra::ui::Color(255, 255, 255),
                 1
@@ -100,7 +118,7 @@ namespace core::stg {
         m_middle->add(
             std::make_shared<view::ui::Button>(
                 exit_b_text,
-                50,
+                30,
                 infra::ui::Color(10, 55, 55),
                 infra::ui::Color(255, 255, 255),
                 1
@@ -113,11 +131,11 @@ namespace core::stg {
         controller = std::make_unique<control::C_Menu>(menu_);
     }
 
-    void Start_Stage::run(float delta) {
+    void End_Stage::run(float tick) {
         dispatch(controller->event_store_);
     }
 
-    view::ui::RenderFrame Start_Stage::get_RenderFrame(const infra::math::Vector2 &screen_size, bool redraw) const {
+    view::ui::RenderFrame End_Stage::get_RenderFrame(const infra::math::Vector2 &screen_size, bool redraw) const {
         //4 Measurement and layout of the entire tree
         ui_root_->measure(screen_size);
 
@@ -127,7 +145,7 @@ namespace core::stg {
         //6 Collecting RenderItems
         view::ui::RenderFrame frame;
         const infra::menu::MenuView v_menu(*menu_);
-        const view::ViewContext ctx(redraw, &v_menu, nullptr, &sb_, nullptr);
+        const view::ViewContext ctx(redraw, &v_menu, &s_, &sb_, nullptr);
         ui_root_->append_render_items(frame, ctx);
         return frame;
     }

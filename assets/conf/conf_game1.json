@@ -1,7 +1,7 @@
 {
   "View" : "conf_View_SFML.json",
   "Models" : [
-    "model/model3.json"
+    "model/model1.json"
   ],
   "ScoreBord" : "score.json"
 }

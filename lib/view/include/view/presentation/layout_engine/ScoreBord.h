@@ -26,7 +26,7 @@ namespace view::ui {
         public:
         ScoreBord() = default;
 
-        explicit ScoreBord(const int fontSize) : Text(fontSize) {
+        explicit ScoreBord(const int fs) : Text(fs) {
 
         }
 

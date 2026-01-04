@@ -16,6 +16,10 @@
     {
       "name" : "Try_Again",
       "file" : "textures/try_again.png"
+    },
+    {
+      "name" : "Game_Over",
+      "file" : "textures/Game_Over.png"
     }
   ],
   "Fonts":[
@@ -54,6 +58,14 @@
       "sprits_width": 585,
       "sprits_height": 275,
       "name" : "Try Again!",
+      "recLeft" : 0,
+      "recTop" : 0
+    },
+    {
+      "using_texture" : "Game_Over",
+      "sprits_width": 600,
+      "sprits_height": 308,
+      "name" : "Game Over!",
       "recLeft" : 0,
       "recTop" : 0
     }

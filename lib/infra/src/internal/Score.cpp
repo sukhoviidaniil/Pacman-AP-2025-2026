@@ -75,6 +75,10 @@ namespace infra {
         return added;
     }
 
+    void Score::all_coins_collected() {
+        level_++;
+    }
+
     unsigned int Score::ghost_collection() {
         time_since_the_last_ghost_collection_ = 0.f;
 

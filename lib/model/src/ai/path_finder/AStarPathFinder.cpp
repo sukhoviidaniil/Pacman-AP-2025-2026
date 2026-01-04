@@ -96,7 +96,7 @@ namespace model::ai {
             if (!walkable(tiles.get_tile(next), permission))
                 continue;
 
-            // forbidden_dir — только для первого шага
+            // forbidden_dir — only for the first step
             if (cur == from && forbidden_dir.has_value()) {
                 if (infra::math::equal(dir, *forbidden_dir))
                     continue;
@@ -116,11 +116,11 @@ namespace model::ai {
         }
     }
 
-    // путь не найден
+    // path not found
     if (cells[to.y][to.x].py == -1)
         return std::nullopt;
 
-    // восстановление пути — ищем ПЕРВЫЙ шаг
+    // path recovery — searching for the FIRST step
     TilePos cur = to;
     TilePos prev = cur;
 
@@ -133,7 +133,7 @@ namespace model::ai {
     int dy = static_cast<int>(prev.y) - static_cast<int>(from.y);
     int dx = static_cast<int>(prev.x) - static_cast<int>(from.x);
 
-    // преобразуем смещение обратно в Direction
+    // convert the offset back to Direction
     for (size_t i = 0; i < 4; ++i) {
         infra::math::Direction dir = infra::math::by_index(i);
         infra::math::Vector2 v = infra::math::to_vec(dir);

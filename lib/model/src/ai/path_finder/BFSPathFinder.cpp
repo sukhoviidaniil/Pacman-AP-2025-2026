@@ -34,17 +34,17 @@ namespace model::ai {
 
         struct Node {
             TilePos pos;
-            Direction first_dir; // первое направление от старта
+            Direction first_dir; // first direction from the start
         };
 
         std::vector<std::vector<bool>> visited(tiles.rows(), std::vector<bool>(tiles.columns(), false));
         std::queue<Node> q;
 
-        // Запускаем BFS с первой вершины
+        // Start BFS from the first vertex
         q.push({from, Direction::None});
         visited[from.y][from.x] = true;
 
-        // Возможные направления и их дельты
+        // Possible directions and their deltas
         constexpr std::pair<Direction, std::pair<int,int>> moves[] = {
             {Direction::Up, {-1,0}},
             {Direction::Right, {0,1}},
@@ -55,11 +55,11 @@ namespace model::ai {
         while (!q.empty()) {
             Node cur = q.front(); q.pop();
 
-            // Если достигли цели и ищем минимальное расстояние
+            // If we have reached the goal and are looking for the minimum distance
             if (opt == IPathFinder::Optimize::MinDistance && cur.pos == to)
                 return cur.first_dir;
 
-            // Перебираем соседей
+            // Going through the neighbors
             for (auto [dir, delta] : moves) {
                 if (forbidden_dir && infra::math::equal(*forbidden_dir, dir))
                     continue;
@@ -78,14 +78,14 @@ namespace model::ai {
 
                 Direction first = (cur.first_dir == Direction::None ? dir : cur.first_dir);
 
-                // Для максимизации дистанции можно пушить всех соседей без раннего выхода
+                // To maximize distance, you can push all neighbors without early exit.
                 q.push({next, first});
 
                 if (opt == IPathFinder::Optimize::MaxDistance && next == to)
-                    return first; // если цель всё-таки задана, можно сразу вернуть
+                    return first; // if the target is set after all, you can return immediately
             }
         }
 
-        return std::nullopt; // путь не найден
+        return std::nullopt; // path not found
     }
 }

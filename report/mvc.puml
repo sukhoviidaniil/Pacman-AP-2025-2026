@@ -1,0 +1,70 @@
+@startuml
+
+
+package model {
+    package AI{
+        class GhostAI
+        class FSM
+        class ModeStrategy
+        class PathFinder
+    }
+    package Entity{
+        class Actor
+        class Ghost
+        class Pacman
+    }
+    class Model
+    class TileGrid
+}
+
+
+package view {
+
+    class UI
+    class Game_Map
+    class RenderFrame
+
+    class View_Renderer
+}
+
+package controller {
+    class Event_Collector
+    class Controller
+    class C_Game
+}
+
+Model *-- TileGrid: owns
+Model *-- Actor: owns
+Model ..> Game_Map : translate (read-only)
+
+Actor --> TileGrid: collision world
+
+Pacman --|> Actor: is a
+
+Ghost --|> Actor: is a
+Ghost --> GhostAI: asks
+Ghost *-- GhostAI: owns
+
+GhostAI *-- FSM: owns
+GhostAI *-- ModeStrategy: owns
+GhostAI *-- PathFinder: owns
+
+FSM --> ModeStrategy: chooses
+
+ModeStrategy --> PathFinder : use
+
+''
+Game_Map --|> UI: is a
+
+
+UI -> RenderFrame: interpreted
+
+RenderFrame -> View_Renderer: being drawn
+
+Event_Collector ..> View_Renderer : listen
+Event_Collector -> Controller : informs
+
+C_Game --|> Controller: is a
+C_Game -> Pacman : controls
+
+@enduml

@@ -40,8 +40,8 @@ namespace infra::math {
          * @param x X-coordinate
          * @param y Y-coordinate
          */
-        [[nodiscard]] constexpr Point2(float x, float y);
-
+        [[nodiscard]] constexpr Point2(const float x, const float y): x(x), y(y) {
+        }
         // ========== Arithmetic operators ==========
 
         /**

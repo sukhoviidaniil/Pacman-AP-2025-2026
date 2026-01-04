@@ -19,6 +19,7 @@
 #include "core/Stage_Factory.h"
 
 #include "core/stage/Death_Stage.h"
+#include "core/stage/End_Stage.h"
 #include "infra/internal/Score.h"
 #include "core/stage/Level_Stage.h"
 #include "core/stage/Pause_Stage.h"
@@ -71,6 +72,19 @@ namespace core {
     }
 
     std::shared_ptr<core::stg::Stage> Stage_Factory::make_GameOver_Stage() {
+        if (score_ == nullptr) {
+            std::string err = "make_GameOver_Stage - score_ == nullptr";
+            LOG(err);
+            throw std::runtime_error(err);
+        }
+        if (score_bord_ == nullptr) {
+            std::string err = "make_GameOver_Stage - score_bord_ == nullptr";
+            LOG(err);
+            throw std::runtime_error(err);
+        }
+        infra::Const_Score s(*score_);
+        infra::Const_ScoreBord sb(*score_bord_);
+        return std::make_unique<stg::End_Stage>(g_eventbus_, s, sb);
     }
 
     void Stage_Factory::make_new_Model() {

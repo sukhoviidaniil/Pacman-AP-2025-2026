@@ -40,7 +40,9 @@ namespace infra::ast {
      */
     struct GhostInfo : Entity_Node {
         float base_speed = 0.1f; ///< Normal movement speed
+        float base_speed_inc = 0.05f;
         float frightened_speed = 0.1f; ///< Speed when in frightened mode
+        float frightened_speed_inc = 0.05f;
         float eaten_speed = 0.1f; ///< Speed after being eaten
         int start_amount = 1; ///< Initial number of ghosts
         float amount_per_level = 0; ///< Additional ghosts per level

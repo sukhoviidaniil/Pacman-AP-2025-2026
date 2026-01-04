@@ -18,6 +18,8 @@
 
 #include "model/ai/path_finder/GreedyPathFinder.h"
 
+#include <cfloat>
+
 namespace model::ai {
     std::optional<infra::math::Direction> GreedyPathFinder::next_dir(
         const Permission& permission,
@@ -29,53 +31,71 @@ namespace model::ai {
     )const {
         using infra::math::Direction;
 
-        struct Candidate {
-            Direction dir;
-            TilePos  pos;
-            size_t   h;   // heuristic
+        const size_t ROW = tiles.rows();
+        const size_t COL = tiles.columns();
+
+        auto isValid = [&](int y, int x) {
+            return y >= 0 && x >= 0 && y < static_cast<int>(ROW) && x < static_cast<int>(COL);
         };
 
-        std::vector<Candidate> candidates;
-
-        auto try_dir = [&](Direction d, int dy, int dx) {
-            if (forbidden_dir.has_value() && infra::math::equal(forbidden_dir.value(), d))
-                return;
-
-            const int ny = int(from.y) + dy;
-            const int nx = int(from.x) + dx;
-            if (ny < 0 || nx < 0) return;
-            if (ny >= int(tiles.rows()) || nx >= int(tiles.columns())) return;
-
-            TilePos next{size_t(ny), size_t(nx)};
-            if (!walkable(tiles.get_tile(next), permission))
-                return;
-
-            size_t h =
-                (next.y > to.y ? next.y - to.y : to.y - next.y) +
-                (next.x > to.x ? next.x - to.x : to.x - next.x);
-
-            candidates.push_back({d, next, h});
+        auto heuristic = [&](int y, int x) -> float {
+            // Manhattan distance, since movement is only possible in 4 directions
+            return static_cast<float>(std::abs(y - static_cast<int>(to.y)) +
+                                      std::abs(x - static_cast<int>(to.x)));
         };
 
-        try_dir(Direction::Up,    -1,  0);
-        try_dir(Direction::Right,  0,  1);
-        try_dir(Direction::Down,   1,  0);
-        try_dir(Direction::Left,   0, -1);
+        // Possible directions
+        constexpr std::pair<Direction, std::pair<int,int>> moves[] = {
+            {Direction::Up, {-1,0}},
+            {Direction::Right, {0,1}},
+            {Direction::Down, {1,0}},
+            {Direction::Left, {0,-1}}
+        };
 
-        if (candidates.empty())
-            return std::nullopt;
+        TilePos cur = from;
+        Direction first_move = Direction::None;
 
-        auto best = (opt == Optimize::MinDistance) ?
-            std::min_element(
-                candidates.begin(), candidates.end(),
-                [](const Candidate& a, const Candidate& b) { return a.h < b.h; }
-            )
-            :
-            std::max_element(
-                candidates.begin(), candidates.end(),
-                [](const Candidate& a, const Candidate& b) { return a.h < b.h; }
-            );
+        std::vector<std::vector<bool>> visited(ROW, std::vector<bool>(COL, false));
+        visited[cur.y][cur.x] = true;
 
-        return best->dir;
+        while (!(cur == to)) {
+            TilePos best_next = cur;
+            float best_h = FLT_MAX;
+            Direction best_dir = Direction::None;
+
+            for (auto [dir, delta] : moves) {
+                int ny = static_cast<int>(cur.y) + delta.first;
+                int nx = static_cast<int>(cur.x) + delta.second;
+
+                if (!isValid(ny, nx)) continue;
+                TilePos next{static_cast<size_t>(ny), static_cast<size_t>(nx)};
+                if (visited[next.y][next.x]) continue;
+                if (!walkable(tiles.get_tile(next), permission)) continue;
+
+                // forbidden_dir — only on the first step
+                if (cur == from && forbidden_dir && infra::math::equal(dir, *forbidden_dir))
+                    continue;
+
+                float h = heuristic(ny, nx);
+                if (h < best_h) {
+                    best_h = h;
+                    best_next = next;
+                    best_dir = dir;
+                }
+            }
+
+            if (best_dir == Direction::None) {
+                // no valid moves
+                return std::nullopt;
+            }
+
+            if (first_move == Direction::None)
+                first_move = best_dir;
+
+            cur = best_next;
+            visited[cur.y][cur.x] = true;
+        }
+
+    return first_move;
     }
 }

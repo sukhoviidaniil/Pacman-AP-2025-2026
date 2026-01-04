@@ -15,7 +15,7 @@ According to the documentation, this layer is primarily represented by the `mode
 
 - **World representation**: maze structure, tiles, and spatial data.
 - **Game entities**: player character, ghosts, collectibles, and their state.
-- **Game rules**: scoring system, life management, level progression, and collision logic.
+- **Game rules**: and collision logic.
 - **Artificial intelligence**: ghost behavior implemented via strategy-based AI modes (`Chase`, `Scatter`, `Frightened`, and idle/house modes), located in `model::ai`.
 - **State and events**: game state transitions and internal events used to notify other layers.
 
@@ -72,7 +72,7 @@ The documented use of strategies for ghost AI and event-based communication furt
 
 ---
 
-![MVC diagram](mvc.png)
+![MVC diagram](report/mvc.png)
 
 *Figure: High-level MVC architecture.  
 The Model contains all core gameplay logic and AI, the View handles rendering and UI, and the Controller translates user input into model updates. Communication from Model to View is performed using an observer/event-based mechanism.*
@@ -194,6 +194,11 @@ This allows new entity types, logic variants, or operating modes to be added by 
 Inheritance is used to reuse common functionality, and composition is used to configure behavior at runtime.
 This approach minimizes the coupling between components, simplifies code maintenance, and makes the system resistant to change and further expansion.
 
+- ### Comments & API Docs
+
+> Most of the code is documented. Comments explain intent, not trivial code.
+Concise names for parameters, classes, and their methods allow you to easily understand the entire program cycle.
+
 - ### ~2 Page Report
 
 Yes: A concise report (~2 pages) explains architecture, key decisions, and trade-offs. It references concrete code structures.
@@ -203,8 +208,3 @@ No: The report is missing or purely descriptive without technical insight.
 
 Yes: Major design choices are justified (why this AI, why this structure). Alternatives are briefly acknowledged.
 No: Decisions are unexplained or purely accidental.
-
-- ### Comments & API Docs
-
-> Most of the code is documented. Comments explain intent, not trivial code.
-Concise names for parameters, classes, and their methods allow you to easily understand the entire program cycle.
