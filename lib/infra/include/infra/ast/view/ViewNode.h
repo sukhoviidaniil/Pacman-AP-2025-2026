@@ -23,12 +23,25 @@
 
 namespace infra::ast {
     struct SpriteVisitor;
-
+    /**
+     * @brief Base class for sprite-related AST nodes.
+     *
+     * Stores texture information and sprite dimensions,
+     * and supports the visitor pattern via accept().
+     */
     struct SpriteNode : Node {
-        std::string using_texture;
-        unsigned int sprits_width;
-        unsigned int sprits_height;
+        std::string using_texture; ///< Name or path of the texture used
+        unsigned int sprits_width; ///< Width of the sprite sheet
+        unsigned int sprits_height; ///< Height of the sprite sheet
         ~SpriteNode() override = default;
+
+        /**
+         * @brief Accepts a SpriteVisitor to process this node.
+         *
+         * @param v Visitor instance.
+         *
+         * @note Default implementation is empty.
+         */
         virtual void accept(SpriteVisitor &v) const {
         }
     };

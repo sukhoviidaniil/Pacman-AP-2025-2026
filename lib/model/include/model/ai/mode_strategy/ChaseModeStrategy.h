@@ -18,13 +18,19 @@
 #ifndef PACMAN_CHASEMODESTRATEGY_H
 #define PACMAN_CHASEMODESTRATEGY_H
 
-
-
 #include "model/ai/mode_strategy/ModeStrategy.h"
 #include "model/ai/target_strategy/TargetStrategy.h"
 
 namespace model::ai {
+
+    /**
+     * @brief Strategy for ghosts in Chase mode.
+     *
+     * Uses a TargetStrategy to select a target tile and the path-finder
+     * to decide the next direction, avoiding reversal if possible.
+     */
     struct ChaseModeStrategy : ModeStrategy {
+        ///< Target selection policy (not owned)
         const TargetStrategy& target;
         ChaseModeStrategy(const TargetStrategy& t, const IPathFinder& pf) : ModeStrategy (pf), target(t) {}
 
@@ -32,8 +38,10 @@ namespace model::ai {
             const GlobalGhostContext& g_ctx,
             const UniqGhostContext& u_ctx
             ) const override {
-            TilePos tar = target.target(g_ctx, u_ctx);
+            // Compute the target tile for this ghost
+            const TilePos tar = target.target(g_ctx, u_ctx);
 
+            // Ask path-finder for the best direction toward the target
             const auto d = path_finder_.next_dir(
                 u_ctx.permission,
                 g_ctx.map,
@@ -42,6 +50,8 @@ namespace model::ai {
                 opposite(u_ctx.self_direction),
                 IPathFinder::Optimize::MaxDistance
                 );
+
+            // If path-finder cannot find a direction, continue current direction
             if (!d.has_value()) {
                 return u_ctx.self_direction;
             }

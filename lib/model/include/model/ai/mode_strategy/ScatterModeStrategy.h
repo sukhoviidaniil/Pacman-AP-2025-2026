@@ -22,6 +22,13 @@
 #include "model/ai/target_strategy/TargetStrategy.h"
 
 namespace model::ai {
+
+    /**
+     * @brief Strategy for ghosts in Scatter mode.
+     *
+     * Ghosts target a fixed corner tile and use the path-finder to move towards it,
+     * avoiding reversing direction. Chooses the shortest path (MinDistance).
+     */
     struct ScatterModeStrategy : ModeStrategy {
         const TargetStrategy& target;
         ScatterModeStrategy(const TargetStrategy& t, const IPathFinder& pf) : ModeStrategy (pf), target(t) {}
@@ -32,7 +39,7 @@ namespace model::ai {
             ) const override {
 
             // Scatter: target — fixed tile (card corner)
-            TilePos tar = target.target(g_ctx, u_ctx);
+            const TilePos tar = target.target(g_ctx, u_ctx);
 
             const auto d = path_finder_.next_dir(
                 u_ctx.permission,

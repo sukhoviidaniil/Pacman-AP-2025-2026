@@ -35,9 +35,28 @@
 
 
 namespace model {
+
+    /**
+     * @brief Core game model.
+     *
+     * Acts as a central coordinator for game entities, grid state,
+     * collision handling, scoring, and update logic.
+     *
+     * The Model owns and updates Pac-Man, ghosts, consumables,
+     * and propagates game events.
+     */
     class Model {
         public:
 
+        /**
+         * @brief Constructs the game model from an AST description.
+         *
+         * @param m Parsed model definition (e.g. level layout).
+         * @param score Shared score object.
+         * @param cc Collision control system.
+         * @param coins Initial coin entities.
+         * @param power_pellets Initial power pellet entities.
+         */
         explicit Model(
             const infra::ast::Model& m,
             const std::shared_ptr<infra::Score>& score,
@@ -46,13 +65,38 @@ namespace model {
             std::vector<std::shared_ptr<entity::PowerPellet>> power_pellets
             );
 
+        /**
+         * @brief Adds a waiting period to the game state.
+         *
+         * @todo Clarify when and why this wait is triggered.
+         */
         void add_wait();
 
+        /**
+         * @brief Checks whether all coins have been collected.
+         *
+         * @return True if no collectible coins remain.
+         */
         [[nodiscard]] bool all_coins_collected() const;
 
+        /**
+         * @brief Advances the game simulation.
+         *
+         * Updates entities, processes collisions, and
+         * advances internal timers.
+         *
+         * @param delta Time elapsed since the last update.
+         */
         void run(float delta);
 
+        /**
+         * @brief Returns the Pac-Man entity.
+         */
         [[nodiscard]] std::shared_ptr<entity::Pacman> get_pacman() const;
+
+        /**
+         * @brief Returns the current status of Pac-Man.
+         */
         [[nodiscard]] infra::Status pacman_status() const;
 
         std::vector<std::shared_ptr<entity::Coin>> coins_;

@@ -19,13 +19,20 @@
 #define PACMAN_TILE_H
 
 namespace model {
-
+    /**
+     * @brief Access level for movement permissions.
+     *
+     * Determines which tiles an entity can traverse.
+     */
     enum class Permission {
         Low,
         High,
         Full
     };
 
+    /**
+     * @brief Tile type in the game grid.
+     */
     enum class Tile {
         Wall,
         GhostSpawn,
@@ -33,6 +40,13 @@ namespace model {
         Free,
     };
 
+    /**
+     * @brief Checks if a tile is walkable given a permission level.
+     *
+     * @param t Tile to check
+     * @param p Permission level (default: Low)
+     * @return True if entity can traverse this tile
+     */
     [[nodiscard]] inline bool walkable(const Tile t, const Permission p = Permission::Low){
         switch (p){
             case Permission::Low : {

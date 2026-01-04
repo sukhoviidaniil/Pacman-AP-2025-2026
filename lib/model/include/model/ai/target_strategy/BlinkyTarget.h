@@ -20,6 +20,10 @@
 #include "TargetStrategy.h"
 
 namespace model::ai {
+
+    /**
+     * @brief Blinky's targeting strategy: always aims directly at Pac-Man's current tile.
+     */
     struct BlinkyTarget : TargetStrategy {
         [[nodiscard]] TilePos target(
             const GlobalGhostContext& g_ctx,

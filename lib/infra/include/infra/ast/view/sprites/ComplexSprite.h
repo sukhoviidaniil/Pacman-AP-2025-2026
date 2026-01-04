@@ -24,13 +24,22 @@
 #include "infra/ast/view/ViewNode.h"
 
 namespace infra::ast {
+    /**
+     * @brief Represents a complex sprite with multiple status-based groups.
+     *
+     * Inherits from SpriteNode and organizes sprites into groups
+     * keyed by Status. Supports the visitor pattern.
+     */
     struct ComplexSprite : SpriteNode {
-        std::vector<std::string> groups_names;
+        std::vector<std::string> groups_names; ///< Names of sprite groups
         std::unordered_map<
             Status,
             SpriteStatus
-        > groups_;
+        > groups_; ///< Mapping from status to sprite data
 
+        /**
+         * @brief Accepts a SpriteVisitor to process this complex sprite.
+         */
         void accept(SpriteVisitor &v) const override {
             v.visit(*this);
         }

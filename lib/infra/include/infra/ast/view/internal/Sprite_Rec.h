@@ -21,9 +21,15 @@
 #include "infra/ast/Node.h"
 
 namespace infra::ast {
+    /**
+     * @brief Represents a sprite rectangle configuration.
+     *
+     * Inherits from Node and defines base and incremental
+     * values for selecting frames or sub-rectangles in a sprite sheet.
+     */
     struct Sprite_Rec : Node {
-        int base = 0;
-        int increase = 0;
+        int base = 0; ///< Base value for sprite rectangle
+        int increase = 0; ///< Increment applied
     };
 }
 

@@ -21,6 +21,13 @@
 #include "model/ai/mode_strategy/ModeStrategy.h"
 
 namespace model::ai {
+
+    /**
+     * @brief Strategy for ghosts in Frightened mode.
+     *
+     * Chooses a direction away from Pacman using the path-finder,
+     * trying to maximize distance while avoiding reversal.
+     */
     struct FrightenedModeStrategy : ModeStrategy{
         explicit FrightenedModeStrategy(const IPathFinder& pf) : ModeStrategy(pf) {}
 
@@ -29,6 +36,7 @@ namespace model::ai {
             const UniqGhostContext& u_ctx
             ) const override {
 
+            // Use path-finder to move away from Pacman
             const auto d = path_finder_.next_dir(
                 u_ctx.permission,
                 g_ctx.map,
@@ -37,6 +45,8 @@ namespace model::ai {
                 opposite(u_ctx.self_direction),
                 IPathFinder::Optimize::MaxDistance
                 );
+
+            // If no direction found, continue current direction
             if (!d.has_value()) {
                 return u_ctx.self_direction;
             }

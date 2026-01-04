@@ -21,8 +21,13 @@
 
 
 namespace infra::ast {
+    /**
+     * @brief Represents Pacman's spawn point in the model AST.
+     *
+     * Inherits from Entity_Node and includes movement speed.
+     */
     struct PacmanSpawn : Entity_Node {
-        float speed = 1.0;
+        float speed = 1.0; ///< Movement speed of Pacman
     };
 }
 

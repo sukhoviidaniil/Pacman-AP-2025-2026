@@ -20,6 +20,11 @@
 #include "ScoreBord.h"
 
 namespace infra {
+    /**
+     * @brief Read-only wrapper around a Score instance.
+     *
+     * Provides const access to score information without allowing modification.
+     */
     class Const_Score {
     public:
         explicit Const_Score(const Score& score) noexcept
@@ -42,11 +47,16 @@ namespace infra {
         }
 
     private:
-        const Score& score_;
+        const Score& score_; ///< Reference to the underlying Score
     };
 
     // --------------------------------------
 
+    /**
+     * @brief Read-only wrapper around a ScoreBord instance.
+     *
+     * Provides const access to the stored scores and scoreboard metadata.
+     */
     class Const_ScoreBord {
     public:
         explicit Const_ScoreBord(const ScoreBord& bord) noexcept
@@ -65,7 +75,7 @@ namespace infra {
         }
 
     private:
-        const ScoreBord& bord_;
+        const ScoreBord& bord_; ///< Reference to the underlying ScoreBord
     };
 }
 

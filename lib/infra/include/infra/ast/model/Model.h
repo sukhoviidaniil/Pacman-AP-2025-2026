@@ -25,12 +25,18 @@
 #include "PowerPelletSpawn.h"
 
 namespace infra::ast {
+    /**
+     * @brief Represents the complete game model AST.
+     *
+     * Inherits from Model_Node and aggregates all main components:
+     * grid layout, entity spawns for Pacman, ghosts, coins, and power pellets.
+     */
     struct Model : Model_Node{
-        Grid grid;
-        PacmanSpawn pacman_spawn;
-        GhostSpawn ghost_spawn;
-        CoinSpawn coin_spawn;
-        PowerPelletSpawn power_pellet_spawn;
+        Grid grid; ///< Game grid layout
+        PacmanSpawn pacman_spawn; ///< Game grid layout
+        GhostSpawn ghost_spawn; ///< Ghost starting positions
+        CoinSpawn coin_spawn; ///< Coin spawn configuration
+        PowerPelletSpawn power_pellet_spawn; ///< Power pellet spawn configuration
     };
 }
 

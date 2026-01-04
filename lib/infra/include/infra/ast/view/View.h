@@ -26,16 +26,22 @@
 
 
 namespace infra::ast {
+    /**
+     * @brief Represents the complete view configuration of the AST.
+     *
+     * Inherits from Node and contains window settings, resource paths,
+     * and collections of textures, fonts, and sprites.
+     */
     struct View : Node{
-        std::string type = "None";
-        unsigned int window_width = 0;
-        unsigned int window_height = 0;
-        int fps = 30;
-        std::string view_directory;
-        std::vector<Texture> textures;
-        std::vector<Font> fonts;
-        std::vector<Sprite> sprites;
-        std::vector<ComplexSprite> complex_sprites;
+        std::string type = "None"; ///< Type identifier for the view
+        unsigned int window_width = 0; ///< Width of the window
+        unsigned int window_height = 0; ///< Height of the window
+        int fps = 30; ///< Frames per second
+        std::string view_directory; ///< Directory containing view assets
+        std::vector<Texture> textures; ///< List of textures used
+        std::vector<Font> fonts; ///< List of fonts used
+        std::vector<Sprite> sprites; ///< List of simple sprites
+        std::vector<ComplexSprite> complex_sprites; ///< List of complex sprites
     };
 }
 

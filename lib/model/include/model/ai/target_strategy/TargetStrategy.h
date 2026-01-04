@@ -20,9 +20,22 @@
 #include "model/ai/GhostContext.h"
 
 namespace model::ai {
-    /// Calculates the target cell for Chase/Scatter mode
+
+    /**
+     * @brief Interface for calculating a ghost's target tile.
+     *
+     * Used by ChaseModeStrategy and ScatterModeStrategy to decide where the ghost should move.
+     */
     struct TargetStrategy {
         virtual ~TargetStrategy() = default;
+
+        /**
+         * @brief Calculate the target tile for a ghost.
+         *
+         * @param g_ctx Global context containing Pac-Man and map info
+         * @param u_ctx Unique ghost context (position, direction, role, etc.)
+         * @return TilePos Target tile for pathfinding
+         */
         [[nodiscard]] virtual TilePos target(
             const GlobalGhostContext& g_ctx,
             const UniqGhostContext& u_ctx

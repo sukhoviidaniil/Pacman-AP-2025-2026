@@ -20,6 +20,11 @@
 #include "TargetStrategy.h"
 
 namespace model::ai {
+
+    /**
+     * @brief Always targets a fixed corner of the map.
+     * Useful for Scatter mode.
+     */
     struct CornerTargetStrategy final : TargetStrategy {
         TilePos corner_{0,0};
 
@@ -27,19 +32,20 @@ namespace model::ai {
             // Search for a tile corresponding to the “corner” of the map depending on preferred_corner
             size_t row = 0, col = 0;
 
+
             switch (preferred_corner) {
                 case infra::math::Direction::Up:    row = 0; break;
                 case infra::math::Direction::Down:  row = map.rows() - 1; break;
                 case infra::math::Direction::Left:  col = 0; break;
                 case infra::math::Direction::Right: col = map.columns() - 1; break;
-                default: row = 0; break;
+                default: break;
             }
 
-            // Find the first passable tile in this corner
+            // Find first passable tile in corner (searching from row/col outwards)
             for (size_t r = row; r < map.rows(); ++r) {
                 for (size_t c = col; c < map.columns(); ++c) {
                     TilePos pos(r, c);
-                    if (walkable(map.get_tile(pos), Permission::High)) {
+                    if (walkable(map.get_tile(pos), Permission::Low)) {
                         corner_ = pos;
                         return;
                     }

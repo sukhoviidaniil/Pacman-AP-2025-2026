@@ -20,11 +20,17 @@
 #include "infra/ast/Node.h"
 
 namespace infra::ast {
+    /**
+     * @brief Represents animation settings for a sprite.
+     *
+     * Inherits from Node and defines the number of frames,
+     * duration per frame, and incremental offsets for sprite rectangles.
+     */
     struct Animation : Node {
-        size_t size = 0;
-        float frame_duration = 1.f;
-        int recLeft_increase = 0;
-        int recTop_increase = 0;
+        size_t size = 0; ///< Number of frames in the animation
+        float frame_duration = 1.f; ///< Duration of each frame
+        int recLeft_increase = 0; ///< Increment for left coordinate per frame
+        int recTop_increase = 0; ///< Increment for top coordinate per frame
     };
 }
 

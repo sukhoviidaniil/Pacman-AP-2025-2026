@@ -65,15 +65,16 @@ namespace model::ai {
         if (candidates.empty())
             return std::nullopt;
 
-        auto best = std::max_element(
-            candidates.begin(), candidates.end(),
-            [&](const Candidate& a, const Candidate& b) {
-                if (opt == Optimize::MinDistance)
-                    return a.h < b.h;
-                else // MaxDistance
-                    return a.h > b.h;
-            }
-        );
+        auto best = (opt == Optimize::MinDistance) ?
+            std::min_element(
+                candidates.begin(), candidates.end(),
+                [](const Candidate& a, const Candidate& b) { return a.h < b.h; }
+            )
+            :
+            std::max_element(
+                candidates.begin(), candidates.end(),
+                [](const Candidate& a, const Candidate& b) { return a.h < b.h; }
+            );
 
         return best->dir;
     }

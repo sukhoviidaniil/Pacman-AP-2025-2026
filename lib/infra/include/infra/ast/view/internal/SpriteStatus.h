@@ -25,11 +25,17 @@
 #include "infra/ast/view/sprites/Animation.h"
 
 namespace infra::ast {
+    /**
+     * @brief Represents the visual status of a sprite.
+     *
+     * Inherits from Node and aggregates directional frames,
+     * animation data, and rectangle offsets for rendering.
+     */
     struct SpriteStatus : Node{
-        std::vector<Sprite_Direction> sprite_directions;
-        Animation animation;
-        Sprite_Rec recLeft;
-        Sprite_Rec recTop;
+        std::vector<Sprite_Direction> sprite_directions; ///< List of directional sprite frames
+        Animation animation; ///< Animation data for the sprite
+        Sprite_Rec recLeft; ///< Rectangle offsets for left coordinate
+        Sprite_Rec recTop; ///< Rectangle offsets for top coordinate
     };
 }
 

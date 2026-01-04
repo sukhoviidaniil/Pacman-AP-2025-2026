@@ -20,8 +20,12 @@
 #include "TargetStrategy.h"
 
 namespace model::ai {
+    /**
+     * @brief Clyde's targeting strategy: normally heads toward Pac-Man, but switches behavior
+     *        based on distance or mode (e.g., may retreat if too close). Here we default to Pac-Man.
+     */
     struct ClydeTarget : TargetStrategy {
-        TilePos target(
+        [[nodiscard]] TilePos target(
             const GlobalGhostContext& g_ctx,
             const UniqGhostContext& u_ctx
             ) const override {

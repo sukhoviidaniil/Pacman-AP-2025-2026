@@ -20,8 +20,13 @@
 #include "infra/ast/Node.h"
 
 namespace infra::ast {
+    /**
+     * @brief Represents an entity in the model AST.
+     *
+     * Inherits from Model_Node and adds entity-specific properties.
+     */
     struct Entity_Node : Model_Node {
-        float sprite_size;
+        float sprite_size; ///< Size of the entity's sprite
     };
 }
 

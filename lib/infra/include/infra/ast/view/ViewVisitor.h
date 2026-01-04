@@ -28,11 +28,34 @@ namespace infra::ast {
     struct ComplexSprite;
 
     // ----------------------------
-    // Interfaces by category
+    // Visitor interface for sprites
     // ----------------------------
+
+    /**
+     * @brief Visitor interface for sprite-related nodes.
+     *
+     * Inherits from Visitor and provides visit methods for
+     * individual sprite types. Can be extended to perform
+     * operations on Sprite and ComplexSprite nodes.
+     */
     struct SpriteVisitor : Visitor {
-        virtual void visit(const Sprite&) {}
-        virtual void visit(const ComplexSprite&) {}
+        /**
+         * @brief Visit a simple sprite node.
+         *
+         * @param s Sprite node to visit.
+         *
+         * @note Default implementation does nothing.
+         */
+        virtual void visit(const Sprite& s) {}
+
+        /**
+         * @brief Visit a complex sprite node.
+         *
+         * @param cs ComplexSprite node to visit.
+         *
+         * @note Default implementation does nothing.
+         */
+        virtual void visit(const ComplexSprite& cs) {}
     };
 }
 

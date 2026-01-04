@@ -23,9 +23,21 @@
 #include "infra/event/Event.h"
 
 namespace infra::menu {
+    /**
+     * @brief Represents a button in a menu.
+     *
+     * Associates a display name with an event that is triggered
+     * when the button is activated.
+     */
     struct MenuButton {
-        std::string name;
-        std::unique_ptr<infra::event::EventConcept> event; // Event that should occur when clicked
+        std::string name; ///< Button display name
+        /**
+         * @brief Event triggered when the button is clicked.
+         *
+         * Stored as a type-erased event instance.
+         *
+         */
+        std::unique_ptr<infra::event::EventConcept> event;
     };
 }
 

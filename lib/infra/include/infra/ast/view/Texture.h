@@ -22,9 +22,15 @@
 #include "infra/ast/Node.h"
 
 namespace infra::ast {
+    /**
+     * @brief Represents a texture resource in the AST.
+     *
+     * Inherits from Node and stores the texture's name and
+     * the file path to its image resource.
+     */
     struct Texture : Node{
-        std::string name;
-        std::string file;
+        std::string name; ///< Name identifier for the texture
+        std::string file; ///< File path to the texture image
     };
 }
 

@@ -22,8 +22,8 @@
     ]
   },
   "PacmanSpawn" : {
-    "sprite_size" : 0.8,
-    "speed" : 3
+    "sprite_size" : 1,
+    "speed" : 3.5
   },
   "GhostSpawn" : {
     "Blinky" : {
@@ -34,7 +34,7 @@
       "path_finder" : "Greedy"
     },
     "Pinky" : {
-      "start_amount" : 0,
+      "start_amount" : 1,
       "sprite_size" : 0.9,
       "base_speed" : 3,
       "frightened_speed" : 2,
@@ -42,15 +42,15 @@
       "path_finder" : "AStar"
     },
     "Inky" : {
-      "start_amount" : 0,
+      "start_amount" : 1,
       "sprite_size" : 0.9,
       "base_speed" : 3,
       "frightened_speed" : 2,
       "eaten_speed" : 6,
-      "path_finder" : "AStar"
+      "path_finder" : "BFS"
     },
     "Clyde" : {
-      "start_amount" : 0,
+      "start_amount" : 1,
       "sprite_size" : 0.9,
       "base_speed" : 3,
       "frightened_speed" : 2,

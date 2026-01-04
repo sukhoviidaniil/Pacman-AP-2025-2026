@@ -20,10 +20,16 @@
 #include "Entity_Node.h"
 
 namespace infra::ast {
+    /**
+     * @brief Represents a power pellet spawn point in the model AST.
+     *
+     * Inherits from Entity_Node and defines hitbox size, name,
+     * and duration of the power-up effect.
+     */
     struct PowerPelletSpawn : Entity_Node {
-        float hitbox_size;
-        std::string name = "PowerPelletSpawn";
-        float buff_duration = 0.f;
+        float hitbox_size; ///< Size of the power pellet's collision hitbox
+        std::string name = "PowerPelletSpawn"; ///< Default name identifier
+        float buff_duration = 0.f; ///< Duration of the power-up effect
     };
 }
 

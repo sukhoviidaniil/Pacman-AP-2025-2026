@@ -20,8 +20,13 @@
 #include "Entity_Node.h"
 
 namespace infra::ast {
+    /**
+     * @brief Represents a coin spawn entity in the model AST.
+     *
+     * Inherits from Entity_Node and adds a hitbox size property.
+     */
     struct CoinSpawn : Entity_Node {
-        float hitbox_size;
+        float hitbox_size; ///< Size of the coin's collision hitbox
     };
 }
 

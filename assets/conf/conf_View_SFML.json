@@ -42,18 +42,18 @@
       "recTop" : 452
     },
     {
-      "using_texture" : "Try_Again",
+      "using_texture" : "Logo",
       "sprits_width": 840,
       "sprits_height": 259,
-      "name" : "Try Again!",
+      "name" : "Pacman Logo",
       "recLeft" : 0,
       "recTop" : 0
     },
     {
-      "using_texture" : "Logo",
-      "sprits_width": 666,
-      "sprits_height": 375,
-      "name" : "Pacman Logo",
+      "using_texture" : "Try_Again",
+      "sprits_width": 585,
+      "sprits_height": 275,
+      "name" : "Try Again!",
       "recLeft" : 0,
       "recTop" : 0
     }

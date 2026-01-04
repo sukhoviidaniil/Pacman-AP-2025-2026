@@ -25,11 +25,17 @@
 #include "infra/ast/view/internal/Sprite_Rec.h"
 
 namespace infra::ast {
+    /**
+     * @brief Represents a list of sprites with shared rectangle offsets.
+     *
+     * Inherits from SpriteNode and stores a collection of sprite names,
+     * along with common rectangle offsets for left and top coordinates.
+     */
     struct SpriteList : SpriteNode{
-        std::vector<std::string> names;
-        Sprite_Rec recLeft;
-        Sprite_Rec recTop;
-        SpriteList() = default;
+        std::vector<std::string> names; ///< Names of sprites in the list
+        Sprite_Rec recLeft; ///< Rectangle offsets for left coordinate
+        Sprite_Rec recTop; ///< Rectangle offsets for top coordinate
+        SpriteList() = default; ///< Default constructor
     };
 }
 

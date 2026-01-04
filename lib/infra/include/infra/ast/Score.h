@@ -25,7 +25,12 @@
 
 
 namespace infra::ast {
-
+    /**
+     * @brief Configuration for score and game progression.
+     *
+     * Inherits from Node and defines lives, level, point scoring,
+     * coin and ghost award rules, and timers for reductions/resets.
+     */
     struct ScoreSetup : Node {
         // --- Base ---
         unsigned int lives_remaining = 3;
@@ -52,6 +57,12 @@ namespace infra::ast {
         float ghost_RR_Time_until_reset = 6.f;
     };
 
+    /**
+     * @brief Represents a snapshot of the player's score and progress.
+     *
+     * Inherits from Node and stores an ID, lives, level, and points.
+     * Supports basic comparison operators for sorting.
+     */
     struct ScoreInfo : Node {
         std::uint64_t id = 0;
         unsigned int lives_remaining = 3;
@@ -68,13 +79,18 @@ namespace infra::ast {
         }
     };
 
+    /**
+     * @brief Represents a scoreboard with multiple scores.
+     *
+     * Inherits from Node and contains configuration, list of scores,
+     * and optionally a file to store/load scores.
+     */
     struct ScoreBord : Node {
-        std::string file;
-        size_t bord_size;
+        std::string file;          ///< File path for saving/loading scoreboard
+        size_t bord_size;          ///< Maximum number of scores to keep
 
-        // mirrors infra::ScoreBord
-        ScoreSetup score_setup;
-        std::vector<ScoreInfo> scores;
+        ScoreSetup score_setup;    ///< Score configuration
+        std::vector<ScoreInfo> scores; ///< List of recorded scores
     };
 }
 

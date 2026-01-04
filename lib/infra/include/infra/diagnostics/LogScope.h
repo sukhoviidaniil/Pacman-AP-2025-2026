@@ -28,9 +28,27 @@
 #endif
 
 namespace infra::diag {
+    /**
+     * @brief RAII helper for automatic log indentation management.
+     *
+     * Increases the logger indentation level on construction
+     * and restores it on destruction.
+     *
+     * Intended to be used via the LOG_SCOPE() macro.
+     */
     class LogScope {
     public:
+        /**
+         * @brief Constructs the log scope.
+         * Increases the logger indentation depth.
+         *
+         */
         LogScope();
+
+        /**
+         * @brief Destroys the log scope and restores previous indentation.
+         * Decreases the logger indentation depth.
+         */
         ~LogScope();
     };
 }

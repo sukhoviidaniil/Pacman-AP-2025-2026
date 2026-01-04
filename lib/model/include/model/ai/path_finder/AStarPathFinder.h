@@ -20,10 +20,28 @@
 #include "IPathFinder.h"
 
 namespace model::ai {
+
+    /**
+     * @brief A pathfinder implementation using the A* algorithm.
+     *
+     * This algorithm finds an optimal path from the start tile to the target tile
+     * using a heuristic to prioritize exploration of promising tiles.
+     */
     class AStarPathFinder final : public IPathFinder {
     public:
         ~AStarPathFinder() override = default;
 
+        /**
+         * @brief Determines the next move using the A* search algorithm.
+         *
+         * @param permission Movement permission level
+         * @param tiles The tile grid to navigate
+         * @param from Starting tile position
+         * @param to Target tile position
+         * @param forbidden_dir Optional direction that should not be chosen
+         * @param opt Optimization strategy
+         * @return Optional direction to move next; empty if no valid move is found
+         */
         [[nodiscard]] std::optional<infra::math::Direction> next_dir(
             const Permission& permission,
             const TileGrid& tiles,

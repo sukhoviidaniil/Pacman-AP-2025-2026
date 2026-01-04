@@ -18,90 +18,130 @@
 
 #include "model/ai/path_finder/AStarPathFinder.h"
 
+#include <cfloat>
 #include <queue>
+#include <set>
+
+#include "infra/math/to_Vector2.h"
 
 namespace model::ai {
-    std::optional<infra::math::Direction> AStarPathFinder::next_dir(
-        const Permission &permission,
-        const TileGrid &tiles,
-        const TilePos from,
-        const TilePos to,
-        const std::optional<infra::math::Direction> forbidden_dir,
-        IPathFinder::Optimize opt
-        ) const {
-        using infra::math::Direction;
 
-        struct Node {
-            TilePos pos;
-            size_t g;              // cost from start
-            size_t f;              // g + h
-            Direction first_dir;   // first move from start
-        };
+    std::optional<infra::math::Direction>
+    model::ai::AStarPathFinder::next_dir(
+        const Permission& permission,
+        const TileGrid& tiles,
+        TilePos from,
+        TilePos to,
+        std::optional<infra::math::Direction> forbidden_dir,
+        IPathFinder::Optimize
+    ) const
+    {
+    const size_t ROW = tiles.rows();
+    const size_t COL = tiles.columns();
 
-        auto heuristic = [&](const TilePos& a) {
-            size_t dist =
-                (a.y > to.y ? a.y - to.y : to.y - a.y) +
-                (a.x > to.x ? a.x - to.x : to.x - a.x);
-            if (opt == IPathFinder::Optimize::MaxDistance)
-                return static_cast<size_t>(10000 - dist); // invert to maximize
-            return dist; // default minimization
-        };
+    auto isValid = [&](int y, int x) {
+        return y >= 0 && x >= 0 &&
+               y < static_cast<int>(ROW) && x < static_cast<int>(COL);
+    };
 
-        struct Cmp {
-            bool operator()(const Node& a, const Node& b) const {
-                return a.f > b.f; // min-heap
-            }
-        };
-
-        std::priority_queue<Node, std::vector<Node>, Cmp> open;
-        std::vector<std::vector<bool>> closed(
-            tiles.rows(), std::vector<bool>(tiles.columns(), false)
+    auto heuristic = [&](int y, int x) -> float {
+        // Manhattan distance — корректна для 4 направлений
+        return static_cast<float>(
+            std::abs(y - static_cast<int>(to.y)) +
+            std::abs(x - static_cast<int>(to.x))
         );
+    };
 
-        auto try_push = [&](const Node& cur, Direction d, int dy, int dx)
-        {
-            if (forbidden_dir.has_value() && infra::math::equal(forbidden_dir.value(), d))
-                return;
+    struct Cell {
+        int py = -1;
+        int px = -1;
+        float f = FLT_MAX;
+        float g = FLT_MAX;
+        float h = FLT_MAX;
+    };
 
-            const int ny = static_cast<int>(cur.pos.y) + dy;
-            const int nx = static_cast<int>(cur.pos.x) + dx;
-            if (ny < 0 || nx < 0) return;
-            if (ny >= static_cast<int>(tiles.rows()) || nx >= static_cast<int>(tiles.columns())) return;
+    std::vector<std::vector<Cell>> cells(ROW, std::vector<Cell>(COL));
+    std::vector<std::vector<bool>> closed(ROW, std::vector<bool>(COL, false));
 
-            const TilePos next{static_cast<size_t>(ny), static_cast<size_t>(nx)};
-            if (closed[next.y][next.x]) return;
-            if (!walkable(tiles.get_tile(next), permission)) return;
+    using Node = std::pair<float, TilePos>; // f, position
+    std::set<Node> open;
 
-            size_t g = cur.g + 1;
-            size_t h = heuristic(next);
-            Direction first = (cur.g == 0 ? d : cur.first_dir);
+    cells[from.y][from.x] = {
+        static_cast<int>(from.y), static_cast<int>(from.x),
+        0.f, 0.f, 0.f
+    };
+    open.insert({0.f, from});
 
-            open.push({next, g, g + h, first});
-        };
+    while (!open.empty()) {
+        auto [_, cur] = *open.begin();
+        open.erase(open.begin());
 
-        // start node
-        open.push({from, 0, heuristic(from), Direction::None});
+        if (cur == to)
+            break;
 
-        while (!open.empty()) {
-            Node cur = open.top();
-            open.pop();
+        closed[cur.y][cur.x] = true;
 
-            if (closed[cur.pos.y][cur.pos.x])
+        for (size_t i = 0; i < 4; ++i) {
+            infra::math::Direction dir = infra::math::by_index(i);
+            infra::math::Vector2 v = infra::math::to_vec(dir);
+
+            int ny = static_cast<int>(cur.y + v.y);
+            int nx = static_cast<int>(cur.x + v.x);
+
+            if (!isValid(ny, nx)) continue;
+            if (closed[ny][nx]) continue;
+
+            TilePos next(ny, nx);
+
+            if (!walkable(tiles.get_tile(next), permission))
                 continue;
 
-            closed[cur.pos.y][cur.pos.x] = true;
-
-            if ((opt == IPathFinder::Optimize::MinDistance && cur.pos == to) ||
-                (opt == IPathFinder::Optimize::MaxDistance && heuristic(cur.pos) == 10000 - 0)) {
-                return cur.first_dir;
+            // forbidden_dir — только для первого шага
+            if (cur == from && forbidden_dir.has_value()) {
+                if (infra::math::equal(dir, *forbidden_dir))
+                    continue;
             }
 
-            try_push(cur, Direction::Up,    -1,  0);
-            try_push(cur, Direction::Right,  0,  1);
-            try_push(cur, Direction::Down,   1,  0);
-            try_push(cur, Direction::Left,   0, -1);
-        }
+            float gNew = cells[cur.y][cur.x].g + 1.f;
+            float hNew = heuristic(ny, nx);
+            float fNew = gNew + hNew;
 
+            if (cells[ny][nx].f > fNew) {
+                open.insert({fNew, next});
+                cells[ny][nx] = {
+                    (int)cur.y, (int)cur.x,
+                    fNew, gNew, hNew
+                };
+            }
+        }
+    }
+
+    // путь не найден
+    if (cells[to.y][to.x].py == -1)
         return std::nullopt;
+
+    // восстановление пути — ищем ПЕРВЫЙ шаг
+    TilePos cur = to;
+    TilePos prev = cur;
+
+    while (!(cur == from)) {
+        prev = cur;
+        const Cell& c = cells[cur.y][cur.x];
+        cur = TilePos(c.py, c.px);
+    }
+
+    int dy = static_cast<int>(prev.y) - static_cast<int>(from.y);
+    int dx = static_cast<int>(prev.x) - static_cast<int>(from.x);
+
+    // преобразуем смещение обратно в Direction
+    for (size_t i = 0; i < 4; ++i) {
+        infra::math::Direction dir = infra::math::by_index(i);
+        infra::math::Vector2 v = infra::math::to_vec(dir);
+
+        if (v.y == dy && v.x == dx)
+            return dir;
+    }
+
+    return std::nullopt;
     }
 }

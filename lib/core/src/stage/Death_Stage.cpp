@@ -33,13 +33,13 @@ namespace core::stg {
         ui_root_ = std::make_unique<view::ui::VBox>();
 
         const auto middle = std::make_shared<view::ui::SpriteElement>(
-            "Try Again",
-            666,
-            375
+            "Try Again!",
+            585,
+            275
             );
         const auto bottom  = std::make_shared<view::ui::HBox>();
-        middle->flex = 5.f;
-        bottom->flex  = 5.f;
+        middle->flex = 6.f;
+        bottom->flex  = 2.f;
         bottom->align = infra::ui::Align::Center;
         ui_root_->add(middle);
         ui_root_->add(bottom);

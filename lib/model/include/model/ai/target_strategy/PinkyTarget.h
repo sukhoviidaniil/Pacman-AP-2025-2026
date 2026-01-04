@@ -21,6 +21,10 @@
 #include "TargetStrategy.h"
 
 namespace model::ai {
+
+    /**
+     * @brief Pinky's targeting strategy: 4 tiles ahead of Pac-Man in his current direction.
+     */
     struct PinkyTarget : TargetStrategy {
         [[nodiscard]] TilePos target(
             const GlobalGhostContext& g_ctx,

@@ -29,7 +29,6 @@ namespace model::entity {
 
         [[nodiscard]] float buff_duration() const;
 
-
     private:
         float buff_duration_;
     };

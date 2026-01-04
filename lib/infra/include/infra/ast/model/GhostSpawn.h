@@ -23,26 +23,40 @@
 
 namespace infra::ast {
 
+    /**
+     * @brief Available pathfinding algorithms for ghost AI.
+     */
     enum class PathFinderType {
         AStar,
         BFS,
         Greedy
     };
 
+    /**
+     * @brief Contains configuration data for a ghost entity.
+     *
+     * Inherits from Entity_Node and defines speed, spawn amount,
+     * and pathfinding behavior.
+     */
     struct GhostInfo : Entity_Node {
-        float base_speed = 0.1f;
-        float frightened_speed = 0.1f;
-        float eaten_speed = 0.1f;
-        int start_amount = 1;
-        float amount_per_level = 0;
-        PathFinderType path_finder = PathFinderType::BFS;
+        float base_speed = 0.1f; ///< Normal movement speed
+        float frightened_speed = 0.1f; ///< Speed when in frightened mode
+        float eaten_speed = 0.1f; ///< Speed after being eaten
+        int start_amount = 1; ///< Initial number of ghosts
+        float amount_per_level = 0; ///< Additional ghosts per level
+        PathFinderType path_finder = PathFinderType::BFS; ///< Pathfinding algorithm
     };
 
+    /**
+     * @brief Node representing ghost spawn points for all four ghosts.
+     *
+     * Contains separate GhostInfo for Blinky, Pinky, Inky, and Clyde.
+     */
     struct GhostSpawn : Model_Node {
-        GhostInfo Blinky;
-        GhostInfo Pinky;
-        GhostInfo Inky;
-        GhostInfo Clyde;
+        GhostInfo Blinky; ///< Configuration for Blinky
+        GhostInfo Pinky; ///< Configuration for Pinky
+        GhostInfo Inky; ///< Configuration for Inky
+        GhostInfo Clyde; ///< Configuration for Clyde
     };
 }
 

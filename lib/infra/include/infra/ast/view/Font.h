@@ -20,9 +20,15 @@
 #include "ViewNode.h"
 
 namespace infra::ast {
+    /**
+     * @brief Represents a font resource in the AST.
+     *
+     * Inherits from Node and stores the font's name and
+     * the path to its file.
+     */
     struct Font : Node{
-        std::string font;
-        std::string file;
+        std::string font; ///< Name of the font
+        std::string file; ///< File path to the font resource
     };
 }
 #endif //PACMAN_AST_FONT_H

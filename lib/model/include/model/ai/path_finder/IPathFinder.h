@@ -22,12 +22,37 @@
 #include "model/grid/TilePos.h"
 
 namespace model::ai {
+
+    /**
+     * @brief Interface for pathfinding algorithms on a tile grid.
+     *
+     * Implementations should provide logic to determine the next movement direction
+     * from a current tile to a target tile.
+     */
     class IPathFinder {
     public:
         IPathFinder() = default;
         virtual ~IPathFinder() = default;
 
-        enum class Optimize { MinDistance, MaxDistance };
+        /**
+         * @brief Optimization strategy for pathfinding.
+         */
+        enum class Optimize {
+            MinDistance,
+            MaxDistance
+        };
+
+        /**
+         * @brief Calculates the next direction from a starting tile to a target tile.
+         *
+         * @param permission Movement permission level
+         * @param tiles The tile grid to navigate
+         * @param from Starting tile position
+         * @param to Target tile position
+         * @param forbidden_dir Optional direction that should not be chosen
+         * @param opt Optimization strategy
+         * @return Optional direction to move next; empty if no valid move is found
+         */
         [[nodiscard]] virtual std::optional<infra::math::Direction> next_dir(
             const Permission& permission,
             const TileGrid& tiles,

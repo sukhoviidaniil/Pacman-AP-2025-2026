@@ -21,14 +21,27 @@
 #include "model/ai/mode_strategy/ModeStrategy.h"
 
 namespace model::ai {
-    // --- FSM: the simplest machine that switches modes based on the global state ---
+
+    /**
+     * @brief A simple finite state machine (FSM) for ghosts that selects
+     *        the appropriate mode strategy based on the ghost's current mode.
+     */
     struct GhostFSM {
-        const ModeStrategy* chase = nullptr; /// NOT OWNER
-        const ModeStrategy* scatter = nullptr; /// NOT OWNER
-        const ModeStrategy* frightened = nullptr; /// NOT OWNER
-        const ModeStrategy* dead = nullptr; /// NOT OWNER
+        ///< Strategy for Chase mode (not owned)
+        const ModeStrategy* chase = nullptr;
+        ///< Strategy for Scatter mode (not owned)
+        const ModeStrategy* scatter = nullptr;
+        ///< Strategy for Frightened mode (not owned)
+        const ModeStrategy* frightened = nullptr;
+        ///< Strategy for Dead mode (not owned)
+        const ModeStrategy* dead = nullptr;
 
-
+        /**
+         * @brief Selects the current mode strategy based on the ghost's context.
+         *
+         * @param ctx The unique context of a ghost
+         * @return Pointer to the selected ModeStrategy
+         */
         [[nodiscard]] const ModeStrategy* select(const UniqGhostContext& ctx) const {
             switch (ctx.mode) {
                 case GhostMode::Chase:return chase;
@@ -36,7 +49,7 @@ namespace model::ai {
                 case GhostMode::Frightened: return frightened;
                 case GhostMode::Dead: return dead;
             }
-            return chase;
+            return chase; // fallback
 
         }
     };

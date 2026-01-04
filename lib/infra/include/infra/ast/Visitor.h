@@ -28,18 +28,48 @@ namespace infra::ast {
     struct Node;
 
     // ----------------------------
-    // Basic Visitor
+    // Basic Visitor Interfaces
     // ----------------------------
+
+    /**
+     * @brief Base visitor interface.
+     *
+     * Provides a virtual destructor for proper polymorphic cleanup.
+     */
     struct Visitor {
         virtual ~Visitor() = default;
     };
 
+    /**
+     * @brief Visitor interface for model AST nodes.
+     *
+     * Can be extended to perform operations on Model nodes.
+     */
     struct Model_Visitor : Visitor {
-        virtual void visit(const Model&) {}
+        /**
+         * @brief Visit a Model node.
+         *
+         * @param m Model node to visit
+         *
+         * @note Default implementation does nothing.
+         */
+        virtual void visit(const Model& m) {}
     };
 
+    /**
+     * @brief Visitor interface for game AST nodes.
+     *
+     * Can be extended to perform operations on Game or Node objects.
+     */
     struct Game_Visitor : Visitor {
-        virtual void visit(const Game&) {}
+        /**
+         * @brief Visit a Game node.
+         *
+         * @param g Game node to visit
+         *
+         * @note Default implementation does nothing.
+         */
+        virtual void visit(const Game& g) {}
         virtual void visit(const Node&) {}
     };
 }

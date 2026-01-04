@@ -23,8 +23,21 @@
 #include "infra/ast/model/GhostSpawn.h"
 
 namespace model::ai {
+
+    /**
+     * @brief Factory for creating pathfinder instances.
+     *
+     * Produces a concrete IPathFinder implementation based on the requested type.
+     */
     class PF_Factory {
     public:
+
+        /**
+         * @brief Creates a pathfinder of the specified type.
+         *
+         * @param type The type of pathfinder to create (AStar, BFS, Greedy)
+         * @return Unique pointer to a newly created IPathFinder instance
+         */
         static std::unique_ptr<IPathFinder> make(const infra::ast::PathFinderType& type);
     };
 }

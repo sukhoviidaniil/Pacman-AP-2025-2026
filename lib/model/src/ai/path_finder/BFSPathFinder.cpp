@@ -30,74 +30,62 @@ namespace model::ai {
         Optimize opt
         ) const
     {
-using infra::math::Direction;
+        using infra::math::Direction;
 
         struct Node {
             TilePos pos;
-            Direction first_dir;
+            Direction first_dir; // первое направление от старта
         };
 
+        std::vector<std::vector<bool>> visited(tiles.rows(), std::vector<bool>(tiles.columns(), false));
         std::queue<Node> q;
-        std::vector<std::vector<bool>> visited(
-            tiles.rows(), std::vector<bool>(tiles.columns(), false)
-        );
 
-        auto try_push = [&](const TilePos& cur, Direction first,
-                            Direction d, int dy, int dx)
-        {
-            if (forbidden_dir && infra::math::equal(*forbidden_dir, d))
-                return;
-
-            const int ny = static_cast<int>(cur.y) + dy;
-            const int nx = static_cast<int>(cur.x) + dx;
-            if (ny < 0 || nx < 0) return;
-            if (ny >= static_cast<int>(tiles.rows()) || nx >= static_cast<int>(tiles.columns())) return;
-
-            const TilePos next{static_cast<size_t>(ny), static_cast<size_t>(nx)};
-            if (visited[next.y][next.x]) return;
-            if (!walkable(tiles.get_tile(next), permission)) return;
-
-            visited[next.y][next.x] = true;
-            q.push({next, first});
-        };
-
+        // Запускаем BFS с первой вершины
+        q.push({from, Direction::None});
         visited[from.y][from.x] = true;
 
-        try_push(from, Direction::Up,    Direction::Up,    -1,  0);
-        try_push(from, Direction::Right, Direction::Right,  0,  1);
-        try_push(from, Direction::Down,  Direction::Down,   1,  0);
-        try_push(from, Direction::Left,  Direction::Left,   0, -1);
-
-        Node farthest{from, Direction::None};
+        // Возможные направления и их дельты
+        constexpr std::pair<Direction, std::pair<int,int>> moves[] = {
+            {Direction::Up, {-1,0}},
+            {Direction::Right, {0,1}},
+            {Direction::Down, {1,0}},
+            {Direction::Left, {0,-1}}
+        };
 
         while (!q.empty()) {
-            Node cur = q.front();
-            q.pop();
+            Node cur = q.front(); q.pop();
 
-            if (opt == Optimize::MinDistance && cur.pos == to)
+            // Если достигли цели и ищем минимальное расстояние
+            if (opt == IPathFinder::Optimize::MinDistance && cur.pos == to)
                 return cur.first_dir;
 
-            if (opt == Optimize::MaxDistance) {
-                // update farthest for each visited position
-                const int cur_dist = (cur.pos.y > to.y ? cur.pos.y - to.y : to.y - cur.pos.y) +
-                               (cur.pos.x > to.x ? cur.pos.x - to.x : to.x - cur.pos.x);
-                const int far_dist = (farthest.pos.y > to.y ? farthest.pos.y - to.y : to.y - farthest.pos.y) +
-                               (farthest.pos.x > to.x ? farthest.pos.x - to.x : to.x - farthest.pos.x);
-                if (cur_dist > far_dist) {
-                    farthest = cur;
-                }
-            }
+            // Перебираем соседей
+            for (auto [dir, delta] : moves) {
+                if (forbidden_dir && infra::math::equal(*forbidden_dir, dir))
+                    continue;
 
-            try_push(cur.pos, cur.first_dir, Direction::Up,    -1,  0);
-            try_push(cur.pos, cur.first_dir, Direction::Right,  0,  1);
-            try_push(cur.pos, cur.first_dir, Direction::Down,   1,  0);
-            try_push(cur.pos, cur.first_dir, Direction::Left,   0, -1);
+                int ny = static_cast<int>(cur.pos.y) + delta.first;
+                int nx = static_cast<int>(cur.pos.x) + delta.second;
+
+                if (ny < 0 || nx < 0 || ny >= static_cast<int>(tiles.rows()) || nx >= static_cast<int>(tiles.columns()))
+                    continue;
+
+                TilePos next{static_cast<size_t>(ny), static_cast<size_t>(nx)};
+                if (visited[next.y][next.x]) continue;
+                if (!walkable(tiles.get_tile(next), permission)) continue;
+
+                visited[next.y][next.x] = true;
+
+                Direction first = (cur.first_dir == Direction::None ? dir : cur.first_dir);
+
+                // Для максимизации дистанции можно пушить всех соседей без раннего выхода
+                q.push({next, first});
+
+                if (opt == IPathFinder::Optimize::MaxDistance && next == to)
+                    return first; // если цель всё-таки задана, можно сразу вернуть
+            }
         }
 
-        // if maximization — return the direction to the furthest cell found
-        if (opt == Optimize::MaxDistance)
-            return farthest.first_dir;
-
-        return std::nullopt;
+        return std::nullopt; // путь не найден
     }
 }

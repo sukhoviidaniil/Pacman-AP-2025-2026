@@ -23,10 +23,22 @@
 #include "infra/ast/view/ViewVisitor.h"
 
 namespace infra::ast {
+    /**
+     * @brief Represents a simple sprite node.
+     *
+     * Inherits from SpriteNode and defines a name and rectangle
+     * offsets within a sprite sheet. Supports the visitor pattern.
+     */
     struct Sprite : SpriteNode{
-        std::string name;
-        int recLeft;
-        int recTop;
+        std::string name; ///< Name of the sprite
+        int recLeft; ///< Left coordinate in the sprite sheet
+        int recTop; ///< Top coordinate in the sprite sheet
+
+        /**
+         * @brief Accepts a SpriteVisitor to process this sprite.
+         *
+         * @param v Visitor instance
+         */
         void accept(SpriteVisitor &v) const override {
             v.visit(*this);
         }

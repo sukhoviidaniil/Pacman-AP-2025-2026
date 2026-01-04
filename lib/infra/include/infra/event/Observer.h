@@ -21,9 +21,24 @@
 
 #include "Event_Bus.h"
 namespace infra::event {
+    /**
+     * @brief Base class for objects observing events from an Event_Bus.
+     *
+     * Manages the lifetime of event subscriptions and ensures that
+     * all tracked subscriptions are properly unsubscribed on destruction.
+     */
     class Observer {
     public:
+        /**
+         * @brief Default constructor.
+         */
         Observer() = default;
+
+        /**
+         * @brief Virtual destructor.
+         *
+         * Automatically unsubscribes from all tracked events.
+         */
         virtual ~Observer() {
             un_track_all();
         }
@@ -37,10 +52,22 @@ namespace infra::event {
         Observer& operator=(Observer&&) noexcept = default;
 
     protected:
+        /**
+         * @brief Tracks an event subscription.
+         *
+         * The subscription will be automatically unsubscribed
+         * when the observer is destroyed or untracked.
+         *
+         * @param s Subscription to track.
+         */
         void track(Event_Bus::Subscription s) {
             subs_.push_back(std::move(s));
         }
 
+        /**
+         * @brief Unsubscribes from all tracked subscriptions.
+         *
+         */
         void un_track_all() {
             for (auto& sub : subs_) {
                 sub.unsubscribe();
@@ -48,6 +75,7 @@ namespace infra::event {
             subs_.clear();
         }
     private:
+        /// List of tracked subscriptions
         std::vector<Event_Bus::Subscription> subs_;
     };
 }

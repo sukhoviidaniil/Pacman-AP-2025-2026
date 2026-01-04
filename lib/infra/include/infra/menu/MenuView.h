@@ -20,20 +20,32 @@
 
 #include "infra/menu/Menu.h"
 namespace infra::menu {
-
+    /**
+     * @brief Read-only view for accessing menu presentation data.
+     *
+     * Provides a lightweight interface for querying information
+     * needed to display a menu without modifying its state.
+     */
     class MenuView {
     public:
+        /**
+         * @brief Constructs a view for an existing menu.
+         *
+         * @param menu Menu instance to observe.
+         */
         explicit MenuView(const Menu& menu)
             : menu_(menu) {}
 
+        /**
+         * @brief Returns the name of the currently selected button.
+         */
         [[nodiscard]] const std::string& current_button_name() const {
             return menu_.get_current_button().name;
         }
 
     private:
-        const Menu& menu_;
+        const Menu& menu_; ///< Referenced menu
     };
-
 }
 
 #endif //PACMAN_MENUVIEW_H

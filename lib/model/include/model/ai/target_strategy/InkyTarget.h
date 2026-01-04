@@ -21,10 +21,15 @@
 
 
 namespace model::ai {
+
+    /**
+     * @brief Inky's targeting strategy: vector-based targeting using Pac-Man's position and Blinky's position.
+     *        Calculates a point "ahead" of Pac-Man, then reflects Blinky's position across it.
+     */
     struct InkyTarget : TargetStrategy {
         std::size_t blinky_index;
 
-        TilePos target(
+        [[nodiscard]] TilePos target(
             const GlobalGhostContext& g_ctx,
             const UniqGhostContext& u_ctx
             ) const override {

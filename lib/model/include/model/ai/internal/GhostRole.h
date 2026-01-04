@@ -20,12 +20,23 @@
 #include <string>
 
 namespace model::ai {
+
+    /**
+     * @brief Enum representing the different ghost roles in the game.
+     */
     enum class GhostRole {
         Blinky,
         Pinky,
         Inky,
         Clyde
     };
+
+    /**
+     * @brief Converts a GhostRole to its string representation.
+     *
+     * @param role The GhostRole value
+     * @return Name of the ghost as a string
+     */
     inline std::string role_name(const GhostRole role) {
         switch (role) {
             case GhostRole::Blinky : return "Blinky";

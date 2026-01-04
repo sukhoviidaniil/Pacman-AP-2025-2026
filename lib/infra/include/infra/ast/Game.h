@@ -25,12 +25,17 @@
 #include "infra/ast/Score.h"
 
 namespace infra::ast {
+    /**
+     * @brief Represents the full game AST node.
+     *
+     * Inherits from Game_Node and aggregates the view configuration,
+     * event collection, models, and score-related data.
+     */
     struct Game : Game_Node{
-        infra::ast::View view;
-        infra::ast::Event_Collector event_collector;
-        std::vector<infra::ast::Model> models;
-        ScoreSetup score_setup;
-        ScoreBord score_bord;
+        infra::ast::View view; ///< View configuration for the game
+        infra::ast::Event_Collector event_collector; ///< Event collector for the game
+        std::vector<infra::ast::Model> models; ///< List of game models
+        ScoreBord score_bord; ///< Scoreboard data
     };
 }
 

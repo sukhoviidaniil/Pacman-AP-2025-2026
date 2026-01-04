@@ -40,6 +40,7 @@ namespace model::entity {
     }
 
     void Ghost::be_weak(float debuff_duration) {
+        if (is_dead()) return;
         mode_ = ai::GhostMode::Frightened;
         elapsed_ = 0;
         debuff_duration_ = debuff_duration;
@@ -50,7 +51,6 @@ namespace model::entity {
     }
     bool Ghost::is_weak() const {
         return mode_ == ai::GhostMode::Frightened;
-
     }
 
     float Ghost::debuff_duration() const {
@@ -62,6 +62,7 @@ namespace model::entity {
     }
 
     void Ghost::die() {
+        permission_ = Permission::Full;
         mode_ = ai::GhostMode::Dead;
     }
 
@@ -86,6 +87,7 @@ namespace model::entity {
             if (const Tile tile = g_ctx.map.get_tile(self_pos); tile == Tile::GhostSpawn) {
                 elapsed_ = 0.f;
                 mode_ = ai::GhostMode::Scatter;
+                permission_ = Permission::High;
             }
         }
 
@@ -138,10 +140,10 @@ namespace model::entity {
         // --- 2. Scatter / Chase timings (Level 1 example) ---
         struct Phase { float duration; ai::GhostMode mode; };
         static const Phase phases[] = {
-            { 1.f,  ai::GhostMode::Scatter },
-            { 10.f, ai::GhostMode::Chase   },
-            { 1.f,  ai::GhostMode::Scatter },
-            { 10.f, ai::GhostMode::Chase   },
+            { 5.f,  ai::GhostMode::Scatter },
+            { 15.f, ai::GhostMode::Chase   },
+            { 5.f,  ai::GhostMode::Scatter },
+            { 20.f, ai::GhostMode::Chase   },
             { 3.f,  ai::GhostMode::Scatter },
             { -1.f, ai::GhostMode::Chase } // inf
         };

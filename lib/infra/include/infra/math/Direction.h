@@ -47,6 +47,16 @@ namespace infra::math {
         }
     }
 
+    constexpr Direction by_index(const size_t d) {
+        switch (d) {
+            case 0: return Direction::Up;
+            case 1: return Direction::Right;
+            case 2: return Direction::Down;
+            case 3: return Direction::Left;
+            default: return Direction::Unknown; break;
+        }
+    }
+
     struct DirectionHash {
         size_t operator()(Direction d) const noexcept {
             return static_cast<std::size_t>(

@@ -22,6 +22,14 @@
 #include "infra/math/Direction.h"
 
 namespace infra::math {
+    /**
+     * @brief Converts a directional enum to a corresponding 2D vector.
+     *
+     * @param d Direction to convert.
+     * @return Vector2 representing the direction.
+     *
+     * Maps Up/Right/Down/Left to unit vectors along axes.
+     */
     constexpr Vector2 to_vec(const Direction d) {
         switch (d) {
             case Direction::Up:     return {0,-1};

@@ -38,11 +38,11 @@ namespace model::ai {
             // turning is allowed, but we still prohibit meaningless backtracking
             // if there are alternatives
             const auto d = path_finder_.next_dir(
-                Permission::Full,                 // passes through walls
+                u_ctx.permission,
                 g_ctx.map,
                 u_ctx.self_pos,
                 home_,
-                std::nullopt,                      // reversal permitted
+                std::nullopt,
                 IPathFinder::Optimize::MinDistance
             );
 

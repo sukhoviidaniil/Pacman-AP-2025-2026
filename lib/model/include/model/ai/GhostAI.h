@@ -29,9 +29,31 @@
 
 namespace model::ai {
 
-    // --- High-level GhostAI: brings everything together ---
+    /**
+     * @brief High-level AI controller for a ghost.
+     *
+     * GhostAI acts as a facade that combines:
+     * - finite state machine (FSM),
+     * - movement/pathfinding policy,
+     * - target selection strategies,
+     * - behavior modes (chase, scatter, frightened, dead).
+     *
+     * It is responsible for selecting the current behavior mode
+     * and delegating the decision-making to it.
+     */
     class GhostAI {
     public:
+        /**
+         * @brief Constructs a GhostAI instance.
+         *
+         * Initializes all behavior modes and wires them into the FSM.
+         *
+         * @param home Tile position used as a reference point
+         *             (e.g. respawn or return location).
+         * @param chase_target Strategy used to compute chase targets.
+         * @param scatter_target Strategy used to compute scatter targets.
+         * @param move_policy Pathfinding / movement policy.
+         */
         GhostAI(
         const TilePos& home,
         std::unique_ptr<TargetStrategy> chase_target,
@@ -56,22 +78,65 @@ namespace model::ai {
             fsm_.dead = dead_mode_.get();
         }
 
+        /**
+         * @brief Decides the next movement direction for the ghost.
+         *
+         * Selects the active mode via the FSM and delegates
+         * the decision to the corresponding strategy.
+         *
+         * @param g_ctx Global context shared between ghosts.
+         * @param u_ctx Context specific to this ghost.
+         * @return Chosen movement direction.
+         */
         [[nodiscard]] infra::math::Direction decide(const GlobalGhostContext& g_ctx, const UniqGhostContext& u_ctx) const {
             return fsm_.select(u_ctx)->decide(g_ctx, u_ctx);
         }
 
     private:
+        /**
+         * @brief Finite state machine controlling ghost modes.
+         */
         GhostFSM fsm_;
 
+        /**
+         * @brief Target strategy used in chase mode.
+         */
         std::unique_ptr<TargetStrategy> chase_target_;
+
+        /**
+         * @brief Target strategy used in scatter mode.
+         */
         std::unique_ptr<TargetStrategy> scatter_target_;
+
+        /**
+         * @brief Target strategy used in dead/eaten mode.
+         * @todo Clarify if this is planned to be used or can be removed.
+         */
         std::unique_ptr<TargetStrategy> dead_target_;
 
+        /**
+         * @brief Movement/pathfinding policy shared across modes.
+         */
         std::unique_ptr<IPathFinder> move_policy_;
 
+        /**
+         * @brief Strategy implementing chase behavior.
+         */
         std::unique_ptr<ModeStrategy> chase_mode_;
+
+        /**
+         * @brief Strategy implementing scatter behavior.
+         */
         std::unique_ptr<ModeStrategy> scatter_mode_;
+
+        /**
+         * @brief Strategy implementing frightened behavior.
+         */
         std::unique_ptr<ModeStrategy> frightened_mode_;
+
+        /**
+         * @brief Strategy implementing dead/eaten behavior.
+         */
         std::unique_ptr<ModeStrategy> dead_mode_;
     };
 }
