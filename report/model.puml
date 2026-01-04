@@ -1,0 +1,52 @@
+@startuml
+
+package <<Model>> {
+    package ai{
+        class GhostAI
+        class FSM
+        interface ModeStrategy
+        interface PathFinder
+    }
+    package entity {
+        abstract class Entity
+        class Actor
+        class Pacman
+        class Ghost
+        class Coin
+        class PowerPellet
+    }
+
+    class Model
+    class TileGrid
+}
+
+
+Ghost *-- GhostAI
+
+GhostAI *-- FSM
+GhostAI *-- ModeStrategy
+GhostAI *-- PathFinder
+
+FSM --> ModeStrategy: chooses
+ModeStrategy --> PathFinder : use
+
+
+
+Coin --|> Entity
+PowerPellet --|> Entity
+
+Actor --|> Entity
+Actor ..> TileGrid: queries collisions
+
+Pacman --|> Actor
+
+Ghost --|> Actor
+
+Model *-- TileGrid
+Model *-- Actor
+Model *-- Coin
+Model *-- PowerPellet
+
+
+
+@enduml

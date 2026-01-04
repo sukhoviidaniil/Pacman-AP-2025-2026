@@ -53,7 +53,6 @@ namespace core {
     void Game::set_global(const std::shared_ptr<infra::event::Event_Bus>& eventbus) {
         un_track_all();
         g_eventbus_ = eventbus;
-        // TODO subs
         track(
             eventbus->subscribe<infra::event::window::Closed>(
                 [this](const infra::event::window::Closed&) {

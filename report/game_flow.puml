@@ -1,0 +1,41 @@
+@startuml
+start
+
+:Initialize Logger;
+:Initialize Random;
+:Initialize Reader;
+:Load Game_Config;
+
+partition Initialize Game{
+    :Subscribe To the end of the cycle;
+    :Initialize Stage_Factory;
+    :Initialize Stage_Manager;
+    :Initialize View;
+    :Initialize Event_Collector;
+    :Emit Request_StartStage;
+}
+
+while (running_) is (true)
+    :Clock Tick;
+
+    partition Stage {
+        :Process Controller;
+        :Dispatch Events;
+        partition Model {
+                :Update Player;
+                :Update Ghosts;
+                :Check Collisions;
+                :Update Score;
+        }
+        :Collect Stage RenderFrame;
+    }
+
+    partition View {
+        :Render Frame;
+    }
+
+    :Dispatch Events;
+endwhile (false)
+
+stop
+@enduml

@@ -1,9 +1,14 @@
 @startuml
 
-
 package infra {
     class Score
     class ScoreBoard
+}
+
+package infra_event{
+    class Event
+    class Event_Bus
+    class Event_Store
 }
 
 package model {
@@ -11,48 +16,62 @@ package model {
 }
 
 package view {
-    class View_Renderer
-    class UI
+    struct ViewContext
+    abstract class View_Renderer
+
+    package ui{
+    }
     class RenderFrame
 }
 
 package controller {
     class Event_Collector
-    class Controller
+    interface Controller
 }
 
 package core {
     class Game
-    class Stage
+    abstract class Stage
     class Stage_Manager
     class Stage_Factory
 }
 
-Model o-- Score: has
+ViewContext ..> ui: consumed by
+
+Event --> Event_Bus: emits in
+Event_Store --> Event: collect
 
 ScoreBoard --> Score : create
 
-UI -> RenderFrame: interpreted
+Model o-- Score
+
+ui -> RenderFrame: interpreted
 
 RenderFrame -> View_Renderer: being drawn
 
+View_Renderer ..> Event_Bus: listen
 
-Event_Collector ..> View_Renderer : listen
 Event_Collector -> Controller : informs
+Event_Collector ..> View_Renderer : listen
 
-Game *-- Score: owns
-Game *-- ScoreBoard: owns
-Game *-- Stage_Manager: owns
-Game *-- Stage_Factory: owns
-Game *-- View_Renderer: owns
+Stage *-- Controller
+Stage o-- Model
+Stage --> ViewContext: submits information
+Stage --> Event_Store: store
+Stage ..>  Score: read-only
+Stage ..>  ScoreBoard: read-only
 
-Stage_Manager o-- Stage: has
+Stage_Manager *-- Stage
 Stage_Manager -->Stage_Factory: asks to create
+
+Stage_Factory *-- Score
+Stage_Factory *-- Model
 Stage_Factory --> Stage: creates
 
-Stage *-- Controller: owns
-Stage o-- Model: owns
-Stage o-- Score: has (const)
-Stage o-- ScoreBoard: has (const)
+Game *-- ScoreBoard
+Game *-- Stage_Manager
+Game *-- Stage_Factory
+Game *-- View_Renderer
+Game ..> Event_Bus: listen
 
 @enduml
