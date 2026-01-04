@@ -45,10 +45,6 @@ namespace model::collision {
         AABB aabb;
         aabb.center = center_;
         aabb.extend = {radius_, radius_};
-        aabb.max_X = center_.x + radius_;
-        aabb.min_X = center_.x - radius_;
-        aabb.max_Y = center_.y + radius_;
-        aabb.min_Y = center_.y - radius_;
         return aabb;
     }
 

@@ -109,3 +109,29 @@ endif()
 target_compile_definitions(${APP_TARGET} PRIVATE ASSETS_DIR="${CMAKE_SOURCE_DIR}/assets/")
 
 
+# -----------------------------------------
+# Doxygen Documentation
+# -----------------------------------------
+
+find_package(Doxygen REQUIRED)
+
+if(DOXYGEN_FOUND)
+    message("DOXYGEN found")
+    # Path to the Doxygen configuration file
+    set(DOXYGEN_IN ${CMAKE_SOURCE_DIR}/Doxyfile.in)
+    set(DOXYGEN_OUT ${CMAKE_BINARY_DIR}/Doxyfile)
+    configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+
+    # Generating a Doxyfile from a template
+    configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+
+    # Creating a goal for compiling documentation
+    add_custom_target(doc
+            COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+            COMMENT "Generating API documentation with Doxygen"
+            VERBATIM
+    )
+else ()
+    message("DOXYGEN not found")
+endif()

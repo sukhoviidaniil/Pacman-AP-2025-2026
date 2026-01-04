@@ -16,6 +16,8 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
+#include <float.h>
+
 #include "model/collision/HitBox_Shape.h"
 
 #include <limits>
@@ -68,21 +70,25 @@ namespace model::collision {
     AABB HitBox_Shape::get_aabb() const {
         AABB aabb;
         aabb.center = get_centers().front();
+        float max_X = FLT_MIN,
+        max_Y = FLT_MIN,
+        min_X = FLT_MAX,
+        min_Y = FLT_MAX;
         for (const infra::math::Point2 &point : points_) {
-            if (aabb.max_X < point.x) {
-                aabb.max_X = point.x;
+            if (max_X < point.x) {
+                max_X = point.x;
             }
-            if (aabb.max_Y < point.y) {
-                aabb.max_Y = point.y;
+            if (max_Y < point.y) {
+                max_Y = point.y;
             }
-            if (aabb.min_X > point.x) {
-                aabb.min_X = point.x;
+            if (min_X > point.x) {
+               min_X = point.x;
             }
-            if (aabb.min_Y > point.y) {
-                aabb.min_Y = point.y;
+            if (min_Y > point.y) {
+                min_Y = point.y;
             }
         }
-        aabb.extend = {aabb.max_X, aabb.max_Y};
+        aabb.extend = {max_X, max_Y};
         return aabb;
     }
 

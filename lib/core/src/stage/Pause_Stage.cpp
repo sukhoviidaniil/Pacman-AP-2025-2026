@@ -18,7 +18,7 @@
 
 #include "core/stage/Pause_Stage.h"
 
-#include "control/C_Pause.h"
+#include "control/controllers/C_Pause.h"
 #include "infra/event/events/game.h"
 #include "infra/event/events/window.hpp"
 #include "view/presentation/layout_engine/Button.h"

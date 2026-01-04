@@ -16,7 +16,7 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "control/C_Pause.h"
+#include "../include/control/controllers/C_Pause.h"
 
 #include "infra/event/events/game.h"
 #include "infra/event/events/input_Keyboard.h"

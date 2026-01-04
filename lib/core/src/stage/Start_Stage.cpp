@@ -18,7 +18,7 @@
 
 #include "core/stage/Start_Stage.h"
 
-#include "control/C_Menu.h"
+#include "control/controllers/C_Menu.h"
 #include "infra/event/events/game.h"
 #include "infra/event/events/window.hpp"
 #include "view/presentation/layout_engine/Button.h"

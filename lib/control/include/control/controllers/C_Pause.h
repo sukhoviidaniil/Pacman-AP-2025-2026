@@ -1,9 +1,9 @@
 /***************************************************************
  * Project:       Pacman
- * File:          C_Menu.h
+ * File:          C_Pause.h
  *
  * Author:        Sukhovii Daniil
- * Created:       2025-12-25
+ * Created:       2025-12-31
  * Modified:      []
  *
  * Description:   []
@@ -15,20 +15,15 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
-#ifndef PACMAN_C_MENU_H
-#define PACMAN_C_MENU_H
-#include "Controller.h"
-#include "infra/menu/Menu.h"
+#ifndef PACMAN_C_PAUSE_H
+#define PACMAN_C_PAUSE_H
+#include "C_Menu.h"
 
 namespace control {
-    class C_Menu : public Controller {
+    class C_Pause : public C_Menu {
     public:
-        C_Menu();
-        explicit C_Menu(std::shared_ptr<infra::menu::Menu> menu);
-    protected:
-        void push_current_button_event();
-        std::shared_ptr<infra::menu::Menu> menu_;
+        explicit C_Pause(const std::shared_ptr<infra::menu::Menu>& menu);
     };
 }
 
-#endif //PACMAN_C_MENU_H
+#endif //PACMAN_C_PAUSE_H

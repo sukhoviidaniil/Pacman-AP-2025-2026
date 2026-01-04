@@ -18,7 +18,7 @@
 #ifndef PACMAN_STAGE_FACTORY_H
 #define PACMAN_STAGE_FACTORY_H
 
-#include "core/Stage.h"
+#include "Stage.h"
 #include "infra/internal/Score.h"
 #include "model/Model.h"
 
@@ -28,7 +28,6 @@ namespace core {
         public:
 
         explicit Stage_Factory(
-            infra::ast::ScoreSetup score_setup,
             const infra::ast::ScoreBord& bord,
             std::vector<infra::ast::Model> models,
             const std::shared_ptr<infra::event::Event_Bus>& g_eventbus,
@@ -49,7 +48,6 @@ namespace core {
     private:
 
         // Score
-        infra::ast::ScoreSetup score_setup_; /// OWNER
         std::shared_ptr<infra::ScoreBord> score_bord_ = nullptr; /// OWNER || GIVER
         std::shared_ptr<infra::Score> score_ = nullptr; /// OWNER || GIVER
         // Model

@@ -20,7 +20,7 @@
 #include "infra/io/File_Reader.h"
 #include "infra/io/readers/Reader_JSON.h"
 #include "infra/event/Event_Bus.h"
-#include "core/Game.h"
+#include "../lib/core/include/core/Game.h"
 #include "infra/diagnostics/Logger.h"
 #include "infra/internal/Random.h"
 

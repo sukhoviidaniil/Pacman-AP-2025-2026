@@ -29,15 +29,11 @@
 
 namespace core {
 
-
-
     Stage_Factory::Stage_Factory(
-        infra::ast::ScoreSetup score_setup,
         const infra::ast::ScoreBord& bord,
         std::vector<infra::ast::Model> models,
         const std::shared_ptr<infra::event::Event_Bus> &g_eventbus,
         const bool random_model_order) :
-        score_setup_(std::move(score_setup)),
         random_model_order_(random_model_order), models_variants_(std::move(models)), g_eventbus_(g_eventbus)
     {
         if (models_variants_.empty()) {

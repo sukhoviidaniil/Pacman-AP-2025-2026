@@ -119,18 +119,6 @@ namespace infra::io {
             }
         }
 
-        std::string score_setup = "ScoreSetup";
-        if (data.contains(score_setup)) {
-            if (data[score_setup].is_string()) {
-                auto file = get_checked<std::string>(score_setup);
-                app.score_setup = fr->read_ScoreSetup(file);
-
-            }
-            if (data[score_setup].is_structured()) {
-                app.score_setup = get_checked<ast::ScoreSetup>(data[score_setup]);
-            }
-        }
-
         return app;
     }
 

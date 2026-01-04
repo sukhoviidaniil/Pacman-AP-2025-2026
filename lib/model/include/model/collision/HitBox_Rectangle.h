@@ -92,7 +92,7 @@ namespace model::collision {
         [[nodiscard]] std::vector<infra::math::Point2> get_centers() const override;
 
     private:
-        infra::math::Point2 center_; ///< Center of the rectangle
+        infra::math::Point2 center_ = {0,0}; ///< Center of the rectangle
         float width_; ///< Width of the rectangle
         float height_; ///< Height of the rectangle
     };

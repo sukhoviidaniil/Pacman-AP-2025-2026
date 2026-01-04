@@ -19,7 +19,7 @@
 #include "core/Game.h"
 
 #include "core/View_Collector_Factory.h"
-#include "../../infra/include/infra/internal/Delta_Timer.h"
+#include "infra/internal/Delta_Timer.h"
 #include "infra/diagnostics/Logger.h"
 #include "infra/event/events/game.h"
 #include "infra/event/events/window.hpp"
@@ -35,7 +35,7 @@ namespace core {
     {
 
         set_global(eventbus);
-        stage_manager_.set_stage_factory(std::make_unique<core::Stage_Factory>(a.score_setup, a.score_bord, a.models, g_eventbus_));
+        stage_manager_.set_stage_factory(std::make_unique<core::Stage_Factory>(a.score_bord, a.models, g_eventbus_));
         stage_manager_.track_global(g_eventbus_);
 
         // Make View and Event_Collector

@@ -23,7 +23,7 @@
 #include "view/View.h"
 #include "core/event_collector/Event_Collector.h"
 #include "core/Stage_Manager.h"
-#include "core/Stage_Factory.h"
+#include "Stage_Factory.h"
 
 namespace core {
     class Game : public infra::event::Observer{

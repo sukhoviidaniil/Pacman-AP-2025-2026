@@ -18,7 +18,7 @@
 
 #include "core/stage/Level_Stage.h"
 
-#include "control/C_Game.h"
+#include "control/controllers/C_Game.h"
 #include "view/presentation/layout_engine/LivesLabel.h"
 #include "view/presentation/layout_engine/Map.h"
 #include "view/presentation/layout_engine/ScoreLabel.h"

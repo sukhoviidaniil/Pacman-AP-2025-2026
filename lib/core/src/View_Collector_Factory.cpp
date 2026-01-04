@@ -19,7 +19,7 @@
 #include "core/View_Collector_Factory.h"
 
 #include "core/event_collector/SFML_Event_Collector.h"
-#include "../../infra/include/infra/ast/view/View.h"
+#include "infra/ast/view/View.h"
 #include "view/sfml/SFML_View.h"
 
 namespace core {

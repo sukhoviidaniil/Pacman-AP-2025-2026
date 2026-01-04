@@ -16,7 +16,7 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "control/C_Game.h"
+#include "../include/control/controllers/C_Game.h"
 
 #include <iostream>
 

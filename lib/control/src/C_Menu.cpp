@@ -16,7 +16,7 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "control/C_Menu.h"
+#include "../include/control/controllers/C_Menu.h"
 
 #include "infra/event/events/input_Keyboard.h"
 #include "infra/menu/Menu.h"

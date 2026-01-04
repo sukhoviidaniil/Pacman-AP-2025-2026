@@ -17,11 +17,8 @@
 ***************************************************************/
 
 #include "model/entity/Coin.h"
-namespace entity {
-
+namespace model::entity {
+    Coin::Coin(float size, const infra::math::Point2 &position, std::unique_ptr<collision::HitBox> hitbox) : Entity("Coin", size, position, std::move(hitbox)){
+    }
+    Coin::~Coin() = default;
 }
-
-model::entity::Coin::Coin(float size, const infra::math::Point2 &position, std::unique_ptr<collision::HitBox> hitbox) : Entity("Coin", size, position, std::move(hitbox)){
-}
-
-model::entity::Coin::~Coin() = default;

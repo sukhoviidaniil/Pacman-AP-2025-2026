@@ -1,0 +1,45 @@
+@startuml
+
+package Model {
+    class TileGrid
+    package AI{
+        class GhostAI
+        class FSM
+        class ModeStrategy
+        class PathFinder
+    }
+    package Entity{
+        class Ghost
+        class Pacman
+    }
+}
+
+package View {
+    package Layout_Engine{
+        class UI
+        class RenderFrame
+    }
+    class Renderer
+}
+
+package Controller {
+    class Event_Collector
+    class C_Game
+}
+
+C_Game -> Pacman : controls
+
+Ghost -> GhostAI: asks
+GhostAI -> FSM: asks
+FSM -> ModeStrategy: chooses
+ModeStrategy -> PathFinder : use
+
+UI ..> Model : translate (read-only)
+UI -> RenderFrame: interpreted
+RenderFrame -> Renderer: Being drawn
+
+
+Event_Collector ..> View : listen
+Event_Collector -> C_Game : informs
+
+@enduml
