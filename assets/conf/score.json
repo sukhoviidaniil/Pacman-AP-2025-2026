@@ -1,35 +1,34 @@
 {
-  "bord_size": 6,
-  "scores": [
-    {
-      "lives_remaining": 3,
-      "level": 12,
-      "points_score": 15400
+    "bord_size": 6,
+    "file": "score.json",
+    "score_setup": {
+        "coin_RR_Time_between_reductions": 1.0,
+        "coin_RR_Time_until_reduction": 5.0,
+        "coin_award_amount": 10,
+        "coin_award_level": 0,
+        "coin_max_award_level": 10,
+        "ghost_RR_Time_until_reset": 6.0,
+        "ghost_award_amount": 200,
+        "ghost_award_level": 0,
+        "ghost_max_award_level": 4,
+        "level": 1,
+        "lives_remaining": 3,
+        "points_score": 0,
+        "time_since_the_last_coin_collection": 0.0,
+        "time_since_the_last_ghost_collection": 0.0
     },
-    {
-      "lives_remaining": 2,
-      "level": 11,
-      "points_score": 13850
-    },
-    {
-      "lives_remaining": 1,
-      "level": 10,
-      "points_score": 12100
-    },
-    {
-      "lives_remaining": 4,
-      "level": 9,
-      "points_score": 9800
-    },
-    {
-      "lives_remaining": 2,
-      "level": 8,
-      "points_score": 8600
-    },
-    {
-      "lives_remaining": 0,
-      "level": 7,
-      "points_score": 7400
-    }
-  ]
+    "scores": [
+        {
+            "id": 2,
+            "level": 1,
+            "lives_remaining": 0,
+            "points_score": 8990
+        },
+        {
+            "id": 1,
+            "level": 1,
+            "lives_remaining": 0,
+            "points_score": 1690
+        }
+    ]
 }

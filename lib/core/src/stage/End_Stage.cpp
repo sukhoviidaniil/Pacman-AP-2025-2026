@@ -46,8 +46,8 @@ namespace core::stg {
         buttons.push_back(infra::menu::MenuButton(
             save_score_b_text,
             std::make_unique<
-                infra::event::EventInstance<infra::event::window::Closed>
-            >(infra::event::window::Closed())
+                infra::event::EventInstance<infra::event::window::Request_Save_Score>
+            >(infra::event::window::Request_Save_Score(s_.get_score_info()))
             )
         );
         buttons.push_back(infra::menu::MenuButton(

@@ -43,6 +43,8 @@ namespace control {
      */
     class Controller {
     public:
+        Controller();
+
         /**
          * @brief Virtual destructor.
          *

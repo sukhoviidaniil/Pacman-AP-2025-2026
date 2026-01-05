@@ -24,31 +24,33 @@
 #include "core/event_collector/Event_Collector.h"
 #include "core/Stage_Manager.h"
 #include "Stage_Factory.h"
+#include "infra/io/File_Reader.h"
 
 namespace core {
     class Game : public infra::event::Observer{
     public:
         ~Game() override;
         Game(
+            const std::shared_ptr<infra::event::Event_Bus>& eventbus,
+            const  std::shared_ptr<infra::io::File_Reader>& fr,
             const infra::ast::Game &a,
-            const std::string &path,
-            const std::shared_ptr<infra::event::Event_Bus>& eventbus
+            const std::string &path
             );
 
-        void set_global(const std::shared_ptr<infra::event::Event_Bus>& eventbus);
-        void dispatch_events() const;
         void run();
 
     private:
         bool running_ = true;
-        std::shared_ptr<view::View> view_; // CAN be used in Event_Collector
+        std::shared_ptr<view::View> view_; // CAN be used by Event_Collector
         std::unique_ptr<core::Event_Collector> event_collector_; // NOT event a Translator/Respondent
 
 
+        std::shared_ptr<infra::ScoreBord> sb_;
         std::shared_ptr<core::Stage_Factory> stage_factory_;
         core::Stage_Manager stage_manager_;
 
-        std::shared_ptr<infra::event::Event_Bus> g_eventbus_ = nullptr; /// GLOBAL || NOT OWNER
+         std::shared_ptr<infra::io::File_Reader> fr_;
+        std::shared_ptr<infra::event::Event_Bus> g_eventbus_; /// GLOBAL || NOT OWNER
 
     };
 }

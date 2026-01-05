@@ -67,7 +67,7 @@ namespace infra::io {
 
     ast::ScoreBord File_Reader::read_ScoreBord(const std::string &filename) const {
         const std::shared_ptr<Reader> reader = get_Reader(filename);
-        return reader->read_ScoreBord(conf_directory_ + filename);
+        return reader->read_ScoreBord(conf_directory_ + filename, filename);
     }
 
     ast::Game File_Reader::read_Game(const std::string &filename) const {
@@ -77,7 +77,7 @@ namespace infra::io {
 
     void File_Reader::save_ScoreBord(const ast::ScoreBord &info) const {
         const std::shared_ptr<Reader> reader = get_Reader(info.file);
-        reader->save_ScoreBord(info);
+        reader->save_ScoreBord(info, conf_directory_ + info.file);
     }
 
     std::shared_ptr<Reader> File_Reader::get_Reader(const std::string &path) const {

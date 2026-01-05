@@ -46,10 +46,14 @@ namespace infra {
          */
         explicit ScoreBord(const ast::ScoreBord &score);
 
+        [[nodiscard]] ast::ScoreBord save() const;
+
         /**
          * @brief Sorts the scores in descending order and trims to the maximum size.
          */
         void sort_and_trim();
+
+        void add_to_bord(ast::ScoreInfo info);
 
         /**
          * @brief Adds a new score to the scoreboard.

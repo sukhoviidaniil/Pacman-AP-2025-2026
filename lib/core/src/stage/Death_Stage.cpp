@@ -29,6 +29,8 @@ namespace core::stg {
         const std::shared_ptr<infra::event::Event_Bus> &global_eventbus,
         const infra::Const_Score score) : Stage(global_eventbus), score_(score){
 
+        controller = std::make_unique<control::Controller>();
+
         //1 Create a root container
         ui_root_ = std::make_unique<view::ui::VBox>();
 
@@ -53,7 +55,6 @@ namespace core::stg {
         bottom->add(score_view);
         bottom->add(lives_view);
 
-        controller = nullptr;
     }
 
     void Death_Stage::run(const float tick) {

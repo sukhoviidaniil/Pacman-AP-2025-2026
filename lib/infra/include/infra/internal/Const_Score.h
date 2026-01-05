@@ -46,6 +46,10 @@ namespace infra {
             return score_.points_score();
         }
 
+        [[nodiscard]] ast::ScoreInfo score_info() const {
+            return score_.get_score_info();
+        }
+
     private:
         const Score& score_; ///< Reference to the underlying Score
     };

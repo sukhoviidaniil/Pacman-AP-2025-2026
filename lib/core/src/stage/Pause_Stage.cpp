@@ -33,6 +33,7 @@ namespace core::stg {
         const std::shared_ptr<infra::event::Event_Bus> &global_eventbus,
         const infra::Const_Score score) : Stage(global_eventbus), score_(score){
 
+
         // 0. Buttons
         std::string сontinue_b_text = "Continue";
         std::string exit_b_text = "Exit the game ";
@@ -119,7 +120,6 @@ namespace core::stg {
         score_view->fontSize = 30;
         lives_view->flex  = 1.f;
         lives_view->fontSize = 30;
-
 
 
         controller = std::make_unique<control::C_Pause>(menu_);

@@ -36,7 +36,7 @@ int main() {
     const auto fr = std::make_shared<infra::io::File_Reader>(conf_dir);
     fr->add_Reader(".json", std::make_shared<infra::io::Reader_JSON>());
     infra::ast::Game t = fr->read_Game("conf_game1.json");
-    auto a = core::Game(t, conf_dir, eventbus_);
+    auto a = core::Game(eventbus_, fr, t, conf_dir);
     a.run();
     return 0;
 }

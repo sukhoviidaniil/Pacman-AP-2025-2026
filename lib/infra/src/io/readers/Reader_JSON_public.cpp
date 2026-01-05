@@ -62,10 +62,10 @@ namespace infra::io {
         return get_checked<ast::ScoreSetup>(j);
     }
 
-    ast::ScoreBord Reader_JSON::read_ScoreBord(const std::string &filename) const {
+    ast::ScoreBord Reader_JSON::read_ScoreBord(const std::string &filename, const std::string formal_path) const {
         nlohmann::json j = get_json_data(filename);
         auto bord = io::get_checked<ast::ScoreBord>(j);
-        bord.file = filename;
+        bord.file = formal_path;
         return bord;
     }
 
@@ -122,7 +122,7 @@ namespace infra::io {
         return app;
     }
 
-    void Reader_JSON::save_ScoreBord(const ast::ScoreBord& bord) const {
+    void Reader_JSON::save_ScoreBord(const ast::ScoreBord& bord, const std::string formal_path) const {
         nlohmann::json j;
 
         // --- Meta ---
@@ -168,7 +168,7 @@ namespace infra::io {
             });
         }
 
-        std::ofstream out(bord.file);
+        std::ofstream out(formal_path);
         out << j.dump(4);
     }
 }

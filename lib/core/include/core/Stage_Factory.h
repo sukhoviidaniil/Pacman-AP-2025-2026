@@ -22,13 +22,12 @@
 #include "infra/internal/Score.h"
 #include "model/Model.h"
 
-
 namespace core {
     class Stage_Factory {
         public:
 
         explicit Stage_Factory(
-            const infra::ast::ScoreBord& bord,
+            const std::shared_ptr<infra::ScoreBord> &sb,
             std::vector<infra::ast::Model> models,
             const std::shared_ptr<infra::event::Event_Bus>& g_eventbus,
             bool random_model_order = false

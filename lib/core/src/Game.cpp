@@ -28,14 +28,33 @@ namespace core {
     Game::~Game() = default;
 
     Game::Game(
+        const std::shared_ptr<infra::event::Event_Bus>& eventbus,
+        const  std::shared_ptr<infra::io::File_Reader>& fr,
         const infra::ast::Game &a,
-        const std::string &path,
-        const std::shared_ptr<infra::event::Event_Bus>& eventbus
-        )
+        const std::string &path
+        ) : fr_(fr), g_eventbus_(eventbus)
     {
 
-        set_global(eventbus);
-        stage_manager_.set_stage_factory(std::make_unique<core::Stage_Factory>(a.score_bord, a.models, g_eventbus_));
+        track(
+            eventbus->subscribe<infra::event::window::Closed>(
+                [this](const infra::event::window::Closed&) {
+                    running_ = false;
+                }
+            )
+        );
+
+        track(
+            eventbus->subscribe<infra::event::window::Request_Save_Score>(
+                [this](const infra::event::window::Request_Save_Score& i) {
+                    sb_->add_to_bord(i.score);
+                    fr_->save_ScoreBord(sb_->save());
+                }
+            )
+        );
+
+        sb_ = std::make_shared<infra::ScoreBord>(a.score_bord);
+
+        stage_manager_.set_stage_factory(std::make_unique<core::Stage_Factory>(sb_, a.models, g_eventbus_));
         stage_manager_.track_global(g_eventbus_);
 
         // Make View and Event_Collector
@@ -50,21 +69,6 @@ namespace core {
         g_eventbus_->emit(*ev);
     }
 
-    void Game::set_global(const std::shared_ptr<infra::event::Event_Bus>& eventbus) {
-        un_track_all();
-        g_eventbus_ = eventbus;
-        track(
-            eventbus->subscribe<infra::event::window::Closed>(
-                [this](const infra::event::window::Closed&) {
-                    running_ = false;
-                }
-            )
-        );
-    }
-
-    void Game::dispatch_events() const {
-
-    }
 
     void Game::run() {
         if (event_collector_ == nullptr) {

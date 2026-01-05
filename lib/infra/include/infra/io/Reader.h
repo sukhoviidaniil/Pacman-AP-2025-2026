@@ -93,7 +93,7 @@ namespace infra::io {
          * @param filename Path to the scoreboard file
          * @return Parsed ast::ScoreBord
          */
-        [[nodiscard]] virtual ast::ScoreBord read_ScoreBord(const std::string &filename) const = 0;
+        [[nodiscard]] virtual ast::ScoreBord read_ScoreBord(const std::string &filename, const std::string formal_path) const = 0;
 
         /**
          * @brief Reads the complete game data from a file.
@@ -109,7 +109,7 @@ namespace infra::io {
          *
          * @param info Scoreboard to save
          */
-        virtual void save_ScoreBord(const ast::ScoreBord & info) const = 0;
+        virtual void save_ScoreBord(const ast::ScoreBord & info, const std::string formal_path) const = 0;
     };
 }
 

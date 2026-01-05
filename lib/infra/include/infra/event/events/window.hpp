@@ -17,10 +17,20 @@
 ***************************************************************/
 #ifndef PACMAN_EV_WINDOW_HPP
 #define PACMAN_EV_WINDOW_HPP
-#include "infra/event/Event.h"
+#include <utility>
 
+#include "infra/event/Event.h"
+#include "infra/ast/Score.h"
 
 namespace infra::event::window {
+
+    struct Request_Save_Score {
+        static constexpr infra::event::EventMask mask =
+            infra::event::EventMask::Window;
+        infra::ast::ScoreInfo score;
+        explicit Request_Save_Score(ast::ScoreInfo s): score(std::move(s)){}
+    };
+
     struct Closed{
         static constexpr infra::event::EventMask mask =
             infra::event::EventMask::Window;

@@ -22,10 +22,24 @@
 
 namespace infra {
 
-    ScoreBord::ScoreBord(const std::string &file, size_t bord_size, const std::vector<ast::ScoreInfo> &all_scores)  : file_(file), bord_size_(bord_size), all_scores_(all_scores) {
+    ScoreBord::ScoreBord(const std::string &file, size_t bord_size, const std::vector<ast::ScoreInfo> &all_scores)
+    : file_(file), bord_size_(bord_size), all_scores_(all_scores) {
+        sync_next_id();
+        sort_and_trim();
     }
 
     ScoreBord::ScoreBord(const ast::ScoreBord &score) : file_(score.file), bord_size_(score.bord_size), all_scores_(score.scores) {
+        sync_next_id();
+        sort_and_trim();
+    }
+
+    ast::ScoreBord ScoreBord::save() const {
+        ast::ScoreBord result{};
+        result.file = file_;
+        result.bord_size = bord_size_;
+        result.score_setup = score_setup_;
+        result.scores = all_scores_;
+        return result;
     }
 
     void ScoreBord::sort_and_trim() {
@@ -35,8 +49,7 @@ namespace infra {
         }
     }
 
-    void ScoreBord::add_to_bord(const Score &score) {
-        const auto info = score.get_score_info();
+    void ScoreBord::add_to_bord(const ast::ScoreInfo info) {
 
         // already exists → ignore
         auto it = std::find_if(
@@ -50,6 +63,12 @@ namespace infra {
 
         all_scores_.push_back(info);
         sort_and_trim();
+    }
+
+
+    void ScoreBord::add_to_bord(const Score &score) {
+        const auto info = score.get_score_info();
+        add_to_bord(info);
     }
 
     const std::vector<ast::ScoreInfo> & ScoreBord::all_scores() const {

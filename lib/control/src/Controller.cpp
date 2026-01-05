@@ -19,6 +19,7 @@
 #include "control/Controller.h"
 
 namespace control {
+    Controller::Controller() = default;
 
     void Controller::handle(const infra::event::EventConcept &ev)  {
         dispatch(ev);

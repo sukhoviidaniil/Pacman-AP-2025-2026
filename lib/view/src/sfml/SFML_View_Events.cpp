@@ -16,8 +16,9 @@
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
 
-#include "infra/event/events/window.hpp"
+
 #include "view/sfml/SFML_View.h"
+#include "infra/event/events/window.hpp"
 
 namespace view {
 

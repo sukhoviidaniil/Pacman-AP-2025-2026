@@ -31,16 +31,15 @@
 namespace core {
 
     Stage_Factory::Stage_Factory(
-        const infra::ast::ScoreBord& bord,
+        const std::shared_ptr<infra::ScoreBord> &sb,
         std::vector<infra::ast::Model> models,
         const std::shared_ptr<infra::event::Event_Bus> &g_eventbus,
         const bool random_model_order) :
-        random_model_order_(random_model_order), models_variants_(std::move(models)), g_eventbus_(g_eventbus)
+        score_bord_(sb), random_model_order_(random_model_order), models_variants_(std::move(models)), g_eventbus_(g_eventbus)
     {
         if (models_variants_.empty()) {
             throw std::invalid_argument("No model specified");
         }
-        score_bord_ = std::make_shared<infra::ScoreBord>(bord);
     }
 
     std::shared_ptr<core::stg::Stage> Stage_Factory::make_Start_Stage() {

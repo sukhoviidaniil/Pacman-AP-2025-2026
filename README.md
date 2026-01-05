@@ -1,81 +1,13 @@
 # Pacman-AP-2025-2026
 Project for the course "Advanced programming", first semester of the second year of the bachelor's degree, 2025-2026
 
+# Report / Design rationalization
 
-## MVC Architecture Overview
-
-The project follows a clear **Model–View–Controller (MVC)** architectural pattern, which ensures separation of concerns, high testability, and independence of core game logic from rendering and input handling.
-
----
-
-### Model
-
-The **Model** layer contains all core game logic and domain rules and is fully independent from any rendering or platform-specific code.  
-According to the documentation, this layer is primarily represented by the `model` namespace and includes:
-
-- **World representation**: maze structure, tiles, and spatial data.
-- **Game entities**: player character, ghosts, collectibles, and their state.
-- **Game rules**: and collision logic.
-- **Artificial intelligence**: ghost behavior implemented via strategy-based AI modes (`Chase`, `Scatter`, `Frightened`, and idle/house modes), located in `model::ai`.
-- **State and events**: game state transitions and internal events used to notify other layers.
-
-The Model does not depend on UI, rendering, or input systems, which allows it to be compiled and tested as a standalone library.
+The report is described in a separate folder called report. It includes several UML diagrams that describe the architecture and main cycle of the program.
 
 ---
 
-### View
-
-The **View** layer is responsible solely for visual representation of the current game state.  
-Based on the documentation, this functionality is encapsulated in UI- and rendering-related components (e.g. rendering systems, HUD, visual assets).
-
-The View:
-- reads data from the Model,
-- subscribes to model events using an **Observer mechanism**,
-- renders entities, maze, and UI elements (score, lives, states).
-
-The View never modifies the game state directly and has no knowledge of game rules.
-
----
-
-### Controller
-
-The **Controller** layer acts as an intermediary between user input and the Model.  
-It is responsible for:
-- processing player input,
-- triggering state changes in the Model,
-- managing the main game loop and update cycle.
-
-Controller logic invokes Model operations in response to input events but does not contain game rules itself.
-
----
-
-### Component Interaction
-
-The interaction between components follows strict dependency rules:
-
-- **Controller → Model**: updates game state based on input and timing.
-- **Model → View**: notifies the View of state changes via events/observers.
-- **View → Controller**: no direct dependency.
-
-This unidirectional dependency structure enforces clean separation and prevents tight coupling between gameplay logic and presentation.
-
----
-
-### Architectural Rationale
-
-This MVC-based design was chosen to:
-- keep game logic independent from rendering and input,
-- simplify future extensions (e.g. new AI modes, entities, or UI),
-- allow reuse of the Model layer across different platforms or frontends.
-
-The documented use of strategies for ghost AI and event-based communication further reinforces modularity and extensibility.
-
----
-
-![MVC diagram](report/mvc.png)
-
-*Figure: High-level MVC architecture.  
-The Model contains all core gameplay logic and AI, the View handles rendering and UI, and the Controller translates user input into model updates. Communication from Model to View is performed using an observer/event-based mechanism.*
+# Some other points
 
 - ### Smooth Continuous Movement
 
@@ -198,13 +130,3 @@ This approach minimizes the coupling between components, simplifies code mainten
 
 > Most of the code is documented. Comments explain intent, not trivial code.
 Concise names for parameters, classes, and their methods allow you to easily understand the entire program cycle.
-
-- ### ~2 Page Report
-
-Yes: A concise report (~2 pages) explains architecture, key decisions, and trade-offs. It references concrete code structures.
-No: The report is missing or purely descriptive without technical insight.
-
-- ### Design Rationale
-
-Yes: Major design choices are justified (why this AI, why this structure). Alternatives are briefly acknowledged.
-No: Decisions are unexplained or purely accidental.

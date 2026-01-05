@@ -15,11 +15,13 @@
  *   This file is part of Pacman.
  *   Unauthorized use, reproduction, or distribution is prohibited.
 ***************************************************************/
+
 #include "core/event_collector/SFML_Event_Collector.h"
 
+#include "infra/event/events/window.hpp"
 #include "infra/event/events/input_Keyboard.h"
 #include "infra/event/events/input_Mouse.h"
-#include "infra/event/events/window.hpp"
+
 
 namespace core {
     SFML_Event_Collector::SFML_Event_Collector(view::ISFML_Event_Source &source) : source_(source) {}
