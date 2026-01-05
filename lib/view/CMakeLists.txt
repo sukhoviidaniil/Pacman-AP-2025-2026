@@ -12,3 +12,4 @@ target_link_libraries(view_lib PUBLIC
         infra_lib
         model_lib
 )
+

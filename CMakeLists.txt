@@ -52,12 +52,7 @@ set(JSON_DIR "${CMAKE_SOURCE_DIR}/external/json")
 file(GLOB_RECURSE RELEASE_SOURCE_FILES "src/*.cpp")
 
 # Collecting Function Resources
-#[[
-file(GLOB_RECURSE FUNC_SOURCES "${CMAKE_SOURCE_DIR}/func/*.h")
-set(FUNC_INCLUDE_DIRS
-        ${CMAKE_SOURCE_DIR}/func
-)
-#]]
+
 
 add_subdirectory(lib/infra)
 add_subdirectory(lib/model)
@@ -83,12 +78,11 @@ target_link_libraries(${APP_TARGET}
 
 
 if(WIN32)
-    #[[
-    message("CMAKE_CURRENT_BINARY_DIR - ${CMAKE_CURRENT_BINARY_DIR}")
-    get_property(SFML_ABSOLUTE_DIR TARGET graphics_lib PROPERTY INTERFACE_SFML_ABSOLUTE_DIR)
-    get_property(SFML_RELATIVE_DIR TARGET graphics_lib PROPERTY INTERFACE_SFML_RELATIVE_DIR)
+
+    set(SFML_ABSOLUTE_DIR "${SFML_ROOT}")
+
     message("SFML_ABSOLUTE_DIR - ${SFML_ABSOLUTE_DIR}")
-    message("SFML_RELATIVE_DIR - ${SFML_RELATIVE_DIR}")
+
     set(BAT_FILE "${CMAKE_CURRENT_BINARY_DIR}/run_${APP_TARGET}.bat")
     add_custom_command(
             OUTPUT "${BAT_FILE}"
@@ -98,7 +92,7 @@ if(WIN32)
             DEPENDS ${APP_TARGET}
     )
     add_custom_target(run_bat ALL DEPENDS "${BAT_FILE}")
-    #]]
+
 elseif(UNIX)
     # Linux: add RPATH so that ELF searches for .so in SFML/lib
     set_target_properties(${APP_TARGET} PROPERTIES
@@ -122,8 +116,6 @@ if(DOXYGEN_FOUND)
     set(DOXYGEN_OUT ${CMAKE_BINARY_DIR}/Doxyfile)
     configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
 
-    # Generating a Doxyfile from a template
-    configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
 
     # Creating a goal for compiling documentation
     add_custom_target(doc
@@ -135,3 +127,5 @@ if(DOXYGEN_FOUND)
 else ()
     message("DOXYGEN not found")
 endif()
+
+
