@@ -1,5 +1,6 @@
-# Pacman-AP-2025-2026
-Project for the course "Advanced programming", first semester of the second year of the bachelor's degree, 2025-2026
+# Pacman 2025-2026 Sukhovii Daniil s0240228
+
+Repository link:  https://github.com/sukhoviidaniil/Pacman-AP-2025-2026
 
 # Report / Design rationalization
 

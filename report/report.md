@@ -258,3 +258,6 @@ Simply fill in the View configuration and all sprites/fonts will be added to the
 ### Adding new model elements and displaying them 
 
 Write them in the Model, record access to them in Constant Access to the Model, and then add your method of interpreting them in the corresponding UI class.
+
+
+![Game cycle diagram](report/game_flow.png)
